@@ -1,1166 +1,1809 @@
 <!DOCTYPE html>
-
 <html lang="tr">
-
 <head>
+<meta charset="UTF-8">
 
-    <meta charset="UTF-8">
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<title>DersTakip 2.0</title>
 
-    <title>DersTakip</title>
+<style>
 
-    <style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+body{
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
 
-        body {
-            font-family:
-                Arial,
-                Helvetica,
-                sans-serif;
+  background:#f5f7fb;
+  color:#171a2b;
+}
 
-            background: #f5f7fb;
+button,
+input,
+select{
+  font:inherit;
+}
 
-            color: #171a2b;
-        }
+button{
+  cursor:pointer;
+}
 
-        button,
-        input {
-            font: inherit;
-        }
+/* =========================
+AUTH
+========================= */
 
-        button {
-            cursor: pointer;
-        }
+#authScreen{
+  min-height:100vh;
 
-        /* =========================
-           AUTH
-        ========================= */
+  display:flex;
+  align-items:center;
+  justify-content:center;
 
-        #authScreen {
+  padding:20px;
 
-            min-height: 100vh;
+  background:
+    linear-gradient(
+      135deg,
+      #6257ee,
+      #947aff
+    );
+}
 
-            display: flex;
+.auth-box{
+  width:100%;
+  max-width:430px;
 
-            align-items: center;
+  background:white;
 
-            justify-content: center;
+  padding:35px;
 
-            padding: 20px;
+  border-radius:25px;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #6257ee,
-                    #947aff
-                );
-        }
+  box-shadow:
+    0 25px 70px #0003;
+}
 
-        .auth-box {
+.auth-logo{
+  text-align:center;
 
-            width: 100%;
+  font-size:32px;
 
-            max-width: 430px;
+  font-weight:900;
 
-            background: white;
+  margin-bottom:8px;
+}
 
-            padding: 35px;
+.auth-logo span{
+  color:#6b60ef;
+}
 
-            border-radius: 25px;
+.auth-description{
+  text-align:center;
 
-            box-shadow:
-                0 25px 70px #0003;
-        }
+  color:#7c8499;
 
-        .auth-logo {
+  margin-bottom:25px;
+}
 
-            text-align: center;
+.auth-tabs{
+  display:grid;
 
-            font-size: 32px;
+  grid-template-columns:
+    1fr 1fr;
 
-            font-weight: 900;
+  background:#f1f2f7;
 
-            margin-bottom: 8px;
-        }
+  padding:5px;
 
-        .auth-logo span {
-            color: #6b60ef;
-        }
+  border-radius:12px;
 
-        .auth-description {
+  margin-bottom:20px;
+}
 
-            text-align: center;
+.auth-tabs button{
+  border:none;
 
-            color: #7c8499;
+  padding:11px;
 
-            margin-bottom: 25px;
-        }
+  background:transparent;
 
-        .auth-tabs {
+  border-radius:9px;
 
-            display: grid;
+  font-weight:700;
+}
 
-            grid-template-columns:
-                1fr 1fr;
+.auth-tabs button.active{
+  background:white;
 
-            background: #f1f2f7;
+  box-shadow:
+    0 3px 10px #0002;
+}
 
-            padding: 5px;
+.form-group{
+  margin-bottom:15px;
+}
 
-            border-radius: 12px;
+.form-group label{
+  display:block;
 
-            margin-bottom: 20px;
-        }
+  font-size:13px;
 
-        .auth-tabs button {
+  font-weight:700;
 
-            border: none;
+  margin-bottom:7px;
+}
 
-            padding: 11px;
+.form-group input,
+.form-group select{
+  width:100%;
 
-            background:
-                transparent;
+  padding:13px;
 
-            border-radius: 9px;
+  border:
+    1px solid #dfe3ec;
 
-            font-weight: 700;
-        }
+  border-radius:11px;
 
-        .auth-tabs button.active {
+  outline:none;
+}
 
-            background: white;
+.form-group input:focus,
+.form-group select:focus{
+  border-color:#6b60ef;
+}
 
-            box-shadow:
-                0 3px 10px #0002;
-        }
+.auth-button{
+  width:100%;
 
-        .form-group {
+  border:none;
 
-            margin-bottom: 15px;
-        }
+  background:#6b60ef;
 
-        .form-group label {
+  color:white;
 
-            display: block;
+  padding:14px;
 
-            font-size: 13px;
+  border-radius:12px;
 
-            font-weight: 700;
+  font-weight:800;
+}
 
-            margin-bottom: 7px;
-        }
+#authMessage{
+  margin-top:15px;
 
-        .form-group input {
+  text-align:center;
 
-            width: 100%;
+  font-size:13px;
 
-            padding: 13px;
+  min-height:18px;
+}
 
-            border:
-                1px solid #dfe3ec;
+/* =========================
+APP
+========================= */
 
-            border-radius: 11px;
+#app{
+  display:none;
+}
 
-            outline: none;
-        }
+.sidebar{
+  position:fixed;
 
-        .form-group input:focus {
+  left:0;
+  top:0;
+  bottom:0;
 
-            border-color:
-                #6b60ef;
-        }
+  width:250px;
 
-        .auth-button {
+  background:#15182b;
 
-            width: 100%;
+  color:white;
 
-            border: none;
+  padding:25px 18px;
 
-            background: #6b60ef;
+  z-index:10;
+}
 
-            color: white;
+.logo{
+  font-size:25px;
 
-            padding: 14px;
+  font-weight:900;
 
-            border-radius: 12px;
+  margin-bottom:35px;
 
-            font-weight: 800;
-        }
+  padding-left:10px;
+}
 
-        #authMessage {
+.logo span{
+  color:#8176ff;
+}
 
-            margin-top: 15px;
+.menu button{
+  width:100%;
 
-            text-align: center;
+  border:none;
 
-            font-size: 13px;
+  background:transparent;
 
-            min-height: 18px;
-        }
+  color:#aeb4ca;
 
-        /* =========================
-           APP
-        ========================= */
+  padding:14px;
 
-        #app {
-            display: none;
-        }
+  border-radius:12px;
 
-        .sidebar {
+  margin-bottom:7px;
 
-            position: fixed;
+  text-align:left;
 
-            left: 0;
+  font-weight:700;
+}
 
-            top: 0;
+.menu button:hover,
+.menu button.active{
+  background:#292d49;
 
-            bottom: 0;
+  color:white;
+}
 
-            width: 250px;
+.logout{
+  position:absolute;
 
-            background: #15182b;
+  bottom:25px;
 
-            color: white;
+  left:18px;
+  right:18px;
+}
 
-            padding: 25px 18px;
-        }
+.logout button{
+  width:100%;
 
-        .logo {
+  border:none;
 
-            font-size: 25px;
+  background:#292d49;
 
-            font-weight: 900;
+  color:white;
 
-            margin-bottom: 35px;
+  padding:12px;
 
-            padding-left: 10px;
-        }
+  border-radius:12px;
+}
 
-        .logo span {
-            color: #8176ff;
-        }
+.main{
+  margin-left:250px;
 
-        .menu button {
+  padding:30px;
 
-            width: 100%;
+  max-width:1500px;
+}
 
-            border: none;
+.topbar{
+  display:flex;
 
-            background:
-                transparent;
+  justify-content:space-between;
 
-            color: #aeb4ca;
+  align-items:center;
 
-            padding: 14px;
+  margin-bottom:25px;
+}
 
-            border-radius: 12px;
+.welcome h1{
+  font-size:30px;
 
-            margin-bottom: 7px;
+  margin-bottom:6px;
+}
 
-            text-align: left;
+.welcome p{
+  color:#747c92;
+}
 
-            font-weight: 700;
-        }
+.profile{
+  background:white;
 
-        .menu button:hover,
-        .menu button.active {
+  padding:9px 14px;
 
-            background: #292d49;
+  border-radius:14px;
 
-            color: white;
-        }
+  display:flex;
 
-        .logout {
+  align-items:center;
 
-            position: absolute;
+  gap:10px;
 
-            bottom: 25px;
+  box-shadow:
+    0 8px 25px #0001;
+}
 
-            left: 18px;
+.avatar{
+  width:40px;
+  height:40px;
 
-            right: 18px;
-        }
+  border-radius:50%;
 
-        .logout button {
+  background:#e7e4ff;
 
-            width: 100%;
+  display:grid;
 
-            border: none;
+  place-items:center;
+}
 
-            background: #292d49;
+/* =========================
+PAGES
+========================= */
 
-            color: white;
+.page{
+  display:none;
+}
 
-            padding: 12px;
+.page.active{
+  display:block;
+}
 
-            border-radius: 12px;
-        }
+/* =========================
+HERO
+========================= */
 
-        .main {
+.hero{
+  background:
+    linear-gradient(
+      135deg,
+      #6357ef,
+      #9275ff
+    );
 
-            margin-left: 250px;
+  color:white;
 
-            padding: 30px;
-        }
+  border-radius:24px;
 
-        .topbar {
+  padding:28px;
 
-            display: flex;
+  margin-bottom:20px;
+}
 
-            justify-content:
-                space-between;
+.hero h2{
+  margin-bottom:8px;
+}
 
-            align-items: center;
+.hero p{
+  opacity:.9;
 
-            margin-bottom: 25px;
-        }
+  margin-bottom:20px;
+}
 
-        .welcome h1 {
+.progress{
+  height:10px;
 
-            font-size: 30px;
+  background:#ffffff30;
 
-            margin-bottom: 6px;
-        }
+  border-radius:20px;
 
-        .welcome p {
+  overflow:hidden;
+}
 
-            color: #747c92;
-        }
+.progress span{
+  display:block;
 
-        .profile {
+  height:100%;
 
-            background: white;
+  background:white;
 
-            padding: 9px 14px;
+  width:0%;
 
-            border-radius: 14px;
+  transition:
+    width .4s ease;
+}
 
-            display: flex;
+.xp{
+  font-size:13px;
 
-            align-items: center;
+  margin-top:8px;
+}
 
-            gap: 10px;
+/* =========================
+GRID
+========================= */
 
-            box-shadow:
-                0 8px 25px #0001;
-        }
+.grid{
+  display:grid;
 
-        .avatar {
+  grid-template-columns:
+    2fr 1fr;
 
-            width: 40px;
+  gap:20px;
+}
 
-            height: 40px;
+.card{
+  background:white;
 
-            border-radius: 50%;
+  border-radius:22px;
 
-            background: #e7e4ff;
+  padding:22px;
 
-            display: grid;
+  box-shadow:
+    0 8px 30px #0001;
 
-            place-items: center;
-        }
+  border:
+    1px solid #e9ecf4;
 
-        .hero {
+  margin-bottom:20px;
+}
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #6357ef,
-                    #9275ff
-                );
+.card-title{
+  display:flex;
 
-            color: white;
+  justify-content:space-between;
 
-            border-radius: 24px;
+  margin-bottom:15px;
+}
 
-            padding: 28px;
+/* =========================
+TASK
+========================= */
 
-            margin-bottom: 20px;
-        }
+.task{
+  display:flex;
 
-        .hero h2 {
+  align-items:center;
 
-            margin-bottom: 8px;
-        }
+  gap:13px;
 
-        .hero p {
+  padding:15px 0;
 
-            opacity: .9;
+  border-bottom:
+    1px solid #edf0f5;
+}
 
-            margin-bottom: 20px;
-        }
+.checkbox{
+  width:27px;
+  height:27px;
 
-        .progress {
+  border:
+    2px solid #d8dce8;
 
-            height: 10px;
+  border-radius:7px;
 
-            background:
-                #ffffff30;
+  display:grid;
 
-            border-radius: 20px;
+  place-items:center;
 
-            overflow: hidden;
-        }
+  flex-shrink:0;
 
-        .progress span {
+  cursor:pointer;
+}
 
-            display: block;
+.task.completed .checkbox{
+  background:#20c997;
 
-            height: 100%;
+  border-color:#20c997;
 
-            background: white;
+  color:white;
+}
 
-            width: 0%;
+.task.completed .task-name{
+  text-decoration:
+    line-through;
 
-            transition:
-                width .4s ease;
-        }
+  color:#9aa1b2;
+}
 
-        .xp {
+.task-name{
+  font-weight:750;
+}
 
-            font-size: 13px;
+.task-subject{
+  color:#8991a5;
 
-            margin-top: 8px;
-        }
+  font-size:12px;
 
-        .grid {
+  margin-top:4px;
+}
 
-            display: grid;
+.task-xp{
+  margin-left:auto;
 
-            grid-template-columns:
-                2fr 1fr;
+  background:#f0efff;
 
-            gap: 20px;
-        }
+  color:#6257df;
 
-        .card {
+  padding:6px 10px;
 
-            background: white;
+  border-radius:20px;
 
-            border-radius: 22px;
+  font-size:11px;
 
-            padding: 22px;
+  font-weight:700;
+}
 
-            box-shadow:
-                0 8px 30px #0001;
+.delete-task{
+  border:none;
 
-            border:
-                1px solid #e9ecf4;
-        }
+  background:transparent;
 
-        .card-title {
+  font-size:16px;
 
-            display: flex;
+  padding:5px;
+}
 
-            justify-content:
-                space-between;
+.add-task{
+  display:flex;
 
-            margin-bottom: 15px;
-        }
+  gap:8px;
 
-        .task {
+  margin-top:15px;
+}
 
-            display: flex;
+.add-task input{
+  flex:1;
 
-            align-items: center;
+  border:
+    1px solid #e0e4ed;
 
-            gap: 13px;
+  padding:12px;
 
-            padding: 15px 0;
+  border-radius:11px;
 
-            border-bottom:
-                1px solid #edf0f5;
-        }
+  outline:none;
+}
 
-        .checkbox {
+.add-task button{
+  border:none;
 
-            width: 27px;
+  background:#6c63ff;
 
-            height: 27px;
+  color:white;
 
-            border:
-                2px solid #d8dce8;
+  padding:
+    12px 17px;
 
-            border-radius: 7px;
+  border-radius:11px;
 
-            display: grid;
+  font-weight:800;
+}
 
-            place-items: center;
+/* =========================
+STATS
+========================= */
 
-            flex-shrink: 0;
+.stats{
+  display:grid;
 
-            cursor: pointer;
-        }
+  grid-template-columns:
+    repeat(3,1fr);
 
-        .task.completed .checkbox {
+  gap:15px;
 
-            background: #20c997;
+  margin:20px 0;
+}
 
-            border-color: #20c997;
+.stat{
+  background:white;
 
-            color: white;
-        }
+  padding:20px;
 
-        .task.completed
-        .task-name {
+  border-radius:18px;
 
-            text-decoration:
-                line-through;
+  border:
+    1px solid #e9ecf4;
+}
 
-            color: #9aa1b2;
-        }
+.stat strong{
+  display:block;
 
-        .task-name {
+  font-size:25px;
 
-            font-weight: 750;
-        }
+  margin:8px 0;
+}
 
-        .task-subject {
+.stat small{
+  color:#7d8599;
+}
 
-            color: #8991a5;
+.info{
+  margin-bottom:20px;
+}
 
-            font-size: 12px;
+.info-number{
+  font-size:40px;
 
-            margin-top: 4px;
-        }
+  font-weight:900;
 
-        .task-xp {
+  margin-top:10px;
+}
 
-            margin-left: auto;
+/* =========================
+FORM
+========================= */
 
-            background: #f0efff;
+.inline-form{
+  display:grid;
 
-            color: #6257df;
+  grid-template-columns:
+    1fr 1fr;
 
-            padding: 6px 10px;
+  gap:12px;
+}
 
-            border-radius: 20px;
+.inline-form input,
+.inline-form select{
+  width:100%;
 
-            font-size: 11px;
+  padding:12px;
 
-            font-weight: 700;
-        }
+  border:
+    1px solid #dfe3ec;
 
-        .delete-task {
+  border-radius:10px;
 
-            border: none;
+  outline:none;
+}
 
-            background:
-                transparent;
+.full{
+  grid-column:
+    1 / -1;
+}
 
-            font-size: 16px;
+.primary{
+  border:none;
 
-            padding: 5px;
-        }
+  background:#6c63ff;
 
-        .add-task {
+  color:white;
 
-            display: flex;
+  padding:12px;
 
-            gap: 8px;
+  border-radius:10px;
 
-            margin-top: 15px;
-        }
+  font-weight:800;
+}
 
-        .add-task input {
+.color-input{
+  height:45px;
 
-            flex: 1;
+  width:100%;
 
-            border:
-                1px solid #e0e4ed;
+  border:none;
 
-            padding: 12px;
+  background:white;
+}
 
-            border-radius: 11px;
+/* =========================
+SUBJECTS
+========================= */
 
-            outline: none;
-        }
+.subject-item{
+  display:flex;
 
-        .add-task button {
+  align-items:center;
 
-            border: none;
+  gap:12px;
 
-            background: #6c63ff;
+  padding:13px 0;
 
-            color: white;
+  border-bottom:
+    1px solid #edf0f5;
+}
 
-            padding:
-                12px 17px;
+.subject-color{
+  width:14px;
+  height:14px;
 
-            border-radius: 11px;
+  border-radius:50%;
+}
 
-            font-weight: 800;
-        }
+.subject-item strong{
+  flex:1;
+}
 
-        .stats {
+.subject-item button,
+.exam-item button{
+  border:none;
 
-            display: grid;
+  background:transparent;
+}
 
-            grid-template-columns:
-                repeat(3, 1fr);
+/* =========================
+EXAMS
+========================= */
 
-            gap: 15px;
+.exam-item{
+  display:grid;
 
-            margin: 20px 0;
-        }
+  grid-template-columns:
+    1fr auto auto;
 
-        .stat {
+  align-items:center;
 
-            background: white;
+  gap:15px;
 
-            padding: 20px;
+  padding:15px 0;
 
-            border-radius: 18px;
+  border-bottom:
+    1px solid #edf0f5;
+}
 
-            border:
-                1px solid #e9ecf4;
-        }
+.exam-item strong{
+  display:block;
+}
 
-        .stat strong {
+.exam-item small{
+  display:block;
 
-            display: block;
+  color:#8991a5;
 
-            font-size: 25px;
+  margin-top:4px;
+}
 
-            margin: 8px 0;
-        }
+.exam-date{
+  background:#f0efff;
 
-        .stat small {
+  color:#6257df;
 
-            color: #7d8599;
-        }
+  padding:8px 12px;
 
-        .info {
+  border-radius:10px;
 
-            margin-bottom: 20px;
-        }
+  font-weight:700;
 
-        .info-number {
+  font-size:13px;
+}
 
-            font-size: 40px;
+/* =========================
+TIMER
+========================= */
 
-            font-weight: 900;
+.timer{
+  text-align:center;
 
-            margin-top: 10px;
-        }
+  padding:30px;
+}
 
-        @media(max-width:900px) {
+.timer-display{
+  font-size:70px;
 
-            .sidebar {
+  font-weight:900;
 
-                width: 75px;
-            }
+  letter-spacing:3px;
 
-            .logo {
+  margin:20px 0;
+}
 
-                font-size: 0;
+.timer-buttons{
+  display:flex;
 
-                text-align: center;
-            }
+  justify-content:center;
 
-            .logo::before {
+  gap:10px;
 
-                content: "DT";
+  flex-wrap:wrap;
+}
 
-                font-size: 22px;
-            }
+.timer-buttons button{
+  border:none;
 
-            .logo span {
+  padding:
+    12px 18px;
 
-                display: none;
-            }
+  border-radius:12px;
 
-            .menu button {
+  font-weight:800;
+}
 
-                font-size: 0;
+.start{
+  background:#20c997;
 
-                text-align: center;
-            }
+  color:white;
+}
 
-            .main {
+.stop{
+  background:#ff6b6b;
 
-                margin-left: 75px;
-            }
+  color:white;
+}
 
-            .grid {
+.reset{
+  background:#e9ecf4;
+}
 
-                grid-template-columns: 1fr;
-            }
-        }
+/* =========================
+ACHIEVEMENTS
+========================= */
 
-        @media(max-width:600px) {
+.achievement{
+  display:flex;
 
-            .main {
+  align-items:center;
 
-                padding: 15px;
-            }
+  gap:14px;
 
-            .stats {
+  padding:14px 0;
 
-                grid-template-columns: 1fr;
-            }
+  border-bottom:
+    1px solid #edf0f5;
+}
 
-            .profile {
+.achievement-icon{
+  width:48px;
+  height:48px;
 
-                display: none;
-            }
+  display:grid;
 
-            .topbar {
+  place-items:center;
 
-                align-items: flex-start;
-            }
-        }
+  border-radius:14px;
 
-    </style>
+  background:#f0efff;
 
+  font-size:24px;
+}
+
+.achievement strong{
+  display:block;
+}
+
+.achievement small{
+  display:block;
+
+  color:#8991a5;
+
+  margin-top:4px;
+}
+
+/* =========================
+EMPTY
+========================= */
+
+.empty{
+  padding:25px 0;
+
+  text-align:center;
+
+  color:#8991a5;
+}
+
+/* =========================
+RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+
+  .sidebar{
+    width:75px;
+  }
+
+  .logo{
+    font-size:0;
+
+    text-align:center;
+  }
+
+  .logo::before{
+    content:"DT";
+
+    font-size:22px;
+  }
+
+  .logo span{
+    display:none;
+  }
+
+  .menu button{
+    font-size:0;
+
+    text-align:center;
+  }
+
+  .main{
+    margin-left:75px;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:650px){
+
+  .main{
+    padding:15px;
+  }
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .profile{
+    display:none;
+  }
+
+  .topbar{
+    align-items:flex-start;
+  }
+
+  .inline-form{
+    grid-template-columns:1fr;
+  }
+
+  .full{
+    grid-column:auto;
+  }
+
+  .timer-display{
+    font-size:48px;
+  }
+}
+
+</style>
 </head>
-
 
 <body>
 
-
-<!-- ==================================
-     GİRİŞ / KAYIT
-================================== -->
+<!-- =========================
+AUTH
+========================= -->
 
 <section id="authScreen">
 
-    <div class="auth-box">
-
-        <div class="auth-logo">
-            Ders<span>Takip</span>
-        </div>
-
-        <p class="auth-description">
-            Derslerini, görevlerini ve hedeflerini takip et.
-        </p>
-
-
-        <div class="auth-tabs">
-
-            <button
-                id="loginTab"
-                class="active"
-                onclick="showLogin()"
-            >
-                Giriş Yap
-            </button>
-
-            <button
-                id="registerTab"
-                onclick="showRegister()"
-            >
-                Kayıt Ol
-            </button>
-
-        </div>
-
-
-        <!-- LOGIN -->
-
-        <form
-            id="loginForm"
-            onsubmit="login(event)"
-        >
-
-            <div class="form-group">
-
-                <label>
-                    E-posta
-                </label>
-
-                <input
-                    id="loginEmail"
-                    type="email"
-                    required
-                    placeholder="ornek@mail.com"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Şifre
-                </label>
-
-                <input
-                    id="loginPassword"
-                    type="password"
-                    required
-                    placeholder="En az 6 karakter"
-                >
-
-            </div>
-
-
-            <button
-                class="auth-button"
-                type="submit"
-            >
-                Giriş Yap
-            </button>
-
-        </form>
-
-
-        <!-- REGISTER -->
-
-        <form
-            id="registerForm"
-            onsubmit="register(event)"
-            style="display:none"
-        >
-
-            <div class="form-group">
-
-                <label>
-                    Ad Soyad
-                </label>
-
-                <input
-                    id="registerName"
-                    type="text"
-                    required
-                    placeholder="Adın"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    E-posta
-                </label>
-
-                <input
-                    id="registerEmail"
-                    type="email"
-                    required
-                    placeholder="ornek@mail.com"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Şifre
-                </label>
-
-                <input
-                    id="registerPassword"
-                    type="password"
-                    minlength="6"
-                    required
-                    placeholder="En az 6 karakter"
-                >
-
-            </div>
-
-
-            <button
-                class="auth-button"
-                type="submit"
-            >
-                Hesap Oluştur
-            </button>
-
-        </form>
-
-
-        <div id="authMessage"></div>
-
-    </div>
-
-</section>
-
-
-
-<!-- ==================================
-     UYGULAMA
-================================== -->
-
-<div id="app">
-
-
-    <aside class="sidebar">
-
-        <div class="logo">
-            Ders<span>Takip</span>
-        </div>
-
-
-        <div class="menu">
-
-            <button class="active">
-                🏠 Ana Sayfa
-            </button>
-
-            <button>
-                ✅ Görevler
-            </button>
-
-            <button>
-                📚 Dersler
-            </button>
-
-            <button>
-                📅 Sınavlar
-            </button>
-
-            <button>
-                ⏱️ Odaklan
-            </button>
-
-            <button>
-                📊 İstatistikler
-            </button>
-
-        </div>
-
-
-        <div class="logout">
-
-            <button onclick="logout()">
-                🚪 Çıkış Yap
-            </button>
-
-        </div>
-
-    </aside>
-
-
-
-    <main class="main">
-
-
-        <div class="topbar">
-
-            <div class="welcome">
-
-                <h1 id="welcomeText">
-                    Merhaba! 👋
-                </h1>
-
-                <p>
-                    Bugün küçük bir adım,
-                    yarın büyük bir başarı.
-                </p>
-
-            </div>
-
-
-            <div class="profile">
-
-                <div class="avatar">
-                    🎓
-                </div>
-
-                <strong id="levelText">
-                    Seviye 1
-                </strong>
-
-            </div>
-
-        </div>
-
-
-
-        <div class="hero">
-
-            <h2>
-                Bugünkü hedefin 🎯
-            </h2>
-
-            <p id="taskSummary">
-                Görevlerini tamamlamaya başla.
-            </p>
-
-
-            <div class="progress">
-
-                <span id="progressBar"></span>
-
-            </div>
-
-
-            <div
-                class="xp"
-                id="xpText"
-            >
-                0 / 250 XP
-            </div>
-
-        </div>
-
-
-
-        <div class="grid">
-
-
-            <div>
-
-                <div class="card">
-
-                    <div class="card-title">
-
-                        <h2>
-                            Bugünkü Görevler
-                        </h2>
-
-                        <span id="taskCounter">
-                            0 / 0
-                        </span>
-
-                    </div>
-
-
-                    <div id="taskList"></div>
-
-
-                    <div class="add-task">
-
-                        <input
-                            id="newTask"
-                            placeholder="Yeni görev ekle..."
-                            maxlength="150"
-                        >
-
-                        <button
-                            onclick="addTask()"
-                        >
-                            + Ekle
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <div class="stats">
-
-                    <div class="stat">
-
-                        <span>
-                            ⭐
-                        </span>
-
-                        <strong id="statXP">
-                            0
-                        </strong>
-
-                        <small>
-                            Toplam XP
-                        </small>
-
-                    </div>
-
-
-                    <div class="stat">
-
-                        <span>
-                            🔥
-                        </span>
-
-                        <strong id="statStreak">
-                            0
-                        </strong>
-
-                        <small>
-                            Günlük seri
-                        </small>
-
-                    </div>
-
-
-                    <div class="stat">
-
-                        <span>
-                            📝
-                        </span>
-
-                        <strong id="statTasks">
-                            0
-                        </strong>
-
-                        <small>
-                            Tamamlanan görev
-                        </small>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-            <div>
-
-                <div class="card info">
-
-                    <h2>
-                        🔥 Çalışma Serisi
-                    </h2>
-
-                    <div
-                        class="info-number"
-                        id="streakNumber"
-                    >
-                        0
-                    </div>
-
-                    <p>
-                        Günlük serin
-                    </p>
-
-                </div>
-
-
-                <div class="card">
-
-                    <h2>
-                        🎓 DersTakip
-                    </h2>
-
-                    <p
-                        style="
-                            color:#7d8599;
-                            margin-top:10px;
-                            line-height:1.6;
-                        "
-                    >
-                        Görevlerini tamamla,
-                        XP kazan,
-                        seviyeni yükselt!
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </main>
+<div class="auth-box">
+
+<div class="auth-logo">
+Ders<span>Takip</span>
+</div>
+
+<p class="auth-description">
+Derslerini, görevlerini ve hedeflerini takip et.
+</p>
+
+<div class="auth-tabs">
+
+<button
+id="loginTab"
+class="active"
+onclick="showLogin()"
+>
+Giriş Yap
+</button>
+
+<button
+id="registerTab"
+onclick="showRegister()"
+>
+Kayıt Ol
+</button>
 
 </div>
 
+<form
+id="loginForm"
+onsubmit="login(event)"
+>
+
+<div class="form-group">
+
+<label>
+E-posta
+</label>
+
+<input
+id="loginEmail"
+type="email"
+required
+placeholder="ornek@mail.com"
+>
+
+</div>
+
+<div class="form-group">
+
+<label>
+Şifre
+</label>
+
+<input
+id="loginPassword"
+type="password"
+required
+placeholder="En az 6 karakter"
+>
+
+</div>
+
+<button
+class="auth-button"
+type="submit"
+>
+Giriş Yap
+</button>
+
+</form>
+
+<form
+id="registerForm"
+onsubmit="register(event)"
+style="display:none"
+>
+
+<div class="form-group">
+
+<label>
+Ad Soyad
+</label>
+
+<input
+id="registerName"
+type="text"
+required
+placeholder="Adın"
+>
+
+</div>
+
+<div class="form-group">
+
+<label>
+E-posta
+</label>
+
+<input
+id="registerEmail"
+type="email"
+required
+placeholder="ornek@mail.com"
+>
+
+</div>
+
+<div class="form-group">
+
+<label>
+Şifre
+</label>
+
+<input
+id="registerPassword"
+type="password"
+minlength="6"
+required
+placeholder="En az 6 karakter"
+>
+
+</div>
+
+<button
+class="auth-button"
+type="submit"
+>
+Hesap Oluştur
+</button>
+
+</form>
+
+<div id="authMessage"></div>
+
+</div>
+
+</section>
+
+<!-- =========================
+APP
+========================= -->
+
+<div id="app">
+
+<aside class="sidebar">
+
+<div class="logo">
+Ders<span>Takip</span>
+</div>
+
+<div class="menu">
+
+<button
+class="active"
+onclick="showPage('home',this)"
+>
+🏠 Ana Sayfa
+</button>
+
+<button
+onclick="showPage('tasks',this)"
+>
+✅ Görevler
+</button>
+
+<button
+onclick="showPage('subjects',this)"
+>
+📚 Dersler
+</button>
+
+<button
+onclick="showPage('exams',this)"
+>
+📅 Sınavlar
+</button>
+
+<button
+onclick="showPage('focus',this)"
+>
+⏱️ Odaklan
+</button>
+
+<button
+onclick="showPage('stats',this)"
+>
+📊 İstatistikler
+</button>
+
+<button
+onclick="showPage('achievements',this)"
+>
+🏆 Başarımlar
+</button>
+
+</div>
+
+<div class="logout">
+
+<button
+onclick="logout()"
+>
+🚪 Çıkış Yap
+</button>
+
+</div>
+
+</aside>
+
+<main class="main">
+
+<!-- =========================
+TOPBAR
+========================= -->
+
+<div class="topbar">
+
+<div class="welcome">
+
+<h1 id="welcomeText">
+Merhaba! 👋
+</h1>
+
+<p>
+Bugün küçük bir adım,
+yarın büyük bir başarı.
+</p>
+
+</div>
+
+<div class="profile">
+
+<div class="avatar">
+🎓
+</div>
+
+<strong id="levelText">
+Seviye 1
+</strong>
+
+</div>
+
+</div>
+
+<!-- =========================
+HOME
+========================= -->
+
+<section
+id="home"
+class="page active"
+>
+
+<div class="hero">
+
+<h2>
+Bugünkü hedefin 🎯
+</h2>
+
+<p id="taskSummary">
+Görevlerini tamamlamaya başla.
+</p>
+
+<div class="progress">
+
+<span
+id="progressBar"
+></span>
+
+</div>
+
+<div
+class="xp"
+id="xpText"
+>
+0 / 250 XP
+</div>
+
+</div>
+
+<div class="grid">
+
+<div>
+
+<div class="card">
+
+<div class="card-title">
+
+<h2>
+Bugünkü Görevler
+</h2>
+
+<span id="taskCounter">
+0 / 0
+</span>
+
+</div>
+
+<div id="taskList"></div>
+
+<div class="add-task">
+
+<input
+id="newTask"
+placeholder="Yeni görev ekle..."
+maxlength="150"
+>
+
+<button
+onclick="addTask()"
+>
++ Ekle
+</button>
+
+</div>
+
+</div>
+
+<div class="stats">
+
+<div class="stat">
+
+<span>⭐</span>
+
+<strong id="statXP">
+0
+</strong>
+
+<small>
+Toplam XP
+</small>
+
+</div>
+
+<div class="stat">
+
+<span>🔥</span>
+
+<strong id="statStreak">
+0
+</strong>
+
+<small>
+Günlük seri
+</small>
+
+</div>
+
+<div class="stat">
+
+<span>📝</span>
+
+<strong id="statTasks">
+0
+</strong>
+
+<small>
+Tamamlanan görev
+</small>
+
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="card info">
+
+<h2>
+🔥 Çalışma Serisi
+</h2>
+
+<div
+class="info-number"
+id="streakNumber"
+>
+0
+</div>
+
+<p>
+Günlük serin
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>
+🎓 DersTakip
+</h2>
+
+<p
+style="
+color:#7d8599;
+margin-top:10px;
+line-height:1.6;
+"
+>
+Görevlerini tamamla,
+XP kazan,
+seviyeni yükselt!
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- =========================
+TASKS
+========================= -->
+
+<section
+id="tasks"
+class="page"
+>
+
+<div class="card">
+
+<h2>
+✅ Görevler
+</h2>
+
+<p
+style="
+color:#8991a5;
+margin:8px 0 20px;
+"
+>
+Yapman gerekenleri buradan takip et.
+</p>
+
+<div id="taskList"></div>
+
+<div class="add-task">
+
+<input
+id="newTask"
+placeholder="Yeni görev ekle..."
+maxlength="150"
+>
+
+<button
+onclick="addTask()"
+>
++ Görev Ekle
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- =========================
+SUBJECTS
+========================= -->
+
+<section
+id="subjects"
+class="page"
+>
+
+<div class="grid">
+
+<div class="card">
+
+<h2>
+📚 Ders Ekle
+</h2>
+
+<div
+class="inline-form"
+style="margin-top:20px"
+>
+
+<input
+id="newSubject"
+placeholder="Örn: Matematik"
+>
+
+<input
+id="subjectColor"
+class="color-input"
+type="color"
+value="#6c63ff"
+>
+
+<button
+class="primary full"
+onclick="addSubject()"
+>
+Ders Ekle
+</button>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+Derslerim
+</h2>
+
+<div
+id="subjectList"
+style="margin-top:15px"
+></div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- =========================
+EXAMS
+========================= -->
+
+<section
+id="exams"
+class="page"
+>
+
+<div class="card">
+
+<h2>
+📅 Sınav Ekle
+</h2>
+
+<div
+class="inline-form"
+style="margin-top:20px"
+>
+
+<input
+id="examTitle"
+placeholder="Sınav adı"
+>
+
+<input
+id="examDate"
+type="datetime-local"
+>
+
+<select id="examSubject">
+
+<option value="">
+Ders seç
+</option>
+
+</select>
+
+<input
+id="examTopic"
+placeholder="Konu"
+>
+
+<button
+class="primary full"
+onclick="addExam()"
+>
+Sınav Ekle
+</button>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+Yaklaşan Sınavlar
+</h2>
+
+<div
+id="examList"
+style="margin-top:15px"
+></div>
+
+</div>
+
+</section>
+
+<!-- =========================
+FOCUS
+========================= -->
+
+<section
+id="focus"
+class="page"
+>
+
+<div class="card timer">
+
+<h2>
+⏱️ Odaklan
+</h2>
+
+<p
+style="
+color:#8991a5;
+margin-top:8px;
+"
+>
+Ders çalış, süreyi tamamla ve XP kazan.
+</p>
+
+<div
+id="timerDisplay"
+class="timer-display"
+>
+25:00
+</div>
+
+<div class="timer-buttons">
+
+<button
+class="start"
+onclick="startTimer()"
+>
+▶ Başlat
+</button>
+
+<button
+class="stop"
+onclick="stopTimer()"
+>
+⏸ Durdur
+</button>
+
+<button
+class="reset"
+onclick="resetTimer()"
+>
+↻ Sıfırla
+</button>
+
+<button
+class="reset"
+onclick="setTimer(15)"
+>
+15 dk
+</button>
+
+<button
+class="reset"
+onclick="setTimer(25)"
+>
+25 dk
+</button>
+
+<button
+class="reset"
+onclick="setTimer(50)"
+>
+50 dk
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- =========================
+STATS
+========================= -->
+
+<section
+id="stats"
+class="page"
+>
+
+<div class="stats">
+
+<div class="stat">
+
+<span>📝</span>
+
+<strong id="bigCompletedTasks">
+0
+</strong>
+
+<small>
+Tamamlanan görev
+</small>
+
+</div>
+
+<div class="stat">
+
+<span>📚</span>
+
+<strong id="bigSubjects">
+0
+</strong>
+
+<small>
+Ders
+</small>
+
+</div>
+
+<div class="stat">
+
+<span>📅</span>
+
+<strong id="bigExams">
+0
+</strong>
+
+<small>
+Sınav
+</small>
+
+</div>
+
+<div class="stat">
+
+<span>⏱️</span>
+
+<strong id="bigStudyMinutes">
+0
+</strong>
+
+<small>
+Çalışma dakikası
+</small>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+📊 Genel Durum
+</h2>
+
+<p
+style="
+color:#8991a5;
+margin-top:10px;
+line-height:1.7;
+"
+>
+Burada DersTakip performansını
+görebilirsin. Görevlerini tamamladıkça,
+çalışma yaptıkça ve XP kazandıkça
+istatistiklerin gelişir.
+</p>
+
+</div>
+
+</section>
+
+<!-- =========================
+ACHIEVEMENTS
+========================= -->
+
+<section
+id="achievements"
+class="page"
+>
+
+<div class="card">
+
+<h2>
+🏆 Başarımlar
+</h2>
+
+<p
+style="
+color:#8991a5;
+margin:8px 0 15px;
+"
+>
+Hedeflerini tamamla ve yeni rozetler aç.
+</p>
+
+<div
+id="achievementList"
+></div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+<script>
+
+function showPage(
+  pageId,
+  button
+){
+
+  document
+    .querySelectorAll(".page")
+    .forEach(page => {
+      page.classList.remove(
+        "active"
+      );
+    });
+
+  const page =
+    document.getElementById(
+      pageId
+    );
+
+  if(page){
+    page.classList.add(
+      "active"
+    );
+  }
+
+  document
+    .querySelectorAll(
+      ".menu button"
+    )
+    .forEach(btn => {
+      btn.classList.remove(
+        "active"
+      );
+    });
+
+  if(button){
+    button.classList.add(
+      "active"
+    );
+  }
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+}
+
+</script>
 
 <script src="/app.js"></script>
 
 </body>
-
 </html>
