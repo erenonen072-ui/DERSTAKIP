@@ -2,9 +2,14 @@ let currentUser = null;
 
 const API = "/api";
 
-/* =========================
-   BAŞLANGIÇ
-========================= */
+let focusSeconds = 25 * 60;
+let focusInterval = null;
+let focusRunning = false;
+
+
+// =====================================
+// BAŞLANGIÇ
+// =====================================
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -12,21 +17,25 @@ document.addEventListener(
 );
 
 
-/* =========================
-   API
-========================= */
+// =====================================
+// API
+// =====================================
 
-async function api(action, options = {}) {
+async function api(
+    action,
+    options = {}
+) {
 
-    try {
-
-        const response = await fetch(
-            `${API}?action=${encodeURIComponent(action)}`,
+    const response =
+        await fetch(
+            `${API}?action=${action}`,
             {
                 credentials: "include",
 
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type":
+                        "application/json",
+
                     ...(options.headers || {})
                 },
 
@@ -34,28 +43,21 @@ async function api(action, options = {}) {
             }
         );
 
-        const data =
-            await response
-                .json()
-                .catch(() => ({}));
+    const data =
+        await response
+            .json()
+            .catch(() => ({}));
 
-        return {
-            response,
-            data
-        };
-
-    } catch (error) {
-
-        console.error("API ERROR:", error);
-
-        throw error;
-    }
+    return {
+        response,
+        data
+    };
 }
 
 
-/* =========================
-   APP BAŞLAT
-========================= */
+// =====================================
+// APP LOAD
+// =====================================
 
 async function loadApp() {
 
@@ -64,7 +66,8 @@ async function loadApp() {
         const {
             response,
             data
-        } = await api("me");
+        } =
+            await api("me");
 
         if (!response.ok) {
 
@@ -73,13 +76,18 @@ async function loadApp() {
             return;
         }
 
-        currentUser = data.user;
+        currentUser =
+            data.user;
 
         showApp();
 
         updateUser();
 
+        updateProfileScreen();
+
         await loadTasks();
+
+        await loadSubjects();
 
     } catch (error) {
 
@@ -90,9 +98,9 @@ async function loadApp() {
 }
 
 
-/* =========================
-   LOGIN
-========================= */
+// =====================================
+// LOGIN
+// =====================================
 
 async function login(event) {
 
@@ -100,13 +108,17 @@ async function login(event) {
 
     const email =
         document
-            .getElementById("loginEmail")
+            .getElementById(
+                "loginEmail"
+            )
             .value
             .trim();
 
     const password =
         document
-            .getElementById("loginPassword")
+            .getElementById(
+                "loginPassword"
+            )
             .value;
 
     setAuthMessage(
@@ -118,40 +130,45 @@ async function login(event) {
         const {
             response,
             data
-        } = await api(
-            "login",
-            {
-                method: "POST",
+        } =
+            await api(
+                "login",
+                {
+                    method: "POST",
 
-                body: JSON.stringify({
-                    email,
-                    password
-                })
-            }
-        );
+                    body:
+                        JSON.stringify({
+                            email,
+                            password
+                        })
+                }
+            );
 
         if (!response.ok) {
 
             setAuthMessage(
                 "❌ " +
-                (data.message ||
-                    "Giriş başarısız.")
+                (
+                    data.message ||
+                    "Giriş başarısız."
+                )
             );
 
             return;
         }
 
-        currentUser = data.user;
+        currentUser =
+            data.user;
 
         showApp();
 
         updateUser();
 
+        updateProfileScreen();
+
         await loadTasks();
 
-        showToast(
-            "👋 Hoş geldin!"
-        );
+        await loadSubjects();
 
     } catch (error) {
 
@@ -164,9 +181,9 @@ async function login(event) {
 }
 
 
-/* =========================
-   REGISTER
-========================= */
+// =====================================
+// REGISTER
+// =====================================
 
 async function register(event) {
 
@@ -174,29 +191,26 @@ async function register(event) {
 
     const name =
         document
-            .getElementById("registerName")
+            .getElementById(
+                "registerName"
+            )
             .value
             .trim();
 
     const email =
         document
-            .getElementById("registerEmail")
+            .getElementById(
+                "registerEmail"
+            )
             .value
             .trim();
 
     const password =
         document
-            .getElementById("registerPassword")
+            .getElementById(
+                "registerPassword"
+            )
             .value;
-
-    if (password.length < 6) {
-
-        setAuthMessage(
-            "❌ Şifre en az 6 karakter olmalı."
-        );
-
-        return;
-    }
 
     setAuthMessage(
         "Hesap oluşturuluyor..."
@@ -207,41 +221,46 @@ async function register(event) {
         const {
             response,
             data
-        } = await api(
-            "register",
-            {
-                method: "POST",
+        } =
+            await api(
+                "register",
+                {
+                    method: "POST",
 
-                body: JSON.stringify({
-                    name,
-                    email,
-                    password
-                })
-            }
-        );
+                    body:
+                        JSON.stringify({
+                            name,
+                            email,
+                            password
+                        })
+                }
+            );
 
         if (!response.ok) {
 
             setAuthMessage(
                 "❌ " +
-                (data.message ||
-                    "Kayıt başarısız.")
+                (
+                    data.message ||
+                    "Kayıt başarısız."
+                )
             );
 
             return;
         }
 
-        currentUser = data.user;
+        currentUser =
+            data.user;
 
         showApp();
 
         updateUser();
 
+        updateProfileScreen();
+
         await loadTasks();
 
-        showToast(
-            "🎉 Hesabın oluşturuldu!"
-        );
+        await loadSubjects();
 
     } catch (error) {
 
@@ -254,9 +273,9 @@ async function register(event) {
 }
 
 
-/* =========================
-   TASKS
-========================= */
+// =====================================
+// TASKS
+// =====================================
 
 async function loadTasks() {
 
@@ -265,10 +284,10 @@ async function loadTasks() {
         const {
             response,
             data
-        } = await api("tasks");
+        } =
+            await api("tasks");
 
         if (!response.ok) {
-
             return;
         }
 
@@ -283,10 +302,6 @@ async function loadTasks() {
 }
 
 
-/* =========================
-   TASK RENDER
-========================= */
-
 function renderTasks(tasks) {
 
     const list =
@@ -295,7 +310,6 @@ function renderTasks(tasks) {
         );
 
     if (!list) {
-
         return;
     }
 
@@ -304,93 +318,81 @@ function renderTasks(tasks) {
     if (tasks.length === 0) {
 
         list.innerHTML = `
-            <div
-                style="
-                    padding:30px 10px;
-                    text-align:center;
-                    color:#8991a5;
-                "
-            >
-                <div style="font-size:38px;margin-bottom:8px;">
-                    🎯
-                </div>
-
-                Henüz görev yok.
-                <br>
-
-                <small>
-                    İlk görevini ekle!
-                </small>
+            <div style="
+                padding:25px 0;
+                text-align:center;
+                color:#8991a5;
+            ">
+                Henüz görev yok. 🎯
             </div>
         `;
 
-        updateTaskStats(tasks);
+    } else {
 
-        return;
-    }
+        tasks.forEach(task => {
 
-    tasks.forEach(task => {
+            const item =
+                document.createElement(
+                    "div"
+                );
 
-        const item =
-            document.createElement("div");
-
-        item.className =
-            "task" +
-            (
-                task.completed
-                    ? " completed"
-                    : ""
-            );
-
-        item.innerHTML = `
-
-            <div
-                class="checkbox"
-                onclick="toggleTask(${task.id})"
-                aria-label="Görevi tamamla"
-            >
-                ${
+            item.className =
+                "task" +
+                (
                     task.completed
-                        ? "✓"
+                        ? " completed"
                         : ""
-                }
-            </div>
+                );
 
-            <div class="task-content">
-
-                <div class="task-name">
-                    ${escapeHTML(task.title)}
+            item.innerHTML = `
+                <div
+                    class="checkbox"
+                    onclick="toggleTask(${task.id})"
+                >
+                    ${
+                        task.completed
+                            ? "✓"
+                            : "☐"
+                    }
                 </div>
 
-                <div class="task-subject">
-                    🎓 Öğrenci görevi
+                <div class="task-content">
+
+                    <div class="task-name">
+                        ${escapeHTML(
+                            task.title
+                        )}
+                    </div>
+
+                    <div class="task-subject">
+                        Öğrenci görevi
+                    </div>
+
                 </div>
 
-            </div>
+                <div class="task-xp">
+                    +${task.xp} XP
+                </div>
 
-            <div class="task-xp">
-                +${Number(task.xp) || 50} XP
-            </div>
+                <button
+                    class="delete-task"
+                    onclick="deleteTask(${task.id})"
+                >
+                    🗑️
+                </button>
+            `;
 
-            <button
-                class="delete-task"
-                onclick="deleteTask(${task.id})"
-                aria-label="Görevi sil"
-            >
-                🗑️
-            </button>
-        `;
-
-        list.appendChild(item);
-    });
+            list.appendChild(item);
+        });
+    }
 
     updateTaskStats(tasks);
 }
 
 
-/* =========================
-   TASK EKLE
-========================= */
+// =====================================
+// ADD TASK
+// =====================================
 
 async function addTask() {
 
@@ -408,143 +410,98 @@ async function addTask() {
             "⚠️ Görev adı yaz!"
         );
 
-        input.focus();
-
         return;
     }
 
-    try {
-
-        const {
-            response,
-            data
-        } = await api(
+    const {
+        response,
+        data
+    } =
+        await api(
             "tasks",
             {
                 method: "POST",
 
-                body: JSON.stringify({
-                    title
-                })
+                body:
+                    JSON.stringify({
+                        title
+                    })
             }
         );
 
-        if (!response.ok) {
-
-            showToast(
-                "❌ " +
-                (data.message ||
-                    "Görev eklenemedi.")
-            );
-
-            return;
-        }
-
-        input.value = "";
-
-        await loadTasks();
+    if (!response.ok) {
 
         showToast(
-            "✅ Görev eklendi!"
+            "❌ " +
+            (
+                data.message ||
+                "Görev eklenemedi."
+            )
         );
 
-    } catch (error) {
-
-        console.error(error);
-
-        showToast(
-            "❌ Bir hata oluştu."
-        );
+        return;
     }
+
+    input.value = "";
+
+    await loadTasks();
+
+    showToast(
+        "✅ Görev eklendi!"
+    );
 }
 
 
-/* =========================
-   ENTER İLE GÖREV EKLE
-========================= */
-
-document.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (
-            event.key === "Enter" &&
-            document.activeElement &&
-            document.activeElement.id === "newTask"
-        ) {
-
-            event.preventDefault();
-
-            addTask();
-        }
-    }
-);
-
-
-/* =========================
-   TASK TAMAMLA
-========================= */
+// =====================================
+// TOGGLE TASK
+// =====================================
 
 async function toggleTask(id) {
 
-    try {
-
-        const {
-            response,
-            data
-        } = await api(
+    const {
+        response,
+        data
+    } =
+        await api(
             "tasks",
             {
                 method: "PATCH",
 
-                body: JSON.stringify({
-                    id
-                })
+                body:
+                    JSON.stringify({
+                        id
+                    })
             }
         );
 
-        if (!response.ok) {
-
-            showToast(
-                "❌ " +
-                (data.message ||
-                    "İşlem başarısız.")
-            );
-
-            return;
-        }
-
-        await refreshUser();
-
-        await loadTasks();
-
-        if (data.completed) {
-
-            showToast(
-                "🎉 Görev tamamlandı! +50 XP"
-            );
-
-        } else {
-
-            showToast(
-                "↩️ Görev yeniden açıldı."
-            );
-        }
-
-    } catch (error) {
-
-        console.error(error);
+    if (!response.ok) {
 
         showToast(
-            "❌ Bir hata oluştu."
+            "❌ " +
+            (
+                data.message ||
+                "İşlem başarısız."
+            )
         );
+
+        return;
     }
+
+    await refreshUser();
+
+    await loadTasks();
+
+    showToast(
+        data.completed
+            ? "🎉 Görev tamamlandı! +50 XP"
+            : "Görev yeniden açıldı."
+    );
 }
 
 
-/* =========================
-   TASK SİL
-========================= */
+// =====================================
+// DELETE TASK
+// =====================================
 
 async function deleteTask(id) {
 
@@ -553,91 +510,75 @@ async function deleteTask(id) {
             "Bu görevi silmek istediğine emin misin?"
         )
     ) {
-
         return;
     }
 
-    try {
-
-        const {
-            response,
-            data
-        } = await api(
+    const {
+        response,
+        data
+    } =
+        await api(
             "tasks",
             {
                 method: "DELETE",
 
-                body: JSON.stringify({
-                    id
-                })
+                body:
+                    JSON.stringify({
+                        id
+                    })
             }
         );
 
-        if (!response.ok) {
-
-            showToast(
-                "❌ " +
-                (data.message ||
-                    "Görev silinemedi.")
-            );
-
-            return;
-        }
-
-        await refreshUser();
-
-        await loadTasks();
+    if (!response.ok) {
 
         showToast(
-            "🗑️ Görev silindi."
+            "❌ " +
+            (
+                data.message ||
+                "Silinemedi."
+            )
         );
 
-    } catch (error) {
-
-        console.error(error);
-
-        showToast(
-            "❌ Bir hata oluştu."
-        );
+        return;
     }
+
+    await refreshUser();
+
+    await loadTasks();
+
+    showToast(
+        "🗑️ Görev silindi."
+    );
 }
 
 
-/* =========================
-   USER YENİLE
-========================= */
+// =====================================
+// USER
+// =====================================
 
 async function refreshUser() {
 
-    try {
+    const {
+        response,
+        data
+    } =
+        await api("me");
 
-        const {
-            response,
-            data
-        } = await api("me");
+    if (response.ok) {
 
-        if (response.ok) {
+        currentUser =
+            data.user;
 
-            currentUser = data.user;
+        updateUser();
 
-            updateUser();
-        }
-
-    } catch (error) {
-
-        console.error(error);
+        updateProfileScreen();
     }
 }
 
-
-/* =========================
-   USER UI
-========================= */
 
 function updateUser() {
 
     if (!currentUser) {
-
         return;
     }
 
@@ -655,13 +596,19 @@ function updateUser() {
     }
 
     const xp =
-        Number(currentUser.xp) || 0;
+        Number(
+            currentUser.xp
+        ) || 0;
 
     const streak =
-        Number(currentUser.streak) || 0;
+        Number(
+            currentUser.streak
+        ) || 0;
 
     const level =
-        Math.floor(xp / 250) + 1;
+        Math.floor(
+            xp / 250
+        ) + 1;
 
     const levelXP =
         xp % 250;
@@ -681,7 +628,8 @@ function updateUser() {
 
     setText(
         "xpText",
-        levelXP + " / 250 XP"
+        levelXP +
+        " / 250 XP"
     );
 
     const bar =
@@ -712,15 +660,16 @@ function updateUser() {
 }
 
 
-/* =========================
-   TASK STATS
-========================= */
+// =====================================
+// TASK STATS
+// =====================================
 
 function updateTaskStats(tasks) {
 
     const completed =
         tasks.filter(
-            task => task.completed
+            task =>
+                task.completed
         ).length;
 
     const total =
@@ -743,9 +692,600 @@ function updateTaskStats(tasks) {
 }
 
 
-/* =========================
-   AUTH UI
-========================= */
+// =====================================
+// SUBJECTS
+// =====================================
+
+async function loadSubjects() {
+
+    try {
+
+        const {
+            response,
+            data
+        } =
+            await api("subjects");
+
+        if (!response.ok) {
+            return;
+        }
+
+        renderSubjects(
+            data.subjects || []
+        );
+
+    } catch (error) {
+
+        console.error(error);
+    }
+}
+
+
+function renderSubjects(subjects) {
+
+    const list =
+        document.getElementById(
+            "subjectList"
+        );
+
+    const counter =
+        document.getElementById(
+            "subjectCount"
+        );
+
+    if (!list) {
+        return;
+    }
+
+    counter.textContent =
+        subjects.length;
+
+    list.innerHTML = "";
+
+    if (subjects.length === 0) {
+
+        list.innerHTML = `
+            <div style="
+                text-align:center;
+                padding:25px;
+                color:#8991a5;
+            ">
+                Henüz ders eklemedin. 📚
+            </div>
+        `;
+
+        return;
+    }
+
+    subjects.forEach(subject => {
+
+        const item =
+            document.createElement(
+                "div"
+            );
+
+        item.className =
+            "subject-item";
+
+        item.innerHTML = `
+
+            <div class="subject-icon">
+                📚
+            </div>
+
+            <div class="subject-name">
+                ${escapeHTML(
+                    subject.name
+                )}
+            </div>
+
+            <button
+                class="subject-delete"
+                onclick="deleteSubject(${subject.id})"
+            >
+                🗑️
+            </button>
+        `;
+
+        list.appendChild(item);
+    });
+}
+
+
+async function addSubject() {
+
+    const input =
+        document.getElementById(
+            "subjectInput"
+        );
+
+    const name =
+        input.value.trim();
+
+    if (!name) {
+
+        showToast(
+            "⚠️ Ders adı yaz!"
+        );
+
+        return;
+    }
+
+    const {
+        response,
+        data
+    } =
+        await api(
+            "subjects",
+            {
+                method: "POST",
+
+                body:
+                    JSON.stringify({
+                        name
+                    })
+            }
+        );
+
+    if (!response.ok) {
+
+        showToast(
+            "❌ " +
+            (
+                data.message ||
+                "Ders eklenemedi."
+            )
+        );
+
+        return;
+    }
+
+    input.value = "";
+
+    await loadSubjects();
+
+    showToast(
+        "📚 Ders eklendi!"
+    );
+}
+
+
+async function deleteSubject(id) {
+
+    if (
+        !confirm(
+            "Bu dersi silmek istediğine emin misin?"
+        )
+    ) {
+        return;
+    }
+
+    const {
+        response
+    } =
+        await api(
+            "subjects",
+            {
+                method: "DELETE",
+
+                body:
+                    JSON.stringify({
+                        id
+                    })
+            }
+        );
+
+    if (!response.ok) {
+
+        showToast(
+            "❌ Ders silinemedi."
+        );
+
+        return;
+    }
+
+    await loadSubjects();
+
+    showToast(
+        "🗑️ Ders silindi."
+    );
+}
+
+
+// =====================================
+// FOCUS
+// =====================================
+
+function updateFocusTimer() {
+
+    const timer =
+        document.getElementById(
+            "focusTimer"
+        );
+
+    if (!timer) {
+        return;
+    }
+
+    const minutes =
+        Math.floor(
+            focusSeconds / 60
+        );
+
+    const seconds =
+        focusSeconds % 60;
+
+    timer.textContent =
+        String(minutes)
+            .padStart(2, "0") +
+        ":" +
+        String(seconds)
+            .padStart(2, "0");
+}
+
+
+function startFocus() {
+
+    if (focusRunning) {
+        return;
+    }
+
+    focusRunning = true;
+
+    setText(
+        "focusStatus",
+        "🔥 Odaklanıyorsun..."
+    );
+
+    focusInterval =
+        setInterval(() => {
+
+            if (focusSeconds <= 0) {
+
+                clearInterval(
+                    focusInterval
+                );
+
+                focusRunning = false;
+
+                completeFocus();
+
+                return;
+            }
+
+            focusSeconds--;
+
+            updateFocusTimer();
+
+        }, 1000);
+}
+
+
+function pauseFocus() {
+
+    if (!focusRunning) {
+        return;
+    }
+
+    clearInterval(
+        focusInterval
+    );
+
+    focusRunning = false;
+
+    setText(
+        "focusStatus",
+        "⏸ Duraklatıldı"
+    );
+}
+
+
+function resetFocus() {
+
+    clearInterval(
+        focusInterval
+    );
+
+    focusRunning = false;
+
+    focusSeconds =
+        25 * 60;
+
+    updateFocusTimer();
+
+    setText(
+        "focusStatus",
+        "Hazır mısın?"
+    );
+}
+
+
+async function completeFocus() {
+
+    setText(
+        "focusStatus",
+        "🎉 25 dakika tamamlandı!"
+    );
+
+    try {
+
+        const {
+            response,
+            data
+        } =
+            await api(
+                "focus",
+                {
+                    method: "POST",
+
+                    body:
+                        JSON.stringify({
+                            duration: 25
+                        })
+                }
+            );
+
+        if (response.ok) {
+
+            currentUser =
+                data.user;
+
+            updateUser();
+
+            updateProfileScreen();
+
+            showToast(
+                "🎉 Odaklanma tamamlandı! +25 XP"
+            );
+
+        } else {
+
+            showToast(
+                "⚠️ Oturum kaydedilemedi."
+            );
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        showToast(
+            "❌ Sunucu hatası."
+        );
+    }
+
+    focusSeconds =
+        25 * 60;
+
+    updateFocusTimer();
+}
+
+
+// =====================================
+// SCREENS
+// =====================================
+
+function hideExtraScreens() {
+
+    document
+        .querySelectorAll(
+            ".extra-screen"
+        )
+        .forEach(screen => {
+
+            screen.classList.remove(
+                "active"
+            );
+        });
+
+    const main =
+        document.querySelector(
+            ".main"
+        );
+
+    if (main) {
+        main.style.display =
+            "block";
+    }
+}
+
+
+function showExtraScreen(id) {
+
+    const main =
+        document.querySelector(
+            ".main"
+        );
+
+    if (main) {
+
+        main.style.display =
+            "none";
+    }
+
+    document
+        .querySelectorAll(
+            ".extra-screen"
+        )
+        .forEach(screen => {
+
+            screen.classList.remove(
+                "active"
+            );
+        });
+
+    const screen =
+        document.getElementById(id);
+
+    if (screen) {
+
+        screen.classList.add(
+            "active"
+        );
+    }
+}
+
+
+function mobileHome() {
+
+    hideExtraScreens();
+
+    setMobileNavActive(0);
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+function mobileSubjects() {
+
+    showExtraScreen(
+        "subjectsScreen"
+    );
+
+    setMobileNavActive(1);
+
+    loadSubjects();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+function mobileFocus() {
+
+    showExtraScreen(
+        "focusScreen"
+    );
+
+    setMobileNavActive(2);
+
+    updateFocusTimer();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+function mobileProfile() {
+
+    showExtraScreen(
+        "profileScreen"
+    );
+
+    setMobileNavActive(3);
+
+    updateProfileScreen();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+function setMobileNavActive(index) {
+
+    document
+        .querySelectorAll(
+            ".mobile-nav-item"
+        )
+        .forEach(
+            (button, i) => {
+
+                button.classList.toggle(
+                    "active",
+                    i === index
+                );
+            }
+        );
+}
+
+
+// =====================================
+// PROFILE
+// =====================================
+
+function updateProfileScreen() {
+
+    if (!currentUser) {
+        return;
+    }
+
+    const name =
+        currentUser.name ||
+        "Öğrenci";
+
+    const email =
+        currentUser.email ||
+        "-";
+
+    const xp =
+        Number(
+            currentUser.xp
+        ) || 0;
+
+    const streak =
+        Number(
+            currentUser.streak
+        ) || 0;
+
+    const level =
+        Math.floor(
+            xp / 250
+        ) + 1;
+
+    setText(
+        "profileName",
+        name
+    );
+
+    setText(
+        "profileEmail",
+        email
+    );
+
+    setText(
+        "profileName2",
+        name
+    );
+
+    setText(
+        "profileEmail2",
+        email
+    );
+
+    setText(
+        "profileXP",
+        xp
+    );
+
+    setText(
+        "profileStreak",
+        streak
+    );
+
+    setText(
+        "profileLevel",
+        level
+    );
+
+    setText(
+        "profileLevel2",
+        level
+    );
+}
+
+
+// =====================================
+// AUTH UI
+// =====================================
 
 function showAuth() {
 
@@ -761,12 +1301,14 @@ function showAuth() {
 
     if (auth) {
 
-        auth.style.display = "flex";
+        auth.style.display =
+            "flex";
     }
 
     if (app) {
 
-        app.style.display = "none";
+        app.style.display =
+            "none";
     }
 }
 
@@ -785,71 +1327,71 @@ function showApp() {
 
     if (auth) {
 
-        auth.style.display = "none";
+        auth.style.display =
+            "none";
     }
 
     if (app) {
 
-        app.style.display = "block";
+        app.style.display =
+            "block";
     }
+
+    mobileHome();
 }
 
-
-/* =========================
-   LOGIN TAB
-========================= */
 
 function showLogin() {
 
     document.getElementById(
         "loginForm"
-    ).style.display = "block";
+    ).style.display =
+        "block";
 
     document.getElementById(
         "registerForm"
-    ).style.display = "none";
+    ).style.display =
+        "none";
 
     document.getElementById(
         "loginTab"
-    ).classList.add("active");
+    ).classList.add(
+        "active"
+    );
 
     document.getElementById(
         "registerTab"
-    ).classList.remove("active");
-
-    setAuthMessage("");
+    ).classList.remove(
+        "active"
+    );
 }
 
-
-/* =========================
-   REGISTER TAB
-========================= */
 
 function showRegister() {
 
     document.getElementById(
         "loginForm"
-    ).style.display = "none";
+    ).style.display =
+        "none";
 
     document.getElementById(
         "registerForm"
-    ).style.display = "block";
+    ).style.display =
+        "block";
 
     document.getElementById(
         "loginTab"
-    ).classList.remove("active");
+    ).classList.remove(
+        "active"
+    );
 
     document.getElementById(
         "registerTab"
-    ).classList.add("active");
-
-    setAuthMessage("");
+    ).classList.add(
+        "active"
+    );
 }
 
-
-/* =========================
-   MESSAGE
-========================= */
 
 function setAuthMessage(text) {
 
@@ -860,14 +1402,15 @@ function setAuthMessage(text) {
 
     if (element) {
 
-        element.textContent = text;
+        element.textContent =
+            text;
     }
 }
 
 
-/* =========================
-   LOGOUT
-========================= */
+// =====================================
+// LOGOUT
+// =====================================
 
 async function logout() {
 
@@ -891,246 +1434,16 @@ async function logout() {
 }
 
 
-/* =========================
-   MOBILE NAV
-========================= */
-
-function mobileNav(button) {
-
-    document
-        .querySelectorAll(
-            ".mobile-nav button"
-        )
-        .forEach(
-            item =>
-                item.classList.remove(
-                    "active"
-                )
-        );
-
-    button.classList.add("active");
-
-    const text =
-        button.innerText.trim();
-
-    if (text.includes("Görevler")) {
-
-        document
-            .getElementById("taskList")
-            ?.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-
-        showToast(
-            "✅ Görevlerin burada!"
-        );
-
-        return;
-    }
-
-    if (text.includes("Dersler")) {
-
-        showToast(
-            "📚 Dersler bölümü yakında!"
-        );
-
-        return;
-    }
-
-    if (text.includes("Odaklan")) {
-
-        showToast(
-            "⏱️ Odaklan modu yakında!"
-        );
-
-        return;
-    }
-
-    if (text.includes("Profil")) {
-
-        showToast(
-            "👤 Profil bölümü yakında!"
-        );
-
-        return;
-    }
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-}
-
-
-/* =========================
-   TOAST
-========================= */
+// =====================================
+// TOAST
+// =====================================
 
 function showToast(text) {
 
-    const old =
-        document.getElementById(
-            "toast"
-        );
-
-    if (old) {
-
-        old.remove();
-    }
-
-    const toast =
-        document.createElement(
-            "div"
-        );
-
-    toast.id = "toast";
-
-    toast.textContent = text;
-
-    toast.style.cssText = `
-        position:fixed;
-        left:50%;
-        transform:translateX(-50%);
-        bottom:92px;
-        background:#15182b;
-        color:white;
-        padding:13px 18px;
-        border-radius:14px;
-        z-index:99999;
-        box-shadow:0 10px 30px rgba(0,0,0,.25);
-        font-size:13px;
-        font-weight:700;
-        max-width:90%;
-        text-align:center;
-        animation:toastIn .25s ease;
-    `;
-
-    document.body.appendChild(toast);
-
-    setTimeout(
-        () => {
-
-            if (toast) {
-
-                toast.remove();
-            }
-
-        },
-        2500
-    );
+    showMobileToast(text);
 }
 
 
-/* =========================
-   HELPERS
-========================= */
-
-function setText(id, value) {
-
-    const element =
-        document.getElementById(id);
-
-    if (element) {
-
-        element.textContent = value;
-    }
-}
-
-
-function escapeHTML(text) {
-
-    const div =
-        document.createElement(
-            "div"
-        );
-
-    div.textContent = text;
-
-    return div.innerHTML;
-}
-
-
-/* =========================
-   TOAST ANIMATION
-========================= */
-
-const toastStyle =
-    document.createElement("style");
-
-toastStyle.textContent = `
-    @keyframes toastIn {
-        from {
-            opacity:0;
-            transform:
-                translate(-50%,20px);
-        }
-
-        to {
-            opacity:1;
-            transform:
-                translate(-50%,0);
-        }
-    }
-`;
-
-document.head.appendChild(
-    toastStyle
-);
-// =====================================
-// MOBİL NAVİGASYON
-// =====================================
-
-function setMobileNavActive(index) {
-    const buttons =
-        document.querySelectorAll(".mobile-nav-item");
-
-    buttons.forEach((button, i) => {
-        button.classList.toggle(
-            "active",
-            i === index
-        );
-    });
-}
-
-// ANA SAYFA
-function mobileHome() {
-    setMobileNavActive(0);
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-}
-
-// DERSLER
-function mobileSubjects() {
-    setMobileNavActive(1);
-
-    showMobileToast(
-        "📚 Dersler bölümü yakında!"
-    );
-}
-
-// ODAKLAN
-function mobileFocus() {
-    setMobileNavActive(2);
-
-    showMobileToast(
-        "⏱️ Odaklan modu yakında!"
-    );
-}
-
-// PROFİL
-function mobileProfile() {
-    setMobileNavActive(3);
-
-    showMobileToast(
-        "👤 Profil bölümü yakında!"
-    );
-}
-
-// MOBİL TOAST
 function showMobileToast(message) {
 
     const toast =
@@ -1142,18 +1455,92 @@ function showMobileToast(message) {
         return;
     }
 
-    toast.textContent = message;
+    toast.textContent =
+        message;
 
-    toast.classList.add("show");
-
-    clearTimeout(
-        window.mobileToastTimer
+    toast.classList.add(
+        "show"
     );
 
-    window.mobileToastTimer =
+    clearTimeout(
+        window.toastTimer
+    );
+
+    window.toastTimer =
         setTimeout(() => {
+
             toast.classList.remove(
                 "show"
             );
-        }, 2200);
+
+        }, 2500);
 }
+
+
+// =====================================
+// HELPERS
+// =====================================
+
+function setText(id, value) {
+
+    const element =
+        document.getElementById(id);
+
+    if (element) {
+
+        element.textContent =
+            value;
+    }
+}
+
+
+function escapeHTML(text) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent =
+        text;
+
+    return div.innerHTML;
+}
+
+
+// =====================================
+// ENTER = GÖREV EKLE
+// =====================================
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Enter" &&
+            document.activeElement &&
+            document.activeElement.id ===
+                "newTask"
+        ) {
+
+            addTask();
+        }
+
+        if (
+            event.key === "Enter" &&
+            document.activeElement &&
+            document.activeElement.id ===
+                "subjectInput"
+        ) {
+
+            addSubject();
+        }
+    }
+);
+
+
+// =====================================
+// TIMER BAŞLANGIÇ
+// =====================================
+
+updateFocusTimer();
