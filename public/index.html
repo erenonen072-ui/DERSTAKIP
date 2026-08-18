@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>DersTakip | Öğrenci Paneli</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f7fb;
+      color: #1b2033;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* SIDEBAR */
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 250px;
+      background: #15182b;
+      color: white;
+      padding: 25px 18px;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: 900;
+      margin-bottom: 35px;
+      padding-left: 10px;
+    }
+
+    .logo span {
+      color: #8176ff;
+    }
+
+    .menu button {
+      width: 100%;
+      border: none;
+      background: transparent;
+      color: #aeb4ca;
+      padding: 14px;
+      border-radius: 12px;
+      margin-bottom: 7px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .menu button:hover,
+    .menu button.active {
+      background: #292d49;
+      color: white;
+    }
+
+    .streak-box {
+      position: absolute;
+      bottom: 25px;
+      left: 18px;
+      right: 18px;
+      background: linear-gradient(135deg, #665bf1, #9579ff);
+      padding: 18px;
+      border-radius: 18px;
+    }
+
+    .streak-box h3 {
+      margin-bottom: 6px;
+    }
+
+    .streak-box p {
+      font-size: 13px;
+      opacity: .85;
+    }
+
+    /* MAIN */
+
+    .main {
+      margin-left: 250px;
+      padding: 30px;
+      max-width: 1500px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .welcome h1 {
+      font-size: 30px;
+      margin-bottom: 6px;
+    }
+
+    .welcome p {
+      color: #747c92;
+    }
+
+    .profile {
+      background: white;
+      padding: 9px 14px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 8px 25px #0000000c;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #e7e4ff;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+    }
+
+    /* HERO */
+
+    .hero {
+      background: linear-gradient(135deg, #6357ef, #9275ff);
+      color: white;
+      border-radius: 24px;
+      padding: 28px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: #ffffff18;
+      right: -80px;
+      top: -100px;
+    }
+
+    .hero h2 {
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+
+    .hero p {
+      opacity: .9;
+      margin-bottom: 25px;
+    }
+
+    .progress {
+      height: 10px;
+      background: #ffffff30;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      background: white;
+      border-radius: 20px;
+      width: 65%;
+    }
+
+    .hero-bottom {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .xp {
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    .hero-button {
+      border: none;
+      background: white;
+      color: #5d51df;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-weight: 800;
+    }
+
+    /* GRID */
+
+    .grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: 0 8px 30px #0000000a;
+      border: 1px solid #e9ecf4;
+    }
+
+    .card-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .card-title h2 {
+      font-size: 19px;
+    }
+
+    .card-title span {
+      color: #858da1;
+      font-size: 13px;
+    }
+
+    /* TASKS */
+
+    .task {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 15px 0;
+      border-bottom: 1px solid #edf0f5;
+    }
+
+    .task:last-child {
+      border-bottom: none;
+    }
+
+    .checkbox {
+      width: 24px;
+      height: 24px;
+      border: 2px solid #d8dce8;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .task.completed .checkbox {
+      background: #20c997;
+      border-color: #20c997;
+      color: white;
+    }
+
+    .task.completed .task-name {
+      text-decoration: line-through;
+      color: #9aa1b2;
+    }
+
+    .task-name {
+      font-weight: 750;
+    }
+
+    .task-subject {
+      color: #8991a5;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .task-xp {
+      margin-left: auto;
+      background: #f0efff;
+      color: #6257df;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* STATS */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .stat {
+      background: white;
+      padding: 20px;
+      border-radius: 18px;
+      border: 1px solid #e9ecf4;
+    }
+
+    .stat-icon {
+      font-size: 23px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 25px;
+      margin: 8px 0 3px;
+    }
+
+    .stat small {
+      color: #7d8599;
+    }
+
+    /* SUBJECTS */
+
+    .subject {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 17px 0;
+    }
+
+    .subject-icon {
+      width: 44px;
+      height: 44px;
+      background: #f0efff;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+    }
+
+    .subject-info {
+      flex: 1;
+    }
+
+    .subject-info strong {
+      display: block;
+      margin-bottom: 7px;
+    }
+
+    .subject-bar {
+      height: 7px;
+      background: #edf0f6;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .subject-bar span {
+      display: block;
+      height: 100%;
+      background: #6c63ff;
+      border-radius: 20px;
+    }
+
+    /* EXAM */
+
+    .exam {
+      margin-top: 15px;
+      background: #f7f8fc;
+      padding: 15px;
+      border-radius: 14px;
+    }
+
+    .exam-title {
+      font-weight: 800;
+    }
+
+    .exam-date {
+      color: #7b8398;
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+    .countdown {
+      display: flex;
+      gap: 8px;
+      margin-top: 13px;
+    }
+
+    .time {
+      flex: 1;
+      background: white;
+      padding: 10px;
+      text-align: center;
+      border-radius: 10px;
+    }
+
+    .time strong {
+      display: block;
+      font-size: 19px;
+    }
+
+    .time small {
+      color: #8a92a5;
+    }
+
+    /* ADD TASK */
+
+    .add-task {
+      display: flex;
+      gap: 8px;
+      margin-top: 15px;
+    }
+
+    .add-task input {
+      flex: 1;
+      border: 1px solid #e0e4ed;
+      padding: 12px;
+      border-radius: 11px;
+      outline: none;
+    }
+
+    .add-task button {
+      border: none;
+      background: #6c63ff;
+      color: white;
+      padding: 12px 17px;
+      border-radius: 11px;
+      font-weight: 800;
+    }
+
+    /* MOBILE */
+
+    @media(max-width:900px) {
+
+      .sidebar {
+        width: 75px;
+      }
+
+      .logo {
+        font-size: 0;
+        text-align: center;
+      }
+
+      .logo::before {
+        content: "DT";
+        font-size: 23px;
+      }
+
+      .menu button {
+        text-align: center;
+        font-size: 0;
+      }
+
+      .menu button:first-letter {
+        font-size: 20px;
+      }
+
+      .streak-box {
+        display: none;
+      }
+
+      .main {
+        margin-left: 75px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media(max-width:600px) {
+
+      .main {
+        padding: 15px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+      }
+
+      .profile {
+        display: none;
+      }
+
+      .welcome h1 {
+        font-size: 23px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .hero-bottom {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .add-task {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar">
+
+    <div class="logo">
+      Ders<span>Takip</span>
+    </div>
+
+    <div class="menu">
+
+      <button class="active">
+        🏠 Ana Sayfa
+      </button>
+
+      <button>
+        ✅ Görevler
+      </button>
+
+      <button>
+        📚 Dersler
+      </button>
+
+      <button>
+        📅 Sınavlar
+      </button>
+
+      <button>
+        ⏱️ Odaklan
+      </button>
+
+      <button>
+        📊 İstatistikler
+      </button>
+
+    </div>
+
+    <div class="streak-box">
+
+      <h3>🔥 7 Günlük Seri</h3>
+
+      <p>
+        Serini korumaya devam et!
+      </p>
+
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN -->
+
+  <main class="main">
+
+    <!-- TOP -->
+
+    <div class="topbar">
+
+      <div class="welcome">
+
+        <h1>
+          Merhaba, Öğrenci! 👋
+        </h1>
+
+        <p>
+          Bugün küçük bir adım, yarın büyük bir başarı.
+        </p>
+
+      </div>
+
+      <div class="profile">
+
+        <div class="avatar">
+          🎓
+        </div>
+
+        <strong>
+          Seviye 4
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <!-- HERO -->
+
+    <div class="hero">
+
+      <h2>
+        Bugünkü hedefin 🎯
+      </h2>
+
+      <p>
+        3 görevden 2'sini tamamladın. Harika gidiyorsun!
+      </p>
+
+      <div class="hero-bottom">
+
+        <div style="flex:1">
+
+          <div class="progress">
+            <span></span>
+          </div>
+
+          <div class="xp">
+            670 / 1000 XP
+          </div>
+
+        </div>
+
+        <button class="hero-button">
+          Görevler →
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- CONTENT -->
+
+    <div class="grid">
+
+      <!-- LEFT -->
+
+      <div>
+
+        <div class="card">
+
+          <div class="card-title">
+
+            <h2>
+              Bugünkü Görevler
+            </h2>
+
+            <span>
+              2 / 3 tamamlandı
+            </span>
+
+          </div>
+
+
+          <div id="taskList">
+
+            <div class="task completed">
+
+              <div class="checkbox">
+                ✓
+              </div>
+
+              <div>
+
+                <div class="task-name">
+                  Matematikten 20 soru çöz
+                </div>
+
+                <div class="task-subject">
+                  Matematik
+                </div>
+
+              </div>
+
+              <div class="task-xp">
+                +50 XP
+              </div>
+
+            </div>
+
+
+            <div class="task completed">
+
+              <div class="checkbox">
+                ✓
+              </div>
+
+              <div>
+
+                <div class="task-name">
+                  İngilizce 15 kelime tekrar et
+                </div>
+
+                <div class="task-subject">
+                  İngilizce
+                </div>
+
+              </div>
+
+              <div class="task-xp">
+                +50 XP
+              </div>
+
+            </div>
+
+
+            <div class="task">
+
+              <div class="checkbox">
+                ☐
+              </div>
+
+              <div>
+
+                <div class="task-name">
+                  Fen konusunu tekrar et
+                </div>
+
+                <div class="task-subject">
+                  Fen Bilimleri
+                </div>
+
+              </div>
+
+              <div class="task-xp">
+                +50 XP
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- ADD -->
+
+          <div class="add-task">
+
+            <input
+              type="text"
+              id="newTask"
+              placeholder="Yeni görev ekle..."
+            >
+
+            <button onclick="addTask()">
+              + Ekle
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- STATS -->
+
+        <div class="stats">
+
+          <div class="stat">
+
+            <span class="stat-icon">
+              ⏱️
+            </span>
+
+            <strong>
+              4s 20dk
+            </strong>
+
+            <small>
+              Bu hafta çalışma
+            </small>
+
+          </div>
+
+
+          <div class="stat">
+
+            <span class="stat-icon">
+              📝
+            </span>
+
+            <strong>
+              87
+            </strong>
+
+            <small>
+              Çözülen soru
+            </small>
+
+          </div>
+
+
+          <div class="stat">
+
+            <span class="stat-icon">
+              ⭐
+            </span>
+
+            <strong>
+              670
+            </strong>
+
+            <small>
+              Toplam XP
+            </small>
+
+          </div>
+
+
+          <div class="stat">
+
+            <span class="stat-icon">
+              🏆
+            </span>
+
+            <strong>
+              6
+            </strong>
+
+            <small>
+              Rozet
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <!-- SUBJECTS -->
+
+        <div class="card">
+
+          <div class="card-title">
+
+            <h2>
+              📚 Ders İlerlemen
+            </h2>
+
+            <span>
+              Bu hafta
+            </span>
+
+          </div>
+
+
+          <div class="subject">
+
+            <div class="subject-icon">
+              ➗
+            </div>
+
+            <div class="subject-info">
+
+              <strong>
+                Matematik
+              </strong>
+
+              <div class="subject-bar">
+                <span style="width:64%"></span>
+              </div>
+
+            </div>
+
+            <strong>
+              64%
+            </strong>
+
+          </div>
+
+
+          <div class="subject">
+
+            <div class="subject-icon">
+              📖
+            </div>
+
+            <div class="subject-info">
+
+              <strong>
+                Türkçe
+              </strong>
+
+              <div class="subject-bar">
+                <span style="width:70%"></span>
+              </div>
+
+            </div>
+
+            <strong>
+              70%
+            </strong>
+
+          </div>
+
+
+          <div class="subject">
+
+            <div class="subject-icon">
+              🧪
+            </div>
+
+            <div class="subject-info">
+
+              <strong>
+                Fen Bilimleri
+              </strong>
+
+              <div class="subject-bar">
+                <span style="width:60%"></span>
+              </div>
+
+            </div>
+
+            <strong>
+              60%
+            </strong>
+
+          </div>
+
+
+          <div class="subject">
+
+            <div class="subject-icon">
+              🇬🇧
+            </div>
+
+            <div class="subject-info">
+
+              <strong>
+                İngilizce
+              </strong>
+
+              <div class="subject-bar">
+                <span style="width:80%"></span>
+              </div>
+
+            </div>
+
+            <strong>
+              80%
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- RIGHT -->
+
+      <div>
+
+        <!-- STREAK -->
+
+        <div class="card">
+
+          <div class="card-title">
+
+            <h2>
+              🔥 Çalışma Serisi
+            </h2>
+
+            <span>
+              Rekor: 12
+            </span>
+
+          </div>
+
+          <div style="font-size:42px;font-weight:900">
+
+            7
+            <span style="font-size:18px">
+              gün
+            </span>
+
+          </div>
+
+          <p style="color:#7d8599;margin-top:7px">
+
+            Bir gün daha çalış!
+
+          </p>
+
+        </div>
+
+
+        <!-- EXAM -->
+
+        <div class="card" style="margin-top:20px">
+
+          <div class="card-title">
+
+            <h2>
+              📅 Yaklaşan Sınav
+            </h2>
+
+          </div>
+
+          <div class="exam">
+
+            <div class="exam-title">
+              Matematik Yazılısı
+            </div>
+
+            <div class="exam-date">
+              25 Ağustos 2026
+            </div>
+
+            <div class="countdown">
+
+              <div class="time">
+                <strong>06</strong>
+                <small>Gün</small>
+              </div>
+
+              <div class="time">
+                <strong>12</strong>
+                <small>Saat</small>
+              </div>
+
+              <div class="time">
+                <strong>35</strong>
+                <small>Dk</small>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- GOAL -->
+
+        <div class="card" style="margin-top:20px">
+
+          <div class="card-title">
+
+            <h2>
+              🎯 Haftalık Hedef
+            </h2>
+
+          </div>
+
+          <p style="color:#7d8599">
+            5 saat çalışma hedefi
+          </p>
+
+          <div
+            class="progress"
+            style="
+              background:#eceef5;
+              margin-top:15px;
+            "
+          >
+
+            <span
+              style="
+                width:87%;
+                background:#6c63ff;
+              "
+            ></span>
+
+          </div>
+
+          <p
+            style="
+              margin-top:10px;
+              font-size:13px;
+            "
+          >
+
+            <strong>
+              4 saat 20 dakika
+            </strong>
+
+            tamamlandı.
+
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <script>
+
+    function addTask() {
+
+      const input =
+        document.getElementById("newTask");
+
+      const title =
+        input.value.trim();
+
+      if (!title) {
+
+        alert("Önce görev yaz!");
+
+        return;
+
+      }
+
+      const taskList =
+        document.getElementById("taskList");
+
+      const task =
+        document.createElement("div");
+
+      task.className = "task";
+
+      task.innerHTML = `
+
+        <div class="checkbox">
+          ☐
+        </div>
+
+        <div>
+
+          <div class="task-name">
+            ${title}
+          </div>
+
+          <div class="task-subject">
+            Kişisel görev
+          </div>
+
+        </div>
+
+        <div class="task-xp">
+          +50 XP
+        </div>
+
+      `;
+
+      taskList.appendChild(task);
+
+      input.value = "";
+
+    }
+
+  </script>
+
+</body>
+</html>
