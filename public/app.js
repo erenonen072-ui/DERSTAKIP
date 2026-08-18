@@ -1,230 +1,219 @@
 let currentUser = null;
-let tasks = [];
-let subjects = [];
-let exams = [];
-let timer = null;
-let timerSeconds = 25 * 60;
-let timerRunning = false;
 
 const API = "/api";
-
-// =====================================
-// BAŞLANGIÇ
-// =====================================
 
 document.addEventListener(
   "DOMContentLoaded",
   loadApp
 );
 
-// =====================================
+// =============================
 // API
-// =====================================
+// =============================
 
 async function api(
   action,
   options = {}
 ) {
-  const response = await fetch(
-    `${API}?action=${encodeURIComponent(action)}`,
-    {
-      credentials: "include",
-      ...options,
-      headers: {
-        "Content-Type":
-          "application/json",
-        ...(options.headers || {})
+  try {
+    const response =
+      await fetch(
+        `${API}?action=${encodeURIComponent(action)}`,
+        {
+          credentials: "include",
+          headers: {
+            "Content-Type":
+              "application/json",
+            ...(options.headers || {})
+          },
+          ...options
+        }
+      );
+
+    const data =
+      await response
+        .json()
+        .catch(() => ({}));
+
+    return {
+      response,
+      data
+    };
+  } catch (error) {
+    console.error(error);
+
+    return {
+      response: {
+        ok: false,
+        status: 0
+      },
+      data: {
+        message:
+          "Sunucuya bağlanılamadı."
       }
-    }
-  );
-
-  const data =
-    await response
-      .json()
-      .catch(() => ({}));
-
-  return {
-    response,
-    data
-  };
+    };
+  }
 }
 
-// =====================================
-// APP LOAD
-// =====================================
+// =============================
+// START
+// =============================
 
 async function loadApp() {
   showAuth();
 
-  try {
-    const {
-      response,
-      data
-    } = await api("me");
+  const {
+    response,
+    data
+  } = await api("me");
 
-    if (!response.ok) {
-      return;
-    }
-
-    currentUser = data.user;
-
-    showApp();
-
-    await refreshAll();
-  } catch (error) {
-    console.error(error);
-    showAuth();
+  if (!response.ok) {
+    return;
   }
-}
 
-async function refreshAll() {
-  await Promise.all([
-    refreshUser(),
-    loadTasks(),
-    loadSubjects(),
-    loadExams(),
-    loadStats(),
-    loadAchievements()
-  ]);
+  currentUser =
+    data.user;
 
+  showApp();
   updateUser();
+
+  await loadTasks();
 }
 
-// =====================================
+// =============================
 // LOGIN
-// =====================================
+// =============================
 
 async function login(event) {
   event.preventDefault();
 
   const email =
-    document.getElementById(
-      "loginEmail"
-    ).value.trim();
+    document
+      .getElementById(
+        "loginEmail"
+      )
+      .value
+      .trim();
 
   const password =
-    document.getElementById(
-      "loginPassword"
-    ).value;
+    document
+      .getElementById(
+        "loginPassword"
+      )
+      .value;
 
   setAuthMessage(
     "Giriş yapılıyor..."
   );
 
-  try {
-    const {
-      response,
-      data
-    } = await api(
-      "login",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          email,
-          password
-        })
-      }
-    );
-
-    if (!response.ok) {
-      setAuthMessage(
-        "❌ " +
-        (
-          data.message ||
-          "Giriş başarısız."
-        )
-      );
-      return;
+  const {
+    response,
+    data
+  } = await api(
+    "login",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        email,
+        password
+      })
     }
+  );
 
-    currentUser = data.user;
-
-    showApp();
-
-    await refreshAll();
-
-    setAuthMessage("");
-  } catch (error) {
-    console.error(error);
-
+  if (!response.ok) {
     setAuthMessage(
-      "❌ Sunucuya bağlanılamadı."
+      "❌ " +
+      (data.message ||
+        "Giriş başarısız.")
     );
+    return;
   }
+
+  currentUser =
+    data.user;
+
+  showApp();
+  updateUser();
+
+  await loadTasks();
+
+  setAuthMessage("");
 }
 
-// =====================================
+// =============================
 // REGISTER
-// =====================================
+// =============================
 
 async function register(event) {
   event.preventDefault();
 
   const name =
-    document.getElementById(
-      "registerName"
-    ).value.trim();
+    document
+      .getElementById(
+        "registerName"
+      )
+      .value
+      .trim();
 
   const email =
-    document.getElementById(
-      "registerEmail"
-    ).value.trim();
+    document
+      .getElementById(
+        "registerEmail"
+      )
+      .value
+      .trim();
 
   const password =
-    document.getElementById(
-      "registerPassword"
-    ).value;
+    document
+      .getElementById(
+        "registerPassword"
+      )
+      .value;
 
   setAuthMessage(
     "Hesap oluşturuluyor..."
   );
 
-  try {
-    const {
-      response,
-      data
-    } = await api(
-      "register",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          name,
-          email,
-          password
-        })
-      }
-    );
-
-    if (!response.ok) {
-      setAuthMessage(
-        "❌ " +
-        (
-          data.message ||
-          "Kayıt başarısız."
-        )
-      );
-      return;
+  const {
+    response,
+    data
+  } = await api(
+    "register",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        name,
+        email,
+        password
+      })
     }
+  );
 
-    currentUser = data.user;
-
-    showApp();
-
-    await refreshAll();
-
-    setAuthMessage("");
-  } catch (error) {
-    console.error(error);
-
+  if (!response.ok) {
     setAuthMessage(
-      "❌ Sunucuya bağlanılamadı."
+      "❌ " +
+      (data.message ||
+        "Kayıt başarısız.")
     );
+    return;
   }
+
+  currentUser =
+    data.user;
+
+  showApp();
+  updateUser();
+
+  await loadTasks();
+
+  showToast(
+    "🎉 Hesabın oluşturuldu!"
+  );
 }
 
-// =====================================
+// =============================
 // TASKS
-// =====================================
+// =============================
 
 async function loadTasks() {
   const {
@@ -233,35 +222,46 @@ async function loadTasks() {
   } = await api("tasks");
 
   if (!response.ok) {
+    showToast(
+      "❌ Görevler yüklenemedi."
+    );
     return;
   }
 
-  tasks = data.tasks || [];
-
-  renderTasks(tasks);
+  renderTasks(
+    data.tasks || []
+  );
 }
 
-function renderTasks(list) {
-  const element =
+function renderTasks(tasks) {
+  const list =
     document.getElementById(
       "taskList"
     );
 
-  if (!element) {
+  if (!list) {
     return;
   }
 
-  element.innerHTML = "";
+  list.innerHTML = "";
 
-  if (!list.length) {
-    element.innerHTML = `
-      <div class="empty">
+  if (tasks.length === 0) {
+    list.innerHTML = `
+      <div style="
+        padding:25px 0;
+        text-align:center;
+        color:#8991a5;
+      ">
         Henüz görev yok. 🎯
       </div>
     `;
+
+    updateTaskStats(tasks);
+
+    return;
   }
 
-  list.forEach(task => {
+  tasks.forEach(task => {
     const item =
       document.createElement(
         "div"
@@ -280,12 +280,18 @@ function renderTasks(list) {
         class="checkbox"
         onclick="toggleTask(${task.id})"
       >
-        ${task.completed ? "✓" : ""}
+        ${
+          task.completed
+            ? "✓"
+            : "☐"
+        }
       </div>
 
       <div class="task-content">
         <div class="task-name">
-          ${escapeHTML(task.title)}
+          ${escapeHTML(
+            task.title
+          )}
         </div>
 
         <div class="task-subject">
@@ -305,11 +311,15 @@ function renderTasks(list) {
       </button>
     `;
 
-    element.appendChild(item);
+    list.appendChild(item);
   });
 
-  updateTaskStats(list);
+  updateTaskStats(tasks);
 }
+
+// =============================
+// ADD TASK
+// =============================
 
 async function addTask() {
   const input =
@@ -343,10 +353,8 @@ async function addTask() {
   if (!response.ok) {
     showToast(
       "❌ " +
-      (
-        data.message ||
-        "Görev eklenemedi."
-      )
+      (data.message ||
+        "Görev eklenemedi.")
     );
     return;
   }
@@ -359,6 +367,25 @@ async function addTask() {
     "✅ Görev eklendi!"
   );
 }
+
+// ENTER ile görev ekle
+
+document.addEventListener(
+  "keydown",
+  event => {
+    if (
+      event.key === "Enter" &&
+      document.activeElement?.id ===
+        "newTask"
+    ) {
+      addTask();
+    }
+  }
+);
+
+// =============================
+// TOGGLE TASK
+// =============================
 
 async function toggleTask(id) {
   const {
@@ -377,22 +404,29 @@ async function toggleTask(id) {
   if (!response.ok) {
     showToast(
       "❌ " +
-      (
-        data.message ||
-        "İşlem başarısız."
-      )
+      (data.message ||
+        "İşlem başarısız.")
     );
     return;
   }
 
-  await refreshAll();
+  await refreshUser();
+  await loadTasks();
 
-  showToast(
-    data.completed
-      ? "🎉 Görev tamamlandı! XP kazandın."
-      : "Görev yeniden açıldı."
-  );
+  if (data.completed) {
+    showToast(
+      "🎉 Görev tamamlandı! +50 XP"
+    );
+  } else {
+    showToast(
+      "Görev yeniden açıldı."
+    );
+  }
 }
+
+// =============================
+// DELETE TASK
+// =============================
 
 async function deleteTask(id) {
   if (
@@ -419,634 +453,23 @@ async function deleteTask(id) {
   if (!response.ok) {
     showToast(
       "❌ " +
-      (
-        data.message ||
-        "Görev silinemedi."
-      )
+      (data.message ||
+        "Görev silinemedi.")
     );
     return;
   }
 
-  await refreshAll();
+  await refreshUser();
+  await loadTasks();
 
   showToast(
     "🗑️ Görev silindi."
   );
 }
 
-// =====================================
-// SUBJECTS
-// =====================================
-
-async function loadSubjects() {
-  const {
-    response,
-    data
-  } = await api("subjects");
-
-  if (!response.ok) {
-    return;
-  }
-
-  subjects =
-    data.subjects || [];
-
-  renderSubjects();
-  fillSubjectSelect();
-}
-
-function renderSubjects() {
-  const list =
-    document.getElementById(
-      "subjectList"
-    );
-
-  if (!list) {
-    return;
-  }
-
-  list.innerHTML = "";
-
-  if (!subjects.length) {
-    list.innerHTML = `
-      <div class="empty">
-        Henüz ders eklemedin. 📚
-      </div>
-    `;
-
-    return;
-  }
-
-  subjects.forEach(subject => {
-    const item =
-      document.createElement(
-        "div"
-      );
-
-    item.className =
-      "subject-item";
-
-    item.innerHTML = `
-      <div
-        class="subject-color"
-        style="background:${escapeHTML(subject.color)}"
-      ></div>
-
-      <strong>
-        ${escapeHTML(subject.name)}
-      </strong>
-
-      <button
-        onclick="deleteSubject(${subject.id})"
-      >
-        🗑️
-      </button>
-    `;
-
-    list.appendChild(item);
-  });
-}
-
-function fillSubjectSelect() {
-  const select =
-    document.getElementById(
-      "examSubject"
-    );
-
-  if (!select) {
-    return;
-  }
-
-  select.innerHTML =
-    `<option value="">Ders seç</option>`;
-
-  subjects.forEach(subject => {
-    select.innerHTML += `
-      <option value="${subject.id}">
-        ${escapeHTML(subject.name)}
-      </option>
-    `;
-  });
-}
-
-async function addSubject() {
-  const input =
-    document.getElementById(
-      "newSubject"
-    );
-
-  const color =
-    document.getElementById(
-      "subjectColor"
-    );
-
-  const name =
-    input.value.trim();
-
-  if (!name) {
-    showToast(
-      "⚠️ Ders adı yaz!"
-    );
-    return;
-  }
-
-  const {
-    response,
-    data
-  } = await api(
-    "subjects",
-    {
-      method: "POST",
-      body: JSON.stringify({
-        name,
-        color:
-          color?.value ||
-          "#6c63ff"
-      })
-    }
-  );
-
-  if (!response.ok) {
-    showToast(
-      "❌ " +
-      (
-        data.message ||
-        "Ders eklenemedi."
-      )
-    );
-    return;
-  }
-
-  input.value = "";
-
-  await loadSubjects();
-
-  showToast(
-    "📚 Ders eklendi!"
-  );
-}
-
-async function deleteSubject(id) {
-  if (
-    !confirm(
-      "Bu dersi silmek istediğine emin misin?"
-    )
-  ) {
-    return;
-  }
-
-  await api(
-    "subjects",
-    {
-      method: "DELETE",
-      body: JSON.stringify({
-        id
-      })
-    }
-  );
-
-  await loadSubjects();
-  await loadExams();
-
-  showToast(
-    "🗑️ Ders silindi."
-  );
-}
-
-// =====================================
-// EXAMS
-// =====================================
-
-async function loadExams() {
-  const {
-    response,
-    data
-  } = await api("exams");
-
-  if (!response.ok) {
-    return;
-  }
-
-  exams =
-    data.exams || [];
-
-  renderExams();
-}
-
-function renderExams() {
-  const list =
-    document.getElementById(
-      "examList"
-    );
-
-  if (!list) {
-    return;
-  }
-
-  list.innerHTML = "";
-
-  if (!exams.length) {
-    list.innerHTML = `
-      <div class="empty">
-        Yaklaşan sınav yok. 📅
-      </div>
-    `;
-
-    return;
-  }
-
-  exams.forEach(exam => {
-    const date =
-      new Date(exam.exam_date);
-
-    const item =
-      document.createElement(
-        "div"
-      );
-
-    item.className =
-      "exam-item";
-
-    item.innerHTML = `
-      <div>
-        <strong>
-          ${escapeHTML(exam.title)}
-        </strong>
-
-        <small>
-          ${
-            exam.subject_name
-              ? escapeHTML(
-                  exam.subject_name
-                )
-              : "Ders belirtilmedi"
-          }
-        </small>
-
-        ${
-          exam.topic
-            ? `
-              <small>
-                Konu: ${escapeHTML(exam.topic)}
-              </small>
-            `
-            : ""
-        }
-      </div>
-
-      <div class="exam-date">
-        ${date.toLocaleDateString("tr-TR")}
-      </div>
-
-      <button
-        onclick="deleteExam(${exam.id})"
-      >
-        🗑️
-      </button>
-    `;
-
-    list.appendChild(item);
-  });
-}
-
-async function addExam() {
-  const title =
-    document.getElementById(
-      "examTitle"
-    ).value.trim();
-
-  const date =
-    document.getElementById(
-      "examDate"
-    ).value;
-
-  const topic =
-    document.getElementById(
-      "examTopic"
-    ).value.trim();
-
-  const subject =
-    document.getElementById(
-      "examSubject"
-    ).value;
-
-  if (!title || !date) {
-    showToast(
-      "⚠️ Sınav adı ve tarih gerekli."
-    );
-    return;
-  }
-
-  const {
-    response,
-    data
-  } = await api(
-    "exams",
-    {
-      method: "POST",
-      body: JSON.stringify({
-        title,
-        exam_date: date,
-        topic,
-        subject_id:
-          subject || null
-      })
-    }
-  );
-
-  if (!response.ok) {
-    showToast(
-      "❌ " +
-      (
-        data.message ||
-        "Sınav eklenemedi."
-      )
-    );
-    return;
-  }
-
-  document.getElementById(
-    "examTitle"
-  ).value = "";
-
-  document.getElementById(
-    "examDate"
-  ).value = "";
-
-  document.getElementById(
-    "examTopic"
-  ).value = "";
-
-  await loadExams();
-
-  showToast(
-    "📅 Sınav eklendi!"
-  );
-}
-
-async function deleteExam(id) {
-  if (
-    !confirm(
-      "Bu sınavı silmek istediğine emin misin?"
-    )
-  ) {
-    return;
-  }
-
-  await api(
-    "exams",
-    {
-      method: "DELETE",
-      body: JSON.stringify({
-        id
-      })
-    }
-  );
-
-  await loadExams();
-
-  showToast(
-    "🗑️ Sınav silindi."
-  );
-}
-
-// =====================================
-// STUDY TIMER
-// =====================================
-
-function setTimer(minutes) {
-  if (timerRunning) {
-    return;
-  }
-
-  timerSeconds =
-    minutes * 60;
-
-  updateTimerDisplay();
-}
-
-function startTimer() {
-  if (timerRunning) {
-    return;
-  }
-
-  timerRunning = true;
-
-  timer =
-    setInterval(
-      async () => {
-        timerSeconds--;
-
-        updateTimerDisplay();
-
-        if (timerSeconds <= 0) {
-          stopTimer();
-
-          await finishStudySession();
-
-          showToast(
-            "🎉 Çalışma tamamlandı! XP kazandın."
-          );
-        }
-      },
-      1000
-    );
-}
-
-function stopTimer() {
-  timerRunning = false;
-
-  if (timer) {
-    clearInterval(timer);
-    timer = null;
-  }
-}
-
-function resetTimer() {
-  stopTimer();
-
-  timerSeconds =
-    25 * 60;
-
-  updateTimerDisplay();
-}
-
-function updateTimerDisplay() {
-  const minutes =
-    Math.floor(
-      timerSeconds / 60
-    );
-
-  const seconds =
-    timerSeconds % 60;
-
-  setText(
-    "timerDisplay",
-    `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`
-  );
-}
-
-async function finishStudySession() {
-  const {
-    response,
-    data
-  } = await api(
-    "sessions",
-    {
-      method: "POST",
-      body: JSON.stringify({
-        duration_minutes: 25
-      })
-    }
-  );
-
-  if (!response.ok) {
-    showToast(
-      "❌ Çalışma kaydedilemedi."
-    );
-    return;
-  }
-
-  await refreshAll();
-}
-
-// =====================================
-// STATS
-// =====================================
-
-async function loadStats() {
-  const {
-    response,
-    data
-  } = await api("stats");
-
-  if (!response.ok) {
-    return;
-  }
-
-  const stats =
-    data.stats || {};
-
-  setText(
-    "bigStudyMinutes",
-    stats.studyMinutes || 0
-  );
-
-  setText(
-    "bigCompletedTasks",
-    stats.completedTasks || 0
-  );
-
-  setText(
-    "bigSubjects",
-    stats.subjects || 0
-  );
-
-  setText(
-    "bigExams",
-    stats.exams || 0
-  );
-}
-
-// =====================================
-// ACHIEVEMENTS
-// =====================================
-
-async function loadAchievements() {
-  const {
-    response,
-    data
-  } = await api(
-    "achievements"
-  );
-
-  if (!response.ok) {
-    return;
-  }
-
-  renderAchievements(
-    data.achievements || []
-  );
-}
-
-function renderAchievements(list) {
-  const element =
-    document.getElementById(
-      "achievementList"
-    );
-
-  if (!element) {
-    return;
-  }
-
-  const names = {
-    first_task:
-      ["🎯", "İlk Görev", "İlk görevini tamamladın."],
-
-    ten_tasks:
-      ["🏆", "10 Görev", "10 görev tamamladın."],
-
-    three_subjects:
-      ["📚", "Ders Kurdu", "3 ders ekledin."],
-
-    first_session:
-      ["⏱️", "İlk Çalışma", "İlk çalışma oturumunu tamamladın."],
-
-    xp_250:
-      ["⭐", "250 XP", "250 XP kazandın."],
-
-    streak_7:
-      ["🔥", "7 Gün Seri", "7 günlük seri yaptın."]
-  };
-
-  element.innerHTML = "";
-
-  if (!list.length) {
-    element.innerHTML = `
-      <div class="empty">
-        Henüz başarım kazanmadın.
-      </div>
-    `;
-
-    return;
-  }
-
-  list.forEach(item => {
-    const info =
-      names[item.achievement_key] ||
-      ["🏅", "Başarım", item.achievement_key];
-
-    const div =
-      document.createElement(
-        "div"
-      );
-
-    div.className =
-      "achievement";
-
-    div.innerHTML = `
-      <div class="achievement-icon">
-        ${info[0]}
-      </div>
-
-      <div>
-        <strong>
-          ${escapeHTML(info[1])}
-        </strong>
-
-        <small>
-          ${escapeHTML(info[2])}
-        </small>
-      </div>
-    `;
-
-    element.appendChild(div);
-  });
-}
-
-// =====================================
+// =============================
 // USER
-// =====================================
+// =============================
 
 async function refreshUser() {
   const {
@@ -1055,12 +478,11 @@ async function refreshUser() {
   } = await api("me");
 
   if (!response.ok) {
-    currentUser = null;
-    showAuth();
     return;
   }
 
-  currentUser = data.user;
+  currentUser =
+    data.user;
 
   updateUser();
 }
@@ -1070,19 +492,29 @@ function updateUser() {
     return;
   }
 
+  const name =
+    currentUser.name ||
+    "Öğrenci";
+
   setText(
     "welcomeText",
-    `Merhaba, ${currentUser.name}! 👋`
+    `Merhaba, ${name}! 👋`
   );
 
   const xp =
-    Number(currentUser.xp) || 0;
+    Number(
+      currentUser.xp
+    ) || 0;
 
   const streak =
-    Number(currentUser.streak) || 0;
+    Number(
+      currentUser.streak
+    ) || 0;
 
   const level =
-    Math.floor(xp / 250) + 1;
+    Math.floor(
+      xp / 250
+    ) + 1;
 
   const levelXP =
     xp % 250;
@@ -1091,7 +523,7 @@ function updateUser() {
     Math.min(
       100,
       Math.round(
-        (levelXP / 250) * 100
+        levelXP / 250 * 100
       )
     );
 
@@ -1104,6 +536,16 @@ function updateUser() {
     "xpText",
     `${levelXP} / 250 XP`
   );
+
+  const bar =
+    document.getElementById(
+      "progressBar"
+    );
+
+  if (bar) {
+    bar.style.width =
+      `${progress}%`;
+  }
 
   setText(
     "statXP",
@@ -1119,30 +561,21 @@ function updateUser() {
     "streakNumber",
     streak
   );
-
-  const bar =
-    document.getElementById(
-      "progressBar"
-    );
-
-  if (bar) {
-    bar.style.width =
-      progress + "%";
-  }
 }
 
-// =====================================
+// =============================
 // TASK STATS
-// =====================================
+// =============================
 
-function updateTaskStats(list) {
+function updateTaskStats(tasks) {
   const completed =
-    list.filter(
-      task => task.completed
+    tasks.filter(
+      task =>
+        task.completed
     ).length;
 
   const total =
-    list.length;
+    tasks.length;
 
   setText(
     "taskCounter",
@@ -1160,9 +593,9 @@ function updateTaskStats(list) {
   );
 }
 
-// =====================================
+// =============================
 // AUTH UI
-// =====================================
+// =============================
 
 function showAuth() {
   const auth =
@@ -1208,57 +641,65 @@ function showApp() {
   }
 }
 
+// =============================
+// TABS
+// =============================
+
 function showLogin() {
   document.getElementById(
     "loginForm"
-  ).style.display = "block";
+  ).style.display =
+    "block";
 
   document.getElementById(
     "registerForm"
-  ).style.display = "none";
+  ).style.display =
+    "none";
 
   document.getElementById(
     "loginTab"
-  ).classList.add("active");
+  ).classList.add(
+    "active"
+  );
 
   document.getElementById(
     "registerTab"
-  ).classList.remove("active");
+  ).classList.remove(
+    "active"
+  );
+
+  setAuthMessage("");
 }
 
 function showRegister() {
   document.getElementById(
     "loginForm"
-  ).style.display = "none";
+  ).style.display =
+    "none";
 
   document.getElementById(
     "registerForm"
-  ).style.display = "block";
+  ).style.display =
+    "block";
 
   document.getElementById(
     "loginTab"
-  ).classList.remove("active");
+  ).classList.remove(
+    "active"
+  );
 
   document.getElementById(
     "registerTab"
-  ).classList.add("active");
+  ).classList.add(
+    "active"
+  );
+
+  setAuthMessage("");
 }
 
-function setAuthMessage(text) {
-  const element =
-    document.getElementById(
-      "authMessage"
-    );
-
-  if (element) {
-    element.textContent =
-      text;
-  }
-}
-
-// =====================================
+// =============================
 // LOGOUT
-// =====================================
+// =============================
 
 async function logout() {
   await api(
@@ -1273,9 +714,9 @@ async function logout() {
   location.reload();
 }
 
-// =====================================
+// =============================
 // TOAST
-// =====================================
+// =============================
 
 function showToast(text) {
   const old =
@@ -1292,7 +733,8 @@ function showToast(text) {
       "div"
     );
 
-  toast.id = "toast";
+  toast.id =
+    "toast";
 
   toast.textContent =
     text;
@@ -1307,6 +749,7 @@ function showToast(text) {
     border-radius:12px;
     z-index:99999;
     box-shadow:0 10px 30px #0004;
+    font-weight:700;
   `;
 
   document.body.appendChild(
@@ -1314,22 +757,39 @@ function showToast(text) {
   );
 
   setTimeout(
-    () => toast.remove(),
+    () => {
+      toast.remove();
+    },
     2500
   );
 }
 
-// =====================================
+// =============================
 // HELPERS
-// =====================================
+// =============================
 
-function setText(id, value) {
+function setText(
+  id,
+  value
+) {
   const element =
     document.getElementById(id);
 
   if (element) {
     element.textContent =
       value;
+  }
+}
+
+function setAuthMessage(text) {
+  const element =
+    document.getElementById(
+      "authMessage"
+    );
+
+  if (element) {
+    element.textContent =
+      text;
   }
 }
 
@@ -1340,26 +800,7 @@ function escapeHTML(text) {
     );
 
   div.textContent =
-    String(text ?? "");
+    String(text);
 
   return div.innerHTML;
 }
-
-// ENTER = ADD TASK
-
-document.addEventListener(
-  "keydown",
-  event => {
-    if (
-      event.key === "Enter" &&
-      document.activeElement?.id ===
-        "newTask"
-    ) {
-      addTask();
-    }
-  }
-);
-
-// TIMER
-
-updateTimerDisplay();
