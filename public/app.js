@@ -1,2856 +1,1027 @@
-// ======================================================
-// DERS TAKİP 3.0
-// ======================================================
-
 const API = "/api";
 
 let currentUser = null;
-
 let tasks = [];
 let subjects = [];
 let exams = [];
-let sessions = [];
 
-let focusTimer = null;
-let focusSeconds = 25 * 60;
-let focusRunning = false;
+let coins = Number(localStorage.getItem("dt_coins") || 0);
+let pet = localStorage.getItem("dt_pet") || "🐣";
+let purchased = JSON.parse(
+  localStorage.getItem("dt_purchased") || "[]"
+);
 
-const MOTIVATIONS = [
-  "Bugün 20 dakika çalışman bile ilerlemedir. 💜",
-  "Dünkü senden daha iyisin! 🔥",
-  "Hedefine biraz daha yaklaştın. 🎯",
-  "Bir görev daha tamamla ve seviyeni yükselt! 🚀",
-  "Küçük adımlar büyük başarılar getirir. ⭐",
-  "Bugün çalış, yarın rahat et. 📚",
-  "Sen bunu yapabilirsin! 💪",
-  "Başlamak başarının yarısıdır. 🚀"
+let timerSeconds = 1500;
+let timerInterval = null;
+
+const pageInfo = {
+  home: ["Ana Sayfa 🏠","Bugünkü hedeflerini burada takip et."],
+  tasks: ["Görevler ✅","Görevlerini tamamla ve XP kazan."],
+  subjects: ["Dersler 📚","Derslerini düzenle ve takip et."],
+  exams: ["Sınavlar 📅","Sınavlarına kalan zamanı takip et."],
+  focus: ["Odaklanma ⏱️","Çalışma süreni başlat ve odaklan."],
+  stats: ["İstatistikler 📊","Çalışma performansını incele."],
+  coach: ["Ders Koçu 🤖","Bugün ne çalışacağını birlikte belirleyelim."],
+  pet: ["Evcil Hayvan 🐣","Çalıştıkça dostunu geliştir."],
+  shop: ["Coin Mağazası 🛍️","Coinlerini kullanarak ödüller aç."],
+  badges: ["Başarılar 🏆","Kazandığın başarıları gör."],
+  profile: ["Profil 👤","Profilini ve görünümünü düzenle."]
+};
+
+const menuItems = [
+ ["home","🏠","Ana Sayfa"],
+ ["tasks","✅","Görevler"],
+ ["subjects","📚","Dersler"],
+ ["exams","📅","Sınavlar"],
+ ["focus","⏱️","Odaklan"],
+ ["stats","📊","İstatistikler"],
+ ["coach","🤖","Ders Koçu"],
+ ["pet","🐣","Evcil Hayvan"],
+ ["shop","🛍️","Mağaza"],
+ ["badges","🏆","Rozetler"],
+ ["profile","👤","Profil"]
 ];
-
-const BADGES = [
-  {
-    id: "first_task",
-    icon: "🥇",
-    name: "İlk Görev",
-    description: "İlk görevini tamamla"
-  },
-  {
-    id: "three_day",
-    icon: "🔥",
-    name: "3 Günlük Seri",
-    description: "3 gün üst üste çalış"
-  },
-  {
-    id: "ten_tasks",
-    icon: "📚",
-    name: "10 Görev",
-    description: "10 görev tamamla"
-  },
-  {
-    id: "100_minutes",
-    icon: "⏱️",
-    name: "100 Dakika",
-    description: "100 dakika çalış"
-  },
-  {
-    id: "first_exam",
-    icon: "🎯",
-    name: "İlk Sınav Hedefi",
-    description: "İlk sınavını ekle"
-  },
-  {
-    id: "1000_xp",
-    icon: "💯",
-    name: "1000 XP",
-    description: "1000 XP kazan"
-  },
-  {
-    id: "master",
-    icon: "👑",
-    name: "Çalışma Ustası",
-    description: "Seviye 10'a ulaş"
-  }
-];
-
-const PETS = [
-  {
-    id: "cat",
-    icon: "🐱",
-    name: "Kedi"
-  },
-  {
-    id: "dog",
-    icon: "🐶",
-    name: "Köpek"
-  },
-  {
-    id: "rabbit",
-    icon: "🐰",
-    name: "Tavşan"
-  },
-  {
-    id: "panda",
-    icon: "🐼",
-    name: "Panda"
-  },
-  {
-    id: "fox",
-    icon: "🦊",
-    name: "Tilki"
-  }
-];
-
-// ======================================================
-// API
-// ======================================================
 
 async function api(action, options = {}) {
-
-  try {
-
-    const response = await fetch(
-      `${API}?action=${encodeURIComponent(action)}`,
-      {
-        credentials: "include",
-
-        headers: {
-          "Content-Type": "application/json",
-          ...(options.headers || {})
-        },
-
-        ...options
-      }
-    );
-
-    const data =
-      await response.json().catch(() => ({}));
-
-    return {
-      response,
-      data
-    };
-
-  } catch (error) {
-
-    console.error(error);
-
-    return {
-      response: {
-        ok: false,
-        status: 0
-      },
-
-      data: {
-        message:
-          "Sunucuya bağlanılamadı."
-      }
-    };
-  }
-}
-
-// ======================================================
-// LOCAL STORAGE
-// ======================================================
-
-function storageKey(key) {
-
-  return `ders_takip_${currentUser?.id || "guest"}_${key}`;
-}
-
-function getLocal(key, fallback) {
-
-  try {
-
-    const value =
-      localStorage.getItem(
-        storageKey(key)
-      );
-
-    return value === null
-      ? fallback
-      : JSON.parse(value);
-
-  } catch {
-
-    return fallback;
-
-  }
-}
-
-function setLocal(key, value) {
-
-  localStorage.setItem(
-    storageKey(key),
-    JSON.stringify(value)
-  );
-}
-
-function getCoins() {
-
-  return Number(
-    getLocal("coins", 0)
-  );
-}
-
-function setCoins(value) {
-
-  setLocal(
-    "coins",
-    Math.max(0, Number(value))
-  );
-}
-
-function getStreak() {
-
-  return Number(
-    getLocal(
-      "streak",
-      currentUser?.streak || 0
-    )
-  );
-}
-
-function setStreak(value) {
-
-  setLocal("streak", value);
-}
-
-function getPet() {
-
-  return getLocal(
-    "pet",
-    "rabbit"
-  );
-}
-
-function setPet(value) {
-
-  setLocal("pet", value);
-}
-
-function getBadges() {
-
-  return getLocal(
-    "badges",
-    []
-  );
-}
-
-function setBadges(value) {
-
-  setLocal(
-    "badges",
-    value
-  );
-}
-
-// ======================================================
-// AUTH
-// ======================================================
-
-function showLogin() {
-
-  document.getElementById(
-    "loginForm"
-  ).style.display = "block";
-
-  document.getElementById(
-    "registerForm"
-  ).style.display = "none";
-
-  document.getElementById(
-    "loginTab"
-  ).classList.add("active");
-
-  document.getElementById(
-    "registerTab"
-  ).classList.remove("active");
-
-  setAuthMessage("");
-}
-
-function showRegister() {
-
-  document.getElementById(
-    "loginForm"
-  ).style.display = "none";
-
-  document.getElementById(
-    "registerForm"
-  ).style.display = "block";
-
-  document.getElementById(
-    "loginTab"
-  ).classList.remove("active");
-
-  document.getElementById(
-    "registerTab"
-  ).classList.add("active");
-
-  setAuthMessage("");
-}
-
-function setAuthMessage(
-  message,
-  success = false
-) {
-
-  const el =
-    document.getElementById(
-      "authMessage"
-    );
-
-  if (!el) return;
-
-  el.textContent = message;
-
-  el.style.color =
-    success
-      ? "#20c997"
-      : "#ff5b6e";
-}
-
-async function login(event) {
-
-  event.preventDefault();
-
-  const email =
-    document.getElementById(
-      "loginEmail"
-    ).value.trim();
-
-  const password =
-    document.getElementById(
-      "loginPassword"
-    ).value;
-
-  setAuthMessage(
-    "Giriş yapılıyor..."
+ try {
+  const response = await fetch(
+   `${API}?action=${encodeURIComponent(action)}`,
+   {
+    credentials:"include",
+    headers:{
+     "Content-Type":"application/json",
+     ...(options.headers || {})
+    },
+    ...options
+   }
   );
 
-  const result = await api(
-    "login",
-    {
-      method: "POST",
+  const data = await response.json().catch(()=>({}));
 
-      body: JSON.stringify({
-        email,
-        password
-      })
-    }
-  );
+  return {response,data};
 
-  if (!result.response.ok) {
-
-    setAuthMessage(
-      result.data.message ||
-      "Giriş yapılamadı."
-    );
-
-    return;
-  }
-
-  currentUser =
-    result.data.user;
-
-  await enterApp();
-}
-
-async function register(event) {
-
-  event.preventDefault();
-
-  const name =
-    document.getElementById(
-      "registerName"
-    ).value.trim();
-
-  const email =
-    document.getElementById(
-      "registerEmail"
-    ).value.trim();
-
-  const password =
-    document.getElementById(
-      "registerPassword"
-    ).value;
-
-  setAuthMessage(
-    "Hesap oluşturuluyor..."
-  );
-
-  const result = await api(
-    "register",
-    {
-      method: "POST",
-
-      body: JSON.stringify({
-        name,
-        email,
-        password
-      })
-    }
-  );
-
-  if (!result.response.ok) {
-
-    setAuthMessage(
-      result.data.message ||
-      "Kayıt olunamadı."
-    );
-
-    return;
-  }
-
-  currentUser =
-    result.data.user;
-
-  await enterApp();
-}
-
-async function logout() {
-
-  await api(
-    "logout",
-    {
-      method: "POST"
-    }
-  );
-
-  currentUser = null;
-
-  document.getElementById(
-    "app"
-  ).style.display = "none";
-
-  document.getElementById(
-    "authScreen"
-  ).style.display = "flex";
-
-  showLogin();
-}
-
-// ======================================================
-// ENTER APP
-// ======================================================
-
-async function enterApp() {
-
-  document.getElementById(
-    "authScreen"
-  ).style.display = "none";
-
-  document.getElementById(
-    "app"
-  ).style.display = "block";
-
-  await loadAll();
-
-  updateUserUI();
-
-  renderHome();
-
-  dailyLoginReward();
-
-  checkBadges();
-}
-
-// ======================================================
-// LOAD
-// ======================================================
-
-async function loadAll() {
-
-  const results =
-    await Promise.all([
-      api("tasks"),
-      api("subjects"),
-      api("exams"),
-      api("sessions")
-    ]);
-
-  tasks =
-    results[0].data.tasks || [];
-
-  subjects =
-    results[1].data.subjects || [];
-
-  exams =
-    results[2].data.exams || [];
-
-  sessions =
-    results[3].data.sessions || [];
-
-  const me =
-    await api("me");
-
-  if (me.response.ok) {
-
-    currentUser =
-      me.data.user;
-  }
-}
-
-// ======================================================
-// USER
-// ======================================================
-
-function updateUserUI() {
-
-  if (!currentUser) return;
-
-  const xp =
-    Number(currentUser.xp || 0);
-
-  const level =
-    getLevel(xp);
-
-  updateXPBar();
-
-  const homeWelcome =
-    document.getElementById(
-      "homeWelcome"
-    );
-
-  if (homeWelcome) {
-
-    homeWelcome.textContent =
-      `Merhaba ${currentUser.name}! 👋`;
-  }
-}
-
-function getLevel(xp) {
-
-  const level =
-    Math.max(
-      1,
-      Math.floor(
-        Number(xp) / 250
-      ) + 1
-    );
-
-  let title =
-    "Başlangıç";
-
-  if (level >= 50) {
-
-    title =
-      "Efsane Öğrenci 👑";
-
-  } else if (level >= 20) {
-
-    title =
-      "Başarı Avcısı";
-
-  } else if (level >= 10) {
-
-    title =
-      "Ders Ustası";
-
-  } else if (level >= 5) {
-
-    title =
-      "Çalışkan";
-  }
+ } catch(error) {
+  console.error(error);
 
   return {
-    level,
-    title,
-    current:
-      (level - 1) * 250,
-    next:
-      level * 250
+   response:{ok:false,status:0},
+   data:{message:"Sunucuya bağlanılamadı."}
   };
+ }
 }
 
-function updateXPBar() {
+function showLogin(){
+ document.getElementById("loginForm").style.display="block";
+ document.getElementById("registerForm").style.display="none";
 
-  const xp =
-    Number(currentUser?.xp || 0);
+ document.getElementById("loginTab").classList.add("active");
+ document.getElementById("registerTab").classList.remove("active");
 
-  const level =
-    getLevel(xp);
-
-  const current =
-    xp - level.current;
-
-  const needed =
-    level.next -
-    level.current;
-
-  const percentage =
-    Math.min(
-      100,
-      Math.max(
-        0,
-        current / needed * 100
-      )
-    );
-
-  const home =
-    document.getElementById(
-      "homeContent"
-    );
-
-  if (!home) return;
+ document.getElementById("authMessage").textContent="";
 }
 
-// ======================================================
-// PAGE SYSTEM
-// ======================================================
+function showRegister(){
+ document.getElementById("loginForm").style.display="none";
+ document.getElementById("registerForm").style.display="block";
 
-function openPage(
-  pageName,
-  button = null
-) {
+ document.getElementById("loginTab").classList.remove("active");
+ document.getElementById("registerTab").classList.add("active");
 
-  document
-    .querySelectorAll(".page")
-    .forEach(page => {
+ document.getElementById("authMessage").textContent="";
+}
 
-      page.classList.remove(
-        "active-page"
-      );
+async function login(event){
+ event.preventDefault();
 
-    });
+ const email =
+  document.getElementById("loginEmail").value;
 
-  const page =
-    document.getElementById(
-      `page-${pageName}`
-    );
+ const password =
+  document.getElementById("loginPassword").value;
 
-  if (!page) return;
+ const result = await api("login",{
+  method:"POST",
+  body:JSON.stringify({email,password})
+ });
 
-  page.classList.add(
-    "active-page"
+ if(!result.data.success){
+  document.getElementById("authMessage").textContent =
+   result.data.message || "Giriş başarısız.";
+  return;
+ }
+
+ currentUser=result.data.user;
+
+ await startApp();
+}
+
+async function register(event){
+ event.preventDefault();
+
+ const name =
+  document.getElementById("registerName").value;
+
+ const email =
+  document.getElementById("registerEmail").value;
+
+ const password =
+  document.getElementById("registerPassword").value;
+
+ const result = await api("register",{
+  method:"POST",
+  body:JSON.stringify({
+   name,
+   email,
+   password
+  })
+ });
+
+ if(!result.data.success){
+  document.getElementById("authMessage").textContent =
+   result.data.message || "Kayıt başarısız.";
+  return;
+ }
+
+ currentUser=result.data.user;
+
+ await startApp();
+}
+
+async function startApp(){
+
+ document.getElementById("authScreen").style.display="none";
+ document.getElementById("app").style.display="block";
+
+ createMenus();
+
+ updateUserUI();
+
+ await Promise.all([
+  loadTasks(),
+  loadSubjects(),
+  loadExams()
+ ]);
+
+ updateAll();
+}
+
+function createMenus(){
+
+ const desktop=document.getElementById("desktopMenu");
+ const mobile=document.getElementById("mobileMenuButtons");
+
+ desktop.innerHTML="";
+ mobile.innerHTML="";
+
+ menuItems.forEach(item=>{
+
+  const [id,icon,label]=item;
+
+  const d=document.createElement("button");
+
+  d.innerHTML=`${icon} ${label}`;
+  d.onclick=()=>showPage(id,d);
+
+  desktop.appendChild(d);
+
+  const m=document.createElement("button");
+
+  m.innerHTML=`${icon} ${label}`;
+  m.onclick=()=>{
+   showPage(id,m);
+   closeMobileMenu();
+  };
+
+  mobile.appendChild(m);
+ });
+}
+
+function showPage(id,button){
+
+ document.querySelectorAll(".page")
+  .forEach(p=>p.classList.remove("active"));
+
+ const page=document.getElementById(`page-${id}`);
+
+ if(page) page.classList.add("active");
+
+ document.querySelectorAll(".menu button,.mobile-panel button")
+  .forEach(b=>b.classList.remove("active"));
+
+ if(button) button.classList.add("active");
+
+ document.getElementById("pageTitle").textContent =
+  pageInfo[id][0];
+
+ document.getElementById("pageSubtitle").textContent =
+  pageInfo[id][1];
+
+ if(id==="stats") updateStats();
+ if(id==="coach") coachAdvice();
+ if(id==="profile") updateProfile();
+
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function goHome(){
+ showPage("home");
+}
+
+function showTasks(){
+ showPage("tasks");
+}
+
+function showSubjects(){
+ showPage("subjects");
+}
+
+function showExams(){
+ showPage("exams");
+}
+
+function showFocus(){
+ showPage("focus");
+}
+
+function showStats(){
+ showPage("stats");
+}
+
+function showProfile(){
+ showPage("profile");
+}
+
+function toggleMobileMenu(){
+ document.getElementById("mobilePanel")
+  .classList.toggle("open");
+
+ document.getElementById("menuOverlay")
+  .classList.toggle("show");
+}
+
+function closeMobileMenu(){
+ document.getElementById("mobilePanel")
+  .classList.remove("open");
+
+ document.getElementById("menuOverlay")
+  .classList.remove("show");
+}
+
+async function logout(){
+
+ await api("logout",{
+  method:"POST"
+ });
+
+ location.reload();
+}
+
+function updateUserUI(){
+
+ if(!currentUser) return;
+
+ const name=currentUser.name || "Öğrenci";
+
+ document.getElementById("profileName").textContent=name;
+
+ document.getElementById("welcomeText").textContent=
+  `Hoş geldin, ${name}! 👋`;
+
+ updateLevel();
+}
+
+function updateLevel(){
+
+ const xp=Number(currentUser?.xp || 0);
+
+ const level=Math.max(
+  1,
+  Math.floor(xp/250)+1
+ );
+
+ document.getElementById("levelText").textContent=
+  `Seviye ${level}`;
+
+ document.getElementById("profileLevel").textContent=
+  level;
+
+ document.getElementById("statXP").textContent=xp;
+ document.getElementById("profileXP").textContent=xp;
+
+ const levelXP=(level-1)*250;
+
+ const progress=
+  Math.min(100,
+   ((xp-levelXP)/250)*100
   );
 
-  document
-    .querySelectorAll(
-      ".menu button, .mobile-nav button"
-    )
-    .forEach(btn => {
+ document.getElementById("progressBar").style.width=
+  `${progress}%`;
 
-      btn.classList.remove(
-        "active"
-      );
+ document.getElementById("xpText").textContent=
+  `${xp} XP • Sonraki seviyeye ${Math.max(0,level*250-xp)} XP`;
 
-    });
+ document.getElementById("bigXP").textContent=xp;
+}
 
-  if (button) {
+async function loadTasks(){
 
-    button.classList.add(
-      "active"
-    );
-  }
+ const result=await api("tasks");
 
-  switch (pageName) {
+ if(result.data.success){
+  tasks=result.data.tasks || [];
+  renderTasks();
+ }
+}
 
-    case "home":
-      renderHome();
-      break;
+function renderTasks(){
 
-    case "tasks":
-      renderTasksPage();
-      break;
+ const containers=[
+  document.getElementById("taskList"),
+  document.getElementById("taskList2")
+ ];
 
-    case "subjects":
-      renderSubjectsPage();
-      break;
+ containers.forEach(container=>{
+  if(!container)return;
 
-    case "exams":
-      renderExamsPage();
-      break;
+  container.innerHTML="";
 
-    case "focus":
-      renderFocusPage();
-      break;
+  tasks.forEach(task=>{
 
-    case "stats":
-      renderStatsPage();
-      break;
+   const div=document.createElement("div");
 
-    case "profile":
-      renderProfilePage();
-      break;
+   div.className=
+    `task ${task.completed ? "completed":""}`;
 
-    case "pet":
-      renderPetPage();
-      break;
+   div.innerHTML=`
+    <div class="checkbox"
+      onclick="toggleTask(${task.id})">
+      ${task.completed ? "✓":""}
+    </div>
 
-    case "badges":
-      renderBadgesPage();
-      break;
+    <div class="task-content">
+      <div class="task-name">
+       ${escapeHtml(task.title)}
+      </div>
 
-    case "rewards":
-      renderRewardsPage();
-      break;
-  }
+      <div class="task-subject">
+       Görev • +${task.xp || 50} XP
+      </div>
+    </div>
 
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
+    <div class="task-xp">
+     +${task.xp || 50} XP
+    </div>
+
+    <button class="delete-task"
+      onclick="deleteTask(${task.id})">
+      🗑️
+    </button>
+   `;
+
+   container.appendChild(div);
   });
+ });
+
+ const completed=tasks.filter(t=>t.completed).length;
+
+ document.getElementById("taskCounter").textContent=
+  `${completed} / ${tasks.length}`;
+
+ document.getElementById("taskSummary").textContent=
+  tasks.length
+   ? `${completed}/${tasks.length} görev tamamlandı. Devam et! 🚀`
+   : "Bugün için bir görev ekle.";
 }
 
-function setActive(button) {
+async function addTask(inputId="newTask"){
 
-  document
-    .querySelectorAll(
-      ".menu button, .mobile-nav button"
-    )
-    .forEach(btn => {
+ const input=document.getElementById(inputId);
 
-      btn.classList.remove(
-        "active"
-      );
+ const title=input.value.trim();
 
-    });
+ if(!title)return;
 
-  if (button) {
+ const result=await api("tasks",{
+  method:"POST",
+  body:JSON.stringify({title})
+ });
 
-    button.classList.add(
-      "active"
-    );
+ if(result.data.success){
+
+  input.value="";
+
+  tasks.push(result.data.task);
+
+  renderTasks();
+
+  toast("🎯 Yeni görev eklendi!");
+ }
+}
+
+async function toggleTask(id){
+
+ const result=await api("tasks",{
+  method:"PATCH",
+  body:JSON.stringify({id})
+ });
+
+ if(result.data.success){
+
+  const task=tasks.find(t=>Number(t.id)===Number(id));
+
+  if(task){
+   task.completed=result.data.completed;
   }
+
+  if(result.data.completed){
+   addCoins(10);
+   toast("🎉 GÖREV TAMAMLANDI! +50 XP • +10 🪙");
+  }else{
+   toast("Görev tekrar açıldı.");
+  }
+
+  await refreshUser();
+  renderTasks();
+  updateAll();
+ }
 }
 
-function goHome(button) {
-  openPage("home", button);
+async function deleteTask(id){
+
+ const result=await api("tasks",{
+  method:"DELETE",
+  body:JSON.stringify({id})
+ });
+
+ if(result.data.success){
+
+  tasks=tasks.filter(t=>Number(t.id)!==Number(id));
+
+  renderTasks();
+
+  await refreshUser();
+
+  updateAll();
+
+  toast("🗑️ Görev silindi.");
+ }
 }
 
-function showTasks(button) {
-  openPage("tasks", button);
+async function loadSubjects(){
+
+ const result=await api("subjects");
+
+ if(result.data.success){
+  subjects=result.data.subjects || [];
+  renderSubjects();
+ }
 }
 
-function showSubjects(button) {
-  openPage("subjects", button);
-}
+function renderSubjects(){
 
-function showExams(button) {
-  openPage("exams", button);
-}
+ const list=document.getElementById("subjectList");
 
-function showFocus(button) {
-  openPage("focus", button);
-}
+ list.innerHTML="";
 
-function showStats(button) {
-  openPage("stats", button);
-}
+ subjects.forEach(subject=>{
 
-function showProfile(button) {
-  openPage("profile", button);
-}
+  const div=document.createElement("div");
 
-function showPet(button) {
-  openPage("pet", button);
-}
+  div.className="subject";
 
-function showBadges(button) {
-  openPage("badges", button);
-}
-
-function showRewards(button) {
-  openPage("rewards", button);
-}
-
-// ======================================================
-// HOME
-// ======================================================
-
-function renderHome() {
-
-  const completed =
-    tasks.filter(
-      t => t.completed
-    ).length;
-
-  const total =
-    tasks.length;
-
-  const percentage =
-    total
-      ? Math.round(
-          completed / total * 100
-        )
-      : 0;
-
-  const xp =
-    Number(currentUser?.xp || 0);
-
-  const level =
-    getLevel(xp);
-
-  const nextXP =
-    level.next - xp;
-
-  const exam =
-    getNextExam();
-
-  const examHTML =
-    exam
-      ? `
-        <div class="card"
-             style="margin-bottom:20px">
-
-          <h2>
-            📅 Yaklaşan Sınav
-          </h2>
-
-          <div class="exam-days">
-            ${daysUntil(exam.exam_date)}
-            gün
-          </div>
-
-          <strong>
-            ${escapeHTML(exam.title)}
-          </strong>
-
-          <p style="color:var(--muted);margin-top:8px">
-            ${exam.topic || "Konu belirtilmemiş"}
-          </p>
-
-        </div>
-      `
-      : "";
-
-  const motivation =
-    MOTIVATIONS[
-      new Date().getDate()
-      % MOTIVATIONS.length
-    ];
-
-  document.getElementById(
-    "homeContent"
-  ).innerHTML = `
-
-    <div class="home-hero">
-
-      <h2>
-        🎯 Bugünkü Hedefin
-      </h2>
-
-      <p>
-        ${completed} / ${total}
-        görev tamamlandı.
-      </p>
-
-      <div class="progress">
-        <span
-          style="width:${percentage}%">
-        </span>
-      </div>
-
-      <div class="xp">
-        ⭐ Seviye ${level.level}
-        · ${xp} XP
-        · Yeni seviyeye ${nextXP} XP
-      </div>
-
-    </div>
-
-    <div class="coach-card">
-
-      <div class="coach-head">
-
-        <div class="coach-icon">
-          🤖
-        </div>
-
-        <div>
-          <h2>
-            Ders Koçu
-          </h2>
-
-          <p style="color:var(--muted)">
-            Bugünkü çalışma planın
-          </p>
-        </div>
-
-      </div>
-
-      <div class="coach-message">
-
-        ${
-          exam
-            ? `Sınavına ${daysUntil(exam.exam_date)}
-               gün kaldı.
-               Bugün ${exam.subject_name || "bu derse"}
-               odaklanman harika olur! 🎯`
-            : `Bugün ${Math.max(
-                25,
-                total * 25
-              )} dakika çalışman harika olur! 🚀`
-        }
-
-      </div>
-
-      <div class="coach-grid">
-
-        <div class="coach-stat">
-          📚
-          <strong>
-            ${subjects.length}
-          </strong>
-          Ders
-        </div>
-
-        <div class="coach-stat">
-          🎯
-          <strong>
-            ${total}
-          </strong>
-          Görev
-        </div>
-
-        <div class="coach-stat">
-          🔥
-          <strong>
-            ${getStreak()}
-          </strong>
-          Seri
-        </div>
-
-        <div class="coach-stat">
-          🪙
-          <strong>
-            ${getCoins()}
-          </strong>
-          Coin
-        </div>
-
-      </div>
-
-    </div>
-
-    ${examHTML}
-
-    <div class="motivation-card">
-
-      <h3>
-        💬 Bugünün Mesajı
-      </h3>
-
-      <p style="
-        margin-top:10px;
-        line-height:1.6;
-      ">
-        ${motivation}
-      </p>
-
-    </div>
-
-    <div class="cards-grid">
-
-      <div class="card">
-
-        <h2>
-          🔥 Çalışma Serisi
-        </h2>
-
-        <div style="
-          font-size:45px;
-          font-weight:950;
-          margin-top:10px;
-        ">
-          ${getStreak()} 🔥
-        </div>
-
-        <p style="
-          color:var(--muted);
-          margin-top:5px;
-        ">
-          Gün üst üste
-        </p>
-
-      </div>
-
-      <div class="card">
-
-        <h2>
-          🪙 Coin
-        </h2>
-
-        <div style="
-          font-size:45px;
-          font-weight:950;
-          margin-top:10px;
-        ">
-          ${getCoins()}
-        </div>
-
-        <p style="
-          color:var(--muted);
-          margin-top:5px;
-        ">
-          Ödüllerde kullanabilirsin.
-        </p>
-
-      </div>
-
-      <div class="card">
-
-        <h2>
-          🐣 Evcil Hayvan
-        </h2>
-
-        <div style="
-          font-size:45px;
-          margin-top:10px;
-        ">
-          ${getPetIcon()}
-        </div>
-
-        <p style="
-          color:var(--muted);
-          margin-top:5px;
-        ">
-          Çalıştıkça gelişiyor!
-        </p>
-
-      </div>
-
-    </div>
+  div.innerHTML=`
+   <div style="font-size:40px">📚</div>
+   <h3>${escapeHtml(subject.name)}</h3>
+   <p style="color:var(--muted);margin:8px">
+    Dersin hazır! 🎯
+   </p>
+   <button class="outline-btn"
+    onclick="deleteSubject(${subject.id})">
+    Sil
+   </button>
   `;
+
+  list.appendChild(div);
+ });
 }
 
-// ======================================================
-// TASK PAGE
-// ======================================================
+async function addSubject(){
 
-function renderTasksPage() {
+ const input=document.getElementById("newSubject");
 
-  const list =
-    document.getElementById(
-      "fullTaskList"
-    );
+ const name=input.value.trim();
 
-  if (!list) return;
+ if(!name)return;
 
-  const completed =
-    tasks.filter(
-      t => t.completed
-    ).length;
+ const result=await api("subjects",{
+  method:"POST",
+  body:JSON.stringify({
+   name,
+   color:"#6658f5"
+  })
+ });
 
-  document.getElementById(
-    "tasksPageCounter"
-  ).textContent =
-    `${completed} / ${tasks.length} tamamlandı`;
+ if(result.data.success){
 
-  if (!tasks.length) {
+  input.value="";
 
-    list.innerHTML = `
-      <div style="
-        text-align:center;
-        padding:40px;
-        color:var(--muted);
-      ">
-        <div style="font-size:60px">
-          🎯
-        </div>
+  subjects.push(result.data.subject);
 
-        <h3 style="
-          margin:10px 0;
-          color:var(--text);
-        ">
-          Henüz görev yok
-        </h3>
+  renderSubjects();
 
-        <p>
-          İlk görevini ekleyerek başla!
-        </p>
-      </div>
-    `;
-
-    return;
-  }
-
-  list.innerHTML =
-    tasks.map(task => `
-      <div class="task">
-
-        <div
-          class="checkbox"
-          onclick="toggleTask(${task.id})">
-
-          ${
-            task.completed
-              ? "✓"
-              : ""
-          }
-
-        </div>
-
-        <div class="task-content">
-
-          <div
-            class="task-name"
-            style="
-              ${
-                task.completed
-                  ? "text-decoration:line-through;color:#9aa1b2"
-                  : ""
-              }
-            ">
-
-            ${escapeHTML(task.title)}
-
-          </div>
-
-        </div>
-
-        <div class="task-xp">
-          +${task.xp || 50} XP
-        </div>
-
-        <button
-          class="delete-task"
-          onclick="deleteTask(${task.id})">
-
-          🗑️
-
-        </button>
-
-      </div>
-    `)
-    .join("");
+  toast("📚 Ders eklendi!");
+ }
 }
 
-async function addTaskFromPage() {
+async function deleteSubject(id){
 
-  const input =
-    document.getElementById(
-      "newTaskPage"
-    );
+ const result=await api("subjects",{
+  method:"DELETE",
+  body:JSON.stringify({id})
+ });
 
-  const title =
-    input.value.trim();
+ if(result.data.success){
 
-  if (!title) return;
-
-  const result =
-    await api(
-      "tasks",
-      {
-        method: "POST",
-
-        body: JSON.stringify({
-          title
-        })
-      }
-    );
-
-  if (!result.response.ok) {
-
-    toast(
-      result.data.message ||
-      "Görev eklenemedi."
-    );
-
-    return;
-  }
-
-  tasks.unshift(
-    result.data.task
+  subjects=subjects.filter(
+   s=>Number(s.id)!==Number(id)
   );
 
-  input.value = "";
+  renderSubjects();
 
-  renderTasksPage();
-
-  toast(
-    "✅ Yeni görev eklendi!"
-  );
+  toast("Ders silindi.");
+ }
 }
 
-async function toggleTask(id) {
+async function loadExams(){
 
-  const result =
-    await api(
-      "tasks",
-      {
-        method: "PATCH",
+ const result=await api("exams");
 
-        body: JSON.stringify({
-          id
-        })
-      }
-    );
+ if(result.data.success){
+  exams=result.data.exams || [];
+  renderExams();
+ }
+}
 
-  if (!result.response.ok) {
+function renderExams(){
 
-    toast(
-      result.data.message ||
-      "Görev değiştirilemedi."
-    );
+ const list=document.getElementById("examList");
 
-    return;
+ list.innerHTML="";
+
+ exams.forEach(exam=>{
+
+  const days=getDaysLeft(exam.exam_date);
+
+  let cls="green";
+
+  if(days<=1)cls="red";
+  else if(days<=3)cls="orange";
+  else if(days<=7)cls="yellow";
+
+  const div=document.createElement("div");
+
+  div.className=`exam ${cls}`;
+
+  div.innerHTML=`
+   <div>
+    <h3>${escapeHtml(exam.title)}</h3>
+    <p style="color:var(--muted);margin-top:5px">
+     ${exam.topic || "Konu belirtilmedi"}
+    </p>
+   </div>
+
+   <div>
+    <div class="exam-days">
+     ${days < 0 ? "Geçti":days+" gün"}
+    </div>
+
+    <button class="outline-btn"
+     onclick="deleteExam(${exam.id})">
+     🗑️
+    </button>
+   </div>
+  `;
+
+  list.appendChild(div);
+ });
+}
+
+async function addExam(){
+
+ const title=document.getElementById("examTitle").value.trim();
+
+ const date=document.getElementById("examDate").value;
+
+ const topic=document.getElementById("examTopic").value.trim();
+
+ if(!title || !date){
+  toast("Sınav adı ve tarih gerekli.");
+  return;
+ }
+
+ const result=await api("exams",{
+  method:"POST",
+  body:JSON.stringify({
+   title,
+   exam_date:date,
+   topic
+  })
+ });
+
+ if(result.data.success){
+
+  document.getElementById("examTitle").value="";
+  document.getElementById("examDate").value="";
+  document.getElementById("examTopic").value="";
+
+  exams.push(result.data.exam);
+
+  renderExams();
+
+  toast("📅 Sınav eklendi!");
+ }
+}
+
+async function deleteExam(id){
+
+ const result=await api("exams",{
+  method:"DELETE",
+  body:JSON.stringify({id})
+ });
+
+ if(result.data.success){
+
+  exams=exams.filter(
+   e=>Number(e.id)!==Number(id)
+  );
+
+  renderExams();
+
+  toast("Sınav silindi.");
+ }
+}
+
+function getDaysLeft(date){
+
+ const today=new Date();
+
+ today.setHours(0,0,0,0);
+
+ const target=new Date(date);
+
+ target.setHours(0,0,0,0);
+
+ return Math.ceil(
+  (target-today)/(1000*60*60*24)
+ );
+}
+
+function startTimer(){
+
+ if(timerInterval)return;
+
+ document.getElementById("focusStatus").textContent=
+  "Odaklanıyorsun... Telefonunu bırak! 🚀";
+
+ timerInterval=setInterval(async()=>{
+
+  timerSeconds--;
+
+  updateTimer();
+
+  if(timerSeconds<=0){
+
+   clearInterval(timerInterval);
+
+   timerInterval=null;
+
+   timerSeconds=1500;
+
+   await finishFocus();
   }
 
-  const task =
-    tasks.find(
-      t => Number(t.id) === Number(id)
-    );
+ },1000);
+}
 
-  if (task) {
+function pauseTimer(){
 
-    task.completed =
-      result.data.completed;
-  }
+ clearInterval(timerInterval);
 
-  if (result.data.completed) {
+ timerInterval=null;
 
-    currentUser.xp =
-      Number(currentUser.xp || 0) +
-      Number(task?.xp || 50);
+ document.getElementById("focusStatus").textContent=
+  "Duraklatıldı. Hazır olduğunda devam et.";
+}
 
-    addCoins(10);
+function resetTimer(){
 
-    increaseStreak();
+ clearInterval(timerInterval);
 
-    showCelebration(
-      "🎉",
-      "Görev Tamamlandı!",
-      `⭐ +${task?.xp || 50} XP<br>
-       🪙 +10 Coin<br>
-       🔥 Seri devam ediyor!`
-    );
+ timerInterval=null;
 
-    checkBadges();
+ timerSeconds=1500;
 
-  } else {
+ updateTimer();
 
-    currentUser.xp =
-      Math.max(
-        0,
-        Number(currentUser.xp || 0) -
-        Number(task?.xp || 50)
-      );
+ document.getElementById("focusStatus").textContent=
+  "25 dakika çalış, +25 XP kazan!";
+}
 
-    toast(
-      "Görev tekrar açıldı."
-    );
-  }
+function updateTimer(){
 
-  renderTasksPage();
+ const min=Math.floor(timerSeconds/60);
+ const sec=timerSeconds%60;
+
+ document.getElementById("timer").textContent=
+  `${String(min).padStart(2,"0")}:${String(sec).padStart(2,"0")}`;
+}
+
+async function finishFocus(){
+
+ const result=await api("sessions",{
+  method:"POST",
+  body:JSON.stringify({
+   duration_minutes:25
+  })
+ });
+
+ if(result.data.success){
+
+  await refreshUser();
+
+  addCoins(15);
+
+  updateAll();
+
+  toast("🎉 ODAKLANMA TAMAMLANDI! +25 XP • +15 🪙");
+
+  document.getElementById("focusStatus").textContent=
+   "Harika! Bir odaklanma daha tamamlandı. 🔥";
+ }
+}
+
+function addCoins(amount){
+
+ coins+=Number(amount);
+
+ localStorage.setItem(
+  "dt_coins",
+  String(coins)
+ );
+
+ updateCoins();
+}
+
+function updateCoins(){
+
+ document.getElementById("statCoins").textContent=coins;
+ document.getElementById("shopCoins").textContent=coins;
+ document.getElementById("profileCoins").textContent=coins;
+}
+
+function buyItem(item,cost){
+
+ if(purchased.includes(item)){
+  toast("Bu eşyaya zaten sahipsin. ✨");
+  return;
+ }
+
+ if(coins<cost){
+  toast(`❌ Yeterli coin yok. ${cost} 🪙 gerekiyor.`);
+  return;
+ }
+
+ coins-=cost;
+
+ purchased.push(item);
+
+ localStorage.setItem("dt_coins",coins);
+ localStorage.setItem(
+  "dt_purchased",
+  JSON.stringify(purchased)
+ );
+
+ updateCoins();
+
+ toast("🎉 Eşya satın alındı!");
+
+ applyPurchasedItem(item);
+}
+
+function applyPurchasedItem(item){
+
+ if(item==="space"){
+  document.body.style.background=
+   "radial-gradient(circle at top,#302b63,#0f1020)";
+ }
+
+ if(item==="rainbow"){
+  document.documentElement.style.setProperty(
+   "--primary","#ff4f81"
+  );
+ }
+
+ if(item==="purple"){
+  document.documentElement.style.setProperty(
+   "--primary","#9b59ff"
+  );
+ }
+
+ if(item==="sparkle"){
+  document.documentElement.style.setProperty(
+   "--primary","#ff9f43"
+  );
+ }
+
+ if(item==="crown"){
+  document.getElementById("topAvatar").textContent="👑";
+  document.getElementById("profileAvatar").textContent="👑";
+ }
+
+ if(item==="legend"){
+  document.getElementById("topAvatar").textContent="👑";
+  document.getElementById("profileAvatar").textContent="👑";
+ }
+}
+
+function choosePet(newPet){
+
+ pet=newPet;
+
+ localStorage.setItem("dt_pet",pet);
+
+ document.getElementById("homePet").textContent=pet;
+ document.getElementById("bigPet").textContent=pet;
+ document.getElementById("profileAvatar").textContent=pet;
+
+ toast(`${pet} artık senin evcil hayvanın! 🐣`);
+}
+
+function updatePet(){
+
+ document.getElementById("homePet").textContent=pet;
+ document.getElementById("bigPet").textContent=pet;
+}
+
+function dailyReward(){
+
+ const key=
+  "dt_reward_"+new Date().toISOString().slice(0,10);
+
+ if(localStorage.getItem(key)){
+  toast("🎁 Bugünkü ödülünü zaten aldın.");
+  return;
+ }
+
+ localStorage.setItem(key,"1");
+
+ addCoins(25);
+
+ toast("🎁 GÜNLÜK ÖDÜL! +25 🪙");
+}
+
+function coachAdvice(){
+
+ const messages=[
+  "Bugün Matematikten 25 dakika çalışman harika olur! 🎯",
+  "Bugün en zor dersinden başlamayı dene. 💪",
+  "25 dakika odaklan, sonra kısa bir mola ver. ☕",
+  "Bugün bir sınav konusunu tekrar etmen çok faydalı olabilir. 📚",
+  "3 küçük görev tamamla ve XP kazan! 🚀",
+  "Bugün dünkü senden biraz daha iyi olmaya çalış. 🔥"
+ ];
+
+ const message=
+  messages[Math.floor(Math.random()*messages.length)];
+
+ document.getElementById("coachMessage").textContent=message;
+ document.getElementById("coachPageMessage").textContent=message;
+}
+
+async function updateStats(){
+
+ const result=await api("stats");
+
+ if(!result.data.success)return;
+
+ const stats=result.data.stats;
+
+ document.getElementById("bigMinutes").textContent=
+  stats.sessions?.minutes || 0;
+}
+
+async function refreshUser(){
+
+ const result=await api("me");
+
+ if(result.data.success){
+
+  currentUser=result.data.user;
 
   updateUserUI();
+ }
 }
 
-async function deleteTask(id) {
+function updateProfile(){
 
-  const result =
-    await api(
-      "tasks",
-      {
-        method: "DELETE",
+ document.getElementById("profileName").textContent=
+  currentUser?.name || "Öğrenci";
 
-        body: JSON.stringify({
-          id
-        })
-      }
-    );
+ document.getElementById("profileXP").textContent=
+  currentUser?.xp || 0;
 
-  if (!result.response.ok) {
+ document.getElementById("profileCoins").textContent=
+  coins;
 
-    toast(
-      result.data.message ||
-      "Görev silinemedi."
-    );
-
-    return;
-  }
-
-  tasks =
-    tasks.filter(
-      t => Number(t.id) !== Number(id)
-    );
-
-  renderTasksPage();
-
-  toast(
-    "🗑️ Görev silindi."
-  );
+ document.getElementById("profileAvatar").textContent=
+  pet;
 }
 
-// ======================================================
-// SUBJECTS
-// ======================================================
+function updateAll(){
 
-function renderSubjectsPage() {
+ updateLevel();
+ updateCoins();
+ updatePet();
 
-  const el =
-    document.getElementById(
-      "subjectsPageContent"
-    );
+ const streak=Number(currentUser?.streak || 0);
 
-  if (!el) return;
+ document.getElementById("statStreak").textContent=streak;
+ document.getElementById("streakNumber").textContent=streak;
+ document.getElementById("bigStreak").textContent=streak;
 
-  if (!subjects.length) {
+ renderTasks();
+ renderSubjects();
+ renderExams();
 
-    el.innerHTML = `
-      <div class="page-card">
+ updateProfile();
+ updateStats();
 
-        <div style="
-          text-align:center;
-          padding:35px;
-        ">
+ coachAdvice();
 
-          <div style="font-size:60px">
-            📚
-          </div>
-
-          <h2 style="margin:10px">
-            İlk dersini ekle
-          </h2>
-
-          <p style="color:var(--muted)">
-            Matematik, Türkçe, Fen Bilimleri...
-          </p>
-
-        </div>
-
-      </div>
-    `;
-
-    return;
-  }
-
-  el.innerHTML =
-    subjects.map((subject,index) => {
-
-      const relatedTasks =
-        tasks.filter(
-          t =>
-            t.subject_id ===
-            subject.id
-        );
-
-      const completed =
-        relatedTasks.filter(
-          t => t.completed
-        ).length;
-
-      const percentage =
-        relatedTasks.length
-          ? Math.round(
-              completed /
-              relatedTasks.length *
-              100
-            )
-          : 0;
-
-      return `
-
-        <div class="subject-card">
-
-          <div
-            class="subject-color"
-            style="
-              background:
-              ${subject.color || "#6658f5"};
-            ">
-          </div>
-
-          <div class="subject-icon">
-            ${
-              [
-                "📚",
-                "🧮",
-                "🔬",
-                "🌍",
-                "📝",
-                "💻"
-              ][index % 6]
-            }
-          </div>
-
-          <h3>
-            ${escapeHTML(subject.name)}
-          </h3>
-
-          <p>
-            ${completed}
-            görev tamamlandı
-          </p>
-
-          <div class="subject-progress">
-            <span
-              style="width:${percentage}%">
-            </span>
-          </div>
-
-          <p style="margin-top:8px">
-            %${percentage} ilerleme
-          </p>
-
-          <button
-            class="secondary-button"
-            style="
-              margin-top:15px;
-              width:100%;
-            "
-            onclick="deleteSubject(${subject.id})">
-
-            Dersi Sil
-
-          </button>
-
-        </div>
-      `;
-    })
-    .join("");
+ purchased.forEach(applyPurchasedItem);
 }
 
-async function addSubjectPrompt() {
+function setTheme(theme){
 
-  const name =
-    prompt(
-      "Ders adı:"
-    );
-
-  if (!name?.trim()) return;
-
-  const result =
-    await api(
-      "subjects",
-      {
-        method: "POST",
-
-        body: JSON.stringify({
-          name: name.trim(),
-          color: "#6658f5"
-        })
-      }
-    );
-
-  if (!result.response.ok) {
-
-    toast(
-      result.data.message ||
-      "Ders eklenemedi."
-    );
-
-    return;
-  }
-
-  subjects.unshift(
-    result.data.subject
-  );
-
-  renderSubjectsPage();
-
-  toast(
-    "📚 Ders eklendi!"
-  );
-
-  checkBadges();
+ if(theme==="dark"){
+  document.body.classList.add("dark");
+  localStorage.setItem("dt_theme","dark");
+ }else{
+  document.body.classList.remove("dark");
+  localStorage.setItem("dt_theme","light");
+ }
 }
 
-async function deleteSubject(id) {
+function loadTheme(){
 
-  if (
-    !confirm(
-      "Bu dersi silmek istiyor musun?"
-    )
-  ) return;
+ const theme=
+  localStorage.getItem("dt_theme");
 
-  const result =
-    await api(
-      "subjects",
-      {
-        method: "DELETE",
-
-        body: JSON.stringify({
-          id
-        })
-      }
-    );
-
-  if (!result.response.ok) return;
-
-  subjects =
-    subjects.filter(
-      s =>
-        Number(s.id) !==
-        Number(id)
-    );
-
-  renderSubjectsPage();
-
-  toast(
-    "🗑️ Ders silindi."
-  );
+ if(theme==="dark"){
+  document.body.classList.add("dark");
+ }
 }
 
-// ======================================================
-// EXAMS
-// ======================================================
+function toast(message){
 
-function getNextExam() {
+ const el=document.getElementById("toast");
 
-  const now =
-    new Date();
+ el.textContent=message;
 
-  return exams
-    .filter(
-      exam =>
-        new Date(exam.exam_date) >= now
-    )
-    .sort(
-      (a,b) =>
-        new Date(a.exam_date) -
-        new Date(b.exam_date)
-    )[0];
+ el.classList.add("show");
+
+ setTimeout(()=>{
+  el.classList.remove("show");
+ },2800);
 }
 
-function daysUntil(date) {
+function escapeHtml(text){
 
-  const now =
-    new Date();
-
-  const target =
-    new Date(date);
-
-  const diff =
-    target.getTime() -
-    now.getTime();
-
-  return Math.max(
-    0,
-    Math.ceil(
-      diff /
-      (1000 * 60 * 60 * 24)
-    )
-  );
+ return String(text)
+  .replaceAll("&","&amp;")
+  .replaceAll("<","&lt;")
+  .replaceAll(">","&gt;")
+  .replaceAll('"',"&quot;")
+  .replaceAll("'","&#039;");
 }
 
-function renderExamsPage() {
+loadTheme();
 
-  const el =
-    document.getElementById(
-      "examsPageContent"
-    );
+(async function(){
 
-  if (!el) return;
+ const result=await api("me");
 
-  if (!exams.length) {
+ if(result.data.success){
 
-    el.innerHTML = `
-      <div class="page-card">
+  currentUser=result.data.user;
 
-        <div style="
-          text-align:center;
-          padding:35px;
-        ">
+  await startApp();
 
-          <div style="font-size:60px">
-            📅
-          </div>
+ }else{
 
-          <h2>
-            Henüz sınav yok
-          </h2>
+  document.getElementById("authScreen").style.display="flex";
+  document.getElementById("app").style.display="none";
+ }
 
-          <p style="
-            color:var(--muted);
-            margin-top:8px;
-          ">
-            Yaklaşan sınavını ekle.
-          </p>
-
-        </div>
-
-      </div>
-    `;
-
-    return;
-  }
-
-  el.innerHTML =
-    exams.map(exam => {
-
-      const days =
-        daysUntil(
-          exam.exam_date
-        );
-
-      let cls = "";
-
-      if (days <= 1) {
-        cls = "danger";
-      } else if (days <= 7) {
-        cls = "warning";
-      }
-
-      return `
-
-        <div class="exam-card ${cls}">
-
-          <h2>
-            📚 ${escapeHTML(exam.title)}
-          </h2>
-
-          <div class="exam-days">
-            ${days}
-            <span style="
-              font-size:16px;
-            ">
-              gün kaldı
-            </span>
-          </div>
-
-          <div class="exam-date">
-            📅 ${
-              formatDate(
-                exam.exam_date
-              )
-            }
-          </div>
-
-          <p style="
-            margin-top:10px;
-            color:var(--muted);
-          ">
-            ${
-              exam.topic ||
-              "Konu belirtilmemiş"
-            }
-          </p>
-
-          <button
-            class="secondary-button"
-            style="
-              margin-top:15px;
-              width:100%;
-            "
-            onclick="deleteExam(${exam.id})">
-
-            Sınavı Sil
-
-          </button>
-
-        </div>
-      `;
-    })
-    .join("");
-}
-
-async function addExamPrompt() {
-
-  const title =
-    prompt(
-      "Sınav adı:"
-    );
-
-  if (!title?.trim()) return;
-
-  const date =
-    prompt(
-      "Sınav tarihi (YYYY-MM-DD):"
-    );
-
-  if (!date) return;
-
-  const topic =
-    prompt(
-      "Konu:"
-    );
-
-  const result =
-    await api(
-      "exams",
-      {
-        method: "POST",
-
-        body: JSON.stringify({
-          title: title.trim(),
-          exam_date: date,
-          topic:
-            topic?.trim() || null,
-          subject_id:
-            subjects[0]?.id || null
-        })
-      }
-    );
-
-  if (!result.response.ok) {
-
-    toast(
-      result.data.message ||
-      "Sınav eklenemedi."
-    );
-
-    return;
-  }
-
-  exams.push(
-    result.data.exam
-  );
-
-  renderExamsPage();
-
-  toast(
-    "📅 Sınav eklendi!"
-  );
-
-  checkBadges();
-}
-
-async function deleteExam(id) {
-
-  const result =
-    await api(
-      "exams",
-      {
-        method: "DELETE",
-
-        body: JSON.stringify({
-          id
-        })
-      }
-    );
-
-  if (!result.response.ok) return;
-
-  exams =
-    exams.filter(
-      e =>
-        Number(e.id) !==
-        Number(id)
-    );
-
-  renderExamsPage();
-
-  toast(
-    "🗑️ Sınav silindi."
-  );
-}
-
-// ======================================================
-// FOCUS
-// ======================================================
-
-function renderFocusPage() {
-
-  updateFocusDisplay();
-}
-
-function startFocus() {
-
-  if (focusRunning) {
-
-    clearInterval(
-      focusTimer
-    );
-
-    focusRunning = false;
-
-    document.querySelector(
-      "#page-focus .primary-button"
-    ).textContent =
-      "▶ Devam Et";
-
-    return;
-  }
-
-  focusRunning = true;
-
-  document.querySelector(
-    "#page-focus .primary-button"
-  ).textContent =
-    "⏸ Duraklat";
-
-  focusTimer =
-    setInterval(
-      async () => {
-
-        focusSeconds--;
-
-        updateFocusDisplay();
-
-        if (focusSeconds <= 0) {
-
-          clearInterval(
-            focusTimer
-          );
-
-          focusRunning = false;
-
-          await completeFocus();
-
-        }
-
-      },
-      1000
-    );
-}
-
-function resetFocus() {
-
-  clearInterval(
-    focusTimer
-  );
-
-  focusRunning = false;
-
-  focusSeconds =
-    25 * 60;
-
-  updateFocusDisplay();
-
-  document.querySelector(
-    "#page-focus .primary-button"
-  ).textContent =
-    "▶ Başlat";
-}
-
-function updateFocusDisplay() {
-
-  const minutes =
-    Math.floor(
-      focusSeconds / 60
-    )
-    .toString()
-    .padStart(2,"0");
-
-  const seconds =
-    (focusSeconds % 60)
-    .toString()
-    .padStart(2,"0");
-
-  const timer =
-    document.getElementById(
-      "focusTimer"
-    );
-
-  if (timer) {
-
-    timer.textContent =
-      `${minutes}:${seconds}`;
-  }
-}
-
-async function completeFocus() {
-
-  const result =
-    await api(
-      "sessions",
-      {
-        method: "POST",
-
-        body: JSON.stringify({
-          duration_minutes: 25
-        })
-      }
-    );
-
-  if (result.response.ok) {
-
-    const earned =
-      Number(
-        result.data.earned_xp || 25
-      );
-
-    currentUser.xp =
-      Number(currentUser.xp || 0) +
-      earned;
-
-    addCoins(15);
-
-    sessions.unshift(
-      result.data.session
-    );
-
-    increaseStreak();
-
-    showCelebration(
-      "🎉",
-      "Odaklanma Tamamlandı!",
-      `⭐ +${earned} XP<br>
-       🪙 +15 Coin<br>
-       🔥 Seri devam ediyor!`
-    );
-
-    checkBadges();
-  }
-
-  focusSeconds =
-    25 * 60;
-
-  updateFocusDisplay();
-}
-
-// ======================================================
-// STATS
-// ======================================================
-
-function renderStatsPage() {
-
-  const el =
-    document.getElementById(
-      "statsPageContent"
-    );
-
-  if (!el) return;
-
-  const completed =
-    tasks.filter(
-      t => t.completed
-    ).length;
-
-  const minutes =
-    sessions.reduce(
-      (sum,s) =>
-        sum +
-        Number(
-          s.duration_minutes || 0
-        ),
-      0
-    );
-
-  const hours =
-    Math.floor(
-      minutes / 60
-    );
-
-  const mins =
-    minutes % 60;
-
-  const xp =
-    Number(currentUser?.xp || 0);
-
-  el.innerHTML = `
-
-    <div class="stat-grid">
-
-      <div class="stat-box">
-        ⭐
-        <strong>
-          ${xp}
-        </strong>
-        <small>
-          Toplam XP
-        </small>
-      </div>
-
-      <div class="stat-box">
-        🔥
-        <strong>
-          ${getStreak()}
-        </strong>
-        <small>
-          Günlük Seri
-        </small>
-      </div>
-
-      <div class="stat-box">
-        ✅
-        <strong>
-          ${completed}
-        </strong>
-        <small>
-          Tamamlanan Görev
-        </small>
-      </div>
-
-      <div class="stat-box">
-        ⏱️
-        <strong>
-          ${hours}s ${mins}dk
-        </strong>
-        <small>
-          Toplam Çalışma
-        </small>
-      </div>
-
-    </div>
-
-    <div class="page-card">
-
-      <h2>
-        📈 Çalışma Grafiği
-      </h2>
-
-      <p style="
-        color:var(--muted);
-        margin-top:6px;
-      ">
-        Son 7 günlük çalışma
-      </p>
-
-      <div class="chart">
-
-        ${createChart()}
-
-      </div>
-
-    </div>
-
-  `;
-}
-
-function createChart() {
-
-  const today =
-    new Date();
-
-  const days = [];
-
-  for (
-    let i = 6;
-    i >= 0;
-    i--
-  ) {
-
-    const date =
-      new Date(today);
-
-    date.setDate(
-      today.getDate() - i
-    );
-
-    const dayName =
-      date.toLocaleDateString(
-        "tr-TR",
-        {
-          weekday:"short"
-        }
-      );
-
-    const dateKey =
-      date.toISOString()
-        .slice(0,10);
-
-    const total =
-      sessions
-        .filter(
-          s =>
-            String(
-              s.created_at
-            ).slice(0,10)
-            === dateKey
-        )
-        .reduce(
-          (sum,s) =>
-            sum +
-            Number(
-              s.duration_minutes || 0
-            ),
-          0
-        );
-
-    days.push({
-      dayName,
-      total
-    });
-  }
-
-  const max =
-    Math.max(
-      ...days.map(
-        d => d.total
-      ),
-      1
-    );
-
-  return days.map(
-    d => `
-
-      <div class="chart-day">
-
-        <div
-          class="chart-bar"
-          style="
-            height:
-              ${Math.max(
-                5,
-                d.total / max * 180
-              )}px;
-          "
-          title="${d.total} dakika">
-        </div>
-
-        <span>
-          ${d.dayName}
-        </span>
-
-      </div>
-
-    `
-  ).join("");
-}
-
-// ======================================================
-// PROFILE
-// ======================================================
-
-function renderProfilePage() {
-
-  const el =
-    document.getElementById(
-      "profilePageContent"
-    );
-
-  if (!el) return;
-
-  const xp =
-    Number(currentUser?.xp || 0);
-
-  const level =
-    getLevel(xp);
-
-  el.innerHTML = `
-
-    <div class="profile-card">
-
-      <div class="profile-avatar">
-
-        ${getPetIcon()}
-
-      </div>
-
-      <h2>
-        ${escapeHTML(
-          currentUser?.name ||
-          "Öğrenci"
-        )}
-      </h2>
-
-      <div class="profile-level">
-
-        Seviye ${level.level}
-        · ${level.title}
-
-      </div>
-
-      <div class="profile-stats">
-
-        <div class="profile-stat">
-
-          <strong>
-            ${xp}
-          </strong>
-
-          XP
-
-        </div>
-
-        <div class="profile-stat">
-
-          <strong>
-            ${getStreak()}
-          </strong>
-
-          🔥 Seri
-
-        </div>
-
-        <div class="profile-stat">
-
-          <strong>
-            ${getCoins()}
-          </strong>
-
-          🪙 Coin
-
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="cards-grid">
-
-      <div class="card">
-
-        <h2>
-          🎨 Tema
-        </h2>
-
-        <p style="
-          color:var(--muted);
-          margin:10px 0;
-        ">
-          DersTakip görünümünü seç.
-        </p>
-
-        <button
-          class="primary-button"
-          onclick="toggleTheme()">
-
-          🌙 Tema Değiştir
-
-        </button>
-
-      </div>
-
-      <div class="card">
-
-        <h2>
-          🐣 Evcil Hayvan
-        </h2>
-
-        <p style="
-          font-size:45px;
-          margin:15px 0;
-        ">
-          ${getPetIcon()}
-        </p>
-
-        <button
-          class="primary-button"
-          onclick="showPet()">
-
-          Petimi Gör
-
-        </button>
-
-      </div>
-
-    </div>
-
-  `;
-}
-
-// ======================================================
-// PET
-// ======================================================
-
-function getPetIcon() {
-
-  const pet =
-    PETS.find(
-      p =>
-        p.id === getPet()
-    );
-
-  return pet
-    ? pet.icon
-    : "🐰";
-}
-
-function renderPetPage() {
-
-  const el =
-    document.getElementById(
-      "petPageContent"
-    );
-
-  if (!el) return;
-
-  const completed =
-    tasks.filter(
-      t => t.completed
-    ).length;
-
-  const petLevel =
-    Math.max(
-      1,
-      Math.floor(
-        completed / 10
-      ) + 1
-    );
-
-  el.innerHTML = `
-
-    <div class="pet-main">
-
-      <div class="big-pet">
-        ${getPetIcon()}
-      </div>
-
-      <h2>
-        ${getPetName()}
-      </h2>
-
-      <div class="pet-level">
-        Seviye ${petLevel}
-      </div>
-
-      <p style="
-        color:var(--muted);
-      ">
-        ${completed}
-        görev tamamladın.
-      </p>
-
-      <p style="
-        margin-top:10px;
-        color:var(--muted);
-      ">
-        Her 10 görevde petin gelişir!
-      </p>
-
-      <div class="pet-grid">
-
-        ${
-          PETS.map(
-            pet => `
-
-              <button
-                class="pet-choice
-                  ${
-                    pet.id === getPet()
-                      ? "selected"
-                      : ""
-                  }"
-                onclick="
-                  choosePet('${pet.id}')
-                ">
-
-                <div>
-                  ${pet.icon}
-                </div>
-
-                ${pet.name}
-
-              </button>
-
-            `
-          ).join("")
-        }
-
-      </div>
-
-    </div>
-
-  `;
-}
-
-function getPetName() {
-
-  const pet =
-    PETS.find(
-      p =>
-        p.id === getPet()
-    );
-
-  return pet
-    ? pet.name
-    : "Tavşan";
-}
-
-function choosePet(id) {
-
-  setPet(id);
-
-  renderPetPage();
-
-  toast(
-    `${getPetIcon()} Yeni arkadaşın seçildi!`
-  );
-}
-
-// ======================================================
-// BADGES
-// ======================================================
-
-function renderBadgesPage() {
-
-  const el =
-    document.getElementById(
-      "badgesPageContent"
-    );
-
-  if (!el) return;
-
-  const earned =
-    getBadges();
-
-  el.innerHTML =
-    BADGES.map(
-      badge => {
-
-        const unlocked =
-          earned.includes(
-            badge.id
-          );
-
-        return `
-
-          <div class="
-            badge-card
-            ${
-              unlocked
-                ? ""
-                : "locked"
-            }
-          ">
-
-            <div class="badge-icon">
-              ${badge.icon}
-            </div>
-
-            <h3>
-              ${badge.name}
-            </h3>
-
-            <p style="
-              color:var(--muted);
-              margin-top:8px;
-            ">
-              ${badge.description}
-            </p>
-
-            <p style="
-              margin-top:10px;
-              font-size:12px;
-            ">
-              ${
-                unlocked
-                  ? "✅ Kazanıldı"
-                  : "🔒 Kilitli"
-              }
-            </p>
-
-          </div>
-
-        `;
-      }
-    ).join("");
-}
-
-function checkBadges() {
-
-  const earned =
-    getBadges();
-
-  const completed =
-    tasks.filter(
-      t => t.completed
-    ).length;
-
-  const minutes =
-    sessions.reduce(
-      (sum,s) =>
-        sum +
-        Number(
-          s.duration_minutes || 0
-        ),
-      0
-    );
-
-  const xp =
-    Number(currentUser?.xp || 0);
-
-  const checks = {
-
-    first_task:
-      completed >= 1,
-
-    three_day:
-      getStreak() >= 3,
-
-    ten_tasks:
-      completed >= 10,
-
-    "100_minutes":
-      minutes >= 100,
-
-    first_exam:
-      exams.length >= 1,
-
-    "1000_xp":
-      xp >= 1000,
-
-    master:
-      getLevel(xp).level >= 10
-
-  };
-
-  Object.keys(checks)
-    .forEach(
-      id => {
-
-        if (
-          checks[id] &&
-          !earned.includes(id)
-        ) {
-
-          earned.push(id);
-
-          const badge =
-            BADGES.find(
-              b =>
-                b.id === id
-            );
-
-          if (badge) {
-
-            showCelebration(
-              badge.icon,
-              "Yeni Rozet!",
-              `${badge.name}<br>
-               ${badge.description}`
-            );
-
-          }
-
-        }
-
-      }
-    );
-
-  setBadges(earned);
-}
-
-// ======================================================
-// REWARDS
-// ======================================================
-
-function dailyLoginReward() {
-
-  const today =
-    new Date()
-      .toISOString()
-      .slice(0,10);
-
-  const last =
-    getLocal(
-      "lastReward",
-      null
-    );
-
-  if (last === today) return;
-
-  setLocal(
-    "lastReward",
-    today
-  );
-
-  addCoins(25);
-
-  toast(
-    "🎁 Günlük ödül: +25 Coin!"
-  );
-}
-
-function renderRewardsPage() {
-
-  const el =
-    document.getElementById(
-      "rewardsPageContent"
-    );
-
-  if (!el) return;
-
-  el.innerHTML = `
-
-    <div class="reward-card">
-
-      <div class="reward-icon">
-        🎁
-      </div>
-
-      <h2>
-        Günlük Ödül
-      </h2>
-
-      <p style="
-        color:var(--muted);
-        margin:10px 0 20px;
-      ">
-        Her gün giriş yaparak coin kazan.
-      </p>
-
-      <div style="
-        font-size:40px;
-        font-weight:950;
-        color:#e8a500;
-      ">
-        🪙 ${getCoins()}
-      </div>
-
-      <p style="
-        color:var(--muted);
-        margin-top:8px;
-      ">
-        Mevcut Coin
-      </p>
-
-      <div style="
-        margin-top:25px;
-        padding:18px;
-        border-radius:18px;
-        background:var(--bg);
-      ">
-
-        🔥
-        <strong>
-          ${getStreak()} günlük seri
-        </strong>
-
-        <br>
-
-        <small style="
-          color:var(--muted);
-        ">
-          7 günlük seri = özel ödül
-        </small>
-
-      </div>
-
-    </div>
-
-  `;
-}
-
-// ======================================================
-// DAILY STREAK
-// ======================================================
-
-function increaseStreak() {
-
-  const today =
-    new Date()
-      .toISOString()
-      .slice(0,10);
-
-  const last =
-    getLocal(
-      "lastStudyDay",
-      null
-    );
-
-  let streak =
-    getStreak();
-
-  if (last === today) {
-    return;
-  }
-
-  if (last) {
-
-    const previous =
-      new Date(last);
-
-    const current =
-      new Date(today);
-
-    const diff =
-      Math.round(
-        (
-          current -
-          previous
-        ) /
-        (1000 * 60 * 60 * 24)
-      );
-
-    if (diff === 1) {
-
-      streak++;
-
-    } else {
-
-      streak = 1;
-    }
-
-  } else {
-
-    streak = 1;
-  }
-
-  setStreak(streak);
-
-  setLocal(
-    "lastStudyDay",
-    today
-  );
-}
-
-// ======================================================
-// COINS
-// ======================================================
-
-function addCoins(amount) {
-
-  const coins =
-    getCoins();
-
-  setCoins(
-    coins +
-    Number(amount)
-  );
-}
-
-// ======================================================
-// THEME
-// ======================================================
-
-function toggleTheme() {
-
-  document.body.classList.toggle(
-    "dark"
-  );
-
-  setLocal(
-    "darkMode",
-    document.body.classList.contains(
-      "dark"
-    )
-  );
-}
-
-function loadTheme() {
-
-  if (
-    getLocal(
-      "darkMode",
-      false
-    )
-  ) {
-
-    document.body.classList.add(
-      "dark"
-    );
-  }
-}
-
-// ======================================================
-// TOAST
-// ======================================================
-
-function toast(message) {
-
-  const container =
-    document.getElementById(
-      "toastContainer"
-    );
-
-  if (!container) return;
-
-  const el =
-    document.createElement(
-      "div"
-    );
-
-  el.className =
-    "toast";
-
-  el.innerHTML =
-    message;
-
-  container.appendChild(
-    el
-  );
-
-  setTimeout(
-    () => {
-
-      el.remove();
-
-    },
-    3500
-  );
-}
-
-// ======================================================
-// CELEBRATION
-// ======================================================
-
-function showCelebration(
-  emoji,
-  title,
-  text
-) {
-
-  const box =
-    document.getElementById(
-      "celebration"
-    );
-
-  document.getElementById(
-    "celebrationEmoji"
-  ).textContent =
-    emoji;
-
-  document.getElementById(
-    "celebrationTitle"
-  ).textContent =
-    title;
-
-  document.getElementById(
-    "celebrationText"
-  ).innerHTML =
-    text;
-
-  box.style.display =
-    "flex";
-}
-
-function closeCelebration() {
-
-  document.getElementById(
-    "celebration"
-  ).style.display =
-    "none";
-}
-
-// ======================================================
-// HELPERS
-// ======================================================
-
-function formatDate(date) {
-
-  return new Date(
-    date
-  ).toLocaleDateString(
-    "tr-TR",
-    {
-      day: "2-digit",
-      month: "long",
-      year: "numeric"
-    }
-  );
-}
-
-function escapeHTML(value) {
-
-  return String(value ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-
-// ======================================================
-// START
-// ======================================================
-
-async function startApp() {
-
-  loadTheme();
-
-  const me =
-    await api("me");
-
-  if (
-    me.response.ok &&
-    me.data.user
-  ) {
-
-    currentUser =
-      me.data.user;
-
-    await enterApp();
-
-  } else {
-
-    document.getElementById(
-      "authScreen"
-    ).style.display =
-      "flex";
-
-    document.getElementById(
-      "app"
-    ).style.display =
-      "none";
-  }
-}
-
-document.addEventListener(
-  "DOMContentLoaded",
-  startApp
-);
+})();
