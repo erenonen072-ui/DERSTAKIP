@@ -4,24 +4,43 @@ import jwt from "jsonwebtoken";
 
 const sql = neon(process.env.DATABASE_URL);
 
-function getCookie(req, name) {
-  const cookies = req.headers.cookie || "";
+const COOKIE_NAME = "ders_takip_token";
 
-  const parts = cookies.split(";");
+function setCookie(res, token) {
+  res.setHeader(
+    "Set-Cookie",
+    `${COOKIE_NAME}=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=604800`
+  );
+}
 
-  for (const part of parts) {
-    const [key, ...value] = part.trim().split("=");
+function clearCookie(res) {
+  res.setHeader(
+    "Set-Cookie",
+    `${COOKIE_NAME}=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0`
+  );
+}
 
-    if (key === name) {
-      return decodeURIComponent(value.join("="));
-    }
+function getToken(req) {
+  const cookie = req.headers.cookie || "";
+
+  const match = cookie
+    .split(";")
+    .map((item) => item.trim())
+    .find((item) =>
+      item.startsWith(`${COOKIE_NAME}=`)
+    );
+
+  if (!match) {
+    return null;
   }
 
-  return null;
+  return match.substring(
+    COOKIE_NAME.length + 1
+  );
 }
 
 function getUserId(req) {
-  const token = getCookie(req, "token");
+  const token = getToken(req);
 
   if (!token) {
     return null;
@@ -34,45 +53,41 @@ function getUserId(req) {
     );
 
     return decoded.userId;
-  } catch {
+  } catch (error) {
     return null;
   }
 }
 
-function sendCookie(res, token) {
-  res.setHeader(
-    "Set-Cookie",
-    `token=${encodeURIComponent(token)}; HttpOnly; Path=/; Max-Age=604800; SameSite=Lax; Secure`
-  );
+async function getUser(req) {
+  const userId = getUserId(req);
+
+  if (!userId) {
+    return null;
+  }
+
+  const result = await sql`
+    SELECT
+      id,
+      name,
+      email,
+      xp,
+      streak,
+      created_at
+    FROM users
+    WHERE id = ${userId}
+    LIMIT 1
+  `;
+
+  return result[0] || null;
 }
 
-function clearCookie(res) {
-  res.setHeader(
-    "Set-Cookie",
-    "token=; HttpOnly; Path=/; Max-Age=0; SameSite=Lax; Secure"
-  );
+function json(res, status, data) {
+  res.status(status).json(data);
 }
 
 export default async function handler(req, res) {
   try {
-    const action = req.query.action;
-
-    // =====================================
-    // TEST
-    // =====================================
-
-    if (!action) {
-      const result = await sql`
-        SELECT NOW() AS time
-      `;
-
-      return res.status(200).json({
-        success: true,
-        message: "DersTakip API + Neon PostgreSQL çalışıyor 🚀",
-        database: "connected",
-        time: result[0].time
-      });
-    }
+    const action = req.query.action || "";
 
     // =====================================
     // REGISTER
@@ -88,34 +103,38 @@ export default async function handler(req, res) {
         password
       } = req.body || {};
 
-      if (!name || !email || !password) {
-        return res.status(400).json({
-          message: "Tüm alanları doldur."
+      if (
+        !name ||
+        !email ||
+        !password
+      ) {
+        return json(res, 400, {
+          message:
+            "Ad, e-posta ve şifre zorunludur."
         });
       }
 
       if (password.length < 6) {
-        return res.status(400).json({
+        return json(res, 400, {
           message:
-            "Şifre en az 6 karakter olmalı."
+            "Şifre en az 6 karakter olmalıdır."
         });
       }
 
       const normalizedEmail =
         email.trim().toLowerCase();
 
-      const existing =
-        await sql`
-          SELECT id
-          FROM users
-          WHERE email = ${normalizedEmail}
-          LIMIT 1
-        `;
+      const existing = await sql`
+        SELECT id
+        FROM users
+        WHERE email = ${normalizedEmail}
+        LIMIT 1
+      `;
 
       if (existing.length > 0) {
-        return res.status(400).json({
+        return json(res, 409, {
           message:
-            "Bu e-posta zaten kayıtlı."
+            "Bu e-posta adresi zaten kayıtlı."
         });
       }
 
@@ -125,24 +144,29 @@ export default async function handler(req, res) {
           10
         );
 
-      const result =
-        await sql`
-          INSERT INTO users
-            (name, email, password)
-          VALUES
-            (
-              ${name.trim()},
-              ${normalizedEmail},
-              ${hashedPassword}
-            )
-          RETURNING
-            id,
-            name,
-            email,
-            xp,
-            streak,
-            created_at
-        `;
+      const result = await sql`
+        INSERT INTO users (
+          name,
+          email,
+          password,
+          xp,
+          streak
+        )
+        VALUES (
+          ${name.trim()},
+          ${normalizedEmail},
+          ${hashedPassword},
+          0,
+          0
+        )
+        RETURNING
+          id,
+          name,
+          email,
+          xp,
+          streak,
+          created_at
+      `;
 
       const user = result[0];
 
@@ -156,10 +180,12 @@ export default async function handler(req, res) {
         }
       );
 
-      sendCookie(res, token);
+      setCookie(res, token);
 
-      return res.status(201).json({
+      return json(res, 201, {
         success: true,
+        message:
+          "Hesap başarıyla oluşturuldu.",
         user
       });
     }
@@ -177,26 +203,28 @@ export default async function handler(req, res) {
         password
       } = req.body || {};
 
-      if (!email || !password) {
-        return res.status(400).json({
+      if (
+        !email ||
+        !password
+      ) {
+        return json(res, 400, {
           message:
-            "E-posta ve şifre gerekli."
+            "E-posta ve şifre zorunludur."
         });
       }
 
       const normalizedEmail =
         email.trim().toLowerCase();
 
-      const result =
-        await sql`
-          SELECT *
-          FROM users
-          WHERE email = ${normalizedEmail}
-          LIMIT 1
-        `;
+      const result = await sql`
+        SELECT *
+        FROM users
+        WHERE email = ${normalizedEmail}
+        LIMIT 1
+      `;
 
       if (result.length === 0) {
-        return res.status(401).json({
+        return json(res, 401, {
           message:
             "E-posta veya şifre hatalı."
         });
@@ -204,14 +232,14 @@ export default async function handler(req, res) {
 
       const user = result[0];
 
-      const valid =
+      const passwordCorrect =
         await bcrypt.compare(
           password,
           user.password
         );
 
-      if (!valid) {
-        return res.status(401).json({
+      if (!passwordCorrect) {
+        return json(res, 401, {
           message:
             "E-posta veya şifre hatalı."
         });
@@ -227,17 +255,15 @@ export default async function handler(req, res) {
         }
       );
 
-      sendCookie(res, token);
+      setCookie(res, token);
 
-      return res.status(200).json({
+      delete user.password;
+
+      return json(res, 200, {
         success: true,
-        user: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          xp: user.xp,
-          streak: user.streak
-        }
+        message:
+          "Giriş başarılı.",
+        user
       });
     }
 
@@ -249,38 +275,19 @@ export default async function handler(req, res) {
       action === "me" &&
       req.method === "GET"
     ) {
-      const userId = getUserId(req);
+      const user =
+        await getUser(req);
 
-      if (!userId) {
-        return res.status(401).json({
-          message: "Giriş yapılmamış."
-        });
-      }
-
-      const result =
-        await sql`
-          SELECT
-            id,
-            name,
-            email,
-            xp,
-            streak,
-            created_at
-          FROM users
-          WHERE id = ${userId}
-          LIMIT 1
-        `;
-
-      if (result.length === 0) {
-        return res.status(401).json({
+      if (!user) {
+        return json(res, 401, {
           message:
-            "Kullanıcı bulunamadı."
+            "Oturum bulunamadı."
         });
       }
 
-      return res.status(200).json({
+      return json(res, 200, {
         success: true,
-        user: result[0]
+        user
       });
     }
 
@@ -294,9 +301,10 @@ export default async function handler(req, res) {
     ) {
       clearCookie(res);
 
-      return res.status(200).json({
+      return json(res, 200, {
         success: true,
-        message: "Çıkış yapıldı."
+        message:
+          "Çıkış yapıldı."
       });
     }
 
@@ -308,30 +316,32 @@ export default async function handler(req, res) {
       action === "tasks" &&
       req.method === "GET"
     ) {
-      const userId = getUserId(req);
+      const userId =
+        getUserId(req);
 
       if (!userId) {
-        return res.status(401).json({
-          message: "Giriş yapmalısın."
+        return json(res, 401, {
+          message:
+            "Giriş yapmalısın."
         });
       }
 
-      const tasks =
-        await sql`
-          SELECT
-            id,
-            title,
-            completed,
-            xp,
-            created_at
-          FROM tasks
-          WHERE user_id = ${userId}
-          ORDER BY
-            completed ASC,
-            created_at DESC
-        `;
+      const tasks = await sql`
+        SELECT
+          id,
+          user_id,
+          title,
+          completed,
+          xp,
+          created_at
+        FROM tasks
+        WHERE user_id = ${userId}
+        ORDER BY
+          completed ASC,
+          created_at DESC
+      `;
 
-      return res.status(200).json({
+      return json(res, 200, {
         success: true,
         tasks
       });
@@ -345,50 +355,66 @@ export default async function handler(req, res) {
       action === "tasks" &&
       req.method === "POST"
     ) {
-      const userId = getUserId(req);
+      const userId =
+        getUserId(req);
 
       if (!userId) {
-        return res.status(401).json({
-          message: "Giriş yapmalısın."
+        return json(res, 401, {
+          message:
+            "Giriş yapmalısın."
         });
       }
 
-      const { title } =
-        req.body || {};
+      const {
+        title
+      } = req.body || {};
 
-      if (!title || !title.trim()) {
-        return res.status(400).json({
+      if (
+        !title ||
+        !title.trim()
+      ) {
+        return json(res, 400, {
           message:
             "Görev adı boş olamaz."
         });
       }
 
-      const result =
-        await sql`
-          INSERT INTO tasks
-            (
-              user_id,
-              title,
-              completed,
-              xp
-            )
-          VALUES
-            (
-              ${userId},
-              ${title.trim()},
-              false,
-              50
-            )
-          RETURNING
-            id,
-            title,
-            completed,
-            xp,
-            created_at
-        `;
+      const cleanTitle =
+        title.trim();
 
-      return res.status(201).json({
+      if (cleanTitle.length > 150) {
+        return json(res, 400, {
+          message:
+            "Görev adı çok uzun."
+        });
+      }
+
+      const result = await sql`
+        INSERT INTO tasks (
+          user_id,
+          title,
+          completed,
+          xp
+        )
+        VALUES (
+          ${userId},
+          ${cleanTitle},
+          FALSE,
+          50
+        )
+        RETURNING
+          id,
+          user_id,
+          title,
+          completed,
+          xp,
+          created_at
+      `;
+
+      return json(res, 201, {
         success: true,
+        message:
+          "Görev eklendi.",
         task: result[0]
       });
     }
@@ -401,25 +427,28 @@ export default async function handler(req, res) {
       action === "tasks" &&
       req.method === "PATCH"
     ) {
-      const userId = getUserId(req);
+      const userId =
+        getUserId(req);
 
       if (!userId) {
-        return res.status(401).json({
-          message: "Giriş yapmalısın."
+        return json(res, 401, {
+          message:
+            "Giriş yapmalısın."
         });
       }
 
-      const { id } =
-        req.body || {};
+      const {
+        id
+      } = req.body || {};
 
       if (!id) {
-        return res.status(400).json({
+        return json(res, 400, {
           message:
             "Görev ID gerekli."
         });
       }
 
-      const current =
+      const existing =
         await sql`
           SELECT
             id,
@@ -432,21 +461,23 @@ export default async function handler(req, res) {
           LIMIT 1
         `;
 
-      if (current.length === 0) {
-        return res.status(404).json({
+      if (existing.length === 0) {
+        return json(res, 404, {
           message:
             "Görev bulunamadı."
         });
       }
 
-      const oldCompleted =
-        current[0].completed;
+      const task =
+        existing[0];
 
       const newCompleted =
-        !oldCompleted;
+        !task.completed;
 
-      const xp =
-        Number(current[0].xp) || 50;
+      const xpChange =
+        newCompleted
+          ? Number(task.xp)
+          : -Number(task.xp);
 
       await sql`
         UPDATE tasks
@@ -457,36 +488,21 @@ export default async function handler(req, res) {
           AND user_id = ${userId}
       `;
 
-      // Görev tamamlandıysa XP ekle
-      if (
-        !oldCompleted &&
-        newCompleted
-      ) {
-        await sql`
-          UPDATE users
-          SET xp = xp + ${xp}
-          WHERE id = ${userId}
-        `;
-      }
-
-      // Görev geri açıldıysa XP çıkar
-      if (
-        oldCompleted &&
-        !newCompleted
-      ) {
-        await sql`
-          UPDATE users
-          SET xp = GREATEST(
+      await sql`
+        UPDATE users
+        SET xp =
+          GREATEST(
             0,
-            xp - ${xp}
+            xp + ${xpChange}
           )
-          WHERE id = ${userId}
-        `;
-      }
+        WHERE id = ${userId}
+      `;
 
-      return res.status(200).json({
+      return json(res, 200, {
         success: true,
-        completed: newCompleted
+        completed:
+          newCompleted,
+        xpChange
       });
     }
 
@@ -498,20 +514,31 @@ export default async function handler(req, res) {
       action === "tasks" &&
       req.method === "DELETE"
     ) {
-      const userId = getUserId(req);
+      const userId =
+        getUserId(req);
 
       if (!userId) {
-        return res.status(401).json({
-          message: "Giriş yapmalısın."
+        return json(res, 401, {
+          message:
+            "Giriş yapmalısın."
         });
       }
 
-      const { id } =
-        req.body || {};
+      const {
+        id
+      } = req.body || {};
 
-      const task =
+      if (!id) {
+        return json(res, 400, {
+          message:
+            "Görev ID gerekli."
+        });
+      }
+
+      const existing =
         await sql`
           SELECT
+            id,
             completed,
             xp
           FROM tasks
@@ -521,24 +548,24 @@ export default async function handler(req, res) {
           LIMIT 1
         `;
 
-      if (task.length === 0) {
-        return res.status(404).json({
+      if (existing.length === 0) {
+        return json(res, 404, {
           message:
             "Görev bulunamadı."
         });
       }
 
-      // Tamamlanmış görev siliniyorsa XP geri alınır
-      if (task[0].completed) {
-        const xp =
-          Number(task[0].xp) || 50;
+      const task =
+        existing[0];
 
+      if (task.completed) {
         await sql`
           UPDATE users
-          SET xp = GREATEST(
-            0,
-            xp - ${xp}
-          )
+          SET xp =
+            GREATEST(
+              0,
+              xp - ${Number(task.xp)}
+            )
           WHERE id = ${userId}
         `;
       }
@@ -550,9 +577,33 @@ export default async function handler(req, res) {
           AND user_id = ${userId}
       `;
 
-      return res.status(200).json({
+      return json(res, 200, {
         success: true,
-        message: "Görev silindi."
+        message:
+          "Görev silindi."
+      });
+    }
+
+    // =====================================
+    // API TEST
+    // =====================================
+
+    if (
+      action === "test" ||
+      action === ""
+    ) {
+      const result = await sql`
+        SELECT NOW() AS time
+      `;
+
+      return json(res, 200, {
+        success: true,
+        message:
+          "DersTakip API + Neon PostgreSQL çalışıyor 🚀",
+        database:
+          "connected",
+        time:
+          result[0].time
       });
     }
 
@@ -560,7 +611,8 @@ export default async function handler(req, res) {
     // BULUNAMADI
     // =====================================
 
-    return res.status(404).json({
+    return json(res, 404, {
+      success: false,
       message:
         "API işlemi bulunamadı."
     });
@@ -571,7 +623,7 @@ export default async function handler(req, res) {
       error
     );
 
-    return res.status(500).json({
+    return json(res, 500, {
       success: false,
       message:
         "Sunucu hatası oluştu.",
