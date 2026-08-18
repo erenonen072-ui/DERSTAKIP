@@ -12,12 +12,12 @@ const PORT = process.env.PORT || 3000;
 
 const JWT_SECRET =
     process.env.JWT_SECRET ||
-    "ders-takip-development-secret-degistir";
+    "DEVELOPMENT_SECRET_CHANGE_THIS";
 
 
-// ================================
-// AYARLAR
-// ================================
+// ======================================
+// MIDDLEWARE
+// ======================================
 
 app.use(express.json());
 
@@ -30,33 +30,29 @@ app.use(
 );
 
 
-// ================================
-// TOKEN OLUŞTUR
-// ================================
+// ======================================
+// TOKEN
+// ======================================
 
 function createToken(user) {
 
     return jwt.sign(
-
         {
             id: user.id,
             email: user.email
         },
-
         JWT_SECRET,
-
         {
             expiresIn: "7d"
         }
-
     );
 
 }
 
 
-// ================================
-// KULLANICI KONTROLÜ
-// ================================
+// ======================================
+// GİRİŞ KONTROLÜ
+// ======================================
 
 function requireLogin(req, res, next) {
 
@@ -66,16 +62,11 @@ function requireLogin(req, res, next) {
     if (!token) {
 
         return res.status(401).json({
-
             success: false,
-
-            message:
-                "Önce giriş yapmalısın."
-
+            message: "Giriş yapmalısın."
         });
 
     }
-
 
     try {
 
@@ -89,17 +80,11 @@ function requireLogin(req, res, next) {
 
         next();
 
-    }
-
-    catch (error) {
+    } catch {
 
         return res.status(401).json({
-
             success: false,
-
-            message:
-                "Oturum süresi dolmuş."
-
+            message: "Oturum geçersiz."
         });
 
     }
@@ -107,9 +92,25 @@ function requireLogin(req, res, next) {
 }
 
 
-// ================================
-// KAYIT OL
-// ================================
+// ======================================
+// ANA SAYFA
+// ======================================
+
+app.get("/", (req, res) => {
+
+    res.sendFile(
+        path.join(
+            __dirname,
+            "../public/index.html"
+        )
+    );
+
+});
+
+
+// ======================================
+// KAYIT
+// ======================================
 
 app.post(
     "/api/register",
@@ -123,7 +124,6 @@ app.post(
                 password
             } = req.body;
 
-
             if (
                 !name ||
                 !email ||
@@ -131,62 +131,46 @@ app.post(
             ) {
 
                 return res.status(400).json({
-
                     success: false,
-
                     message:
                         "Tüm alanları doldur."
-
                 });
 
             }
-
 
             if (password.length < 6) {
 
                 return res.status(400).json({
-
                     success: false,
-
                     message:
                         "Şifre en az 6 karakter olmalı."
-
                 });
 
             }
-
 
             const normalizedEmail =
                 email
                     .trim()
                     .toLowerCase();
 
-
-            const existingUser =
-                db.prepare(
-                    `
+            const existing =
+                db.prepare(`
                     SELECT id
                     FROM users
                     WHERE email = ?
-                    `
-                ).get(
+                `).get(
                     normalizedEmail
                 );
 
-
-            if (existingUser) {
+            if (existing) {
 
                 return res.status(409).json({
-
                     success: false,
-
                     message:
                         "Bu e-posta zaten kayıtlı."
-
                 });
 
             }
-
 
             const hashedPassword =
                 await bcrypt.hash(
@@ -194,10 +178,8 @@ app.post(
                     12
                 );
 
-
             const result =
-                db.prepare(
-                    `
+                db.prepare(`
                     INSERT INTO users
                     (
                         name,
@@ -205,21 +187,14 @@ app.post(
                         password
                     )
                     VALUES (?, ?, ?)
-                    `
-                ).run(
-
+                `).run(
                     name.trim(),
-
                     normalizedEmail,
-
                     hashedPassword
-
                 );
 
-
             const user =
-                db.prepare(
-                    `
+                db.prepare(`
                     SELECT
                         id,
                         name,
@@ -228,15 +203,12 @@ app.post(
                         streak
                     FROM users
                     WHERE id = ?
-                    `
-                ).get(
+                `).get(
                     result.lastInsertRowid
                 );
 
-
             const token =
                 createToken(user);
-
 
             res.cookie(
                 "ders_takip_token",
@@ -244,36 +216,28 @@ app.post(
                 {
                     httpOnly: true,
                     sameSite: "lax",
+                    secure:
+                        process.env.NODE_ENV === "production",
                     maxAge:
                         7 * 24 * 60 * 60 * 1000
                 }
             );
 
-
             res.status(201).json({
-
                 success: true,
-
                 message:
-                    "Hesabın oluşturuldu!",
-
+                    "Hesap oluşturuldu.",
                 user
-
             });
 
-        }
-
-        catch (error) {
+        } catch (error) {
 
             console.error(error);
 
             res.status(500).json({
-
                 success: false,
-
                 message:
                     "Kayıt sırasında hata oluştu."
-
             });
 
         }
@@ -282,9 +246,9 @@ app.post(
 );
 
 
-// ================================
-// GİRİŞ YAP
-// ================================
+// ======================================
+// GİRİŞ
+// ======================================
 
 app.post(
     "/api/login",
@@ -297,59 +261,48 @@ app.post(
                 password
             } = req.body;
 
+            const normalizedEmail =
+                (email || "")
+                    .trim()
+                    .toLowerCase();
 
             const user =
-                db.prepare(
-                    `
+                db.prepare(`
                     SELECT *
                     FROM users
                     WHERE email = ?
-                    `
-                ).get(
-                    (email || "")
-                        .trim()
-                        .toLowerCase()
+                `).get(
+                    normalizedEmail
                 );
-
 
             if (!user) {
 
                 return res.status(401).json({
-
                     success: false,
-
                     message:
                         "E-posta veya şifre hatalı."
-
                 });
 
             }
 
-
-            const passwordCorrect =
+            const correct =
                 await bcrypt.compare(
                     password || "",
                     user.password
                 );
 
-
-            if (!passwordCorrect) {
+            if (!correct) {
 
                 return res.status(401).json({
-
                     success: false,
-
                     message:
                         "E-posta veya şifre hatalı."
-
                 });
 
             }
 
-
             const token =
                 createToken(user);
-
 
             res.cookie(
                 "ders_takip_token",
@@ -357,48 +310,34 @@ app.post(
                 {
                     httpOnly: true,
                     sameSite: "lax",
+                    secure:
+                        process.env.NODE_ENV === "production",
                     maxAge:
                         7 * 24 * 60 * 60 * 1000
                 }
             );
 
-
             res.json({
-
                 success: true,
-
                 message:
-                    "Giriş başarılı!",
-
+                    "Giriş başarılı.",
                 user: {
-
                     id: user.id,
-
                     name: user.name,
-
                     email: user.email,
-
                     xp: user.xp,
-
                     streak: user.streak
-
                 }
-
             });
 
-        }
-
-        catch (error) {
+        } catch (error) {
 
             console.error(error);
 
             res.status(500).json({
-
                 success: false,
-
                 message:
                     "Giriş sırasında hata oluştu."
-
             });
 
         }
@@ -407,9 +346,9 @@ app.post(
 );
 
 
-// ================================
+// ======================================
 // ÇIKIŞ
-// ================================
+// ======================================
 
 app.post(
     "/api/logout",
@@ -420,18 +359,16 @@ app.post(
         );
 
         res.json({
-
             success: true
-
         });
 
     }
 );
 
 
-// ================================
+// ======================================
 // BEN KİMİM?
-// ================================
+// ======================================
 
 app.get(
     "/api/me",
@@ -439,8 +376,7 @@ app.get(
     (req, res) => {
 
         const user =
-            db.prepare(
-                `
+            db.prepare(`
                 SELECT
                     id,
                     name,
@@ -450,41 +386,32 @@ app.get(
                     created_at
                 FROM users
                 WHERE id = ?
-                `
-            ).get(
+            `).get(
                 req.user.id
             );
-
 
         if (!user) {
 
             return res.status(404).json({
-
                 success: false,
-
                 message:
                     "Kullanıcı bulunamadı."
-
             });
 
         }
 
-
         res.json({
-
             success: true,
-
             user
-
         });
 
     }
 );
 
 
-// ================================
+// ======================================
 // GÖREVLERİ GETİR
-// ================================
+// ======================================
 
 app.get(
     "/api/tasks",
@@ -492,8 +419,7 @@ app.get(
     (req, res) => {
 
         const tasks =
-            db.prepare(
-                `
+            db.prepare(`
                 SELECT
                     id,
                     title,
@@ -503,26 +429,22 @@ app.get(
                 FROM tasks
                 WHERE user_id = ?
                 ORDER BY id DESC
-                `
-            ).all(
+            `).all(
                 req.user.id
             );
 
-
         res.json({
-
             success: true,
-
             tasks
-
         });
 
     }
 );
 
-// ================================
+
+// ======================================
 // GÖREV EKLE
-// ================================
+// ======================================
 
 app.post(
     "/api/tasks",
@@ -532,34 +454,24 @@ app.post(
         try {
 
             const {
-                title,
-                xp
+                title
             } = req.body;
 
-
-            if (!title || !title.trim()) {
+            if (
+                !title ||
+                !title.trim()
+            ) {
 
                 return res.status(400).json({
-
                     success: false,
-
                     message:
                         "Görev adı boş olamaz."
-
                 });
 
             }
 
-
-            const taskXP =
-                Number.isInteger(xp)
-                    ? xp
-                    : 50;
-
-
             const result =
-                db.prepare(
-                    `
+                db.prepare(`
                     INSERT INTO tasks
                     (
                         user_id,
@@ -567,22 +479,14 @@ app.post(
                         completed,
                         xp
                     )
-                    VALUES (?, ?, 0, ?)
-                    `
-                ).run(
-
+                    VALUES (?, ?, 0, 50)
+                `).run(
                     req.user.id,
-
-                    title.trim(),
-
-                    taskXP
-
+                    title.trim()
                 );
 
-
             const task =
-                db.prepare(
-                    `
+                db.prepare(`
                     SELECT
                         id,
                         title,
@@ -591,33 +495,23 @@ app.post(
                         created_at
                     FROM tasks
                     WHERE id = ?
-                    `
-                ).get(
+                `).get(
                     result.lastInsertRowid
                 );
 
-
             res.status(201).json({
-
                 success: true,
-
                 task
-
             });
 
-        }
-
-        catch (error) {
+        } catch (error) {
 
             console.error(error);
 
             res.status(500).json({
-
                 success: false,
-
                 message:
-                    "Görev eklenirken hata oluştu."
-
+                    "Görev eklenemedi."
             });
 
         }
@@ -626,9 +520,9 @@ app.post(
 );
 
 
-// ================================
+// ======================================
 // GÖREV TAMAMLA / GERİ AL
-// ================================
+// ======================================
 
 app.patch(
     "/api/tasks/:id",
@@ -640,106 +534,72 @@ app.patch(
             const taskId =
                 Number(req.params.id);
 
-
             const task =
-                db.prepare(
-                    `
+                db.prepare(`
                     SELECT *
                     FROM tasks
                     WHERE id = ?
                     AND user_id = ?
-                    `
-                ).get(
-
+                `).get(
                     taskId,
-
                     req.user.id
-
                 );
-
 
             if (!task) {
 
                 return res.status(404).json({
-
                     success: false,
-
                     message:
                         "Görev bulunamadı."
-
                 });
 
             }
 
+            const newCompleted =
+                task.completed ? 0 : 1;
 
-            const completed =
-                task.completed
-                    ? 0
-                    : 1;
+            db.transaction(() => {
 
-
-            db.prepare(
-                `
-                UPDATE tasks
-                SET completed = ?
-                WHERE id = ?
-                AND user_id = ?
-                `
-            ).run(
-
-                completed,
-
-                taskId,
-
-                req.user.id
-
-            );
-
-
-            // Görev tamamlandıysa XP ekle
-            if (
-                completed === 1
-            ) {
-
-                db.prepare(
-                    `
-                    UPDATE users
-                    SET xp = xp + ?
+                db.prepare(`
+                    UPDATE tasks
+                    SET completed = ?
                     WHERE id = ?
-                    `
-                ).run(
-
-                    task.xp,
-
+                    AND user_id = ?
+                `).run(
+                    newCompleted,
+                    taskId,
                     req.user.id
-
                 );
 
-            }
+                if (newCompleted === 1) {
 
-            // Görev geri alındıysa XP çıkar
-            else {
+                    db.prepare(`
+                        UPDATE users
+                        SET xp = xp + ?
+                        WHERE id = ?
+                    `).run(
+                        task.xp,
+                        req.user.id
+                    );
 
-                db.prepare(
-                    `
-                    UPDATE users
-                    SET xp = MAX(0, xp - ?)
-                    WHERE id = ?
-                    `
-                ).run(
+                } else {
 
-                    task.xp,
+                    db.prepare(`
+                        UPDATE users
+                        SET xp =
+                            MAX(0, xp - ?)
+                        WHERE id = ?
+                    `).run(
+                        task.xp,
+                        req.user.id
+                    );
 
-                    req.user.id
+                }
 
-                );
+            })();
 
-            }
-
-
-            const updatedTask =
-                db.prepare(
-                    `
+            const updated =
+                db.prepare(`
                     SELECT
                         id,
                         title,
@@ -748,34 +608,23 @@ app.patch(
                         created_at
                     FROM tasks
                     WHERE id = ?
-                    `
-                ).get(
+                `).get(
                     taskId
                 );
 
-
             res.json({
-
                 success: true,
-
-                task:
-                    updatedTask
-
+                task: updated
             });
 
-        }
-
-        catch (error) {
+        } catch (error) {
 
             console.error(error);
 
             res.status(500).json({
-
                 success: false,
-
                 message:
                     "Görev güncellenemedi."
-
             });
 
         }
@@ -784,9 +633,9 @@ app.patch(
 );
 
 
-// ================================
+// ======================================
 // GÖREV SİL
-// ================================
+// ======================================
 
 app.delete(
     "/api/tasks/:id",
@@ -798,95 +647,132 @@ app.delete(
             const taskId =
                 Number(req.params.id);
 
-
-            const result =
-                db.prepare(
-                    `
-                    DELETE FROM tasks
+            const task =
+                db.prepare(`
+                    SELECT *
+                    FROM tasks
                     WHERE id = ?
                     AND user_id = ?
-                    `
-                ).run(
-
+                `).get(
                     taskId,
-
                     req.user.id
-
                 );
 
-
-            if (
-                result.changes === 0
-            ) {
+            if (!task) {
 
                 return res.status(404).json({
-
                     success: false,
-
                     message:
                         "Görev bulunamadı."
-
                 });
 
             }
 
+            db.transaction(() => {
+
+                if (task.completed) {
+
+                    db.prepare(`
+                        UPDATE users
+                        SET xp =
+                            MAX(0, xp - ?)
+                        WHERE id = ?
+                    `).run(
+                        task.xp,
+                        req.user.id
+                    );
+
+                }
+
+                db.prepare(`
+                    DELETE FROM tasks
+                    WHERE id = ?
+                    AND user_id = ?
+                `).run(
+                    taskId,
+                    req.user.id
+                );
+
+            })();
 
             res.json({
-
                 success: true
-
             });
 
-        }
-
-        catch (error) {
+        } catch (error) {
 
             console.error(error);
 
             res.status(500).json({
-
                 success: false,
-
                 message:
                     "Görev silinemedi."
-
             });
 
         }
 
     }
 );
-// ================================
+
+
+// ======================================
 // TEST
-// ================================
+// ======================================
 
 app.get(
     "/api/test",
     (req, res) => {
 
         res.json({
-
             success: true,
-
             message:
                 "DersTakip backend çalışıyor 🚀"
-
         });
 
     }
 );
 
 
-// ================================
+// ======================================
+// 404
+// ======================================
+
+app.use(
+    (req, res) => {
+
+        if (
+            req.path.startsWith("/api/")
+        ) {
+
+            return res.status(404).json({
+                success: false,
+                message:
+                    "API bulunamadı."
+            });
+
+        }
+
+        res.sendFile(
+            path.join(
+                __dirname,
+                "../public/index.html"
+            )
+        );
+
+    }
+);
+
+
+// ======================================
 // SUNUCU
-// ================================
+// ======================================
 
 app.listen(
     PORT,
     () => {
 
         console.log(
-            `DersTakip http://localhost:${PORT}`
+            `🚀 DersTakip ${PORT} portunda çalışıyor.`
         );
 
     }
