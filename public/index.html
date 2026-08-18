@@ -1,1306 +1,1331 @@
 <!DOCTYPE html>
 <html lang="tr">
-
 <head>
+    <meta charset="UTF-8">
 
-<meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
->
+    <meta name="theme-color" content="#635bff">
 
-<title>DersTakip 2.0</title>
+    <title>DersTakip 2.0</title>
 
-<style>
+    <style>
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+        /* =====================================================
+           RESET
+        ===================================================== */
 
-body {
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    background: #f5f7fb;
-    color: #171a2b;
-}
+        html {
+            scroll-behavior: smooth;
+        }
 
-button,
-input {
-    font: inherit;
-}
+        body {
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Arial,
+                sans-serif;
 
-button {
-    cursor: pointer;
-}
+            background: #f5f7fb;
+            color: #171a2b;
 
-/* =====================================
-   AUTH
-===================================== */
+            min-height: 100vh;
+        }
 
-#authScreen {
+        button,
+        input {
+            font: inherit;
+        }
 
-    min-height: 100vh;
+        button {
+            cursor: pointer;
+        }
 
-    display: flex;
+        /* =====================================================
+           AUTH
+        ===================================================== */
 
-    align-items: center;
-    justify-content: center;
+        #authScreen {
+            min-height: 100vh;
 
-    padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-    background:
-        linear-gradient(
-            135deg,
-            #6257ee,
-            #947aff
-        );
-}
+            padding: 20px;
 
-.auth-box {
+            background:
+                radial-gradient(
+                    circle at top left,
+                    #9b91ff 0,
+                    transparent 35%
+                ),
+                linear-gradient(
+                    135deg,
+                    #5c54e8,
+                    #8c76ff
+                );
+        }
 
-    width: 100%;
-    max-width: 430px;
+        .auth-box {
+            width: 100%;
+            max-width: 440px;
 
-    background: white;
+            background: rgba(255,255,255,.98);
 
-    padding: 35px;
+            padding: 38px;
 
-    border-radius: 25px;
+            border-radius: 28px;
 
-    box-shadow:
-        0 25px 70px #0003;
-}
+            box-shadow:
+                0 30px 80px rgba(0,0,0,.20);
+        }
 
-.auth-logo {
+        .auth-logo {
+            text-align: center;
 
-    text-align: center;
+            font-size: 34px;
+            font-weight: 900;
 
-    font-size: 32px;
+            margin-bottom: 8px;
 
-    font-weight: 900;
+            letter-spacing: -1px;
+        }
 
-    margin-bottom: 8px;
-}
+        .auth-logo span {
+            color: #665cff;
+        }
 
-.auth-logo span {
-    color: #6b60ef;
-}
+        .auth-description {
+            text-align: center;
 
-.auth-description {
+            color: #7d8498;
 
-    text-align: center;
+            margin-bottom: 26px;
 
-    color: #7c8499;
+            line-height: 1.5;
+        }
 
-    margin-bottom: 25px;
-}
+        .auth-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
 
-.auth-tabs {
+            background: #f1f2f7;
 
-    display: grid;
+            padding: 5px;
 
-    grid-template-columns:
-        1fr 1fr;
+            border-radius: 14px;
 
-    background: #f1f2f7;
+            margin-bottom: 22px;
+        }
 
-    padding: 5px;
+        .auth-tabs button {
+            border: none;
 
-    border-radius: 12px;
+            background: transparent;
 
-    margin-bottom: 20px;
-}
+            padding: 12px;
 
-.auth-tabs button {
+            border-radius: 10px;
 
-    border: none;
+            font-weight: 800;
 
-    padding: 11px;
+            color: #777e92;
 
-    background:
-        transparent;
+            transition: .2s;
+        }
 
-    border-radius: 9px;
+        .auth-tabs button.active {
+            background: white;
 
-    font-weight: 700;
-}
+            color: #22263a;
 
-.auth-tabs button.active {
+            box-shadow:
+                0 4px 14px rgba(0,0,0,.08);
+        }
 
-    background: white;
+        .form-group {
+            margin-bottom: 16px;
+        }
 
-    box-shadow:
-        0 3px 10px #0002;
-}
+        .form-group label {
+            display: block;
 
-.form-group {
-    margin-bottom: 15px;
-}
+            font-size: 13px;
 
-.form-group label {
+            font-weight: 800;
 
-    display: block;
+            margin-bottom: 7px;
+        }
 
-    font-size: 13px;
+        .form-group input {
+            width: 100%;
 
-    font-weight: 700;
+            padding: 14px;
 
-    margin-bottom: 7px;
-}
+            border:
+                1px solid #dfe3ec;
 
-.form-group input {
+            border-radius: 12px;
 
-    width: 100%;
+            outline: none;
 
-    padding: 13px;
+            background: #fff;
 
-    border:
-        1px solid #dfe3ec;
+            transition: .2s;
+        }
 
-    border-radius: 11px;
+        .form-group input:focus {
+            border-color: #665cff;
 
-    outline: none;
-}
+            box-shadow:
+                0 0 0 4px rgba(102,92,255,.10);
+        }
 
-.auth-button {
+        .auth-button {
+            width: 100%;
 
-    width: 100%;
+            border: none;
 
-    border: none;
+            background:
+                linear-gradient(
+                    135deg,
+                    #635bff,
+                    #8776ff
+                );
 
-    background: #6b60ef;
+            color: white;
 
-    color: white;
+            padding: 14px;
 
-    padding: 14px;
+            border-radius: 13px;
 
-    border-radius: 12px;
+            font-weight: 900;
 
-    font-weight: 800;
-}
+            box-shadow:
+                0 10px 25px rgba(99,91,255,.25);
 
-#authMessage {
+            transition: .2s;
+        }
 
-    margin-top: 15px;
+        .auth-button:hover {
+            transform: translateY(-1px);
+        }
 
-    text-align: center;
+        #authMessage {
+            margin-top: 15px;
 
-    font-size: 13px;
+            text-align: center;
 
-    min-height: 18px;
-}
+            font-size: 13px;
 
-/* =====================================
-   APP
-===================================== */
+            min-height: 18px;
+        }
 
-#app {
-    display: none;
-}
+        /* =====================================================
+           APP
+        ===================================================== */
 
-.sidebar {
+        #app {
+            display: none;
 
-    position: fixed;
+            min-height: 100vh;
+        }
 
-    left: 0;
-    top: 0;
-    bottom: 0;
+        /* =====================================================
+           SIDEBAR
+        ===================================================== */
 
-    width: 250px;
+        .sidebar {
+            position: fixed;
 
-    background: #15182b;
+            left: 0;
+            top: 0;
+            bottom: 0;
 
-    color: white;
+            width: 255px;
 
-    padding: 25px 18px;
-}
+            background:
+                linear-gradient(
+                    180deg,
+                    #15182b,
+                    #101222
+                );
 
-.logo {
+            color: white;
 
-    font-size: 25px;
+            padding: 25px 18px;
 
-    font-weight: 900;
+            z-index: 100;
 
-    margin-bottom: 35px;
+            display: flex;
+            flex-direction: column;
 
-    padding-left: 10px;
-}
+            box-shadow:
+                10px 0 35px rgba(0,0,0,.06);
+        }
 
-.logo span {
-    color: #8176ff;
-}
+        .logo {
+            font-size: 26px;
 
-.menu button {
+            font-weight: 950;
 
-    width: 100%;
+            margin-bottom: 35px;
 
-    border: none;
+            padding-left: 10px;
 
-    background:
-        transparent;
+            letter-spacing: -.8px;
+        }
 
-    color: #aeb4ca;
+        .logo span {
+            color: #8177ff;
+        }
 
-    padding: 14px;
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
 
-    border-radius: 12px;
+        .menu button {
+            width: 100%;
 
-    margin-bottom: 7px;
+            border: none;
 
-    text-align: left;
+            background: transparent;
 
-    font-weight: 700;
-}
+            color: #aeb4ca;
 
-.menu button:hover,
-.menu button.active {
+            padding: 13px 14px;
 
-    background: #292d49;
+            border-radius: 12px;
 
-    color: white;
-}
+            text-align: left;
 
-.logout {
+            font-weight: 750;
 
-    position: absolute;
+            transition: .2s;
+        }
 
-    bottom: 25px;
+        .menu button:hover {
+            background: #242841;
 
-    left: 18px;
-    right: 18px;
-}
+            color: white;
 
-.logout button {
+            transform: translateX(2px);
+        }
 
-    width: 100%;
+        .menu button.active {
+            background:
+                linear-gradient(
+                    135deg,
+                    #6259ef,
+                    #7b70ff
+                );
 
-    border: none;
+            color: white;
 
-    background: #292d49;
+            box-shadow:
+                0 8px 20px rgba(99,91,255,.20);
+        }
 
-    color: white;
+        .logout {
+            margin-top: auto;
+        }
 
-    padding: 12px;
+        .logout button {
+            width: 100%;
 
-    border-radius: 12px;
-}
+            border: none;
 
-.main {
+            background: #272b45;
 
-    margin-left: 250px;
+            color: white;
 
-    padding: 30px;
-}
+            padding: 13px;
 
-.topbar {
+            border-radius: 12px;
 
-    display: flex;
+            font-weight: 750;
 
-    justify-content:
-        space-between;
+            transition: .2s;
+        }
 
-    align-items: center;
+        .logout button:hover {
+            background: #353a58;
+        }
 
-    margin-bottom: 25px;
-}
+        /* =====================================================
+           MAIN
+        ===================================================== */
 
-.welcome h1 {
+        .main {
+            margin-left: 255px;
 
-    font-size: 30px;
+            width:
+                calc(100% - 255px);
 
-    margin-bottom: 6px;
-}
+            padding: 30px;
 
-.welcome p {
-    color: #747c92;
-}
+            min-height: 100vh;
+        }
 
-.profile {
+        /* =====================================================
+           TOPBAR
+        ===================================================== */
 
-    background: white;
+        .topbar {
+            display: flex;
 
-    padding: 9px 14px;
+            justify-content:
+                space-between;
 
-    border-radius: 14px;
+            align-items: center;
 
-    display: flex;
+            gap: 20px;
 
-    align-items: center;
+            margin-bottom: 25px;
+        }
 
-    gap: 10px;
+        .welcome h1 {
+            font-size: 31px;
 
-    box-shadow:
-        0 8px 25px #0001;
-}
+            line-height: 1.2;
 
-.avatar {
+            margin-bottom: 7px;
 
-    width: 40px;
-    height: 40px;
+            letter-spacing: -.7px;
+        }
 
-    border-radius: 50%;
+        .welcome p {
+            color: #747c92;
 
-    background: #e7e4ff;
+            line-height: 1.5;
+        }
 
-    display: grid;
+        .profile {
+            background: white;
 
-    place-items: center;
-}
+            padding: 8px 14px;
 
-.hero {
+            border-radius: 15px;
 
-    background:
-        linear-gradient(
-            135deg,
-            #6357ef,
-            #9275ff
-        );
+            display: flex;
 
-    color: white;
+            align-items: center;
 
-    border-radius: 24px;
+            gap: 10px;
 
-    padding: 28px;
+            box-shadow:
+                0 8px 25px rgba(0,0,0,.06);
 
-    margin-bottom: 20px;
-}
+            border:
+                1px solid #e9ecf4;
+        }
 
-.hero h2 {
-    margin-bottom: 8px;
-}
+        .avatar {
+            width: 42px;
+            height: 42px;
 
-.hero p {
+            border-radius: 50%;
 
-    opacity: .9;
+            background:
+                linear-gradient(
+                    135deg,
+                    #e9e6ff,
+                    #d9d5ff
+                );
 
-    margin-bottom: 20px;
-}
+            display: grid;
 
-.progress {
+            place-items: center;
 
-    height: 10px;
+            font-size: 20px;
+        }
 
-    background:
-        #ffffff30;
+        /* =====================================================
+           HERO
+        ===================================================== */
 
-    border-radius: 20px;
+        .hero {
+            position: relative;
 
-    overflow: hidden;
-}
+            overflow: hidden;
 
-.progress span {
+            background:
+                linear-gradient(
+                    135deg,
+                    #6258ef,
+                    #9278ff
+                );
 
-    display: block;
+            color: white;
 
-    height: 100%;
+            border-radius: 25px;
 
-    background: white;
+            padding: 30px;
 
-    width: 0%;
+            margin-bottom: 20px;
 
-    transition:
-        width .4s ease;
-}
+            box-shadow:
+                0 18px 45px rgba(99,91,255,.18);
+        }
 
-.xp {
+        .hero::after {
+            content: "";
 
-    font-size: 13px;
+            position: absolute;
 
-    margin-top: 8px;
-}
+            width: 220px;
+            height: 220px;
 
-.grid {
+            right: -70px;
+            top: -100px;
 
-    display: grid;
+            background:
+                rgba(255,255,255,.10);
 
-    grid-template-columns:
-        2fr 1fr;
+            border-radius: 50%;
+        }
 
-    gap: 20px;
-}
+        .hero h2 {
+            position: relative;
 
-.card {
+            z-index: 1;
 
-    background: white;
+            margin-bottom: 8px;
 
-    border-radius: 22px;
+            font-size: 22px;
+        }
 
-    padding: 22px;
+        .hero p {
+            position: relative;
 
-    box-shadow:
-        0 8px 30px #0001;
+            z-index: 1;
 
-    border:
-        1px solid #e9ecf4;
-}
+            opacity: .92;
 
-.card-title {
+            margin-bottom: 20px;
+        }
 
-    display: flex;
+        .progress {
+            position: relative;
 
-    justify-content:
-        space-between;
+            z-index: 1;
 
-    margin-bottom: 15px;
-}
+            height: 11px;
 
-.task {
+            background:
+                rgba(255,255,255,.25);
 
-    display: flex;
+            border-radius: 20px;
 
-    align-items: center;
+            overflow: hidden;
+        }
 
-    gap: 13px;
+        .progress span {
+            display: block;
 
-    padding: 15px 0;
+            height: 100%;
 
-    border-bottom:
-        1px solid #edf0f5;
-}
+            background: white;
 
-.checkbox {
+            width: 0%;
 
-    width: 27px;
-    height: 27px;
+            border-radius: inherit;
 
-    border:
-        2px solid #d8dce8;
+            transition:
+                width .5s ease;
+        }
 
-    border-radius: 7px;
+        .xp {
+            position: relative;
 
-    display: grid;
+            z-index: 1;
 
-    place-items: center;
+            font-size: 13px;
 
-    flex-shrink: 0;
+            margin-top: 9px;
 
-    cursor: pointer;
-}
+            font-weight: 700;
+        }
 
-.task.completed .checkbox {
+        /* =====================================================
+           GRID
+        ===================================================== */
 
-    background: #20c997;
+        .grid {
+            display: grid;
 
-    border-color: #20c997;
+            grid-template-columns:
+                minmax(0, 2fr)
+                minmax(280px, 1fr);
 
-    color: white;
-}
+            gap: 20px;
+        }
 
-.task.completed .task-name {
+        /* =====================================================
+           CARDS
+        ===================================================== */
 
-    text-decoration:
-        line-through;
+        .card {
+            background: white;
 
-    color: #9aa1b2;
-}
+            border-radius: 22px;
 
-.task-name {
-    font-weight: 750;
-}
+            padding: 23px;
 
-.task-subject {
+            box-shadow:
+                0 8px 30px rgba(0,0,0,.055);
 
-    color: #8991a5;
+            border:
+                1px solid #e9ecf4;
+        }
 
-    font-size: 12px;
+        .card-title {
+            display: flex;
 
-    margin-top: 4px;
-}
+            justify-content:
+                space-between;
 
-.task-xp {
+            align-items: center;
 
-    margin-left: auto;
+            gap: 10px;
 
-    background: #f0efff;
+            margin-bottom: 15px;
+        }
 
-    color: #6257df;
+        .card-title h2 {
+            font-size: 20px;
+        }
 
-    padding: 6px 10px;
+        .card-title span {
+            color: #7c8498;
 
-    border-radius: 20px;
+            font-weight: 800;
 
-    font-size: 11px;
+            font-size: 13px;
+        }
 
-    font-weight: 700;
-}
+        /* =====================================================
+           TASK
+        ===================================================== */
 
-.delete-task {
+        .task {
+            display: flex;
 
-    border: none;
+            align-items: center;
 
-    background:
-        transparent;
+            gap: 13px;
 
-    font-size: 16px;
+            padding: 15px 0;
 
-    padding: 5px;
-}
+            border-bottom:
+                1px solid #edf0f5;
+        }
 
-.add-task {
+        .checkbox {
+            width: 28px;
+            height: 28px;
 
-    display: flex;
+            border:
+                2px solid #d8dce8;
 
-    gap: 8px;
+            border-radius: 8px;
 
-    margin-top: 15px;
-}
+            display: grid;
 
-.add-task input {
+            place-items: center;
 
-    flex: 1;
+            flex-shrink: 0;
 
-    border:
-        1px solid #e0e4ed;
+            cursor: pointer;
 
-    padding: 12px;
+            color: white;
 
-    border-radius: 11px;
+            font-weight: 900;
 
-    outline: none;
-}
+            transition: .2s;
+        }
 
-.add-task button {
+        .checkbox:hover {
+            border-color: #6c63ff;
+        }
 
-    border: none;
+        .task.completed .checkbox {
+            background: #20c997;
 
-    background: #6c63ff;
+            border-color: #20c997;
+        }
 
-    color: white;
+        .task.completed .task-name {
+            text-decoration:
+                line-through;
 
-    padding:
-        12px 17px;
+            color: #9aa1b2;
+        }
 
-    border-radius: 11px;
+        .task-content {
+            min-width: 0;
+        }
 
-    font-weight: 800;
-}
+        .task-name {
+            font-weight: 800;
 
-.stats {
+            overflow: hidden;
 
-    display: grid;
+            text-overflow: ellipsis;
 
-    grid-template-columns:
-        repeat(3, 1fr);
+            white-space: nowrap;
+        }
 
-    gap: 15px;
+        .task-subject {
+            color: #8991a5;
 
-    margin: 20px 0;
-}
+            font-size: 12px;
 
-.stat {
+            margin-top: 4px;
+        }
 
-    background: white;
+        .task-xp {
+            margin-left: auto;
 
-    padding: 20px;
+            background: #f0efff;
 
-    border-radius: 18px;
+            color: #6257df;
 
-    border:
-        1px solid #e9ecf4;
-}
+            padding: 6px 10px;
 
-.stat strong {
+            border-radius: 20px;
 
-    display: block;
+            font-size: 11px;
 
-    font-size: 25px;
+            font-weight: 800;
 
-    margin: 8px 0;
-}
+            white-space: nowrap;
+        }
 
-.stat small {
-    color: #7d8599;
-}
+        .delete-task {
+            border: none;
 
-.info {
-    margin-bottom: 20px;
-}
+            background: transparent;
 
-.info-number {
+            font-size: 16px;
 
-    font-size: 40px;
+            padding: 5px;
 
-    font-weight: 900;
+            opacity: .65;
 
-    margin-top: 10px;
-}
+            transition: .2s;
+        }
 
-/* =====================================
-   ÖZEL EKRANLAR
-===================================== */
+        .delete-task:hover {
+            opacity: 1;
 
-.extra-screen {
-    display: none;
-}
+            transform: scale(1.1);
+        }
 
-.extra-screen.active {
-    display: block;
-}
+        /* =====================================================
+           ADD TASK
+        ===================================================== */
 
-.screen-header {
+        .add-task {
+            display: flex;
 
-    display: flex;
+            gap: 8px;
 
-    align-items: center;
+            margin-top: 16px;
+        }
 
-    gap: 12px;
+        .add-task input {
+            flex: 1;
 
-    margin-bottom: 20px;
-}
+            min-width: 0;
 
-.screen-header h1 {
+            border:
+                1px solid #e0e4ed;
 
-    font-size: 27px;
+            padding: 13px;
 
-    margin-bottom: 4px;
-}
+            border-radius: 12px;
 
-.screen-header p {
+            outline: none;
 
-    color: #7d8599;
+            background: #fafbfe;
+        }
 
-    font-size: 13px;
-}
+        .add-task input:focus {
+            border-color: #6c63ff;
 
-.back-button {
+            background: white;
+        }
 
-    border: none;
+        .add-task button {
+            border: none;
 
-    width: 43px;
-    height: 43px;
+            background:
+                linear-gradient(
+                    135deg,
+                    #6c63ff,
+                    #8177ff
+                );
 
-    border-radius: 13px;
+            color: white;
 
-    background: white;
+            padding: 12px 18px;
 
-    box-shadow:
-        0 5px 20px #0001;
+            border-radius: 12px;
 
-    font-size: 22px;
-}
+            font-weight: 900;
 
-/* =====================================
-   SUBJECT
-===================================== */
+            white-space: nowrap;
+        }
 
-.subject-add {
+        /* =====================================================
+           STATS
+        ===================================================== */
 
-    display: flex;
+        .stats {
+            display: grid;
 
-    gap: 10px;
+            grid-template-columns:
+                repeat(3, 1fr);
 
-    margin-top: 15px;
-}
+            gap: 15px;
 
-.subject-add input {
+            margin-top: 20px;
+        }
 
-    flex: 1;
+        .stat {
+            background: white;
 
-    min-width: 0;
+            padding: 20px;
 
-    padding: 13px;
+            border-radius: 18px;
 
-    border:
-        1px solid #e0e4ed;
+            border:
+                1px solid #e9ecf4;
 
-    border-radius: 11px;
+            box-shadow:
+                0 7px 25px rgba(0,0,0,.035);
+        }
 
-    outline: none;
-}
+        .stat span {
+            font-size: 19px;
+        }
 
-.subject-add button {
+        .stat strong {
+            display: block;
 
-    border: none;
+            font-size: 26px;
 
-    background: #6c63ff;
+            margin: 8px 0 4px;
+        }
 
-    color: white;
+        .stat small {
+            color: #7d8599;
+        }
 
-    padding: 12px 17px;
+        /* =====================================================
+           INFO
+        ===================================================== */
 
-    border-radius: 11px;
+        .info {
+            margin-bottom: 20px;
+        }
 
-    font-weight: 800;
-}
+        .info h2 {
+            font-size: 19px;
+        }
 
-.subject-item {
+        .info-number {
+            font-size: 44px;
 
-    display: flex;
+            font-weight: 950;
 
-    align-items: center;
+            margin-top: 12px;
 
-    gap: 12px;
+            color: #6259ef;
+        }
 
-    padding: 15px 0;
+        .info p {
+            color: #7d8599;
 
-    border-bottom:
-        1px solid #edf0f5;
-}
+            margin-top: 3px;
+        }
 
-.subject-icon {
+        /* =====================================================
+           MOBILE NAV
+        ===================================================== */
 
-    width: 44px;
-    height: 44px;
+        .mobile-nav {
+            display: none;
+        }
 
-    border-radius: 14px;
+        /* =====================================================
+           MOBILE HEADER
+        ===================================================== */
 
-    background: #eeecff;
+        .mobile-header {
+            display: none;
+        }
 
-    display: grid;
+        /* =====================================================
+           TABLET
+        ===================================================== */
 
-    place-items: center;
+        @media (max-width: 1100px) {
 
-    font-size: 21px;
-}
+            .sidebar {
+                width: 82px;
 
-.subject-name {
+                padding:
+                    24px 12px;
+            }
 
-    font-weight: 800;
+            .logo {
+                font-size: 0;
 
-    flex: 1;
-}
+                text-align: center;
 
-.subject-delete {
+                padding: 0;
 
-    border: none;
+                margin-bottom: 30px;
+            }
 
-    background:
-        transparent;
+            .logo::before {
+                content: "DT";
 
-    font-size: 17px;
-}
+                font-size: 23px;
 
-/* =====================================
-   FOCUS
-===================================== */
+                font-weight: 950;
+            }
 
-.focus-card {
+            .logo span {
+                display: none;
+            }
 
-    background:
-        linear-gradient(
-            135deg,
-            #6257ee,
-            #9275ff
-        );
+            .menu button {
+                text-align: center;
 
-    color: white;
+                font-size: 0;
 
-    border-radius: 25px;
+                padding: 14px 8px;
+            }
 
-    padding: 35px 20px;
+            .menu button::first-letter {
+                font-size: 20px;
+            }
 
-    text-align: center;
+            .logout button {
+                font-size: 0;
 
-    box-shadow:
-        0 15px 40px #6257ee44;
-}
+                padding: 13px 5px;
+            }
 
-.focus-title {
+            .logout button::first-letter {
+                font-size: 20px;
+            }
 
-    font-size: 18px;
+            .main {
+                margin-left: 82px;
 
-    font-weight: 800;
-}
+                width:
+                    calc(100% - 82px);
+            }
 
-#focusTimer {
+            .grid {
+                grid-template-columns: 1fr;
+            }
 
-    font-size: 70px;
+            .info {
+                margin-bottom: 0;
+            }
+        }
 
-    font-weight: 900;
+        /* =====================================================
+           TABLET SMALL
+        ===================================================== */
 
-    margin: 25px 0 8px;
-}
+        @media (max-width: 800px) {
 
-.focus-status {
+            .main {
+                padding: 22px;
+            }
 
-    opacity: .9;
+            .welcome h1 {
+                font-size: 27px;
+            }
 
-    margin-bottom: 25px;
-}
+            .stats {
+                grid-template-columns:
+                    repeat(3, 1fr);
+            }
 
-.focus-buttons {
+            .hero {
+                padding: 25px;
+            }
+        }
 
-    display: flex;
+        /* =====================================================
+           PHONE
+        ===================================================== */
 
-    gap: 8px;
+        @media (max-width: 600px) {
 
-    justify-content: center;
+            body {
+                padding-bottom: 75px;
+            }
 
-    flex-wrap: wrap;
-}
+            /* Sidebar gizle */
 
-.focus-buttons button {
+            .sidebar {
+                display: none;
+            }
 
-    border: none;
+            .main {
+                margin-left: 0;
 
-    padding: 12px 16px;
+                width: 100%;
 
-    border-radius: 12px;
+                padding:
+                    14px 14px 95px;
+            }
 
-    background: white;
+            /* Mobil header */
 
-    color: #6257ee;
+            .mobile-header {
+                display: flex;
 
-    font-weight: 800;
-}
+                justify-content:
+                    space-between;
 
-.focus-xp {
+                align-items: center;
 
-    margin-top: 25px;
+                margin-bottom: 16px;
+            }
 
-    font-size: 13px;
+            .mobile-brand {
+                font-size: 23px;
 
-    opacity: .9;
-}
+                font-weight: 950;
 
-/* =====================================
-   PROFILE
-===================================== */
+                letter-spacing: -.7px;
+            }
 
-.profile-big-card {
+            .mobile-brand span {
+                color: #665cff;
+            }
 
-    background: white;
+            .mobile-avatar {
+                width: 42px;
+                height: 42px;
 
-    border-radius: 22px;
+                border-radius: 50%;
 
-    padding: 28px;
+                display: grid;
 
-    text-align: center;
+                place-items: center;
 
-    box-shadow:
-        0 8px 30px #0001;
+                background:
+                    #e9e6ff;
 
-    margin-bottom: 15px;
-}
+                font-size: 19px;
+            }
 
-.profile-big-avatar {
+            /* Topbar */
 
-    width: 80px;
-    height: 80px;
+            .topbar {
+                margin-bottom: 16px;
 
-    margin: auto;
+                display: block;
+            }
 
-    border-radius: 50%;
+            .welcome h1 {
+                font-size: 25px;
 
-    background: #e9e6ff;
+                margin-bottom: 5px;
+            }
 
-    display: grid;
+            .welcome p {
+                font-size: 13px;
+            }
 
-    place-items: center;
+            .profile {
+                display: none;
+            }
 
-    font-size: 38px;
+            /* Hero */
 
-    margin-bottom: 12px;
-}
+            .hero {
+                padding: 21px;
 
-.profile-big-card h2 {
-    margin-bottom: 5px;
-}
+                border-radius: 20px;
 
-.profile-big-card p {
-    color: #7d8599;
-}
+                margin-bottom: 14px;
+            }
 
-.profile-stats {
+            .hero h2 {
+                font-size: 19px;
+            }
 
-    display: grid;
+            .hero p {
+                font-size: 13px;
 
-    grid-template-columns:
-        repeat(3, 1fr);
+                line-height: 1.5;
+            }
 
-    gap: 10px;
+            /* Grid */
 
-    margin-bottom: 15px;
-}
+            .grid {
+                display: block;
+            }
 
-.profile-stat {
+            /* Cards */
 
-    background: white;
+            .card {
+                border-radius: 18px;
 
-    border-radius: 17px;
+                padding: 17px;
 
-    padding: 16px 8px;
+                margin-bottom: 14px;
+            }
 
-    text-align: center;
-}
+            .card-title h2 {
+                font-size: 18px;
+            }
 
-.profile-stat span {
-    display: block;
-}
+            /* Task */
 
-.profile-stat strong {
+            .task {
+                gap: 10px;
 
-    display: block;
+                padding: 13px 0;
+            }
 
-    font-size: 21px;
+            .checkbox {
+                width: 26px;
+                height: 26px;
+            }
 
-    margin: 4px;
-}
+            .task-name {
+                font-size: 14px;
+            }
 
-.profile-stat small {
-    color: #7d8599;
-}
+            .task-subject {
+                font-size: 11px;
+            }
 
-.profile-row {
+            .task-xp {
+                font-size: 10px;
 
-    display: flex;
+                padding:
+                    5px 8px;
+            }
 
-    justify-content:
-        space-between;
+            .delete-task {
+                font-size: 14px;
 
-    gap: 20px;
+                padding: 3px;
+            }
 
-    padding: 15px 0;
+            /* Add */
 
-    border-bottom:
-        1px solid #edf0f5;
-}
+            .add-task {
+                margin-top: 13px;
+            }
 
-.profile-row span {
-    color: #7d8599;
-}
+            .add-task input {
+                padding: 12px;
 
-.profile-row b {
-    text-align: right;
-    word-break: break-word;
-}
+                font-size: 13px;
+            }
 
-.profile-logout {
+            .add-task button {
+                padding:
+                    11px 14px;
 
-    width: 100%;
+                font-size: 13px;
+            }
 
-    border: none;
+            /* Stats */
 
-    background: #15182b;
+            .stats {
+                grid-template-columns:
+                    repeat(3, 1fr);
 
-    color: white;
+                gap: 8px;
 
-    padding: 14px;
+                margin-top: 14px;
+            }
 
-    border-radius: 14px;
+            .stat {
+                padding: 13px 10px;
 
-    font-weight: 800;
-}
+                border-radius: 15px;
 
-/* =====================================
-   MOBILE NAV
-===================================== */
+                text-align: center;
+            }
 
-.mobile-nav {
+            .stat span {
+                font-size: 16px;
+            }
 
-    display: none;
-}
+            .stat strong {
+                font-size: 20px;
 
-/* =====================================
-   TOAST
-===================================== */
+                margin:
+                    5px 0 2px;
+            }
 
-.mobile-toast {
+            .stat small {
+                font-size: 10px;
+            }
 
-    position: fixed;
+            /* Info */
 
-    left: 50%;
+            .info-number {
+                font-size: 36px;
+            }
 
-    bottom: 92px;
+            /* =================================================
+               MOBILE BOTTOM NAV
+            ================================================= */
 
-    transform:
-        translateX(-50%)
-        translateY(20px);
+            .mobile-nav {
+                position: fixed;
 
-    background: #15182b;
+                display: grid;
 
-    color: white;
+                grid-template-columns:
+                    repeat(5, 1fr);
 
-    padding: 12px 18px;
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
 
-    border-radius: 14px;
+                height: 64px;
 
-    font-size: 13px;
+                background:
+                    rgba(255,255,255,.96);
 
-    font-weight: 700;
+                backdrop-filter:
+                    blur(18px);
 
-    opacity: 0;
+                -webkit-backdrop-filter:
+                    blur(18px);
 
-    pointer-events: none;
+                border:
+                    1px solid #e8eaf1;
 
-    transition: .25s;
+                border-radius: 19px;
 
-    z-index: 10000;
+                box-shadow:
+                    0 12px 35px rgba(0,0,0,.14);
 
-    white-space: nowrap;
+                z-index: 9999;
 
-    box-shadow:
-        0 10px 30px #0003;
-}
+                overflow: hidden;
+            }
 
-.mobile-toast.show {
+            .mobile-nav button {
+                border: none;
 
-    opacity: 1;
+                background: transparent;
 
-    transform:
-        translateX(-50%)
-        translateY(0);
-}
+                color: #8b91a3;
 
-/* =====================================
-   RESPONSIVE
-===================================== */
+                display: flex;
 
-@media(max-width:900px) {
+                flex-direction: column;
 
-    .sidebar {
-        width: 75px;
-    }
+                align-items: center;
 
-    .logo {
+                justify-content: center;
 
-        font-size: 0;
+                gap: 3px;
 
-        text-align: center;
-    }
+                font-size: 10px;
 
-    .logo::before {
+                font-weight: 800;
+            }
 
-        content: "DT";
+            .mobile-nav button span {
+                font-size: 20px;
 
-        font-size: 22px;
-    }
+                line-height: 20px;
+            }
 
-    .logo span {
-        display: none;
-    }
+            .mobile-nav button.active {
+                color: #6259ef;
+            }
 
-    .menu button {
+            .mobile-nav button:active {
+                transform: scale(.94);
+            }
+        }
 
-        font-size: 0;
+        /* =====================================================
+           VERY SMALL PHONES
+        ===================================================== */
 
-        text-align: center;
-    }
+        @media (max-width: 380px) {
 
-    .main {
-        margin-left: 75px;
-    }
+            .main {
+                padding-left: 11px;
+                padding-right: 11px;
+            }
 
-    .grid {
-        grid-template-columns: 1fr;
-    }
-}
+            .hero {
+                padding: 18px;
+            }
 
-@media(max-width:600px) {
+            .card {
+                padding: 15px;
+            }
 
-    body {
+            .stats {
+                gap: 6px;
+            }
 
-        padding-bottom: 85px;
+            .stat {
+                padding:
+                    11px 5px;
+            }
 
-        overflow-x: hidden;
-    }
+            .stat strong {
+                font-size: 18px;
+            }
 
-    .sidebar {
-        display: none !important;
-    }
+            .stat small {
+                font-size: 9px;
+            }
 
-    .main {
+            .mobile-nav {
+                left: 6px;
+                right: 6px;
+            }
+        }
 
-        margin-left: 0 !important;
-
-        padding: 16px;
-
-        width: 100%;
-    }
-
-    .welcome h1 {
-        font-size: 24px;
-    }
-
-    .welcome p {
-        font-size: 13px;
-    }
-
-    .profile {
-
-        display: flex;
-
-        padding: 6px;
-
-        background:
-            transparent;
-
-        box-shadow: none;
-    }
-
-    .profile strong {
-        display: none;
-    }
-
-    .hero {
-
-        border-radius: 20px;
-
-        padding: 21px;
-
-        margin-bottom: 15px;
-    }
-
-    .hero h2 {
-        font-size: 19px;
-    }
-
-    .hero p {
-        font-size: 13px;
-    }
-
-    .grid {
-        display: block;
-    }
-
-    .card {
-
-        border-radius: 18px;
-
-        padding: 17px;
-
-        margin-bottom: 15px;
-    }
-
-    .stats {
-
-        grid-template-columns:
-            repeat(3, 1fr);
-
-        gap: 8px;
-    }
-
-    .stat {
-
-        padding: 13px 8px;
-
-        text-align: center;
-    }
-
-    .stat strong {
-        font-size: 20px;
-    }
-
-    .stat small {
-        font-size: 9px;
-    }
-
-    .mobile-nav {
-
-        position: fixed;
-
-        display: grid;
-
-        grid-template-columns:
-            repeat(4, 1fr);
-
-        left: 10px;
-        right: 10px;
-        bottom: 10px;
-
-        height: 68px;
-
-        background:
-            rgba(255,255,255,.96);
-
-        backdrop-filter:
-            blur(15px);
-
-        -webkit-backdrop-filter:
-            blur(15px);
-
-        border:
-            1px solid #e8eaf2;
-
-        border-radius: 21px;
-
-        box-shadow:
-            0 10px 35px #0002;
-
-        z-index: 9999;
-
-        padding: 5px;
-    }
-
-    .mobile-nav-item {
-
-        border: none;
-
-        background:
-            transparent;
-
-        border-radius: 16px;
-
-        color: #858ba0;
-
-        display: flex;
-
-        flex-direction: column;
-
-        align-items: center;
-
-        justify-content: center;
-
-        gap: 3px;
-    }
-
-    .mobile-nav-item span {
-
-        font-size: 21px;
-
-        line-height: 22px;
-    }
-
-    .mobile-nav-item small {
-
-        font-size: 9px;
-
-        font-weight: 800;
-    }
-
-    .mobile-nav-item.active {
-
-        background: #efedff;
-
-        color: #6257ef;
-    }
-
-    .mobile-nav-item:active {
-        transform: scale(.92);
-    }
-
-    #focusTimer {
-        font-size: 58px;
-    }
-
-    .subject-add {
-        flex-direction: column;
-    }
-
-    .subject-add button {
-        width: 100%;
-    }
-
-    .profile-stats {
-        gap: 7px;
-    }
-}
-
-</style>
-
+    </style>
 </head>
 
 <body>
 
-<!-- =====================================
-     AUTH
-===================================== -->
+<!-- =========================================================
+     GİRİŞ / KAYIT
+========================================================= -->
 
 <section id="authScreen">
 
@@ -1311,7 +1336,8 @@ button {
         </div>
 
         <p class="auth-description">
-            Derslerini, görevlerini ve hedeflerini takip et.
+            Derslerini, görevlerini ve hedeflerini
+            tek yerden takip et.
         </p>
 
         <div class="auth-tabs">
@@ -1333,6 +1359,8 @@ button {
 
         </div>
 
+        <!-- LOGIN -->
+
         <form
             id="loginForm"
             onsubmit="login(event)"
@@ -1340,12 +1368,15 @@ button {
 
             <div class="form-group">
 
-                <label>E-posta</label>
+                <label>
+                    E-posta
+                </label>
 
                 <input
                     id="loginEmail"
                     type="email"
                     required
+                    autocomplete="email"
                     placeholder="ornek@mail.com"
                 >
 
@@ -1353,13 +1384,16 @@ button {
 
             <div class="form-group">
 
-                <label>Şifre</label>
+                <label>
+                    Şifre
+                </label>
 
                 <input
                     id="loginPassword"
                     type="password"
                     required
-                    placeholder="En az 6 karakter"
+                    autocomplete="current-password"
+                    placeholder="Şifren"
                 >
 
             </div>
@@ -1373,6 +1407,8 @@ button {
 
         </form>
 
+        <!-- REGISTER -->
+
         <form
             id="registerForm"
             onsubmit="register(event)"
@@ -1381,12 +1417,15 @@ button {
 
             <div class="form-group">
 
-                <label>Ad Soyad</label>
+                <label>
+                    Ad Soyad
+                </label>
 
                 <input
                     id="registerName"
                     type="text"
                     required
+                    autocomplete="name"
                     placeholder="Adın"
                 >
 
@@ -1394,12 +1433,15 @@ button {
 
             <div class="form-group">
 
-                <label>E-posta</label>
+                <label>
+                    E-posta
+                </label>
 
                 <input
                     id="registerEmail"
                     type="email"
                     required
+                    autocomplete="email"
                     placeholder="ornek@mail.com"
                 >
 
@@ -1407,13 +1449,16 @@ button {
 
             <div class="form-group">
 
-                <label>Şifre</label>
+                <label>
+                    Şifre
+                </label>
 
                 <input
                     id="registerPassword"
                     type="password"
                     minlength="6"
                     required
+                    autocomplete="new-password"
                     placeholder="En az 6 karakter"
                 >
 
@@ -1435,11 +1480,15 @@ button {
 </section>
 
 
-<!-- =====================================
-     APP
-===================================== -->
+<!-- =========================================================
+     UYGULAMA
+========================================================= -->
 
 <div id="app">
+
+    <!-- =====================================================
+         DESKTOP SIDEBAR
+    ====================================================== -->
 
     <aside class="sidebar">
 
@@ -1451,35 +1500,39 @@ button {
 
             <button
                 class="active"
-                onclick="mobileHome()"
+                onclick="setActiveMenu(this)"
             >
                 🏠 Ana Sayfa
             </button>
 
             <button
-                onclick="mobileSubjects()"
+                onclick="showToast('📚 Dersler bölümü yakında!')"
             >
                 📚 Dersler
             </button>
 
-            <button>
+            <button
+                onclick="setActiveMenu(this)"
+            >
+                ✅ Görevler
+            </button>
+
+            <button
+                onclick="showToast('📅 Sınavlar bölümü yakında!')"
+            >
                 📅 Sınavlar
             </button>
 
             <button
-                onclick="mobileFocus()"
+                onclick="showToast('⏱️ Odaklan modu yakında!')"
             >
                 ⏱️ Odaklan
             </button>
 
-            <button>
-                📊 İstatistikler
-            </button>
-
             <button
-                onclick="mobileProfile()"
+                onclick="showToast('📊 İstatistikler bölümü yakında!')"
             >
-                👤 Profil
+                📊 İstatistikler
             </button>
 
         </div>
@@ -1495,11 +1548,31 @@ button {
     </aside>
 
 
-    <!-- =====================================
-         ANA SAYFA
-    ===================================== -->
+    <!-- =====================================================
+         ANA İÇERİK
+    ====================================================== -->
 
     <main class="main">
+
+        <!-- MOBILE HEADER -->
+
+        <div class="mobile-header">
+
+            <div class="mobile-brand">
+                Ders<span>Takip</span>
+            </div>
+
+            <div
+                class="mobile-avatar"
+                onclick="showToast('👤 Profil bölümü yakında!')"
+            >
+                🎓
+            </div>
+
+        </div>
+
+
+        <!-- TOPBAR -->
 
         <div class="topbar">
 
@@ -1531,6 +1604,10 @@ button {
         </div>
 
 
+        <!-- =================================================
+             HERO
+        ================================================== -->
+
         <div class="hero">
 
             <h2>
@@ -1557,9 +1634,17 @@ button {
         </div>
 
 
+        <!-- =================================================
+             DASHBOARD GRID
+        ================================================== -->
+
         <div class="grid">
 
+            <!-- SOL -->
+
             <div>
+
+                <!-- GÖREVLER -->
 
                 <div class="card">
 
@@ -1583,9 +1668,16 @@ button {
                             id="newTask"
                             placeholder="Yeni görev ekle..."
                             maxlength="150"
+                            onkeydown="
+                                if(event.key==='Enter'){
+                                    addTask();
+                                }
+                            "
                         >
 
-                        <button onclick="addTask()">
+                        <button
+                            onclick="addTask()"
+                        >
                             + Ekle
                         </button>
 
@@ -1594,11 +1686,15 @@ button {
                 </div>
 
 
+                <!-- İSTATİSTİKLER -->
+
                 <div class="stats">
 
                     <div class="stat">
 
-                        <span>⭐</span>
+                        <span>
+                            ⭐
+                        </span>
 
                         <strong id="statXP">
                             0
@@ -1610,9 +1706,12 @@ button {
 
                     </div>
 
+
                     <div class="stat">
 
-                        <span>🔥</span>
+                        <span>
+                            🔥
+                        </span>
 
                         <strong id="statStreak">
                             0
@@ -1624,16 +1723,19 @@ button {
 
                     </div>
 
+
                     <div class="stat">
 
-                        <span>📝</span>
+                        <span>
+                            📝
+                        </span>
 
                         <strong id="statTasks">
                             0
                         </strong>
 
                         <small>
-                            Tamamlanan görev
+                            Tamamlanan
                         </small>
 
                     </div>
@@ -1643,7 +1745,11 @@ button {
             </div>
 
 
+            <!-- SAĞ -->
+
             <div>
+
+                <!-- SERİ -->
 
                 <div class="card info">
 
@@ -1664,6 +1770,9 @@ button {
 
                 </div>
 
+
+                <!-- MOTİVASYON -->
+
                 <div class="card">
 
                     <h2>
@@ -1674,7 +1783,7 @@ button {
                         style="
                             color:#7d8599;
                             margin-top:10px;
-                            line-height:1.6;
+                            line-height:1.7;
                         "
                     >
                         Görevlerini tamamla,
@@ -1691,360 +1800,139 @@ button {
     </main>
 
 
-    <!-- =====================================
-         DERSLER
-    ===================================== -->
-
-    <section
-        id="subjectsScreen"
-        class="extra-screen"
-    >
-
-        <div class="screen-header">
-
-            <button
-                onclick="mobileHome()"
-                class="back-button"
-            >
-                ←
-            </button>
-
-            <div>
-
-                <h1>📚 Dersler</h1>
-
-                <p>
-                    Derslerini düzenle ve takip et.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <h2>
-                Yeni Ders Ekle
-            </h2>
-
-            <div class="subject-add">
-
-                <input
-                    id="subjectInput"
-                    maxlength="50"
-                    placeholder="Örn: Matematik"
-                >
-
-                <button
-                    onclick="addSubject()"
-                >
-                    + Ekle
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="card-title">
-
-                <h2>
-                    Derslerim
-                </h2>
-
-                <span id="subjectCount">
-                    0
-                </span>
-
-            </div>
-
-            <div id="subjectList"></div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =====================================
-         ODAKLAN
-    ===================================== -->
-
-    <section
-        id="focusScreen"
-        class="extra-screen"
-    >
-
-        <div class="screen-header">
-
-            <button
-                onclick="mobileHome()"
-                class="back-button"
-            >
-                ←
-            </button>
-
-            <div>
-
-                <h1>⏱️ Odaklan</h1>
-
-                <p>
-                    Dikkatini derse ver.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="focus-card">
-
-            <div class="focus-title">
-                🎯 Odaklanma Zamanı
-            </div>
-
-            <div id="focusTimer">
-                25:00
-            </div>
-
-            <div
-                class="focus-status"
-                id="focusStatus"
-            >
-                Hazır mısın?
-            </div>
-
-            <div class="focus-buttons">
-
-                <button
-                    onclick="startFocus()"
-                >
-                    ▶ Başlat
-                </button>
-
-                <button
-                    onclick="pauseFocus()"
-                >
-                    ⏸ Duraklat
-                </button>
-
-                <button
-                    onclick="resetFocus()"
-                >
-                    🔄 Sıfırla
-                </button>
-
-            </div>
-
-            <div class="focus-xp">
-
-                ⏱️ 25 dakika tamamla
-                →
-                <b>+25 XP</b>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =====================================
-         PROFİL
-    ===================================== -->
-
-    <section
-        id="profileScreen"
-        class="extra-screen"
-    >
-
-        <div class="screen-header">
-
-            <button
-                onclick="mobileHome()"
-                class="back-button"
-            >
-                ←
-            </button>
-
-            <div>
-
-                <h1>👤 Profil</h1>
-
-                <p>
-                    Hesabını ve ilerlemeni gör.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="profile-big-card">
-
-            <div class="profile-big-avatar">
-                🎓
-            </div>
-
-            <h2 id="profileName">
-                Öğrenci
-            </h2>
-
-            <p id="profileEmail">
-                -
-            </p>
-
-        </div>
-
-
-        <div class="profile-stats">
-
-            <div class="profile-stat">
-
-                <span>⭐</span>
-
-                <strong id="profileXP">
-                    0
-                </strong>
-
-                <small>
-                    XP
-                </small>
-
-            </div>
-
-            <div class="profile-stat">
-
-                <span>🔥</span>
-
-                <strong id="profileStreak">
-                    0
-                </strong>
-
-                <small>
-                    Gün Seri
-                </small>
-
-            </div>
-
-            <div class="profile-stat">
-
-                <span>🏆</span>
-
-                <strong id="profileLevel">
-                    1
-                </strong>
-
-                <small>
-                    Seviye
-                </small>
-
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <h2>
-                🎓 Hesap Bilgileri
-            </h2>
-
-            <div class="profile-row">
-
-                <span>Ad</span>
-
-                <b id="profileName2">
-                    -
-                </b>
-
-            </div>
-
-            <div class="profile-row">
-
-                <span>E-posta</span>
-
-                <b id="profileEmail2">
-                    -
-                </b>
-
-            </div>
-
-            <div class="profile-row">
-
-                <span>Seviye</span>
-
-                <b id="profileLevel2">
-                    1
-                </b>
-
-            </div>
-
-        </div>
+    <!-- =====================================================
+         MOBILE BOTTOM NAV
+    ====================================================== -->
+
+    <nav class="mobile-nav">
+
+        <button
+            class="active"
+            onclick="
+                setMobileActive(this);
+                window.scrollTo({
+                    top:0,
+                    behavior:'smooth'
+                });
+            "
+        >
+
+            <span>
+                🏠
+            </span>
+
+            Ana Sayfa
+
+        </button>
 
 
         <button
-            class="profile-logout"
-            onclick="logout()"
+            onclick="
+                setMobileActive(this);
+                showToast('📚 Dersler bölümü yakında!');
+            "
         >
-            🚪 Çıkış Yap
+
+            <span>
+                📚
+            </span>
+
+            Dersler
+
         </button>
 
-    </section>
+
+        <button
+            onclick="
+                setMobileActive(this);
+                document
+                    .getElementById('newTask')
+                    ?.focus();
+            "
+        >
+
+            <span>
+                ✅
+            </span>
+
+            Görevler
+
+        </button>
+
+
+        <button
+            onclick="
+                setMobileActive(this);
+                showToast('⏱️ Odaklan modu yakında!');
+            "
+        >
+
+            <span>
+                ⏱️
+            </span>
+
+            Odaklan
+
+        </button>
+
+
+        <button
+            onclick="
+                setMobileActive(this);
+                showToast('👤 Profil bölümü yakında!');
+            "
+        >
+
+            <span>
+                👤
+            </span>
+
+            Profil
+
+        </button>
+
+    </nav>
 
 </div>
 
 
-<!-- =====================================
-     MOBILE NAV
-===================================== -->
-
-<nav class="mobile-nav">
-
-    <button
-        class="mobile-nav-item active"
-        onclick="mobileHome()"
-    >
-        <span>🏠</span>
-        <small>Ana Sayfa</small>
-    </button>
-
-    <button
-        class="mobile-nav-item"
-        onclick="mobileSubjects()"
-    >
-        <span>📚</span>
-        <small>Dersler</small>
-    </button>
-
-    <button
-        class="mobile-nav-item"
-        onclick="mobileFocus()"
-    >
-        <span>⏱️</span>
-        <small>Odaklan</small>
-    </button>
-
-    <button
-        class="mobile-nav-item"
-        onclick="mobileProfile()"
-    >
-        <span>👤</span>
-        <small>Profil</small>
-    </button>
-
-</nav>
-
-
-<div
-    id="mobileToast"
-    class="mobile-toast"
-></div>
-
+<!-- =========================================================
+     APP JS
+========================================================= -->
 
 <script src="/app.js"></script>
+
+
+<!-- =========================================================
+     TASARIM YARDIMCI JS
+========================================================= -->
+
+<script>
+
+function setActiveMenu(button) {
+
+    document
+        .querySelectorAll(".menu button")
+        .forEach(item => {
+            item.classList.remove("active");
+        });
+
+    button.classList.add("active");
+}
+
+
+function setMobileActive(button) {
+
+    document
+        .querySelectorAll(".mobile-nav button")
+        .forEach(item => {
+            item.classList.remove("active");
+        });
+
+    button.classList.add("active");
+}
+
+</script>
 
 </body>
 </html>
