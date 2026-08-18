@@ -1,0 +1,13 @@
+{
+  "name": "ders-takip",
+  "version": "1.0.0",
+  "description": "Öğrenciler için çalışma ve görev takip sistemi",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
