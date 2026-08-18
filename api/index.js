@@ -3,7 +3,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 const sql = neon(process.env.DATABASE_URL);
-const JWT_SECRET = process.env.JWT_SECRET;
+
+const COOKIE_NAME = "ders_takip_token";
 
 function send(res, status, data) {
   return res.status(status).json(data);
@@ -11,17 +12,24 @@ function send(res, status, data) {
 
 function getToken(req) {
   const cookies = req.headers.cookie || "";
-  const match = cookies.match(/(?:^|;\s*)token=([^;]+)/);
+
+  const match = cookies.match(
+    new RegExp(`${COOKIE_NAME}=([^;]+)`)
+  );
+
   return match ? decodeURIComponent(match[1]) : null;
 }
 
 function getUser(req) {
-  const token = getToken(req);
-
-  if (!token) return null;
-
   try {
-    return jwt.verify(token, JWT_SECRET);
+    const token = getToken(req);
+
+    if (!token) return null;
+
+    return jwt.verify(
+      token,
+      process.env.JWT_SECRET
+    );
   } catch {
     return null;
   }
@@ -30,14 +38,16 @@ function getUser(req) {
 function setCookie(res, token) {
   res.setHeader(
     "Set-Cookie",
-    `token=${encodeURIComponent(token)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=604800`
+    `${COOKIE_NAME}=${encodeURIComponent(
+      token
+    )}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=604800`
   );
 }
 
 function clearCookie(res) {
   res.setHeader(
     "Set-Cookie",
-    "token=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0"
+    `${COOKIE_NAME}=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`
   );
 }
 
@@ -49,7 +59,7 @@ export default async function handler(req, res) {
     // TEST
     // =========================
 
-    if (!action || action === "test") {
+    if (action === "test") {
       const result = await sql`
         SELECT NOW() AS time
       `;
@@ -66,8 +76,15 @@ export default async function handler(req, res) {
     // REGISTER
     // =========================
 
-    if (action === "register" && req.method === "POST") {
-      const { name, email, password } = req.body || {};
+    if (
+      action === "register" &&
+      req.method === "POST"
+    ) {
+      const {
+        name,
+        email,
+        password
+      } = req.body || {};
 
       if (!name || !email || !password) {
         return send(res, 400, {
@@ -77,33 +94,43 @@ export default async function handler(req, res) {
 
       if (password.length < 6) {
         return send(res, 400, {
-          message: "Şifre en az 6 karakter olmalı."
+          message:
+            "Şifre en az 6 karakter olmalı."
         });
       }
-
-      const normalizedEmail = email.trim().toLowerCase();
 
       const existing = await sql`
         SELECT id
         FROM users
-        WHERE email = ${normalizedEmail}
+        WHERE email = ${email.toLowerCase()}
         LIMIT 1
       `;
 
       if (existing.length) {
         return send(res, 409, {
-          message: "Bu e-posta zaten kayıtlı."
+          message:
+            "Bu e-posta zaten kayıtlı."
         });
       }
 
-      const hashedPassword = await bcrypt.hash(password, 10);
+      const hashedPassword =
+        await bcrypt.hash(password, 10);
 
       const result = await sql`
         INSERT INTO users
-        (name, email, password)
+          (name, email, password)
         VALUES
-        (${name.trim()}, ${normalizedEmail}, ${hashedPassword})
-        RETURNING id, name, email, xp, streak
+          (
+            ${name},
+            ${email.toLowerCase()},
+            ${hashedPassword}
+          )
+        RETURNING
+          id,
+          name,
+          email,
+          xp,
+          streak
       `;
 
       const user = result[0];
@@ -113,7 +140,7 @@ export default async function handler(req, res) {
           id: user.id,
           email: user.email
         },
-        JWT_SECRET,
+        process.env.JWT_SECRET,
         {
           expiresIn: "7d"
         }
@@ -131,40 +158,48 @@ export default async function handler(req, res) {
     // LOGIN
     // =========================
 
-    if (action === "login" && req.method === "POST") {
-      const { email, password } = req.body || {};
+    if (
+      action === "login" &&
+      req.method === "POST"
+    ) {
+      const {
+        email,
+        password
+      } = req.body || {};
 
       if (!email || !password) {
         return send(res, 400, {
-          message: "E-posta ve şifre gerekli."
+          message:
+            "E-posta ve şifre gerekli."
         });
       }
-
-      const normalizedEmail = email.trim().toLowerCase();
 
       const result = await sql`
         SELECT *
         FROM users
-        WHERE email = ${normalizedEmail}
+        WHERE email = ${email.toLowerCase()}
         LIMIT 1
       `;
 
       if (!result.length) {
         return send(res, 401, {
-          message: "E-posta veya şifre hatalı."
+          message:
+            "E-posta veya şifre yanlış."
         });
       }
 
       const user = result[0];
 
-      const valid = await bcrypt.compare(
-        password,
-        user.password
-      );
+      const valid =
+        await bcrypt.compare(
+          password,
+          user.password
+        );
 
       if (!valid) {
         return send(res, 401, {
-          message: "E-posta veya şifre hatalı."
+          message:
+            "E-posta veya şifre yanlış."
         });
       }
 
@@ -173,7 +208,7 @@ export default async function handler(req, res) {
           id: user.id,
           email: user.email
         },
-        JWT_SECRET,
+        process.env.JWT_SECRET,
         {
           expiresIn: "7d"
         }
@@ -181,20 +216,31 @@ export default async function handler(req, res) {
 
       setCookie(res, token);
 
+      delete user.password;
+
       return send(res, 200, {
         success: true,
-        user: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          xp: user.xp,
-          streak: user.streak
-        }
+        user
       });
     }
 
     // =========================
-    // ME
+    // LOGOUT
+    // =========================
+
+    if (
+      action === "logout" &&
+      req.method === "POST"
+    ) {
+      clearCookie(res);
+
+      return send(res, 200, {
+        success: true
+      });
+    }
+
+    // =========================
+    // CURRENT USER
     // =========================
 
     if (action === "me") {
@@ -202,7 +248,7 @@ export default async function handler(req, res) {
 
       if (!authUser) {
         return send(res, 401, {
-          message: "Giriş yapılmamış."
+          message: "Oturum bulunamadı."
         });
       }
 
@@ -212,7 +258,8 @@ export default async function handler(req, res) {
           name,
           email,
           xp,
-          streak
+          streak,
+          created_at
         FROM users
         WHERE id = ${authUser.id}
         LIMIT 1
@@ -231,39 +278,31 @@ export default async function handler(req, res) {
     }
 
     // =========================
-    // LOGOUT
+    // AUTH REQUIRED
     // =========================
 
-    if (action === "logout" && req.method === "POST") {
-      clearCookie(res);
+    const authUser = getUser(req);
 
-      return send(res, 200, {
-        success: true
+    if (!authUser) {
+      return send(res, 401, {
+        message: "Giriş yapmalısın."
       });
     }
 
+    const userId = authUser.id;
+
     // =========================
-    // TASKS GET
+    // TASKS
     // =========================
 
-    if (action === "tasks" && req.method === "GET") {
-      const authUser = getUser(req);
-
-      if (!authUser) {
-        return send(res, 401, {
-          message: "Giriş yapmalısın."
-        });
-      }
-
+    if (
+      action === "tasks" &&
+      req.method === "GET"
+    ) {
       const tasks = await sql`
-        SELECT
-          id,
-          title,
-          completed,
-          xp,
-          created_at
+        SELECT *
         FROM tasks
-        WHERE user_id = ${authUser.id}
+        WHERE user_id = ${userId}
         ORDER BY created_at DESC
       `;
 
@@ -273,22 +312,13 @@ export default async function handler(req, res) {
       });
     }
 
-    // =========================
-    // TASK ADD
-    // =========================
-
-    if (action === "tasks" && req.method === "POST") {
-      const authUser = getUser(req);
-
-      if (!authUser) {
-        return send(res, 401, {
-          message: "Giriş yapmalısın."
-        });
-      }
-
+    if (
+      action === "tasks" &&
+      req.method === "POST"
+    ) {
       const { title } = req.body || {};
 
-      if (!title || !title.trim()) {
+      if (!title?.trim()) {
         return send(res, 400, {
           message: "Görev adı gerekli."
         });
@@ -296,15 +326,10 @@ export default async function handler(req, res) {
 
       const result = await sql`
         INSERT INTO tasks
-        (user_id, title, xp)
+          (user_id, title)
         VALUES
-        (${authUser.id}, ${title.trim()}, 50)
-        RETURNING
-          id,
-          title,
-          completed,
-          xp,
-          created_at
+          (${userId}, ${title.trim()})
+        RETURNING *
       `;
 
       return send(res, 201, {
@@ -313,27 +338,19 @@ export default async function handler(req, res) {
       });
     }
 
-    // =========================
-    // TASK TOGGLE
-    // =========================
-
-    if (action === "tasks" && req.method === "PATCH") {
-      const authUser = getUser(req);
-
-      if (!authUser) {
-        return send(res, 401, {
-          message: "Giriş yapmalısın."
-        });
-      }
-
+    if (
+      action === "tasks" &&
+      req.method === "PATCH"
+    ) {
       const { id } = req.body || {};
 
       const result = await sql`
-        SELECT id, completed, xp
-        FROM tasks
-        WHERE id = ${id}
-        AND user_id = ${authUser.id}
-        LIMIT 1
+        UPDATE tasks
+        SET completed = NOT completed
+        WHERE
+          id = ${id}
+          AND user_id = ${userId}
+        RETURNING *
       `;
 
       if (!result.length) {
@@ -343,78 +360,45 @@ export default async function handler(req, res) {
       }
 
       const task = result[0];
-      const completed = !task.completed;
 
-      await sql`
-        UPDATE tasks
-        SET completed = ${completed}
-        WHERE id = ${id}
-        AND user_id = ${authUser.id}
-      `;
-
-      if (completed) {
+      if (task.completed) {
         await sql`
           UPDATE users
           SET xp = xp + ${task.xp}
-          WHERE id = ${authUser.id}
+          WHERE id = ${userId}
         `;
       } else {
         await sql`
           UPDATE users
           SET xp = GREATEST(0, xp - ${task.xp})
-          WHERE id = ${authUser.id}
+          WHERE id = ${userId}
         `;
       }
 
       return send(res, 200, {
         success: true,
-        completed
+        completed: task.completed
       });
     }
 
-    // =========================
-    // TASK DELETE
-    // =========================
-
-    if (action === "tasks" && req.method === "DELETE") {
-      const authUser = getUser(req);
-
-      if (!authUser) {
-        return send(res, 401, {
-          message: "Giriş yapmalısın."
-        });
-      }
-
+    if (
+      action === "tasks" &&
+      req.method === "DELETE"
+    ) {
       const { id } = req.body || {};
 
       const result = await sql`
-        SELECT completed, xp
-        FROM tasks
-        WHERE id = ${id}
-        AND user_id = ${authUser.id}
-        LIMIT 1
+        DELETE FROM tasks
+        WHERE
+          id = ${id}
+          AND user_id = ${userId}
+        RETURNING *
       `;
 
       if (!result.length) {
         return send(res, 404, {
           message: "Görev bulunamadı."
         });
-      }
-
-      const task = result[0];
-
-      await sql`
-        DELETE FROM tasks
-        WHERE id = ${id}
-        AND user_id = ${authUser.id}
-      `;
-
-      if (task.completed) {
-        await sql`
-          UPDATE users
-          SET xp = GREATEST(0, xp - ${task.xp})
-          WHERE id = ${authUser.id}
-        `;
       }
 
       return send(res, 200, {
@@ -422,123 +406,123 @@ export default async function handler(req, res) {
       });
     }
 
-    // =====================================================
+    // =========================
     // SUBJECTS
-    // =====================================================
+    // =========================
 
-    if (action === "subjects") {
-      const authUser = getUser(req);
+    if (
+      action === "subjects" &&
+      req.method === "GET"
+    ) {
+      const subjects = await sql`
+        SELECT *
+        FROM subjects
+        WHERE user_id = ${userId}
+        ORDER BY created_at DESC
+      `;
 
-      if (!authUser) {
-        return send(res, 401, {
-          message: "Giriş yapmalısın."
+      return send(res, 200, {
+        success: true,
+        subjects
+      });
+    }
+
+    if (
+      action === "subjects" &&
+      req.method === "POST"
+    ) {
+      const {
+        name,
+        color
+      } = req.body || {};
+
+      if (!name?.trim()) {
+        return send(res, 400, {
+          message: "Ders adı gerekli."
         });
       }
 
-      if (req.method === "GET") {
-        const subjects = await sql`
-          SELECT *
-          FROM subjects
-          WHERE user_id = ${authUser.id}
-          ORDER BY name ASC
-        `;
-
-        return send(res, 200, {
-          success: true,
-          subjects
-        });
-      }
-
-      if (req.method === "POST") {
-        const { name, color } = req.body || {};
-
-        if (!name || !name.trim()) {
-          return send(res, 400, {
-            message: "Ders adı gerekli."
-          });
-        }
-
-        const result = await sql`
-          INSERT INTO subjects
+      const result = await sql`
+        INSERT INTO subjects
           (user_id, name, color)
-          VALUES
+        VALUES
           (
-            ${authUser.id},
+            ${userId},
             ${name.trim()},
             ${color || "#6c63ff"}
           )
-          RETURNING *
-        `;
+        RETURNING *
+      `;
 
-        return send(res, 201, {
-          success: true,
-          subject: result[0]
-        });
-      }
-
-      if (req.method === "DELETE") {
-        const { id } = req.body || {};
-
-        await sql`
-          DELETE FROM subjects
-          WHERE id = ${id}
-          AND user_id = ${authUser.id}
-        `;
-
-        return send(res, 200, {
-          success: true
-        });
-      }
+      return send(res, 201, {
+        success: true,
+        subject: result[0]
+      });
     }
 
-    // =====================================================
+    if (
+      action === "subjects" &&
+      req.method === "DELETE"
+    ) {
+      const { id } = req.body || {};
+
+      await sql`
+        DELETE FROM subjects
+        WHERE
+          id = ${id}
+          AND user_id = ${userId}
+      `;
+
+      return send(res, 200, {
+        success: true
+      });
+    }
+
+    // =========================
     // EXAMS
-    // =====================================================
+    // =========================
 
-    if (action === "exams") {
-      const authUser = getUser(req);
+    if (
+      action === "exams" &&
+      req.method === "GET"
+    ) {
+      const exams = await sql`
+        SELECT
+          exams.*,
+          subjects.name AS subject_name
+        FROM exams
+        LEFT JOIN subjects
+          ON subjects.id = exams.subject_id
+        WHERE exams.user_id = ${userId}
+        ORDER BY exam_date ASC
+      `;
 
-      if (!authUser) {
-        return send(res, 401, {
-          message: "Giriş yapmalısın."
+      return send(res, 200, {
+        success: true,
+        exams
+      });
+    }
+
+    if (
+      action === "exams" &&
+      req.method === "POST"
+    ) {
+      const {
+        title,
+        exam_date,
+        subject_id,
+        topic
+      } = req.body || {};
+
+      if (!title || !exam_date) {
+        return send(res, 400, {
+          message:
+            "Sınav adı ve tarihi gerekli."
         });
       }
 
-      if (req.method === "GET") {
-        const exams = await sql`
-          SELECT
-            exams.*,
-            subjects.name AS subject_name,
-            subjects.color AS subject_color
-          FROM exams
-          LEFT JOIN subjects
-            ON subjects.id = exams.subject_id
-          WHERE exams.user_id = ${authUser.id}
-          ORDER BY exams.exam_date ASC
-        `;
-
-        return send(res, 200, {
-          success: true,
-          exams
-        });
-      }
-
-      if (req.method === "POST") {
-        const {
-          title,
-          exam_date,
-          topic,
-          subject_id
-        } = req.body || {};
-
-        if (!title || !exam_date) {
-          return send(res, 400, {
-            message: "Sınav adı ve tarih gerekli."
-          });
-        }
-
-        const result = await sql`
-          INSERT INTO exams
+      const result = await sql`
+        INSERT INTO exams
           (
             user_id,
             subject_id,
@@ -546,249 +530,182 @@ export default async function handler(req, res) {
             exam_date,
             topic
           )
-          VALUES
+        VALUES
           (
-            ${authUser.id},
+            ${userId},
             ${subject_id || null},
-            ${title.trim()},
+            ${title},
             ${exam_date},
             ${topic || null}
           )
-          RETURNING *
-        `;
+        RETURNING *
+      `;
 
-        return send(res, 201, {
-          success: true,
-          exam: result[0]
-        });
-      }
-
-      if (req.method === "DELETE") {
-        const { id } = req.body || {};
-
-        await sql`
-          DELETE FROM exams
-          WHERE id = ${id}
-          AND user_id = ${authUser.id}
-        `;
-
-        return send(res, 200, {
-          success: true
-        });
-      }
+      return send(res, 201, {
+        success: true,
+        exam: result[0]
+      });
     }
 
-    // =====================================================
+    if (
+      action === "exams" &&
+      req.method === "DELETE"
+    ) {
+      const { id } = req.body || {};
+
+      await sql`
+        DELETE FROM exams
+        WHERE
+          id = ${id}
+          AND user_id = ${userId}
+      `;
+
+      return send(res, 200, {
+        success: true
+      });
+    }
+
+    // =========================
     // STUDY SESSIONS
-    // =====================================================
+    // =========================
+
+    if (
+      action === "study" &&
+      req.method === "GET"
+    ) {
+      const sessions = await sql`
+        SELECT *
+        FROM study_sessions
+        WHERE user_id = ${userId}
+        ORDER BY created_at DESC
+        LIMIT 20
+      `;
+
+      return send(res, 200, {
+        success: true,
+        sessions
+      });
+    }
 
     if (
       action === "study" &&
       req.method === "POST"
     ) {
-      const authUser = getUser(req);
+      const duration =
+        Number(
+          req.body?.duration_minutes
+        ) || 25;
 
-      if (!authUser) {
-        return send(res, 401, {
-          message: "Giriş yapmalısın."
-        });
-      }
+      const xp =
+        Math.max(
+          10,
+          Math.floor(duration)
+        );
 
-      const minutes = Math.max(
-        1,
-        Number(req.body?.duration_minutes) || 25
-      );
-
-      const xp = Math.max(
-        1,
-        Math.round(minutes)
-      );
-
-      const session = await sql`
+      const result = await sql`
         INSERT INTO study_sessions
-        (
-          user_id,
-          duration_minutes,
-          xp
-        )
+          (
+            user_id,
+            duration_minutes,
+            xp
+          )
         VALUES
-        (
-          ${authUser.id},
-          ${minutes},
-          ${xp}
-        )
+          (
+            ${userId},
+            ${duration},
+            ${xp}
+          )
         RETURNING *
       `;
 
       await sql`
         UPDATE users
         SET xp = xp + ${xp}
-        WHERE id = ${authUser.id}
+        WHERE id = ${userId}
       `;
 
       return send(res, 201, {
         success: true,
-        session: session[0],
-        earnedXP: xp
+        session: result[0],
+        xp
       });
     }
 
-    // =====================================================
-    // STUDY STATS
-    // =====================================================
+    // =========================
+    // ACHIEVEMENTS
+    // =========================
 
     if (
-      action === "study" &&
+      action === "achievements" &&
       req.method === "GET"
     ) {
-      const authUser = getUser(req);
-
-      if (!authUser) {
-        return send(res, 401, {
-          message: "Giriş yapmalısın."
-        });
-      }
-
-      const result = await sql`
-        SELECT
-          COALESCE(
-            SUM(duration_minutes),
-            0
-          ) AS total_minutes,
-          COUNT(*) AS total_sessions
-        FROM study_sessions
-        WHERE user_id = ${authUser.id}
+      const achievements = await sql`
+        SELECT *
+        FROM achievements
+        WHERE user_id = ${userId}
+        ORDER BY unlocked_at DESC
       `;
 
       return send(res, 200, {
         success: true,
-        stats: result[0]
+        achievements
       });
     }
 
-    // =====================================================
-    // ACHIEVEMENTS
-    // =====================================================
+    // =========================
+    // STATS
+    // =========================
 
-    if (action === "achievements") {
-      const authUser = getUser(req);
-
-      if (!authUser) {
-        return send(res, 401, {
-          message: "Giriş yapmalısın."
-        });
-      }
-
-      if (req.method === "GET") {
-        const achievements = await sql`
-          SELECT *
-          FROM achievements
-          WHERE user_id = ${authUser.id}
-          ORDER BY unlocked_at DESC
-        `;
-
-        return send(res, 200, {
-          success: true,
-          achievements
-        });
-      }
-
-      if (req.method === "POST") {
-        const { key } = req.body || {};
-
-        if (!key) {
-          return send(res, 400, {
-            message: "Başarı anahtarı gerekli."
-          });
-        }
-
-        const result = await sql`
-          INSERT INTO achievements
-          (
-            user_id,
-            achievement_key
-          )
-          VALUES
-          (
-            ${authUser.id},
-            ${key}
-          )
-          ON CONFLICT
-          (user_id, achievement_key)
-          DO NOTHING
-          RETURNING *
-        `;
-
-        return send(res, 201, {
-          success: true,
-          achievement: result[0] || null
-        });
-      }
-    }
-
-    // =====================================================
-    // DASHBOARD
-    // =====================================================
-
-    if (action === "dashboard") {
-      const authUser = getUser(req);
-
-      if (!authUser) {
-        return send(res, 401, {
-          message: "Giriş yapmalısın."
-        });
-      }
-
-      const userResult = await sql`
-        SELECT
-          id,
-          name,
-          email,
-          xp,
-          streak
-        FROM users
-        WHERE id = ${authUser.id}
-      `;
-
-      const taskStats = await sql`
+    if (
+      action === "stats" &&
+      req.method === "GET"
+    ) {
+      const tasks = await sql`
         SELECT
           COUNT(*)::INTEGER AS total,
           COUNT(*) FILTER (
-            WHERE completed = true
+            WHERE completed = TRUE
           )::INTEGER AS completed
         FROM tasks
-        WHERE user_id = ${authUser.id}
+        WHERE user_id = ${userId}
       `;
 
-      const studyStats = await sql`
+      const subjects = await sql`
+        SELECT COUNT(*)::INTEGER AS count
+        FROM subjects
+        WHERE user_id = ${userId}
+      `;
+
+      const exams = await sql`
+        SELECT COUNT(*)::INTEGER AS count
+        FROM exams
+        WHERE user_id = ${userId}
+      `;
+
+      const study = await sql`
         SELECT
           COALESCE(
             SUM(duration_minutes),
             0
-          )::INTEGER AS minutes,
-          COUNT(*)::INTEGER AS sessions
+          )::INTEGER AS minutes
         FROM study_sessions
-        WHERE user_id = ${authUser.id}
-      `;
-
-      const examStats = await sql`
-        SELECT COUNT(*)::INTEGER AS count
-        FROM exams
-        WHERE user_id = ${authUser.id}
-        AND exam_date >= NOW()
+        WHERE user_id = ${userId}
       `;
 
       return send(res, 200, {
         success: true,
-        user: userResult[0],
-        tasks: taskStats[0],
-        study: studyStats[0],
-        upcomingExams: examStats[0].count
+        stats: {
+          tasks: tasks[0],
+          subjects: subjects[0].count,
+          exams: exams[0].count,
+          studyMinutes:
+            study[0].minutes
+        }
       });
     }
 
     return send(res, 404, {
-      message: "API endpoint bulunamadı."
+      message: "API işlemi bulunamadı."
     });
 
   } catch (error) {
@@ -796,7 +713,13 @@ export default async function handler(req, res) {
 
     return send(res, 500, {
       success: false,
-      message: "Sunucu hatası oluştu."
+      message:
+        "Sunucu hatası oluştu.",
+      error:
+        process.env.NODE_ENV ===
+        "development"
+          ? error.message
+          : undefined
     });
   }
 }
