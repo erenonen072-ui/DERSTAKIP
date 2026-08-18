@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>DersTakip | Öğrenci Paneli</title>
+  <title>DersTakip</title>
 
   <style>
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -14,14 +15,13 @@
     }
 
     body {
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: Arial, sans-serif;
       background: #f5f7fb;
-      color: #1b2033;
+      color: #171a2b;
     }
 
     button,
-    input,
-    select {
+    input {
       font: inherit;
     }
 
@@ -29,7 +29,121 @@
       cursor: pointer;
     }
 
-    /* SIDEBAR */
+    /* =========================
+       AUTH
+    ========================= */
+
+    #authScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #6257ee,
+          #947aff
+        );
+    }
+
+    .auth-box {
+      width: 100%;
+      max-width: 430px;
+      background: white;
+      padding: 35px;
+      border-radius: 25px;
+      box-shadow: 0 25px 70px #0003;
+    }
+
+    .auth-logo {
+      text-align: center;
+      font-size: 30px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .auth-logo span {
+      color: #6b60ef;
+    }
+
+    .auth-description {
+      text-align: center;
+      color: #7c8499;
+      margin-bottom: 25px;
+    }
+
+    .auth-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #f1f2f7;
+      padding: 5px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .auth-tabs button {
+      border: none;
+      padding: 11px;
+      background: transparent;
+      border-radius: 9px;
+      font-weight: 700;
+    }
+
+    .auth-tabs button.active {
+      background: white;
+      box-shadow: 0 3px 10px #00000012;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #dfe3ec;
+      border-radius: 11px;
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-color: #6b60ef;
+    }
+
+    .auth-button {
+      width: 100%;
+      border: none;
+      background: #6b60ef;
+      color: white;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 800;
+      margin-top: 5px;
+    }
+
+    #authMessage {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 13px;
+      min-height: 18px;
+    }
+
+    /* =========================
+       APP
+    ========================= */
+
+    #app {
+      display: none;
+    }
 
     .sidebar {
       position: fixed;
@@ -71,31 +185,25 @@
       color: white;
     }
 
-    .streak-box {
+    .logout {
       position: absolute;
       bottom: 25px;
       left: 18px;
       right: 18px;
-      background: linear-gradient(135deg, #665bf1, #9579ff);
-      padding: 18px;
-      border-radius: 18px;
     }
 
-    .streak-box h3 {
-      margin-bottom: 6px;
+    .logout button {
+      width: 100%;
+      border: none;
+      background: #292d49;
+      color: white;
+      padding: 12px;
+      border-radius: 12px;
     }
-
-    .streak-box p {
-      font-size: 13px;
-      opacity: .85;
-    }
-
-    /* MAIN */
 
     .main {
       margin-left: 250px;
       padding: 30px;
-      max-width: 1500px;
     }
 
     .topbar {
@@ -131,40 +239,28 @@
       background: #e7e4ff;
       display: grid;
       place-items: center;
-      font-size: 20px;
     }
 
-    /* HERO */
-
     .hero {
-      background: linear-gradient(135deg, #6357ef, #9275ff);
+      background: linear-gradient(
+        135deg,
+        #6357ef,
+        #9275ff
+      );
+
       color: white;
       border-radius: 24px;
       padding: 28px;
       margin-bottom: 20px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      width: 250px;
-      height: 250px;
-      border-radius: 50%;
-      background: #ffffff18;
-      right: -80px;
-      top: -100px;
     }
 
     .hero h2 {
-      font-size: 26px;
       margin-bottom: 8px;
     }
 
     .hero p {
       opacity: .9;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
 
     .progress {
@@ -178,31 +274,13 @@
       display: block;
       height: 100%;
       background: white;
-      border-radius: 20px;
-      width: 65%;
-    }
-
-    .hero-bottom {
-      display: flex;
-      align-items: center;
-      gap: 20px;
+      width: 0%;
     }
 
     .xp {
       font-size: 13px;
       margin-top: 8px;
     }
-
-    .hero-button {
-      border: none;
-      background: white;
-      color: #5d51df;
-      padding: 12px 18px;
-      border-radius: 12px;
-      font-weight: 800;
-    }
-
-    /* GRID */
 
     .grid {
       display: grid;
@@ -221,20 +299,8 @@
     .card-title {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       margin-bottom: 15px;
     }
-
-    .card-title h2 {
-      font-size: 19px;
-    }
-
-    .card-title span {
-      color: #858da1;
-      font-size: 13px;
-    }
-
-    /* TASKS */
 
     .task {
       display: flex;
@@ -244,18 +310,15 @@
       border-bottom: 1px solid #edf0f5;
     }
 
-    .task:last-child {
-      border-bottom: none;
-    }
-
     .checkbox {
-      width: 24px;
-      height: 24px;
+      width: 25px;
+      height: 25px;
       border: 2px solid #d8dce8;
       border-radius: 7px;
       display: grid;
       place-items: center;
       flex-shrink: 0;
+      cursor: pointer;
     }
 
     .task.completed .checkbox {
@@ -289,122 +352,6 @@
       font-weight: 700;
     }
 
-    /* STATS */
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
-      margin: 20px 0;
-    }
-
-    .stat {
-      background: white;
-      padding: 20px;
-      border-radius: 18px;
-      border: 1px solid #e9ecf4;
-    }
-
-    .stat-icon {
-      font-size: 23px;
-    }
-
-    .stat strong {
-      display: block;
-      font-size: 25px;
-      margin: 8px 0 3px;
-    }
-
-    .stat small {
-      color: #7d8599;
-    }
-
-    /* SUBJECTS */
-
-    .subject {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 17px 0;
-    }
-
-    .subject-icon {
-      width: 44px;
-      height: 44px;
-      background: #f0efff;
-      border-radius: 13px;
-      display: grid;
-      place-items: center;
-      font-size: 20px;
-    }
-
-    .subject-info {
-      flex: 1;
-    }
-
-    .subject-info strong {
-      display: block;
-      margin-bottom: 7px;
-    }
-
-    .subject-bar {
-      height: 7px;
-      background: #edf0f6;
-      border-radius: 20px;
-      overflow: hidden;
-    }
-
-    .subject-bar span {
-      display: block;
-      height: 100%;
-      background: #6c63ff;
-      border-radius: 20px;
-    }
-
-    /* EXAM */
-
-    .exam {
-      margin-top: 15px;
-      background: #f7f8fc;
-      padding: 15px;
-      border-radius: 14px;
-    }
-
-    .exam-title {
-      font-weight: 800;
-    }
-
-    .exam-date {
-      color: #7b8398;
-      font-size: 13px;
-      margin-top: 5px;
-    }
-
-    .countdown {
-      display: flex;
-      gap: 8px;
-      margin-top: 13px;
-    }
-
-    .time {
-      flex: 1;
-      background: white;
-      padding: 10px;
-      text-align: center;
-      border-radius: 10px;
-    }
-
-    .time strong {
-      display: block;
-      font-size: 19px;
-    }
-
-    .time small {
-      color: #8a92a5;
-    }
-
-    /* ADD TASK */
-
     .add-task {
       display: flex;
       gap: 8px;
@@ -428,9 +375,40 @@
       font-weight: 800;
     }
 
-    /* MOBILE */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin: 20px 0;
+    }
 
-    @media(max-width:900px) {
+    .stat {
+      background: white;
+      padding: 20px;
+      border-radius: 18px;
+      border: 1px solid #e9ecf4;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 25px;
+      margin: 8px 0;
+    }
+
+    .stat small {
+      color: #7d8599;
+    }
+
+    .info {
+      margin-bottom: 20px;
+    }
+
+    .info-number {
+      font-size: 40px;
+      font-weight: 900;
+    }
+
+    @media(max-width: 900px) {
 
       .sidebar {
         width: 75px;
@@ -443,20 +421,12 @@
 
       .logo::before {
         content: "DT";
-        font-size: 23px;
+        font-size: 22px;
       }
 
       .menu button {
-        text-align: center;
         font-size: 0;
-      }
-
-      .menu button:first-letter {
-        font-size: 20px;
-      }
-
-      .streak-box {
-        display: none;
+        text-align: center;
       }
 
       .main {
@@ -467,15 +437,16 @@
         grid-template-columns: 1fr;
       }
 
-      .stats {
-        grid-template-columns: repeat(2, 1fr);
-      }
     }
 
-    @media(max-width:600px) {
+    @media(max-width: 600px) {
 
       .main {
         padding: 15px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
       }
 
       .topbar {
@@ -486,35 +457,182 @@
         display: none;
       }
 
-      .welcome h1 {
-        font-size: 23px;
-      }
-
-      .stats {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .hero-bottom {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .add-task {
-        flex-direction: column;
-      }
     }
+
   </style>
 </head>
 
 <body>
 
-  <!-- SIDEBAR -->
+
+<!-- ==================================
+     GİRİŞ / KAYIT
+================================== -->
+
+<section id="authScreen">
+
+  <div class="auth-box">
+
+    <div class="auth-logo">
+      Ders<span>Takip</span>
+    </div>
+
+    <p class="auth-description">
+      Derslerini, görevlerini ve hedeflerini takip et.
+    </p>
+
+
+    <div class="auth-tabs">
+
+      <button
+        id="loginTab"
+        class="active"
+        onclick="showLogin()"
+      >
+        Giriş Yap
+      </button>
+
+      <button
+        id="registerTab"
+        onclick="showRegister()"
+      >
+        Kayıt Ol
+      </button>
+
+    </div>
+
+
+    <!-- GİRİŞ -->
+
+    <form
+      id="loginForm"
+      onsubmit="login(event)"
+    >
+
+      <div class="form-group">
+
+        <label>
+          E-posta
+        </label>
+
+        <input
+          id="loginEmail"
+          type="email"
+          required
+          placeholder="ornek@mail.com"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Şifre
+        </label>
+
+        <input
+          id="loginPassword"
+          type="password"
+          required
+          placeholder="••••••••"
+        >
+
+      </div>
+
+
+      <button class="auth-button">
+        Giriş Yap
+      </button>
+
+    </form>
+
+
+    <!-- KAYIT -->
+
+    <form
+      id="registerForm"
+      onsubmit="register(event)"
+      style="display:none"
+    >
+
+      <div class="form-group">
+
+        <label>
+          Ad Soyad
+        </label>
+
+        <input
+          id="registerName"
+          type="text"
+          required
+          placeholder="Adın Soyadın"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          E-posta
+        </label>
+
+        <input
+          id="registerEmail"
+          type="email"
+          required
+          placeholder="ornek@mail.com"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Şifre
+        </label>
+
+        <input
+          id="registerPassword"
+          type="password"
+          minlength="6"
+          required
+          placeholder="En az 6 karakter"
+        >
+
+      </div>
+
+
+      <button class="auth-button">
+        Hesap Oluştur
+      </button>
+
+    </form>
+
+
+    <div id="authMessage"></div>
+
+  </div>
+
+</section>
+
+
+
+<!-- ==================================
+     UYGULAMA
+================================== -->
+
+<div id="app">
+
 
   <aside class="sidebar">
 
     <div class="logo">
       Ders<span>Takip</span>
     </div>
+
 
     <div class="menu">
 
@@ -544,31 +662,28 @@
 
     </div>
 
-    <div class="streak-box">
 
-      <h3>🔥 7 Günlük Seri</h3>
+    <div class="logout">
 
-      <p>
-        Serini korumaya devam et!
-      </p>
+      <button onclick="logout()">
+        🚪 Çıkış Yap
+      </button>
 
     </div>
 
   </aside>
 
 
-  <!-- MAIN -->
 
   <main class="main">
 
-    <!-- TOP -->
 
     <div class="topbar">
 
       <div class="welcome">
 
-        <h1>
-          Merhaba, Öğrenci! 👋
+        <h1 id="welcomeText">
+          Merhaba! 👋
         </h1>
 
         <p>
@@ -577,14 +692,15 @@
 
       </div>
 
+
       <div class="profile">
 
         <div class="avatar">
           🎓
         </div>
 
-        <strong>
-          Seviye 4
+        <strong id="levelText">
+          Seviye 1
         </strong>
 
       </div>
@@ -592,7 +708,6 @@
     </div>
 
 
-    <!-- HERO -->
 
     <div class="hero">
 
@@ -600,38 +715,31 @@
         Bugünkü hedefin 🎯
       </h2>
 
-      <p>
-        3 görevden 2'sini tamamladın. Harika gidiyorsun!
+      <p id="taskSummary">
+        Görevlerini tamamlamaya başla.
       </p>
 
-      <div class="hero-bottom">
 
-        <div style="flex:1">
+      <div class="progress">
 
-          <div class="progress">
-            <span></span>
-          </div>
+        <span id="progressBar"></span>
 
-          <div class="xp">
-            670 / 1000 XP
-          </div>
+      </div>
 
-        </div>
 
-        <button class="hero-button">
-          Görevler →
-        </button>
-
+      <div
+        class="xp"
+        id="xpText"
+      >
+        0 XP
       </div>
 
     </div>
 
 
-    <!-- CONTENT -->
 
     <div class="grid">
 
-      <!-- LEFT -->
 
       <div>
 
@@ -643,103 +751,26 @@
               Bugünkü Görevler
             </h2>
 
-            <span>
-              2 / 3 tamamlandı
+            <span id="taskCounter">
+              0 / 0
             </span>
 
           </div>
 
 
-          <div id="taskList">
+          <div id="taskList"></div>
 
-            <div class="task completed">
-
-              <div class="checkbox">
-                ✓
-              </div>
-
-              <div>
-
-                <div class="task-name">
-                  Matematikten 20 soru çöz
-                </div>
-
-                <div class="task-subject">
-                  Matematik
-                </div>
-
-              </div>
-
-              <div class="task-xp">
-                +50 XP
-              </div>
-
-            </div>
-
-
-            <div class="task completed">
-
-              <div class="checkbox">
-                ✓
-              </div>
-
-              <div>
-
-                <div class="task-name">
-                  İngilizce 15 kelime tekrar et
-                </div>
-
-                <div class="task-subject">
-                  İngilizce
-                </div>
-
-              </div>
-
-              <div class="task-xp">
-                +50 XP
-              </div>
-
-            </div>
-
-
-            <div class="task">
-
-              <div class="checkbox">
-                ☐
-              </div>
-
-              <div>
-
-                <div class="task-name">
-                  Fen konusunu tekrar et
-                </div>
-
-                <div class="task-subject">
-                  Fen Bilimleri
-                </div>
-
-              </div>
-
-              <div class="task-xp">
-                +50 XP
-              </div>
-
-            </div>
-
-          </div>
-
-
-          <!-- ADD -->
 
           <div class="add-task">
 
             <input
-              type="text"
               id="newTask"
               placeholder="Yeni görev ekle..."
             >
 
-            <button onclick="addTask()">
+            <button
+              onclick="addTask()"
+            >
               + Ekle
             </button>
 
@@ -748,52 +779,16 @@
         </div>
 
 
-        <!-- STATS -->
-
         <div class="stats">
 
           <div class="stat">
 
-            <span class="stat-icon">
-              ⏱️
-            </span>
-
-            <strong>
-              4s 20dk
-            </strong>
-
-            <small>
-              Bu hafta çalışma
-            </small>
-
-          </div>
-
-
-          <div class="stat">
-
-            <span class="stat-icon">
-              📝
-            </span>
-
-            <strong>
-              87
-            </strong>
-
-            <small>
-              Çözülen soru
-            </small>
-
-          </div>
-
-
-          <div class="stat">
-
-            <span class="stat-icon">
+            <span>
               ⭐
             </span>
 
-            <strong>
-              670
+            <strong id="statXP">
+              0
             </strong>
 
             <small>
@@ -805,136 +800,34 @@
 
           <div class="stat">
 
-            <span class="stat-icon">
-              🏆
+            <span>
+              🔥
             </span>
 
-            <strong>
-              6
+            <strong id="statStreak">
+              0
             </strong>
 
             <small>
-              Rozet
+              Günlük seri
             </small>
 
           </div>
 
-        </div>
 
-
-        <!-- SUBJECTS -->
-
-        <div class="card">
-
-          <div class="card-title">
-
-            <h2>
-              📚 Ders İlerlemen
-            </h2>
+          <div class="stat">
 
             <span>
-              Bu hafta
+              📝
             </span>
 
-          </div>
-
-
-          <div class="subject">
-
-            <div class="subject-icon">
-              ➗
-            </div>
-
-            <div class="subject-info">
-
-              <strong>
-                Matematik
-              </strong>
-
-              <div class="subject-bar">
-                <span style="width:64%"></span>
-              </div>
-
-            </div>
-
-            <strong>
-              64%
+            <strong id="statTasks">
+              0
             </strong>
 
-          </div>
-
-
-          <div class="subject">
-
-            <div class="subject-icon">
-              📖
-            </div>
-
-            <div class="subject-info">
-
-              <strong>
-                Türkçe
-              </strong>
-
-              <div class="subject-bar">
-                <span style="width:70%"></span>
-              </div>
-
-            </div>
-
-            <strong>
-              70%
-            </strong>
-
-          </div>
-
-
-          <div class="subject">
-
-            <div class="subject-icon">
-              🧪
-            </div>
-
-            <div class="subject-info">
-
-              <strong>
-                Fen Bilimleri
-              </strong>
-
-              <div class="subject-bar">
-                <span style="width:60%"></span>
-              </div>
-
-            </div>
-
-            <strong>
-              60%
-            </strong>
-
-          </div>
-
-
-          <div class="subject">
-
-            <div class="subject-icon">
-              🇬🇧
-            </div>
-
-            <div class="subject-info">
-
-              <strong>
-                İngilizce
-              </strong>
-
-              <div class="subject-bar">
-                <span style="width:80%"></span>
-              </div>
-
-            </div>
-
-            <strong>
-              80%
-            </strong>
+            <small>
+              Tamamlanan görev
+            </small>
 
           </div>
 
@@ -943,136 +836,45 @@
       </div>
 
 
-      <!-- RIGHT -->
 
       <div>
 
-        <!-- STREAK -->
+        <div class="card info">
+
+          <h2>
+            🔥 Çalışma Serisi
+          </h2>
+
+          <div
+            class="info-number"
+            id="streakNumber"
+          >
+            0
+          </div>
+
+          <p>
+            Günlük serin
+          </p>
+
+        </div>
+
 
         <div class="card">
 
-          <div class="card-title">
-
-            <h2>
-              🔥 Çalışma Serisi
-            </h2>
-
-            <span>
-              Rekor: 12
-            </span>
-
-          </div>
-
-          <div style="font-size:42px;font-weight:900">
-
-            7
-            <span style="font-size:18px">
-              gün
-            </span>
-
-          </div>
-
-          <p style="color:#7d8599;margin-top:7px">
-
-            Bir gün daha çalış!
-
-          </p>
-
-        </div>
-
-
-        <!-- EXAM -->
-
-        <div class="card" style="margin-top:20px">
-
-          <div class="card-title">
-
-            <h2>
-              📅 Yaklaşan Sınav
-            </h2>
-
-          </div>
-
-          <div class="exam">
-
-            <div class="exam-title">
-              Matematik Yazılısı
-            </div>
-
-            <div class="exam-date">
-              25 Ağustos 2026
-            </div>
-
-            <div class="countdown">
-
-              <div class="time">
-                <strong>06</strong>
-                <small>Gün</small>
-              </div>
-
-              <div class="time">
-                <strong>12</strong>
-                <small>Saat</small>
-              </div>
-
-              <div class="time">
-                <strong>35</strong>
-                <small>Dk</small>
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- GOAL -->
-
-        <div class="card" style="margin-top:20px">
-
-          <div class="card-title">
-
-            <h2>
-              🎯 Haftalık Hedef
-            </h2>
-
-          </div>
-
-          <p style="color:#7d8599">
-            5 saat çalışma hedefi
-          </p>
-
-          <div
-            class="progress"
-            style="
-              background:#eceef5;
-              margin-top:15px;
-            "
-          >
-
-            <span
-              style="
-                width:87%;
-                background:#6c63ff;
-              "
-            ></span>
-
-          </div>
+          <h2>
+            🎓 DersTakip
+          </h2>
 
           <p
             style="
+              color:#7d8599;
               margin-top:10px;
-              font-size:13px;
+              line-height:1.6;
             "
           >
-
-            <strong>
-              4 saat 20 dakika
-            </strong>
-
-            tamamlandı.
-
+            Görevlerini tamamla,
+            XP kazan,
+            seviyeni yükselt!
           </p>
 
         </div>
@@ -1083,64 +885,582 @@
 
   </main>
 
+</div>
 
-  <script>
 
-    function addTask() {
 
-      const input =
-        document.getElementById("newTask");
+<script>
 
-      const title =
-        input.value.trim();
+/* =====================================
+   AUTH SEKME
+===================================== */
 
-      if (!title) {
+function showLogin() {
 
-        alert("Önce görev yaz!");
+  document.getElementById(
+    "loginForm"
+  ).style.display = "block";
 
-        return;
+  document.getElementById(
+    "registerForm"
+  ).style.display = "none";
 
-      }
+  document.getElementById(
+    "loginTab"
+  ).classList.add("active");
 
-      const taskList =
-        document.getElementById("taskList");
+  document.getElementById(
+    "registerTab"
+  ).classList.remove("active");
 
-      const task =
-        document.createElement("div");
+}
 
-      task.className = "task";
 
-      task.innerHTML = `
+function showRegister() {
 
-        <div class="checkbox">
-          ☐
-        </div>
+  document.getElementById(
+    "loginForm"
+  ).style.display = "none";
 
-        <div>
+  document.getElementById(
+    "registerForm"
+  ).style.display = "block";
 
-          <div class="task-name">
-            ${title}
-          </div>
+  document.getElementById(
+    "loginTab"
+  ).classList.remove("active");
 
-          <div class="task-subject">
-            Kişisel görev
-          </div>
+  document.getElementById(
+    "registerTab"
+  ).classList.add("active");
 
-        </div>
+}
 
-        <div class="task-xp">
-          +50 XP
-        </div>
 
-      `;
+/* =====================================
+   MESAJ
+===================================== */
 
-      taskList.appendChild(task);
+function message(text) {
 
-      input.value = "";
+  document.getElementById(
+    "authMessage"
+  ).textContent = text;
+
+}
+
+
+/* =====================================
+   KAYIT
+===================================== */
+
+async function register(event) {
+
+  event.preventDefault();
+
+
+  const name =
+    document.getElementById(
+      "registerName"
+    ).value;
+
+  const email =
+    document.getElementById(
+      "registerEmail"
+    ).value;
+
+  const password =
+    document.getElementById(
+      "registerPassword"
+    ).value;
+
+
+  message("Hesap oluşturuluyor...");
+
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/register",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+            name,
+            email,
+            password
+          })
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      message(
+        "❌ " +
+        data.message
+      );
+
+      return;
 
     }
 
-  </script>
+
+    message(
+      "✅ Hesabın oluşturuldu!"
+    );
+
+
+    setTimeout(
+      loadApp,
+      500
+    );
+
+  }
+
+  catch (error) {
+
+    message(
+      "❌ Sunucuya bağlanılamadı."
+    );
+
+  }
+
+}
+
+
+/* =====================================
+   GİRİŞ
+===================================== */
+
+async function login(event) {
+
+  event.preventDefault();
+
+
+  const email =
+    document.getElementById(
+      "loginEmail"
+    ).value;
+
+  const password =
+    document.getElementById(
+      "loginPassword"
+    ).value;
+
+
+  message("Giriş yapılıyor...");
+
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/login",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+            email,
+            password
+          })
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      message(
+        "❌ " +
+        data.message
+      );
+
+      return;
+
+    }
+
+
+    message(
+      "✅ Giriş başarılı!"
+    );
+
+
+    setTimeout(
+      loadApp,
+      300
+    );
+
+  }
+
+  catch (error) {
+
+    message(
+      "❌ Sunucuya bağlanılamadı."
+    );
+
+  }
+
+}
+
+
+/* =====================================
+   UYGULAMAYI AÇ
+===================================== */
+
+async function loadApp() {
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/me"
+      );
+
+
+    if (!response.ok) {
+
+      showAuth();
+
+      return;
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    document.getElementById(
+      "authScreen"
+    ).style.display = "none";
+
+
+    document.getElementById(
+      "app"
+    ).style.display = "block";
+
+
+    updateUser(
+      data.user
+    );
+
+
+    loadTasks();
+
+  }
+
+  catch {
+
+    showAuth();
+
+  }
+
+}
+
+
+/* =====================================
+   KULLANICI
+===================================== */
+
+function updateUser(user) {
+
+  document.getElementById(
+    "welcomeText"
+  ).textContent =
+    "Merhaba, " +
+    user.name +
+    "! 👋";
+
+
+  document.getElementById(
+    "statXP"
+  ).textContent =
+    user.xp;
+
+
+  document.getElementById(
+    "statStreak"
+  ).textContent =
+    user.streak;
+
+
+  document.getElementById(
+    "streakNumber"
+  ).textContent =
+    user.streak;
+
+
+  const level =
+    Math.floor(
+      user.xp / 250
+    ) + 1;
+
+
+  document.getElementById(
+    "levelText"
+  ).textContent =
+    "Seviye " +
+    level;
+
+
+  document.getElementById(
+    "xpText"
+  ).textContent =
+    user.xp +
+    " XP";
+
+}
+
+
+/* =====================================
+   GÖREVLER
+===================================== */
+
+async function loadTasks() {
+
+  const response =
+    await fetch(
+      "/api/tasks"
+    );
+
+
+  if (!response.ok) {
+
+    return;
+
+  }
+
+
+  const data =
+    await response.json();
+
+
+  const list =
+    document.getElementById(
+      "taskList"
+    );
+
+
+  list.innerHTML = "";
+
+
+  data.tasks.forEach(task => {
+
+    const item =
+      document.createElement(
+        "div"
+      );
+
+
+    item.className =
+      "task" +
+      (
+        task.completed
+          ? " completed"
+          : ""
+      );
+
+
+    item.innerHTML = `
+
+      <div class="checkbox">
+        ${
+          task.completed
+            ? "✓"
+            : "☐"
+        }
+      </div>
+
+      <div>
+
+        <div class="task-name">
+          ${escapeHTML(task.title)}
+        </div>
+
+        <div class="task-subject">
+          Öğrenci görevi
+        </div>
+
+      </div>
+
+      <div class="task-xp">
+        +${task.xp} XP
+      </div>
+
+    `;
+
+
+    list.appendChild(
+      item
+    );
+
+  });
+
+
+  const completed =
+    data.tasks.filter(
+      task =>
+        task.completed
+    ).length;
+
+
+  document.getElementById(
+    "taskCounter"
+  ).textContent =
+    completed +
+    " / " +
+    data.tasks.length;
+
+
+  document.getElementById(
+    "statTasks"
+  ).textContent =
+    completed;
+
+
+  document.getElementById(
+    "taskSummary"
+  ).textContent =
+    completed +
+    " / " +
+    data.tasks.length +
+    " görev tamamlandı.";
+
+}
+
+
+/* =====================================
+   GÖREV EKLE
+===================================== */
+
+async function addTask() {
+
+  const input =
+    document.getElementById(
+      "newTask"
+    );
+
+
+  const title =
+    input.value.trim();
+
+
+  if (!title) {
+
+    alert(
+      "Görev yazmalısın."
+    );
+
+    return;
+
+  }
+
+
+  /*
+    Şimdilik backend'de görev ekleme
+    endpointini bir sonraki adımda
+    oluşturacağız.
+  */
+
+  alert(
+    "Görev sistemi bir sonraki adımda gerçek veritabanına bağlanacak."
+  );
+
+
+  input.value = "";
+
+}
+
+
+/* =====================================
+   ÇIKIŞ
+===================================== */
+
+async function logout() {
+
+  await fetch(
+    "/api/logout",
+    {
+      method: "POST"
+    }
+  );
+
+
+  location.reload();
+
+}
+
+
+/* =====================================
+   OTURUM YOK
+===================================== */
+
+function showAuth() {
+
+  document.getElementById(
+    "authScreen"
+  ).style.display = "flex";
+
+
+  document.getElementById(
+    "app"
+  ).style.display = "none";
+
+}
+
+
+/* =====================================
+   GÜVENLİ HTML
+===================================== */
+
+function escapeHTML(text) {
+
+  const div =
+    document.createElement(
+      "div"
+    );
+
+  div.textContent =
+    text;
+
+  return div.innerHTML;
+
+}
+
+
+/* =====================================
+   SAYFA AÇILDI
+===================================== */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    loadApp();
+
+  }
+);
+
+</script>
 
 </body>
 </html>
