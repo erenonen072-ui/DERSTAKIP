@@ -1,17 +1,17 @@
 {
   "name": "ders-takip",
   "version": "1.0.0",
-  "description": "Öğrenciler için çalışma ve görev takip sistemi",
+  "description": "Öğrenciler için ders ve görev takip sistemi",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
     "dev": "node src/server.js"
   },
- "dependencies": {
-  "express": "^4.21.2",
-  "better-sqlite3": "^11.8.1",
-  "bcryptjs": "^3.0.2",
-  "jsonwebtoken": "^9.0.2",
-  "cookie-parser": "^1.4.7"
-}
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "better-sqlite3": "^11.8.1",
+    "cookie-parser": "^1.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2"
+  }
 }
