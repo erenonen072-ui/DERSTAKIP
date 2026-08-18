@@ -1,3 +1,61 @@
+// ==========================================
+// DERS TAKİP API
+// ==========================================
+
+const API = "/api/index";
+
+// ==========================================
+// API İSTEĞİ
+// ==========================================
+
+async function api(action, options = {}) {
+  try {
+    const config = {
+      credentials: "include",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...(options.headers || {})
+      }
+    };
+
+    // Body obje ise JSON'a çevir
+    if (
+      config.body &&
+      typeof config.body !== "string"
+    ) {
+      config.body = JSON.stringify(config.body);
+    }
+
+    const response = await fetch(
+      `${API}?action=${encodeURIComponent(action)}`,
+      config
+    );
+
+    const data = await response
+      .json()
+      .catch(() => ({}));
+
+    return {
+      response,
+      data
+    };
+
+  } catch (error) {
+    console.error("API HATASI:", error);
+
+    return {
+      response: {
+        ok: false,
+        status: 0
+      },
+      data: {
+        success: false,
+        message: "Sunucuya bağlanılamadı."
+      }
+    };
+  }
+}
 let currentUser = null;
 
 const API = "/api";
