@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#6658f5">
+  <meta name="theme-color" content="#6857f5">
+  <meta name="description" content="DersTakip - Derslerini, hedeflerini ve çalışma süreni takip et.">
+
   <title>DersTakip 2.0</title>
 
   <style>
@@ -14,28 +16,29 @@
     }
 
     :root {
-      --primary: #6658f5;
-      --primary2: #9275ff;
+      --primary: #6857f5;
+      --primary2: #917dff;
       --dark: #15182b;
-      --dark2: #292d49;
+      --dark2: #202540;
       --text: #171a2b;
       --muted: #7d8498;
-      --border: #e8ebf3;
+      --border: #e7eaf2;
       --bg: #f5f7fb;
       --white: #fff;
       --green: #20c997;
       --red: #ff5b6e;
-      --orange: #ffae42;
-      --shadow: 0 12px 35px rgba(25,30,60,.08);
+      --yellow: #ffbd3c;
+      --blue: #3b82f6;
+      --shadow: 0 15px 45px rgba(25, 30, 60, .08);
     }
 
     body.dark {
-      --text: #f4f5ff;
-      --muted: #aab0c5;
-      --border: #343850;
-      --bg: #101322;
-      --white: #191d31;
-      --shadow: 0 12px 35px rgba(0,0,0,.25);
+      --bg: #101321;
+      --white: #181c2f;
+      --text: #f5f7ff;
+      --muted: #9da5bd;
+      --border: #2a3048;
+      --shadow: 0 15px 45px rgba(0,0,0,.25);
     }
 
     html {
@@ -43,15 +46,11 @@
     }
 
     body {
-      font-family:
-        Inter,
-        Arial,
-        Helvetica,
-        sans-serif;
+      font-family: Inter, Arial, Helvetica, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      transition: .25s;
+      transition: background .25s, color .25s;
     }
 
     button,
@@ -64,9 +63,9 @@
       cursor: pointer;
     }
 
-    /* =========================================
+    /* =========================
        AUTH
-    ========================================= */
+    ========================= */
 
     #authScreen {
       min-height: 100vh;
@@ -75,43 +74,31 @@
       justify-content: center;
       padding: 25px;
       background:
-        radial-gradient(
-          circle at 10% 10%,
-          #b9afff,
-          transparent 30%
-        ),
-        radial-gradient(
-          circle at 90% 90%,
-          #d8cfff,
-          transparent 25%
-        ),
-        linear-gradient(
-          135deg,
-          #6257ee,
-          #947aff
-        );
+        radial-gradient(circle at 10% 10%, #b7aaff 0, transparent 28%),
+        radial-gradient(circle at 90% 90%, #ffc4e2 0, transparent 28%),
+        linear-gradient(135deg, #5e51ed, #9a7dff);
     }
 
     .auth-wrapper {
       width: 100%;
       max-width: 1050px;
+      min-height: 650px;
       display: grid;
       grid-template-columns: 1.1fr .9fr;
-      background: rgba(255,255,255,.96);
-      border-radius: 32px;
+      background: rgba(255,255,255,.95);
+      border-radius: 35px;
       overflow: hidden;
       box-shadow: 0 35px 100px rgba(0,0,0,.25);
     }
 
     .auth-showcase {
-      position: relative;
       padding: 50px;
       color: white;
-      background:
-        radial-gradient(circle at 75% 20%, #ffffff40, transparent 20%),
-        linear-gradient(145deg,#5146df,#9275ff);
-      min-height: 620px;
+      position: relative;
       overflow: hidden;
+      background:
+        radial-gradient(circle at 80% 15%, #ffffff35, transparent 25%),
+        linear-gradient(145deg, #6153ef, #9378ff);
     }
 
     .auth-showcase h1 {
@@ -125,117 +112,47 @@
     }
 
     .auth-showcase > p {
-      max-width: 470px;
-      line-height: 1.7;
-      opacity: .92;
       font-size: 17px;
+      line-height: 1.7;
+      opacity: .9;
+      max-width: 480px;
     }
 
-    .study-illustration {
-      position: absolute;
-      left: 50%;
-      bottom: 45px;
-      transform: translateX(-50%);
-      width: 360px;
-      height: 270px;
-    }
-
-    .cloud {
-      position: absolute;
-      background: white;
-      opacity: .15;
-      border-radius: 100px;
-      width: 160px;
-      height: 50px;
-      right: 0;
-      top: 10px;
-    }
-
-    .cloud:before,
-    .cloud:after {
-      content: "";
-      position: absolute;
-      background: inherit;
+    .auth-illustration {
+      width: 300px;
+      height: 300px;
+      margin: 35px auto 20px;
       border-radius: 50%;
-    }
-
-    .cloud:before {
-      width: 70px;
-      height: 70px;
-      left: 25px;
-      top: -30px;
-    }
-
-    .cloud:after {
-      width: 90px;
-      height: 90px;
-      right: 20px;
-      top: -40px;
-    }
-
-    .big-book {
-      position: absolute;
-      width: 250px;
-      height: 145px;
-      left: 50%;
-      bottom: 10px;
-      transform: translateX(-50%) rotate(-4deg);
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 25px 45px #0003;
-    }
-
-    .big-book:before {
-      content: "📚";
-      position: absolute;
-      font-size: 80px;
-      left: 82px;
-      top: 22px;
-    }
-
-    .floating-star {
-      position: absolute;
-      font-size: 42px;
+      background: rgba(255,255,255,.14);
+      display: grid;
+      place-items: center;
+      font-size: 150px;
+      box-shadow: inset 0 0 50px #ffffff18;
       animation: float 3s ease-in-out infinite;
     }
 
-    .star1 {
-      left: 15px;
-      top: 100px;
-    }
-
-    .star2 {
-      right: 25px;
-      bottom: 80px;
-      animation-delay: 1s;
-    }
-
     @keyframes float {
-      0%,100% {
-        transform: translateY(0) rotate(0);
-      }
-      50% {
-        transform: translateY(-15px) rotate(8deg);
-      }
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
     }
 
-    .feature-pills {
-      display: flex;
-      flex-wrap: wrap;
+    .auth-features {
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
       gap: 10px;
-      margin-top: 30px;
+      margin-top: 20px;
     }
 
-    .feature-pills span {
-      background: #ffffff20;
-      border: 1px solid #ffffff35;
-      padding: 10px 13px;
-      border-radius: 30px;
+    .auth-feature {
+      background: rgba(255,255,255,.13);
+      border: 1px solid rgba(255,255,255,.14);
+      padding: 12px;
+      border-radius: 15px;
       font-size: 13px;
       font-weight: 800;
     }
 
-    .auth-panel {
+    .auth-box {
       padding: 45px;
       display: flex;
       flex-direction: column;
@@ -243,25 +160,27 @@
     }
 
     .auth-logo {
+      text-align: center;
       font-size: 34px;
       font-weight: 950;
-      margin-bottom: 8px;
+      margin-bottom: 7px;
+      color: #171a2b;
     }
 
     .auth-logo span {
       color: var(--primary);
     }
 
-    .auth-panel-title {
-      color: var(--muted);
+    .auth-description {
+      text-align: center;
+      color: #7d8498;
       margin-bottom: 25px;
-      line-height: 1.5;
     }
 
     .auth-tabs {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 4px;
+      gap: 5px;
       background: #f0f1f6;
       padding: 5px;
       border-radius: 13px;
@@ -274,11 +193,13 @@
       background: transparent;
       border-radius: 9px;
       font-weight: 800;
+      color: #555;
     }
 
     .auth-tabs button.active {
       background: white;
       box-shadow: 0 4px 12px #0001;
+      color: #171a2b;
     }
 
     .form-group {
@@ -290,18 +211,16 @@
       font-size: 13px;
       font-weight: 800;
       margin-bottom: 7px;
-    }
-
-    .input-wrap {
-      position: relative;
+      color: #292d40;
     }
 
     .form-group input {
       width: 100%;
       padding: 14px;
       border: 1px solid #dfe3ec;
-      border-radius: 12px;
+      border-radius: 13px;
       outline: none;
+      transition: .2s;
       background: white;
       color: #171a2b;
     }
@@ -311,30 +230,38 @@
       box-shadow: 0 0 0 4px #6658f515;
     }
 
-    .password-toggle {
+    .password-wrap {
+      position: relative;
+    }
+
+    .password-wrap input {
+      padding-right: 48px;
+    }
+
+    .show-password {
       position: absolute;
-      right: 10px;
+      right: 8px;
       top: 50%;
       transform: translateY(-50%);
-      border: 0;
+      border: none;
       background: transparent;
-      padding: 5px;
+      font-size: 20px;
     }
 
     .auth-button {
       width: 100%;
       border: none;
-      background:
-        linear-gradient(
-          135deg,
-          var(--primary),
-          var(--primary2)
-        );
+      background: linear-gradient(135deg,var(--primary),var(--primary2));
       color: white;
       padding: 14px;
-      border-radius: 12px;
+      border-radius: 13px;
       font-weight: 900;
       box-shadow: 0 10px 25px #6658f530;
+      transition: .2s;
+    }
+
+    .auth-button:hover {
+      transform: translateY(-2px);
     }
 
     #authMessage {
@@ -344,9 +271,9 @@
       min-height: 18px;
     }
 
-    /* =========================================
+    /* =========================
        APP
-    ========================================= */
+    ========================= */
 
     #app {
       display: none;
@@ -362,7 +289,7 @@
       background: var(--dark);
       color: white;
       padding: 25px 18px;
-      z-index: 1000;
+      z-index: 100;
     }
 
     .logo {
@@ -381,9 +308,9 @@
       border: none;
       background: transparent;
       color: #aeb4ca;
-      padding: 14px;
+      padding: 13px;
       border-radius: 12px;
-      margin-bottom: 7px;
+      margin-bottom: 6px;
       text-align: left;
       font-weight: 800;
       transition: .2s;
@@ -419,51 +346,50 @@
       max-width: 1700px;
     }
 
-    /* =========================================
-       MOBILE HEADER
-    ========================================= */
-
-    .mobile-header {
-      display: none;
+    /* Üst menü yok */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
     }
 
-    .mobile-overlay {
-      display: none;
-    }
-
-    /* =========================================
-       PAGE HEADER
-    ========================================= */
-
-    .page-header {
-      margin-bottom: 22px;
-    }
-
-    .page-header h1 {
-      font-size: clamp(26px,3vw,36px);
+    .welcome h1 {
+      font-size: clamp(25px,3vw,34px);
       margin-bottom: 6px;
     }
 
-    .page-header p {
+    .welcome p {
       color: var(--muted);
     }
 
-    /* =========================================
+    .profile {
+      background: var(--white);
+      padding: 9px 14px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #e7e4ff;
+      display: grid;
+      place-items: center;
+    }
+
+    /* =========================
        HERO
-    ========================================= */
+    ========================= */
 
     .hero {
       background:
-        radial-gradient(
-          circle at 90% 20%,
-          #ffffff25,
-          transparent 30%
-        ),
-        linear-gradient(
-          135deg,
-          #6357ef,
-          #9275ff
-        );
+        radial-gradient(circle at 90% 20%,#ffffff25,transparent 30%),
+        linear-gradient(135deg,#6357ef,#9275ff);
       color: white;
       border-radius: 25px;
       padding: 30px;
@@ -500,15 +426,13 @@
       margin-top: 8px;
     }
 
-    /* =========================================
-       GRID / CARD
-    ========================================= */
+    /* =========================
+       GRID
+    ========================= */
 
     .grid {
       display: grid;
-      grid-template-columns:
-        minmax(0,2fr)
-        minmax(280px,1fr);
+      grid-template-columns:minmax(0,2fr) minmax(280px,1fr);
       gap: 20px;
     }
 
@@ -518,7 +442,7 @@
       padding: 22px;
       box-shadow: var(--shadow);
       border: 1px solid var(--border);
-      margin-bottom: 20px;
+      color: var(--text);
     }
 
     .card-title {
@@ -533,62 +457,53 @@
       font-size: 20px;
     }
 
-    /* =========================================
+    /* =========================
        COACH
-    ========================================= */
+    ========================= */
 
     .coach {
+      background: linear-gradient(135deg,#eef0ff,#f8f6ff);
+      border: 1px solid #dfdcff;
+      margin-bottom: 20px;
+    }
+
+    body.dark .coach {
+      background: #202540;
+      border-color: #353b5c;
+    }
+
+    .coach-head {
       display: flex;
-      gap: 15px;
-      align-items: flex-start;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 12px;
     }
 
     .coach-icon {
-      width: 55px;
-      height: 55px;
-      flex-shrink: 0;
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
       display: grid;
       place-items: center;
-      background: #eeebff;
-      border-radius: 18px;
-      font-size: 30px;
+      font-size: 28px;
+      background: #dedaff;
     }
 
-    .coach-text {
+    .coach-message {
       line-height: 1.6;
+      color: var(--muted);
     }
 
-    .coach-text strong {
-      color: var(--primary);
-    }
-
-    .coach-buttons {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 14px;
-    }
-
-    .coach-buttons button {
-      border: 1px solid #ddd9ff;
-      color: var(--primary);
-      background: #f6f4ff;
-      border-radius: 10px;
-      padding: 8px 12px;
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    /* =========================================
+    /* =========================
        TASK
-    ========================================= */
+    ========================= */
 
     .task {
       display: flex;
       align-items: center;
       gap: 13px;
       padding: 15px 0;
-      border-bottom: 1px solid #edf0f5;
+      border-bottom: 1px solid var(--border);
     }
 
     .checkbox {
@@ -599,7 +514,7 @@
       display: grid;
       place-items: center;
       flex-shrink: 0;
-      cursor: pointer;
+      transition: .2s;
     }
 
     .task.completed .checkbox {
@@ -648,8 +563,7 @@
 
     .add-task input {
       flex: 1;
-      min-width: 0;
-      border: 1px solid #e0e4ed;
+      border: 1px solid var(--border);
       padding: 13px;
       border-radius: 11px;
       outline: none;
@@ -666,14 +580,15 @@
       font-weight: 900;
     }
 
-    /* =========================================
+    /* =========================
        STATS
-    ========================================= */
+    ========================= */
 
     .stats {
       display: grid;
       grid-template-columns: repeat(3,1fr);
       gap: 15px;
+      margin-top: 20px;
     }
 
     .stat {
@@ -694,70 +609,73 @@
       color: var(--muted);
     }
 
-    /* =========================================
-       BUTTONS
-    ========================================= */
+    /* =========================
+       PET
+    ========================= */
 
-    .btn {
+    .pet-card {
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .pet-display {
+      height: 180px;
+      border-radius: 20px;
+      background: linear-gradient(135deg,#fff1b9,#ffd8ec);
+      display: grid;
+      place-items: center;
+      font-size: 95px;
+      margin: 15px 0;
+    }
+
+    .pet-name {
+      font-size: 20px;
+      font-weight: 950;
+    }
+
+    .pet-level {
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+    /* =========================
+       BUTTONS
+    ========================= */
+
+    .primary-btn {
       border: none;
-      padding: 11px 15px;
+      background: var(--primary);
+      color: white;
+      padding: 11px 16px;
       border-radius: 11px;
       font-weight: 800;
     }
 
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
-
-    .btn-soft {
-      background: #f0efff;
-      color: var(--primary);
-    }
-
-    .btn-danger {
-      background: #fff0f2;
-      color: var(--red);
-    }
-
-    /* =========================================
-       SHOP
-    ========================================= */
-
-    .coin-box {
-      background: linear-gradient(135deg,#ffe27a,#ffb52e);
-      color: #694600;
-      padding: 10px 15px;
-      border-radius: 14px;
-      font-weight: 950;
-      display: inline-block;
-    }
-
-    .shop-tabs {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 18px;
-    }
-
-    .shop-tabs button {
+    .secondary-btn {
       border: 1px solid var(--border);
       background: var(--white);
       color: var(--text);
-      padding: 9px 13px;
+      padding: 11px 16px;
+      border-radius: 11px;
+      font-weight: 800;
+    }
+
+    .danger-btn {
+      border: none;
+      background: #fff0f2;
+      color: #d63c4e;
+      padding: 10px 14px;
       border-radius: 10px;
       font-weight: 800;
     }
 
-    .shop-tabs button.active {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
+    /* =========================
+       MARKET
+    ========================= */
 
-    .shop-grid {
+    .market-grid {
       display: grid;
-      grid-template-columns: repeat(3,1fr);
+      grid-template-columns: repeat(auto-fill,minmax(180px,1fr));
       gap: 15px;
     }
 
@@ -777,248 +695,282 @@
 
     .shop-icon {
       font-size: 50px;
-      margin: 8px;
+      margin-bottom: 8px;
     }
 
     .shop-item h3 {
-      font-size: 16px;
-      margin-bottom: 6px;
+      font-size: 15px;
+      margin-bottom: 5px;
     }
 
     .shop-item p {
       color: var(--muted);
       font-size: 12px;
-      min-height: 34px;
+      margin-bottom: 12px;
     }
 
     .price {
-      color: #d38a00;
-      font-weight: 950;
-      margin: 10px;
+      font-weight: 900;
+      color: #d79a00;
+      margin-bottom: 10px;
     }
 
-    /* =========================================
-       PET
-    ========================================= */
+    /* =========================
+       COUNTDOWN
+    ========================= */
 
-    .pet-area {
+    .countdown {
       text-align: center;
-      padding: 25px;
-      border-radius: 25px;
-      background:
-        radial-gradient(circle at 50% 20%,#ffffff,#f1eeff);
     }
 
-    .pet {
-      font-size: 105px;
-      margin: 15px;
-      display: inline-block;
-      animation: petFloat 3s ease-in-out infinite;
-    }
-
-    @keyframes petFloat {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    .pet-name {
-      font-size: 22px;
+    .countdown-number {
+      font-size: 42px;
       font-weight: 950;
+      color: var(--primary);
+      margin: 10px 0;
     }
 
-    .pet-items {
-      margin-top: 10px;
-      color: var(--muted);
-    }
-
-    .pet-select {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 18px;
-    }
-
-    .pet-select button {
-      border: 1px solid var(--border);
-      background: var(--white);
-      padding: 10px;
-      border-radius: 12px;
-      font-size: 22px;
-    }
-
-    /* =========================================
+    /* =========================
        FOCUS
-    ========================================= */
+    ========================= */
+
+    .focus {
+      text-align: center;
+    }
 
     .timer {
       font-size: 75px;
       font-weight: 950;
-      text-align: center;
       margin: 25px 0;
-      color: var(--primary);
+      letter-spacing: 2px;
     }
 
-    .timer-buttons {
+    .focus-buttons {
       display: flex;
       justify-content: center;
       gap: 10px;
-      flex-wrap: wrap;
     }
 
-    /* =========================================
-       BADGES
-    ========================================= */
+    /* =========================
+       ACHIEVEMENTS
+    ========================= */
 
-    .badge-grid {
+    .badges {
       display: grid;
-      grid-template-columns: repeat(4,1fr);
-      gap: 14px;
+      grid-template-columns: repeat(auto-fill,minmax(140px,1fr));
+      gap: 12px;
     }
 
     .badge {
-      border: 1px solid var(--border);
-      border-radius: 17px;
-      padding: 18px 10px;
       text-align: center;
+      padding: 17px 10px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
       background: var(--white);
     }
 
     .badge.locked {
+      opacity: .4;
       filter: grayscale(1);
-      opacity: .45;
     }
 
     .badge-icon {
       font-size: 38px;
-      margin-bottom: 8px;
+      margin-bottom: 7px;
     }
 
     .badge small {
-      display: block;
       color: var(--muted);
-      margin-top: 5px;
     }
 
-    /* =========================================
-       EXAM
-    ========================================= */
+    /* =========================
+       MODAL
+    ========================= */
 
-    .exam-card {
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 20px;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 500px;
+      background: var(--white);
+      border-radius: 25px;
+      padding: 25px;
+      color: var(--text);
+      max-height: 90vh;
+      overflow: auto;
+    }
+
+    .modal-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 15px;
-      border: 1px solid var(--border);
-      padding: 17px;
-      border-radius: 16px;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
     }
 
-    .days {
+    .close-modal {
+      border: none;
+      background: transparent;
       font-size: 25px;
-      font-weight: 950;
-      color: var(--primary);
     }
 
-    /* =========================================
-       GRAPH
-    ========================================= */
+    /* =========================
+       TOAST
+    ========================= */
 
-    .bar-chart {
-      display: flex;
-      align-items: flex-end;
-      height: 220px;
-      gap: 10px;
-      padding-top: 20px;
-    }
-
-    .bar-wrap {
-      flex: 1;
-      height: 100%;
+    #toastContainer {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 20000;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 7px;
+      gap: 10px;
     }
 
-    .bar {
-      width: 100%;
-      max-width: 45px;
-      min-height: 5px;
-      border-radius: 8px 8px 3px 3px;
-      background: linear-gradient(var(--primary2),var(--primary));
-    }
-
-    .bar-wrap span {
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    /* =========================================
-       PROFILE
-    ========================================= */
-
-    .profile-big {
-      text-align: center;
-    }
-
-    .avatar-big {
-      width: 100px;
-      height: 100px;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      margin: auto;
-      background: #e7e4ff;
-      font-size: 55px;
-    }
-
-    .profile-big h2 {
-      margin: 12px 0 5px;
-    }
-
-    /* =========================================
-       EMPTY
-    ========================================= */
-
-    .empty {
-      text-align: center;
-      padding: 30px;
-      color: var(--muted);
-    }
-
-    /* =========================================
-       TOAST
-    ========================================= */
-
-    #toast {
-      position: fixed;
-      right: 25px;
-      bottom: 25px;
-      z-index: 99999;
+    .toast {
+      min-width: 260px;
       background: var(--dark);
       color: white;
-      padding: 15px 20px;
+      padding: 15px 18px;
       border-radius: 15px;
-      box-shadow: 0 15px 40px #0003;
-      transform: translateY(120px);
-      opacity: 0;
-      transition: .3s;
-      max-width: 350px;
+      box-shadow: 0 15px 35px #0003;
+      animation: toastIn .3s ease;
     }
 
-    #toast.show {
-      transform: translateY(0);
-      opacity: 1;
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    /* =========================================
-       MOBILE
-    ========================================= */
+    /* =========================
+       CELEBRATION
+    ========================= */
 
-    @media(max-width:800px) {
+    #celebration {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 30000;
+    }
+
+    .celebration-box {
+      background: white;
+      color: #171a2b;
+      padding: 35px;
+      border-radius: 28px;
+      text-align: center;
+      box-shadow: 0 30px 100px #0004;
+      animation: celebrate .7s ease;
+    }
+
+    .celebration-box h2 {
+      font-size: 30px;
+      color: #6658f5;
+      margin-bottom: 12px;
+    }
+
+    @keyframes celebrate {
+      0% { transform: scale(.5) rotate(-5deg); opacity: 0; }
+      70% { transform: scale(1.08) rotate(2deg); }
+      100% { transform: scale(1) rotate(0); opacity: 1; }
+    }
+
+    /* =========================
+       MOBILE MENU
+    ========================= */
+
+    .mobile-menu-button {
+      display: none;
+    }
+
+    .mobile-drawer {
+      display: none;
+    }
+
+    @media (max-width: 1100px) {
+      .sidebar {
+        width: 82px;
+      }
+
+      .logo {
+        font-size: 0;
+        text-align: center;
+        padding: 0;
+      }
+
+      .logo::before {
+        content: "DT";
+        font-size: 22px;
+      }
+
+      .logo span {
+        display: none;
+      }
+
+      .menu button {
+        font-size: 0;
+        text-align: center;
+      }
+
+      .menu button::first-letter {
+        font-size: 20px;
+      }
+
+      .logout button {
+        font-size: 0;
+      }
+
+      .logout button::before {
+        content: "🚪";
+        font-size: 20px;
+      }
+
+      .main {
+        margin-left: 82px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding-bottom: 15px;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .main {
+        margin-left: 0;
+        padding: 15px;
+      }
+
       .auth-wrapper {
         grid-template-columns: 1fr;
       }
@@ -1027,98 +979,117 @@
         display: none;
       }
 
-      .auth-panel {
-        padding: 30px;
+      .auth-box {
+        padding: 30px 22px;
       }
 
-      .sidebar {
-        width: 280px;
-        transform: translateX(-100%);
-        transition: .3s;
-      }
-
-      .sidebar.open {
-        transform: translateX(0);
-      }
-
-      .main {
-        margin-left: 0;
-        padding: 80px 15px 25px;
-      }
-
-      .mobile-header {
-        display: flex;
+      .mobile-menu-button {
+        display: grid;
+        place-items: center;
         position: fixed;
-        left: 0;
-        right: 0;
-        top: 0;
-        height: 65px;
-        background: var(--white);
-        border-bottom: 1px solid var(--border);
-        z-index: 900;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 15px;
-      }
-
-      .hamburger {
-        width: 44px;
-        height: 44px;
+        right: 15px;
+        top: 15px;
+        width: 48px;
+        height: 48px;
         border: none;
-        border-radius: 12px;
-        background: #f0efff;
-        font-size: 22px;
+        border-radius: 15px;
+        background: var(--dark);
+        color: white;
+        font-size: 23px;
+        z-index: 9998;
+        box-shadow: 0 10px 25px #0003;
       }
 
-      .mobile-title {
-        font-weight: 950;
-        font-size: 19px;
-      }
-
-      .mobile-overlay.open {
-        display: block;
+      .mobile-drawer {
         position: fixed;
-        inset: 0;
-        background: #0006;
-        z-index: 950;
+        display: block;
+        top: 0;
+        right: -290px;
+        width: 280px;
+        height: 100vh;
+        background: var(--dark);
+        color: white;
+        z-index: 9999;
+        padding: 25px 18px;
+        transition: right .25s ease;
+        box-shadow: -15px 0 40px #0003;
       }
 
-      .grid {
-        grid-template-columns: 1fr;
+      .mobile-drawer.open {
+        right: 0;
+      }
+
+      .mobile-drawer-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+      }
+
+      .mobile-drawer-head button {
+        border: none;
+        background: transparent;
+        color: white;
+        font-size: 25px;
+      }
+
+      .mobile-menu-item {
+        width: 100%;
+        border: none;
+        background: transparent;
+        color: #aeb4ca;
+        padding: 14px;
+        text-align: left;
+        border-radius: 12px;
+        margin-bottom: 6px;
+        font-weight: 800;
+      }
+
+      .mobile-menu-item.active {
+        background: #292d49;
+        color: white;
+      }
+
+      .topbar {
+        padding-right: 58px;
+      }
+
+      .profile {
+        display: none;
+      }
+
+      .hero {
+        padding: 22px;
       }
 
       .stats {
         grid-template-columns: 1fr;
       }
 
-      .shop-grid {
+      .add-task {
+        flex-direction: column;
+      }
+
+      .add-task button {
+        width: 100%;
+      }
+
+      .market-grid {
         grid-template-columns: repeat(2,1fr);
-      }
-
-      .badge-grid {
-        grid-template-columns: repeat(2,1fr);
-      }
-
-      .hero {
-        padding: 22px;
-      }
-    }
-
-    @media(max-width:480px) {
-      .auth-panel {
-        padding: 25px 20px;
-      }
-
-      .shop-grid {
-        grid-template-columns: 1fr 1fr;
       }
 
       .timer {
         font-size: 55px;
       }
+    }
 
-      .exam-card {
-        align-items: flex-start;
+    @media (max-width: 400px) {
+      .market-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .auth-box {
+        padding: 25px 16px;
       }
     }
   </style>
@@ -1126,9 +1097,9 @@
 
 <body>
 
-<!-- =========================================
+<!-- =========================
      LOGIN
-========================================= -->
+========================= -->
 
 <section id="authScreen">
 
@@ -1136,52 +1107,40 @@
 
     <div class="auth-showcase">
 
-      <div class="auth-logo">
-        Ders<span>Takip</span>
-      </div>
-
       <h1>
-        Ders çalışmayı<br>
-        <span>oyuna dönüştür.</span> 🎮
+        Ders çalışmak artık
+        <span>oyun gibi!</span> 🎮
       </h1>
 
       <p>
-        Görevlerini tamamla, XP kazan, seviyeni yükselt,
-        evcil hayvanını geliştir ve sınavlarına daha
-        düzenli hazırlan.
+        DersTakip ile görevlerini tamamla,
+        XP kazan, seviyeni yükselt, evcil hayvanını
+        geliştir ve sınavlarına hazırlan.
       </p>
 
-      <div class="feature-pills">
-        <span>🤖 Ders Koçu</span>
-        <span>🔥 Seri Sistemi</span>
-        <span>🏆 Rozetler</span>
-        <span>🐼 Evcil Hayvan</span>
-        <span>🛍️ Ödül Marketi</span>
-        <span>⏱️ Odaklanma</span>
+      <div class="auth-illustration">
+        🐼
       </div>
 
-      <div class="study-illustration">
-
-        <div class="cloud"></div>
-
-        <div class="floating-star star1">⭐</div>
-        <div class="floating-star star2">✨</div>
-
-        <div class="big-book"></div>
-
+      <div class="auth-features">
+        <div class="auth-feature">🤖 Ders Koçu</div>
+        <div class="auth-feature">🔥 Seri Sistemi</div>
+        <div class="auth-feature">⭐ XP & Seviye</div>
+        <div class="auth-feature">🐣 Evcil Hayvan</div>
+        <div class="auth-feature">🛒 Ödül Marketi</div>
+        <div class="auth-feature">🎯 Sınav Takibi</div>
       </div>
 
     </div>
 
-    <div class="auth-panel">
+    <div class="auth-box">
 
       <div class="auth-logo">
         Ders<span>Takip</span>
       </div>
 
-      <p class="auth-panel-title">
-        Başarı yolculuğuna devam etmek için
-        hesabına giriş yap.
+      <p class="auth-description">
+        Başarı yolculuğuna bugün başla 🚀
       </p>
 
       <div class="auth-tabs">
@@ -1202,6 +1161,8 @@
         </button>
 
       </div>
+
+      <!-- LOGIN -->
 
       <form
         id="loginForm"
@@ -1225,18 +1186,18 @@
 
           <label>Şifre</label>
 
-          <div class="input-wrap">
+          <div class="password-wrap">
 
             <input
               id="loginPassword"
               type="password"
               required
-              placeholder="Şifreni gir"
+              placeholder="Şifren"
             >
 
             <button
               type="button"
-              class="password-toggle"
+              class="show-password"
               onclick="togglePassword('loginPassword',this)"
             >
               👁️
@@ -1254,6 +1215,8 @@
         </button>
 
       </form>
+
+      <!-- REGISTER -->
 
       <form
         id="registerForm"
@@ -1291,7 +1254,7 @@
 
           <label>Şifre</label>
 
-          <div class="input-wrap">
+          <div class="password-wrap">
 
             <input
               id="registerPassword"
@@ -1303,7 +1266,7 @@
 
             <button
               type="button"
-              class="password-toggle"
+              class="show-password"
               onclick="togglePassword('registerPassword',this)"
             >
               👁️
@@ -1331,13 +1294,15 @@
 </section>
 
 
-<!-- =========================================
+<!-- =========================
      APP
-========================================= -->
+========================= -->
 
 <div id="app">
 
-  <aside class="sidebar" id="sidebar">
+  <!-- DESKTOP SIDEBAR -->
+
+  <aside class="sidebar">
 
     <div class="logo">
       Ders<span>Takip</span>
@@ -1345,125 +1310,509 @@
 
     <div class="menu">
 
-      <button
-        data-page="home"
-        class="active"
-        onclick="navigate('home')"
-      >
+      <button class="active" onclick="navigate('home',this)">
         🏠 Ana Sayfa
       </button>
 
-      <button
-        data-page="tasks"
-        onclick="navigate('tasks')"
-      >
+      <button onclick="navigate('tasks',this)">
         ✅ Görevler
       </button>
 
-      <button
-        data-page="subjects"
-        onclick="navigate('subjects')"
-      >
+      <button onclick="navigate('subjects',this)">
         📚 Dersler
       </button>
 
-      <button
-        data-page="exams"
-        onclick="navigate('exams')"
-      >
+      <button onclick="navigate('exams',this)">
         📅 Sınavlar
       </button>
 
-      <button
-        data-page="focus"
-        onclick="navigate('focus')"
-      >
+      <button onclick="navigate('focus',this)">
         ⏱️ Odaklan
       </button>
 
-      <button
-        data-page="pet"
-        onclick="navigate('pet')"
-      >
-        🐾 Evcil Hayvan
+      <button onclick="navigate('coach',this)">
+        🤖 Ders Koçu
       </button>
 
-      <button
-        data-page="shop"
-        onclick="navigate('shop')"
-      >
-        🛍️ Ödül Marketi
+      <button onclick="navigate('pet',this)">
+        🐣 Evcil Hayvan
       </button>
 
-      <button
-        data-page="badges"
-        onclick="navigate('badges')"
-      >
+      <button onclick="navigate('market',this)">
+        🛒 Market
+      </button>
+
+      <button onclick="navigate('achievements',this)">
         🏆 Rozetler
       </button>
 
-      <button
-        data-page="stats"
-        onclick="navigate('stats')"
-      >
+      <button onclick="navigate('stats',this)">
         📊 İstatistikler
       </button>
 
-      <button
-        data-page="profile"
-        onclick="navigate('profile')"
-      >
+      <button onclick="navigate('profile',this)">
         👤 Profil
       </button>
 
     </div>
 
     <div class="logout">
+
       <button onclick="logout()">
         🚪 Çıkış Yap
       </button>
+
     </div>
 
   </aside>
 
 
-  <div
-    class="mobile-overlay"
-    id="mobileOverlay"
-    onclick="closeMobileMenu()"
-  ></div>
+  <!-- MOBILE MENU BUTTON -->
+
+  <button
+    class="mobile-menu-button"
+    onclick="toggleMobileMenu()"
+  >
+    ☰
+  </button>
 
 
-  <header class="mobile-header">
+  <!-- MOBILE DRAWER -->
 
-    <button
-      class="hamburger"
-      onclick="toggleMobileMenu()"
-    >
-      ☰
+  <aside
+    id="mobileDrawer"
+    class="mobile-drawer"
+  >
+
+    <div class="mobile-drawer-head">
+
+      <strong>DersTakip 🚀</strong>
+
+      <button onclick="toggleMobileMenu()">
+        ✕
+      </button>
+
+    </div>
+
+    <button class="mobile-menu-item active" onclick="navigateMobile('home')">
+      🏠 Ana Sayfa
     </button>
 
-    <div class="mobile-title">
-      DersTakip
-    </div>
+    <button class="mobile-menu-item" onclick="navigateMobile('tasks')">
+      ✅ Görevler
+    </button>
 
-    <div id="mobileCoins">
-      🪙 0
-    </div>
+    <button class="mobile-menu-item" onclick="navigateMobile('subjects')">
+      📚 Dersler
+    </button>
 
-  </header>
+    <button class="mobile-menu-item" onclick="navigateMobile('exams')">
+      📅 Sınavlar
+    </button>
 
+    <button class="mobile-menu-item" onclick="navigateMobile('focus')">
+      ⏱️ Odaklan
+    </button>
+
+    <button class="mobile-menu-item" onclick="navigateMobile('coach')">
+      🤖 Ders Koçu
+    </button>
+
+    <button class="mobile-menu-item" onclick="navigateMobile('pet')">
+      🐣 Evcil Hayvan
+    </button>
+
+    <button class="mobile-menu-item" onclick="navigateMobile('market')">
+      🛒 Market
+    </button>
+
+    <button class="mobile-menu-item" onclick="navigateMobile('achievements')">
+      🏆 Rozetler
+    </button>
+
+    <button class="mobile-menu-item" onclick="navigateMobile('stats')">
+      📊 İstatistikler
+    </button>
+
+    <button class="mobile-menu-item" onclick="navigateMobile('profile')">
+      👤 Profil
+    </button>
+
+    <button
+      class="mobile-menu-item"
+      onclick="logout()"
+      style="margin-top:20px"
+    >
+      🚪 Çıkış Yap
+    </button>
+
+  </aside>
+
+
+  <!-- MAIN -->
 
   <main class="main">
 
-    <div id="pageContent"></div>
+    <div class="topbar">
+
+      <div class="welcome">
+
+        <h1 id="welcomeText">
+          Merhaba! 👋
+        </h1>
+
+        <p id="sectionSubtitle">
+          Bugün küçük bir adım, yarın büyük bir başarı.
+        </p>
+
+      </div>
+
+      <div
+        class="profile"
+        onclick="navigate('profile')"
+        style="cursor:pointer"
+      >
+
+        <div
+          class="avatar"
+          id="topAvatar"
+        >
+          🎓
+        </div>
+
+        <strong id="levelText">
+          Seviye 1
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <!-- HERO -->
+
+    <div
+      class="hero"
+      id="homeHero"
+    >
+
+      <h2>
+        Bugünkü hedefin 🎯
+      </h2>
+
+      <p id="taskSummary">
+        Görevlerini tamamlamaya başla.
+      </p>
+
+      <div class="progress">
+        <span id="progressBar"></span>
+      </div>
+
+      <div
+        class="xp"
+        id="xpText"
+      >
+        0 XP
+      </div>
+
+    </div>
+
+
+    <!-- CONTENT -->
+
+    <div class="grid">
+
+      <div id="mainContent">
+
+        <!-- COACH -->
+
+        <div class="card coach">
+
+          <div class="coach-head">
+
+            <div class="coach-icon">
+              🤖
+            </div>
+
+            <div>
+              <h2>Ders Koçu</h2>
+              <small style="color:var(--muted)">
+                Bugünün önerisi
+              </small>
+            </div>
+
+          </div>
+
+          <p
+            id="coachMessage"
+            class="coach-message"
+          >
+            Bugün güzel bir çalışma günü!
+          </p>
+
+        </div>
+
+
+        <!-- TASKS -->
+
+        <div
+          class="card"
+          id="tasksSection"
+        >
+
+          <div class="card-title">
+
+            <h2>
+              Bugünkü Görevler
+            </h2>
+
+            <span id="taskCounter">
+              0 / 0
+            </span>
+
+          </div>
+
+          <div id="taskList"></div>
+
+          <div class="add-task">
+
+            <input
+              id="newTask"
+              placeholder="Yeni görev ekle..."
+              maxlength="150"
+              onkeydown="if(event.key==='Enter') addTask()"
+            >
+
+            <button onclick="addTask()">
+              + Ekle
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- DYNAMIC -->
+
+        <div
+          class="card"
+          id="dynamicSection"
+          style="display:none;margin-top:20px"
+        ></div>
+
+
+        <!-- STATS -->
+
+        <div class="stats">
+
+          <div class="stat">
+
+            <span>⭐</span>
+
+            <strong id="statXP">
+              0
+            </strong>
+
+            <small>
+              Toplam XP
+            </small>
+
+          </div>
+
+          <div class="stat">
+
+            <span>🔥</span>
+
+            <strong id="statStreak">
+              0
+            </strong>
+
+            <small>
+              Günlük seri
+            </small>
+
+          </div>
+
+          <div class="stat">
+
+            <span>🪙</span>
+
+            <strong id="statCoins">
+              0
+            </strong>
+
+            <small>
+              Coin
+            </small>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- RIGHT COLUMN -->
+
+      <div>
+
+        <!-- PET -->
+
+        <div class="card pet-card">
+
+          <h2>
+            🐣 Evcil Hayvanın
+          </h2>
+
+          <div
+            class="pet-display"
+            id="petDisplay"
+          >
+            🐼
+          </div>
+
+          <div
+            class="pet-name"
+            id="petName"
+          >
+            Panda
+          </div>
+
+          <div
+            class="pet-level"
+            id="petLevel"
+          >
+            Seviye 1
+          </div>
+
+          <button
+            class="primary-btn"
+            style="margin-top:15px"
+            onclick="navigate('pet')"
+          >
+            Evcil Hayvanım
+          </button>
+
+        </div>
+
+
+        <!-- STREAK -->
+
+        <div
+          class="card"
+          style="margin-top:20px"
+        >
+
+          <h2>
+            🔥 Çalışma Serisi
+          </h2>
+
+          <div
+            class="info-number"
+            id="streakNumber"
+          >
+            0
+          </div>
+
+          <p style="color:var(--muted)">
+            Günlük serin
+          </p>
+
+        </div>
+
+
+        <!-- DAILY REWARD -->
+
+        <div
+          class="card"
+          style="margin-top:20px"
+        >
+
+          <h2>
+            🎁 Günlük Ödül
+          </h2>
+
+          <p
+            id="dailyRewardText"
+            style="color:var(--muted);margin:10px 0"
+          >
+            Günlük ödülünü kontrol et.
+          </p>
+
+          <button
+            id="dailyRewardButton"
+            class="primary-btn"
+            onclick="claimDailyReward()"
+          >
+            Ödülü Al 🎁
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
 
   </main>
 
 </div>
 
 
-<div id="toast"></div>
+<!-- MODAL -->
+
+<div
+  class="modal"
+  id="modal"
+  onclick="if(event.target===this)closeModal()"
+>
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <h2 id="modalTitle">
+        DersTakip
+      </h2>
+
+      <button
+        class="close-modal"
+        onclick="closeModal()"
+      >
+        ✕
+      </button>
+
+    </div>
+
+    <div id="modalContent"></div>
+
+  </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div id="toastContainer"></div>
+
+
+<!-- CELEBRATION -->
+
+<div id="celebration">
+
+  <div class="celebration-box">
+
+    <h2>
+      ✨ GÖREV TAMAMLANDI! ✨
+    </h2>
+
+    <p id="celebrationText">
+      ⭐ +50 XP
+    </p>
+
+  </div>
+
+</div>
+
 
 <script src="/app.js"></script>
 
