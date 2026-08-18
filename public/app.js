@@ -1077,3 +1077,83 @@ toastStyle.textContent = `
 document.head.appendChild(
     toastStyle
 );
+// =====================================
+// MOBİL NAVİGASYON
+// =====================================
+
+function setMobileNavActive(index) {
+    const buttons =
+        document.querySelectorAll(".mobile-nav-item");
+
+    buttons.forEach((button, i) => {
+        button.classList.toggle(
+            "active",
+            i === index
+        );
+    });
+}
+
+// ANA SAYFA
+function mobileHome() {
+    setMobileNavActive(0);
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+// DERSLER
+function mobileSubjects() {
+    setMobileNavActive(1);
+
+    showMobileToast(
+        "📚 Dersler bölümü yakında!"
+    );
+}
+
+// ODAKLAN
+function mobileFocus() {
+    setMobileNavActive(2);
+
+    showMobileToast(
+        "⏱️ Odaklan modu yakında!"
+    );
+}
+
+// PROFİL
+function mobileProfile() {
+    setMobileNavActive(3);
+
+    showMobileToast(
+        "👤 Profil bölümü yakında!"
+    );
+}
+
+// MOBİL TOAST
+function showMobileToast(message) {
+
+    const toast =
+        document.getElementById(
+            "mobileToast"
+        );
+
+    if (!toast) {
+        return;
+    }
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    clearTimeout(
+        window.mobileToastTimer
+    );
+
+    window.mobileToastTimer =
+        setTimeout(() => {
+            toast.classList.remove(
+                "show"
+            );
+        }, 2200);
+}
