@@ -1,60 +1,1117 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <meta name="theme-color" content="#6759f5">
-    <meta name="description" content="DersTakip - Derslerini, görevlerini ve hedeflerini takip et.">
+<meta charset="UTF-8">
 
-    <title>DersTakip 🚀</title>
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+>
 
-    <style>
-    /* =========================================
-   MOBİL UYGULAMA TASARIMI
-========================================= */
+<title>DersTakip 2.0</title>
 
-.mobile-nav {
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: #f5f7fb;
+    color: #171a2b;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* =====================================
+   AUTH
+===================================== */
+
+#authScreen {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6257ee,
+            #947aff
+        );
+}
+
+.auth-box {
+
+    width: 100%;
+    max-width: 430px;
+
+    background: white;
+
+    padding: 35px;
+
+    border-radius: 25px;
+
+    box-shadow:
+        0 25px 70px #0003;
+}
+
+.auth-logo {
+
+    text-align: center;
+
+    font-size: 32px;
+
+    font-weight: 900;
+
+    margin-bottom: 8px;
+}
+
+.auth-logo span {
+    color: #6b60ef;
+}
+
+.auth-description {
+
+    text-align: center;
+
+    color: #7c8499;
+
+    margin-bottom: 25px;
+}
+
+.auth-tabs {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    background: #f1f2f7;
+
+    padding: 5px;
+
+    border-radius: 12px;
+
+    margin-bottom: 20px;
+}
+
+.auth-tabs button {
+
+    border: none;
+
+    padding: 11px;
+
+    background:
+        transparent;
+
+    border-radius: 9px;
+
+    font-weight: 700;
+}
+
+.auth-tabs button.active {
+
+    background: white;
+
+    box-shadow:
+        0 3px 10px #0002;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+
+    display: block;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    margin-bottom: 7px;
+}
+
+.form-group input {
+
+    width: 100%;
+
+    padding: 13px;
+
+    border:
+        1px solid #dfe3ec;
+
+    border-radius: 11px;
+
+    outline: none;
+}
+
+.auth-button {
+
+    width: 100%;
+
+    border: none;
+
+    background: #6b60ef;
+
+    color: white;
+
+    padding: 14px;
+
+    border-radius: 12px;
+
+    font-weight: 800;
+}
+
+#authMessage {
+
+    margin-top: 15px;
+
+    text-align: center;
+
+    font-size: 13px;
+
+    min-height: 18px;
+}
+
+/* =====================================
+   APP
+===================================== */
+
+#app {
     display: none;
 }
 
-/* TELEFON */
-@media (max-width: 600px) {
+.sidebar {
+
+    position: fixed;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 250px;
+
+    background: #15182b;
+
+    color: white;
+
+    padding: 25px 18px;
+}
+
+.logo {
+
+    font-size: 25px;
+
+    font-weight: 900;
+
+    margin-bottom: 35px;
+
+    padding-left: 10px;
+}
+
+.logo span {
+    color: #8176ff;
+}
+
+.menu button {
+
+    width: 100%;
+
+    border: none;
+
+    background:
+        transparent;
+
+    color: #aeb4ca;
+
+    padding: 14px;
+
+    border-radius: 12px;
+
+    margin-bottom: 7px;
+
+    text-align: left;
+
+    font-weight: 700;
+}
+
+.menu button:hover,
+.menu button.active {
+
+    background: #292d49;
+
+    color: white;
+}
+
+.logout {
+
+    position: absolute;
+
+    bottom: 25px;
+
+    left: 18px;
+    right: 18px;
+}
+
+.logout button {
+
+    width: 100%;
+
+    border: none;
+
+    background: #292d49;
+
+    color: white;
+
+    padding: 12px;
+
+    border-radius: 12px;
+}
+
+.main {
+
+    margin-left: 250px;
+
+    padding: 30px;
+}
+
+.topbar {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+}
+
+.welcome h1 {
+
+    font-size: 30px;
+
+    margin-bottom: 6px;
+}
+
+.welcome p {
+    color: #747c92;
+}
+
+.profile {
+
+    background: white;
+
+    padding: 9px 14px;
+
+    border-radius: 14px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    box-shadow:
+        0 8px 25px #0001;
+}
+
+.avatar {
+
+    width: 40px;
+    height: 40px;
+
+    border-radius: 50%;
+
+    background: #e7e4ff;
+
+    display: grid;
+
+    place-items: center;
+}
+
+.hero {
+
+    background:
+        linear-gradient(
+            135deg,
+            #6357ef,
+            #9275ff
+        );
+
+    color: white;
+
+    border-radius: 24px;
+
+    padding: 28px;
+
+    margin-bottom: 20px;
+}
+
+.hero h2 {
+    margin-bottom: 8px;
+}
+
+.hero p {
+
+    opacity: .9;
+
+    margin-bottom: 20px;
+}
+
+.progress {
+
+    height: 10px;
+
+    background:
+        #ffffff30;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+.progress span {
+
+    display: block;
+
+    height: 100%;
+
+    background: white;
+
+    width: 0%;
+
+    transition:
+        width .4s ease;
+}
+
+.xp {
+
+    font-size: 13px;
+
+    margin-top: 8px;
+}
+
+.grid {
+
+    display: grid;
+
+    grid-template-columns:
+        2fr 1fr;
+
+    gap: 20px;
+}
+
+.card {
+
+    background: white;
+
+    border-radius: 22px;
+
+    padding: 22px;
+
+    box-shadow:
+        0 8px 30px #0001;
+
+    border:
+        1px solid #e9ecf4;
+}
+
+.card-title {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    margin-bottom: 15px;
+}
+
+.task {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 15px 0;
+
+    border-bottom:
+        1px solid #edf0f5;
+}
+
+.checkbox {
+
+    width: 27px;
+    height: 27px;
+
+    border:
+        2px solid #d8dce8;
+
+    border-radius: 7px;
+
+    display: grid;
+
+    place-items: center;
+
+    flex-shrink: 0;
+
+    cursor: pointer;
+}
+
+.task.completed .checkbox {
+
+    background: #20c997;
+
+    border-color: #20c997;
+
+    color: white;
+}
+
+.task.completed .task-name {
+
+    text-decoration:
+        line-through;
+
+    color: #9aa1b2;
+}
+
+.task-name {
+    font-weight: 750;
+}
+
+.task-subject {
+
+    color: #8991a5;
+
+    font-size: 12px;
+
+    margin-top: 4px;
+}
+
+.task-xp {
+
+    margin-left: auto;
+
+    background: #f0efff;
+
+    color: #6257df;
+
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+.delete-task {
+
+    border: none;
+
+    background:
+        transparent;
+
+    font-size: 16px;
+
+    padding: 5px;
+}
+
+.add-task {
+
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: 15px;
+}
+
+.add-task input {
+
+    flex: 1;
+
+    border:
+        1px solid #e0e4ed;
+
+    padding: 12px;
+
+    border-radius: 11px;
+
+    outline: none;
+}
+
+.add-task button {
+
+    border: none;
+
+    background: #6c63ff;
+
+    color: white;
+
+    padding:
+        12px 17px;
+
+    border-radius: 11px;
+
+    font-weight: 800;
+}
+
+.stats {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+
+    margin: 20px 0;
+}
+
+.stat {
+
+    background: white;
+
+    padding: 20px;
+
+    border-radius: 18px;
+
+    border:
+        1px solid #e9ecf4;
+}
+
+.stat strong {
+
+    display: block;
+
+    font-size: 25px;
+
+    margin: 8px 0;
+}
+
+.stat small {
+    color: #7d8599;
+}
+
+.info {
+    margin-bottom: 20px;
+}
+
+.info-number {
+
+    font-size: 40px;
+
+    font-weight: 900;
+
+    margin-top: 10px;
+}
+
+/* =====================================
+   ÖZEL EKRANLAR
+===================================== */
+
+.extra-screen {
+    display: none;
+}
+
+.extra-screen.active {
+    display: block;
+}
+
+.screen-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 20px;
+}
+
+.screen-header h1 {
+
+    font-size: 27px;
+
+    margin-bottom: 4px;
+}
+
+.screen-header p {
+
+    color: #7d8599;
+
+    font-size: 13px;
+}
+
+.back-button {
+
+    border: none;
+
+    width: 43px;
+    height: 43px;
+
+    border-radius: 13px;
+
+    background: white;
+
+    box-shadow:
+        0 5px 20px #0001;
+
+    font-size: 22px;
+}
+
+/* =====================================
+   SUBJECT
+===================================== */
+
+.subject-add {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 15px;
+}
+
+.subject-add input {
+
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 13px;
+
+    border:
+        1px solid #e0e4ed;
+
+    border-radius: 11px;
+
+    outline: none;
+}
+
+.subject-add button {
+
+    border: none;
+
+    background: #6c63ff;
+
+    color: white;
+
+    padding: 12px 17px;
+
+    border-radius: 11px;
+
+    font-weight: 800;
+}
+
+.subject-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 15px 0;
+
+    border-bottom:
+        1px solid #edf0f5;
+}
+
+.subject-icon {
+
+    width: 44px;
+    height: 44px;
+
+    border-radius: 14px;
+
+    background: #eeecff;
+
+    display: grid;
+
+    place-items: center;
+
+    font-size: 21px;
+}
+
+.subject-name {
+
+    font-weight: 800;
+
+    flex: 1;
+}
+
+.subject-delete {
+
+    border: none;
+
+    background:
+        transparent;
+
+    font-size: 17px;
+}
+
+/* =====================================
+   FOCUS
+===================================== */
+
+.focus-card {
+
+    background:
+        linear-gradient(
+            135deg,
+            #6257ee,
+            #9275ff
+        );
+
+    color: white;
+
+    border-radius: 25px;
+
+    padding: 35px 20px;
+
+    text-align: center;
+
+    box-shadow:
+        0 15px 40px #6257ee44;
+}
+
+.focus-title {
+
+    font-size: 18px;
+
+    font-weight: 800;
+}
+
+#focusTimer {
+
+    font-size: 70px;
+
+    font-weight: 900;
+
+    margin: 25px 0 8px;
+}
+
+.focus-status {
+
+    opacity: .9;
+
+    margin-bottom: 25px;
+}
+
+.focus-buttons {
+
+    display: flex;
+
+    gap: 8px;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+}
+
+.focus-buttons button {
+
+    border: none;
+
+    padding: 12px 16px;
+
+    border-radius: 12px;
+
+    background: white;
+
+    color: #6257ee;
+
+    font-weight: 800;
+}
+
+.focus-xp {
+
+    margin-top: 25px;
+
+    font-size: 13px;
+
+    opacity: .9;
+}
+
+/* =====================================
+   PROFILE
+===================================== */
+
+.profile-big-card {
+
+    background: white;
+
+    border-radius: 22px;
+
+    padding: 28px;
+
+    text-align: center;
+
+    box-shadow:
+        0 8px 30px #0001;
+
+    margin-bottom: 15px;
+}
+
+.profile-big-avatar {
+
+    width: 80px;
+    height: 80px;
+
+    margin: auto;
+
+    border-radius: 50%;
+
+    background: #e9e6ff;
+
+    display: grid;
+
+    place-items: center;
+
+    font-size: 38px;
+
+    margin-bottom: 12px;
+}
+
+.profile-big-card h2 {
+    margin-bottom: 5px;
+}
+
+.profile-big-card p {
+    color: #7d8599;
+}
+
+.profile-stats {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 10px;
+
+    margin-bottom: 15px;
+}
+
+.profile-stat {
+
+    background: white;
+
+    border-radius: 17px;
+
+    padding: 16px 8px;
+
+    text-align: center;
+}
+
+.profile-stat span {
+    display: block;
+}
+
+.profile-stat strong {
+
+    display: block;
+
+    font-size: 21px;
+
+    margin: 4px;
+}
+
+.profile-stat small {
+    color: #7d8599;
+}
+
+.profile-row {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    gap: 20px;
+
+    padding: 15px 0;
+
+    border-bottom:
+        1px solid #edf0f5;
+}
+
+.profile-row span {
+    color: #7d8599;
+}
+
+.profile-row b {
+    text-align: right;
+    word-break: break-word;
+}
+
+.profile-logout {
+
+    width: 100%;
+
+    border: none;
+
+    background: #15182b;
+
+    color: white;
+
+    padding: 14px;
+
+    border-radius: 14px;
+
+    font-weight: 800;
+}
+
+/* =====================================
+   MOBILE NAV
+===================================== */
+
+.mobile-nav {
+
+    display: none;
+}
+
+/* =====================================
+   TOAST
+===================================== */
+
+.mobile-toast {
+
+    position: fixed;
+
+    left: 50%;
+
+    bottom: 92px;
+
+    transform:
+        translateX(-50%)
+        translateY(20px);
+
+    background: #15182b;
+
+    color: white;
+
+    padding: 12px 18px;
+
+    border-radius: 14px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: .25s;
+
+    z-index: 10000;
+
+    white-space: nowrap;
+
+    box-shadow:
+        0 10px 30px #0003;
+}
+
+.mobile-toast.show {
+
+    opacity: 1;
+
+    transform:
+        translateX(-50%)
+        translateY(0);
+}
+
+/* =====================================
+   RESPONSIVE
+===================================== */
+
+@media(max-width:900px) {
+
+    .sidebar {
+        width: 75px;
+    }
+
+    .logo {
+
+        font-size: 0;
+
+        text-align: center;
+    }
+
+    .logo::before {
+
+        content: "DT";
+
+        font-size: 22px;
+    }
+
+    .logo span {
+        display: none;
+    }
+
+    .menu button {
+
+        font-size: 0;
+
+        text-align: center;
+    }
+
+    .main {
+        margin-left: 75px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width:600px) {
 
     body {
-        background: #f5f7fb;
+
         padding-bottom: 85px;
+
         overflow-x: hidden;
     }
 
-    #authScreen {
-        min-height: 100vh;
-        padding: 15px;
-    }
-
-    .auth-box {
-        padding: 25px 20px;
-        border-radius: 22px;
-    }
-
-    .auth-logo {
-        font-size: 28px;
-    }
-
-    /* Sidebar gizle */
     .sidebar {
         display: none !important;
     }
 
-    /* Ana içerik */
     .main {
-        margin-left: 0 !important;
-        padding: 16px;
-        width: 100%;
-    }
 
-    .topbar {
-        margin-bottom: 18px;
+        margin-left: 0 !important;
+
+        padding: 16px;
+
+        width: 100%;
     }
 
     .welcome h1 {
@@ -63,13 +1120,17 @@
 
     .welcome p {
         font-size: 13px;
-        line-height: 1.4;
     }
 
     .profile {
-        display: flex !important;
+
+        display: flex;
+
         padding: 6px;
-        background: transparent;
+
+        background:
+            transparent;
+
         box-shadow: none;
     }
 
@@ -77,15 +1138,12 @@
         display: none;
     }
 
-    .avatar {
-        width: 42px;
-        height: 42px;
-    }
-
-    /* Hero */
     .hero {
+
         border-radius: 20px;
+
         padding: 21px;
+
         margin-bottom: 15px;
     }
 
@@ -95,146 +1153,121 @@
 
     .hero p {
         font-size: 13px;
-        line-height: 1.5;
     }
 
-    .progress {
-        height: 9px;
-    }
-
-    /* Grid */
     .grid {
-        display: block !important;
+        display: block;
     }
 
     .card {
+
         border-radius: 18px;
+
         padding: 17px;
+
         margin-bottom: 15px;
     }
 
-    .card-title h2 {
-        font-size: 18px;
-    }
-
-    /* Görev */
-    .task {
-        padding: 14px 0;
-        gap: 10px;
-    }
-
-    .task-name {
-        font-size: 14px;
-    }
-
-    .task-subject {
-        font-size: 11px;
-    }
-
-    .task-xp {
-        padding: 5px 7px;
-        font-size: 10px;
-    }
-
-    .delete-task {
-        font-size: 15px;
-    }
-
-    .checkbox {
-        width: 25px;
-        height: 25px;
-    }
-
-    /* Görev ekleme */
-    .add-task {
-        gap: 7px;
-    }
-
-    .add-task input {
-        min-width: 0;
-        font-size: 13px;
-    }
-
-    .add-task button {
-        padding: 11px 13px;
-        white-space: nowrap;
-    }
-
-    /* İstatistik */
     .stats {
-        display: grid !important;
-        grid-template-columns: repeat(3, 1fr) !important;
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
         gap: 8px;
-        margin: 15px 0;
     }
 
     .stat {
+
         padding: 13px 8px;
-        border-radius: 15px;
+
         text-align: center;
     }
 
     .stat strong {
         font-size: 20px;
-        margin: 5px 0;
     }
 
     .stat small {
         font-size: 9px;
     }
 
-    /* Sağ taraf kartları */
-    .info-number {
-        font-size: 34px;
-    }
-
-    /* =====================================
-       ALT NAVİGASYON
-    ===================================== */
-
     .mobile-nav {
+
         position: fixed;
+
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+
+        grid-template-columns:
+            repeat(4, 1fr);
+
         left: 10px;
         right: 10px;
         bottom: 10px;
+
         height: 68px;
-        background: rgba(255,255,255,.96);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        border: 1px solid #e8eaf2;
+
+        background:
+            rgba(255,255,255,.96);
+
+        backdrop-filter:
+            blur(15px);
+
+        -webkit-backdrop-filter:
+            blur(15px);
+
+        border:
+            1px solid #e8eaf2;
+
         border-radius: 21px;
-        box-shadow: 0 10px 35px rgba(0,0,0,.13);
+
+        box-shadow:
+            0 10px 35px #0002;
+
         z-index: 9999;
+
         padding: 5px;
     }
 
     .mobile-nav-item {
+
         border: none;
-        background: transparent;
+
+        background:
+            transparent;
+
         border-radius: 16px;
+
         color: #858ba0;
+
         display: flex;
+
         flex-direction: column;
+
         align-items: center;
+
         justify-content: center;
+
         gap: 3px;
-        transition: .2s;
     }
 
     .mobile-nav-item span {
+
         font-size: 21px;
+
         line-height: 22px;
     }
 
     .mobile-nav-item small {
+
         font-size: 9px;
+
         font-weight: 800;
     }
 
     .mobile-nav-item.active {
+
         background: #efedff;
+
         color: #6257ef;
     }
 
@@ -242,1030 +1275,32 @@
         transform: scale(.92);
     }
 
-    .focus-button span {
-        font-size: 23px;
+    #focusTimer {
+        font-size: 58px;
     }
 
-    /* Toast */
-    .mobile-toast {
-        position: fixed;
-        left: 50%;
-        bottom: 92px;
-        transform: translateX(-50%) translateY(20px);
-        background: #15182b;
-        color: white;
-        padding: 12px 18px;
-        border-radius: 14px;
-        font-size: 13px;
-        font-weight: 700;
-        opacity: 0;
-        pointer-events: none;
-        transition: .25s;
-        z-index: 10000;
-        white-space: nowrap;
-        box-shadow: 0 10px 30px rgba(0,0,0,.2);
+    .subject-add {
+        flex-direction: column;
     }
 
-    .mobile-toast.show {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
+    .subject-add button {
+        width: 100%;
+    }
+
+    .profile-stats {
+        gap: 7px;
     }
 }
 
-/* TABLET */
-@media (min-width: 601px) and (max-width: 900px) {
-    .mobile-nav {
-        display: none;
-    }
-}
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+</style>
 
-        :root {
-            --primary: #6759f5;
-            --primary2: #8b7cff;
-            --dark: #15182b;
-            --text: #171a2b;
-            --muted: #858ca0;
-            --bg: #f5f6fb;
-            --card: #ffffff;
-            --border: #e9ebf3;
-            --green: #20c997;
-            --orange: #ffad33;
-            --red: #ff5c6c;
-        }
-
-        html,
-        body {
-            width: 100%;
-            min-height: 100%;
-        }
-
-        body {
-            font-family:
-                Inter,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Arial,
-                sans-serif;
-
-            background: var(--bg);
-            color: var(--text);
-            -webkit-font-smoothing: antialiased;
-        }
-
-        button,
-        input {
-            font: inherit;
-        }
-
-        button {
-            cursor: pointer;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* =========================
-           AUTH
-        ========================= */
-
-        #authScreen {
-            min-height: 100vh;
-            min-height: 100dvh;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            padding: 20px;
-
-            background:
-                radial-gradient(
-                    circle at 20% 10%,
-                    #aaa1ff 0,
-                    transparent 30%
-                ),
-                linear-gradient(
-                    135deg,
-                    #5f54e9,
-                    #927bff
-                );
-        }
-
-        .auth-box {
-            width: 100%;
-            max-width: 430px;
-
-            background: rgba(255,255,255,.97);
-
-            padding: 35px;
-
-            border-radius: 28px;
-
-            box-shadow:
-                0 30px 80px rgba(0,0,0,.25);
-        }
-
-        .auth-logo {
-            text-align: center;
-            font-size: 34px;
-            font-weight: 900;
-            letter-spacing: -1.5px;
-        }
-
-        .auth-logo span {
-            color: var(--primary);
-        }
-
-        .auth-description {
-            text-align: center;
-            color: var(--muted);
-            margin: 8px 0 25px;
-            font-size: 14px;
-        }
-
-        .auth-tabs {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-
-            background: #f0f1f6;
-            padding: 5px;
-
-            border-radius: 13px;
-            margin-bottom: 20px;
-        }
-
-        .auth-tabs button {
-            border: none;
-            padding: 12px;
-
-            background: transparent;
-            border-radius: 9px;
-
-            font-weight: 800;
-            color: #777d91;
-        }
-
-        .auth-tabs button.active {
-            background: white;
-            color: var(--text);
-
-            box-shadow:
-                0 4px 12px rgba(0,0,0,.08);
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-
-            font-size: 13px;
-            font-weight: 800;
-
-            margin-bottom: 7px;
-        }
-
-        .form-group input {
-            width: 100%;
-
-            padding: 14px;
-
-            border: 1px solid #dfe2eb;
-            border-radius: 12px;
-
-            outline: none;
-
-            transition: .2s;
-        }
-
-        .form-group input:focus {
-            border-color: var(--primary);
-
-            box-shadow:
-                0 0 0 4px rgba(103,89,245,.1);
-        }
-
-        .auth-button {
-            width: 100%;
-
-            border: none;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--primary),
-                    var(--primary2)
-                );
-
-            color: white;
-
-            padding: 15px;
-
-            border-radius: 13px;
-
-            font-weight: 900;
-
-            box-shadow:
-                0 10px 25px rgba(103,89,245,.25);
-        }
-
-        #authMessage {
-            margin-top: 15px;
-            text-align: center;
-
-            font-size: 13px;
-
-            min-height: 18px;
-        }
-
-        /* =========================
-           APP
-        ========================= */
-
-        #app {
-            display: none;
-            min-height: 100vh;
-        }
-
-        /* =========================
-           SIDEBAR
-        ========================= */
-
-        .sidebar {
-            position: fixed;
-
-            left: 0;
-            top: 0;
-            bottom: 0;
-
-            width: 250px;
-
-            background: var(--dark);
-            color: white;
-
-            padding: 25px 18px;
-
-            z-index: 100;
-        }
-
-        .logo {
-            font-size: 25px;
-            font-weight: 900;
-
-            margin-bottom: 35px;
-            padding-left: 10px;
-        }
-
-        .logo span {
-            color: #8176ff;
-        }
-
-        .menu button {
-            width: 100%;
-
-            border: none;
-            background: transparent;
-
-            color: #aeb4ca;
-
-            padding: 14px;
-
-            border-radius: 12px;
-
-            margin-bottom: 7px;
-
-            text-align: left;
-
-            font-weight: 700;
-
-            transition: .2s;
-        }
-
-        .menu button:hover,
-        .menu button.active {
-            background: #292d49;
-            color: white;
-        }
-
-        .logout {
-            position: absolute;
-
-            bottom: 25px;
-
-            left: 18px;
-            right: 18px;
-        }
-
-        .logout button {
-            width: 100%;
-
-            border: none;
-
-            background: #292d49;
-            color: white;
-
-            padding: 12px;
-
-            border-radius: 12px;
-        }
-
-        /* =========================
-           MAIN
-        ========================= */
-
-        .main {
-            margin-left: 250px;
-
-            padding: 30px;
-
-            max-width: 1500px;
-        }
-
-        .topbar {
-            display: flex;
-
-            justify-content: space-between;
-            align-items: center;
-
-            margin-bottom: 25px;
-        }
-
-        .welcome h1 {
-            font-size: 30px;
-            margin-bottom: 6px;
-        }
-
-        .welcome p {
-            color: var(--muted);
-        }
-
-        .profile {
-            background: white;
-
-            padding: 9px 14px;
-
-            border-radius: 14px;
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
-            box-shadow:
-                0 8px 25px rgba(0,0,0,.06);
-        }
-
-        .avatar {
-            width: 40px;
-            height: 40px;
-
-            border-radius: 50%;
-
-            background: #e7e4ff;
-
-            display: grid;
-            place-items: center;
-        }
-
-        /* =========================
-           HERO
-        ========================= */
-
-        .hero {
-            background:
-                linear-gradient(
-                    135deg,
-                    #6357ef,
-                    #9275ff
-                );
-
-            color: white;
-
-            border-radius: 25px;
-
-            padding: 28px;
-
-            margin-bottom: 20px;
-
-            box-shadow:
-                0 15px 35px rgba(103,89,245,.2);
-        }
-
-        .hero h2 {
-            margin-bottom: 8px;
-        }
-
-        .hero p {
-            opacity: .9;
-            margin-bottom: 20px;
-        }
-
-        .progress {
-            height: 11px;
-
-            background: rgba(255,255,255,.22);
-
-            border-radius: 20px;
-
-            overflow: hidden;
-        }
-
-        .progress span {
-            display: block;
-
-            height: 100%;
-
-            background: white;
-
-            width: 0%;
-
-            transition:
-                width .5s ease;
-        }
-
-        .xp {
-            font-size: 13px;
-
-            margin-top: 9px;
-
-            font-weight: 700;
-        }
-
-        /* =========================
-           GRID
-        ========================= */
-
-        .grid {
-            display: grid;
-
-            grid-template-columns:
-                minmax(0, 2fr)
-                minmax(280px, 1fr);
-
-            gap: 20px;
-        }
-
-        .card {
-            background: white;
-
-            border-radius: 22px;
-
-            padding: 22px;
-
-            box-shadow:
-                0 8px 30px rgba(0,0,0,.05);
-
-            border:
-                1px solid var(--border);
-        }
-
-        .card-title {
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            margin-bottom: 15px;
-        }
-
-        /* =========================
-           TASK
-        ========================= */
-
-        .task {
-            display: flex;
-
-            align-items: center;
-
-            gap: 13px;
-
-            padding: 15px 0;
-
-            border-bottom:
-                1px solid #edf0f5;
-        }
-
-        .checkbox {
-            width: 28px;
-            height: 28px;
-
-            border:
-                2px solid #d8dce8;
-
-            border-radius: 8px;
-
-            display: grid;
-            place-items: center;
-
-            flex-shrink: 0;
-
-            cursor: pointer;
-
-            transition: .2s;
-        }
-
-        .task.completed .checkbox {
-            background: var(--green);
-
-            border-color: var(--green);
-
-            color: white;
-        }
-
-        .task.completed .task-name {
-            text-decoration: line-through;
-
-            color: #9aa1b2;
-        }
-
-        .task-name {
-            font-weight: 750;
-
-            word-break: break-word;
-        }
-
-        .task-subject {
-            color: #8991a5;
-
-            font-size: 12px;
-
-            margin-top: 4px;
-        }
-
-        .task-xp {
-            margin-left: auto;
-
-            background: #f0efff;
-
-            color: #6257df;
-
-            padding: 6px 10px;
-
-            border-radius: 20px;
-
-            font-size: 11px;
-
-            font-weight: 800;
-
-            white-space: nowrap;
-        }
-
-        .delete-task {
-            border: none;
-
-            background: transparent;
-
-            font-size: 16px;
-
-            padding: 6px;
-        }
-
-        /* =========================
-           ADD TASK
-        ========================= */
-
-        .add-task {
-            display: flex;
-
-            gap: 8px;
-
-            margin-top: 15px;
-        }
-
-        .add-task input {
-            flex: 1;
-
-            min-width: 0;
-
-            border:
-                1px solid #e0e4ed;
-
-            padding: 13px;
-
-            border-radius: 12px;
-
-            outline: none;
-        }
-
-        .add-task input:focus {
-            border-color: var(--primary);
-        }
-
-        .add-task button {
-            border: none;
-
-            background: var(--primary);
-
-            color: white;
-
-            padding: 12px 17px;
-
-            border-radius: 11px;
-
-            font-weight: 900;
-        }
-
-        /* =========================
-           STATS
-        ========================= */
-
-        .stats {
-            display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
-            gap: 15px;
-
-            margin: 20px 0;
-        }
-
-        .stat {
-            background: white;
-
-            padding: 20px;
-
-            border-radius: 18px;
-
-            border:
-                1px solid var(--border);
-        }
-
-        .stat strong {
-            display: block;
-
-            font-size: 25px;
-
-            margin: 8px 0;
-        }
-
-        .stat small {
-            color: #7d8599;
-        }
-
-        .info {
-            margin-bottom: 20px;
-        }
-
-        .info-number {
-            font-size: 40px;
-
-            font-weight: 900;
-
-            margin-top: 10px;
-        }
-
-        /* =========================
-           MOBILE BOTTOM NAV
-        ========================= */
-
-        .mobile-nav {
-            display: none;
-        }
-
-        /* =========================
-           TABLET
-        ========================= */
-
-        @media(max-width:900px) {
-
-            .sidebar {
-                width: 75px;
-            }
-
-            .logo {
-                font-size: 0;
-                text-align: center;
-            }
-
-            .logo::before {
-                content: "DT";
-                font-size: 22px;
-            }
-
-            .logo span {
-                display: none;
-            }
-
-            .menu button {
-                font-size: 0;
-                text-align: center;
-            }
-
-            .main {
-                margin-left: 75px;
-            }
-
-            .grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* =========================
-           PHONE
-        ========================= */
-
-        @media(max-width:600px) {
-
-            body {
-                background: #f5f6fb;
-                padding-bottom: 80px;
-            }
-
-            /* Hide desktop sidebar */
-
-            .sidebar {
-                display: none;
-            }
-
-            .main {
-                margin-left: 0;
-
-                padding:
-                    16px
-                    16px
-                    100px;
-            }
-
-            /* Top */
-
-            .topbar {
-                margin-bottom: 18px;
-
-                align-items: center;
-            }
-
-            .welcome h1 {
-                font-size: 24px;
-
-                letter-spacing: -.5px;
-            }
-
-            .welcome p {
-                font-size: 12px;
-
-                margin-top: 4px;
-            }
-
-            .profile {
-                display: flex;
-
-                padding: 6px;
-            }
-
-            .profile strong {
-                display: none;
-            }
-
-            .avatar {
-                width: 42px;
-                height: 42px;
-            }
-
-            /* Hero */
-
-            .hero {
-                border-radius: 22px;
-
-                padding: 21px;
-
-                margin-bottom: 16px;
-            }
-
-            .hero h2 {
-                font-size: 19px;
-            }
-
-            .hero p {
-                font-size: 13px;
-
-                line-height: 1.5;
-
-                margin-bottom: 16px;
-            }
-
-            .progress {
-                height: 9px;
-            }
-
-            /* Main cards */
-
-            .grid {
-                display: block;
-            }
-
-            .card {
-                border-radius: 20px;
-
-                padding: 18px;
-
-                margin-bottom: 15px;
-            }
-
-            .card-title h2 {
-                font-size: 18px;
-            }
-
-            /* Tasks */
-
-            .task {
-                padding: 14px 0;
-
-                gap: 10px;
-            }
-
-            .checkbox {
-                width: 30px;
-                height: 30px;
-            }
-
-            .task-name {
-                font-size: 14px;
-            }
-
-            .task-subject {
-                font-size: 11px;
-            }
-
-            .task-xp {
-                font-size: 10px;
-
-                padding: 5px 7px;
-            }
-
-            .delete-task {
-                font-size: 14px;
-            }
-
-            /* Add task */
-
-            .add-task {
-                margin-top: 13px;
-            }
-
-            .add-task input {
-                padding: 13px;
-
-                font-size: 14px;
-            }
-
-            .add-task button {
-                padding:
-                    12px 14px;
-            }
-
-            /* Stats */
-
-            .stats {
-                grid-template-columns:
-                    repeat(3, 1fr);
-
-                gap: 8px;
-
-                margin: 15px 0;
-            }
-
-            .stat {
-                padding: 14px 9px;
-
-                text-align: center;
-
-                border-radius: 16px;
-            }
-
-            .stat span {
-                font-size: 18px;
-            }
-
-            .stat strong {
-                font-size: 20px;
-
-                margin: 5px 0;
-            }
-
-            .stat small {
-                font-size: 9px;
-            }
-
-            /* Info */
-
-            .info-number {
-                font-size: 36px;
-            }
-
-            /* Bottom navigation */
-
-            .mobile-nav {
-                position: fixed;
-
-                display: grid;
-
-                grid-template-columns:
-                    repeat(5, 1fr);
-
-                left: 10px;
-                right: 10px;
-                bottom: 10px;
-
-                height: 68px;
-
-                background:
-                    rgba(255,255,255,.96);
-
-                backdrop-filter:
-                    blur(15px);
-
-                -webkit-backdrop-filter:
-                    blur(15px);
-
-                border:
-                    1px solid rgba(0,0,0,.06);
-
-                border-radius: 21px;
-
-                box-shadow:
-                    0 12px 35px rgba(0,0,0,.14);
-
-                z-index: 999;
-            }
-
-            .mobile-nav button {
-                border: none;
-
-                background: transparent;
-
-                color: #858ca0;
-
-                display: flex;
-
-                flex-direction: column;
-
-                justify-content: center;
-
-                align-items: center;
-
-                gap: 3px;
-
-                font-size: 10px;
-
-                font-weight: 700;
-            }
-
-            .mobile-nav button span {
-                font-size: 21px;
-
-                line-height: 1;
-            }
-
-            .mobile-nav button.active {
-                color: var(--primary);
-            }
-
-            .mobile-nav button.active span {
-                transform: translateY(-2px);
-            }
-        }
-
-        /* Very small phones */
-
-        @media(max-width:380px) {
-
-            .main {
-                padding-left: 12px;
-                padding-right: 12px;
-            }
-
-            .welcome h1 {
-                font-size: 21px;
-            }
-
-            .hero {
-                padding: 18px;
-            }
-
-            .task-xp {
-                display: none;
-            }
-
-            .stats {
-                gap: 5px;
-            }
-        }
-    </style>
 </head>
 
 <body>
 
-<!-- =========================
+<!-- =====================================
      AUTH
-========================= -->
+===================================== -->
 
 <section id="authScreen">
 
@@ -1311,7 +1346,6 @@
                     id="loginEmail"
                     type="email"
                     required
-                    autocomplete="email"
                     placeholder="ornek@mail.com"
                 >
 
@@ -1325,7 +1359,6 @@
                     id="loginPassword"
                     type="password"
                     required
-                    autocomplete="current-password"
                     placeholder="En az 6 karakter"
                 >
 
@@ -1335,7 +1368,7 @@
                 class="auth-button"
                 type="submit"
             >
-                Giriş Yap 🚀
+                Giriş Yap
             </button>
 
         </form>
@@ -1367,7 +1400,6 @@
                     id="registerEmail"
                     type="email"
                     required
-                    autocomplete="email"
                     placeholder="ornek@mail.com"
                 >
 
@@ -1382,7 +1414,6 @@
                     type="password"
                     minlength="6"
                     required
-                    autocomplete="new-password"
                     placeholder="En az 6 karakter"
                 >
 
@@ -1392,7 +1423,7 @@
                 class="auth-button"
                 type="submit"
             >
-                Hesap Oluştur 🎓
+                Hesap Oluştur
             </button>
 
         </form>
@@ -1403,9 +1434,10 @@
 
 </section>
 
-<!-- =========================
+
+<!-- =====================================
      APP
-========================= -->
+===================================== -->
 
 <div id="app">
 
@@ -1417,15 +1449,16 @@
 
         <div class="menu">
 
-            <button class="active">
+            <button
+                class="active"
+                onclick="mobileHome()"
+            >
                 🏠 Ana Sayfa
             </button>
 
-            <button>
-                ✅ Görevler
-            </button>
-
-            <button>
+            <button
+                onclick="mobileSubjects()"
+            >
                 📚 Dersler
             </button>
 
@@ -1433,12 +1466,20 @@
                 📅 Sınavlar
             </button>
 
-            <button>
+            <button
+                onclick="mobileFocus()"
+            >
                 ⏱️ Odaklan
             </button>
 
             <button>
                 📊 İstatistikler
+            </button>
+
+            <button
+                onclick="mobileProfile()"
+            >
+                👤 Profil
             </button>
 
         </div>
@@ -1452,6 +1493,11 @@
         </div>
 
     </aside>
+
+
+    <!-- =====================================
+         ANA SAYFA
+    ===================================== -->
 
     <main class="main">
 
@@ -1484,7 +1530,6 @@
 
         </div>
 
-        <!-- XP -->
 
         <div class="hero">
 
@@ -1511,11 +1556,10 @@
 
         </div>
 
+
         <div class="grid">
 
             <div>
-
-                <!-- TASK CARD -->
 
                 <div class="card">
 
@@ -1541,9 +1585,7 @@
                             maxlength="150"
                         >
 
-                        <button
-                            onclick="addTask()"
-                        >
+                        <button onclick="addTask()">
                             + Ekle
                         </button>
 
@@ -1551,7 +1593,6 @@
 
                 </div>
 
-                <!-- STATS -->
 
                 <div class="stats">
 
@@ -1592,7 +1633,7 @@
                         </strong>
 
                         <small>
-                            Tamamlanan
+                            Tamamlanan görev
                         </small>
 
                     </div>
@@ -1600,6 +1641,7 @@
                 </div>
 
             </div>
+
 
             <div>
 
@@ -1648,68 +1690,361 @@
 
     </main>
 
-    <!-- MOBILE NAV -->
 
-    <nav class="mobile-nav">
+    <!-- =====================================
+         DERSLER
+    ===================================== -->
+
+    <section
+        id="subjectsScreen"
+        class="extra-screen"
+    >
+
+        <div class="screen-header">
+
+            <button
+                onclick="mobileHome()"
+                class="back-button"
+            >
+                ←
+            </button>
+
+            <div>
+
+                <h1>📚 Dersler</h1>
+
+                <p>
+                    Derslerini düzenle ve takip et.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Yeni Ders Ekle
+            </h2>
+
+            <div class="subject-add">
+
+                <input
+                    id="subjectInput"
+                    maxlength="50"
+                    placeholder="Örn: Matematik"
+                >
+
+                <button
+                    onclick="addSubject()"
+                >
+                    + Ekle
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+
+                <h2>
+                    Derslerim
+                </h2>
+
+                <span id="subjectCount">
+                    0
+                </span>
+
+            </div>
+
+            <div id="subjectList"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================
+         ODAKLAN
+    ===================================== -->
+
+    <section
+        id="focusScreen"
+        class="extra-screen"
+    >
+
+        <div class="screen-header">
+
+            <button
+                onclick="mobileHome()"
+                class="back-button"
+            >
+                ←
+            </button>
+
+            <div>
+
+                <h1>⏱️ Odaklan</h1>
+
+                <p>
+                    Dikkatini derse ver.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="focus-card">
+
+            <div class="focus-title">
+                🎯 Odaklanma Zamanı
+            </div>
+
+            <div id="focusTimer">
+                25:00
+            </div>
+
+            <div
+                class="focus-status"
+                id="focusStatus"
+            >
+                Hazır mısın?
+            </div>
+
+            <div class="focus-buttons">
+
+                <button
+                    onclick="startFocus()"
+                >
+                    ▶ Başlat
+                </button>
+
+                <button
+                    onclick="pauseFocus()"
+                >
+                    ⏸ Duraklat
+                </button>
+
+                <button
+                    onclick="resetFocus()"
+                >
+                    🔄 Sıfırla
+                </button>
+
+            </div>
+
+            <div class="focus-xp">
+
+                ⏱️ 25 dakika tamamla
+                →
+                <b>+25 XP</b>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================
+         PROFİL
+    ===================================== -->
+
+    <section
+        id="profileScreen"
+        class="extra-screen"
+    >
+
+        <div class="screen-header">
+
+            <button
+                onclick="mobileHome()"
+                class="back-button"
+            >
+                ←
+            </button>
+
+            <div>
+
+                <h1>👤 Profil</h1>
+
+                <p>
+                    Hesabını ve ilerlemeni gör.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-big-card">
+
+            <div class="profile-big-avatar">
+                🎓
+            </div>
+
+            <h2 id="profileName">
+                Öğrenci
+            </h2>
+
+            <p id="profileEmail">
+                -
+            </p>
+
+        </div>
+
+
+        <div class="profile-stats">
+
+            <div class="profile-stat">
+
+                <span>⭐</span>
+
+                <strong id="profileXP">
+                    0
+                </strong>
+
+                <small>
+                    XP
+                </small>
+
+            </div>
+
+            <div class="profile-stat">
+
+                <span>🔥</span>
+
+                <strong id="profileStreak">
+                    0
+                </strong>
+
+                <small>
+                    Gün Seri
+                </small>
+
+            </div>
+
+            <div class="profile-stat">
+
+                <span>🏆</span>
+
+                <strong id="profileLevel">
+                    1
+                </strong>
+
+                <small>
+                    Seviye
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                🎓 Hesap Bilgileri
+            </h2>
+
+            <div class="profile-row">
+
+                <span>Ad</span>
+
+                <b id="profileName2">
+                    -
+                </b>
+
+            </div>
+
+            <div class="profile-row">
+
+                <span>E-posta</span>
+
+                <b id="profileEmail2">
+                    -
+                </b>
+
+            </div>
+
+            <div class="profile-row">
+
+                <span>Seviye</span>
+
+                <b id="profileLevel2">
+                    1
+                </b>
+
+            </div>
+
+        </div>
+
 
         <button
-            class="active"
-            onclick="mobileNav(this)"
+            class="profile-logout"
+            onclick="logout()"
         >
-            <span>🏠</span>
-            Ana Sayfa
+            🚪 Çıkış Yap
         </button>
 
-        <button onclick="mobileNav(this)">
-            <span>✅</span>
-            Görevler
-        </button>
-
-        <button onclick="mobileNav(this)">
-            <span>📚</span>
-            Dersler
-        </button>
-
-        <button onclick="mobileNav(this)">
-            <span>⏱️</span>
-            Odaklan
-        </button>
-
-        <button onclick="mobileNav(this)">
-            <span>👤</span>
-            Profil
-        </button>
-
-    </nav>
+    </section>
 
 </div>
 
-<script src="/app.js"></script>
-<!-- MOBİL ALT MENÜ -->
+
+<!-- =====================================
+     MOBILE NAV
+===================================== -->
+
 <nav class="mobile-nav">
-    <button class="mobile-nav-item active" onclick="mobileHome()">
+
+    <button
+        class="mobile-nav-item active"
+        onclick="mobileHome()"
+    >
         <span>🏠</span>
         <small>Ana Sayfa</small>
     </button>
 
-    <button class="mobile-nav-item" onclick="mobileSubjects()">
+    <button
+        class="mobile-nav-item"
+        onclick="mobileSubjects()"
+    >
         <span>📚</span>
         <small>Dersler</small>
     </button>
 
-    <button class="mobile-nav-item focus-button" onclick="mobileFocus()">
+    <button
+        class="mobile-nav-item"
+        onclick="mobileFocus()"
+    >
         <span>⏱️</span>
         <small>Odaklan</small>
     </button>
 
-    <button class="mobile-nav-item" onclick="mobileProfile()">
+    <button
+        class="mobile-nav-item"
+        onclick="mobileProfile()"
+    >
         <span>👤</span>
         <small>Profil</small>
     </button>
+
 </nav>
 
-<div id="mobileToast" class="mobile-toast"></div>
+
+<div
+    id="mobileToast"
+    class="mobile-toast"
+></div>
+
 
 <script src="/app.js"></script>
+
 </body>
 </html>
