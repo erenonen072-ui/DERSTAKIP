@@ -1417,6 +1417,31 @@
 </div>
 
 <script src="/app.js"></script>
+<!-- MOBİL ALT MENÜ -->
+<nav class="mobile-nav">
+    <button class="mobile-nav-item active" onclick="mobileHome()">
+        <span>🏠</span>
+        <small>Ana Sayfa</small>
+    </button>
 
+    <button class="mobile-nav-item" onclick="mobileSubjects()">
+        <span>📚</span>
+        <small>Dersler</small>
+    </button>
+
+    <button class="mobile-nav-item focus-button" onclick="mobileFocus()">
+        <span>⏱️</span>
+        <small>Odaklan</small>
+    </button>
+
+    <button class="mobile-nav-item" onclick="mobileProfile()">
+        <span>👤</span>
+        <small>Profil</small>
+    </button>
+</nav>
+
+<div id="mobileToast" class="mobile-toast"></div>
+
+<script src="/app.js"></script>
 </body>
 </html>
