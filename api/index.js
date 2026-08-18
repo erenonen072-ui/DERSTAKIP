@@ -4,12 +4,64 @@ import jwt from "jsonwebtoken";
 
 const sql = neon(process.env.DATABASE_URL);
 
-const JWT_SECRET = process.env.JWT_SECRET;
+function getCookie(req, name) {
+  const cookies = req.headers.cookie || "";
+
+  const parts = cookies.split(";");
+
+  for (const part of parts) {
+    const [key, ...value] = part.trim().split("=");
+
+    if (key === name) {
+      return decodeURIComponent(value.join("="));
+    }
+  }
+
+  return null;
+}
+
+function getUserId(req) {
+  const token = getCookie(req, "token");
+
+  if (!token) {
+    return null;
+  }
+
+  try {
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET
+    );
+
+    return decoded.userId;
+  } catch {
+    return null;
+  }
+}
+
+function sendCookie(res, token) {
+  res.setHeader(
+    "Set-Cookie",
+    `token=${encodeURIComponent(token)}; HttpOnly; Path=/; Max-Age=604800; SameSite=Lax; Secure`
+  );
+}
+
+function clearCookie(res) {
+  res.setHeader(
+    "Set-Cookie",
+    "token=; HttpOnly; Path=/; Max-Age=0; SameSite=Lax; Secure"
+  );
+}
 
 export default async function handler(req, res) {
   try {
+    const action = req.query.action;
+
+    // =====================================
     // TEST
-    if (req.method === "GET") {
+    // =====================================
+
+    if (!action) {
       const result = await sql`
         SELECT NOW() AS time
       `;
@@ -22,153 +74,262 @@ export default async function handler(req, res) {
       });
     }
 
-    // JSON kontrolü
-    if (!req.body) {
-      return res.status(400).json({
-        success: false,
-        message: "İstek verisi bulunamadı."
-      });
-    }
+    // =====================================
+    // REGISTER
+    // =====================================
 
-    const { action } = req.body;
-
-    // =========================
-    // KAYIT
-    // =========================
-    if (action === "register") {
-      const { name, email, password } = req.body;
+    if (
+      action === "register" &&
+      req.method === "POST"
+    ) {
+      const {
+        name,
+        email,
+        password
+      } = req.body || {};
 
       if (!name || !email || !password) {
         return res.status(400).json({
-          success: false,
-          message: "Ad, e-posta ve şifre zorunludur."
+          message: "Tüm alanları doldur."
         });
       }
 
       if (password.length < 6) {
         return res.status(400).json({
-          success: false,
-          message: "Şifre en az 6 karakter olmalıdır."
+          message:
+            "Şifre en az 6 karakter olmalı."
         });
       }
 
-      const existingUser = await sql`
-        SELECT id FROM users
-        WHERE email = ${email}
-      `;
+      const normalizedEmail =
+        email.trim().toLowerCase();
 
-      if (existingUser.length > 0) {
-        return res.status(409).json({
-          success: false,
-          message: "Bu e-posta zaten kayıtlı."
+      const existing =
+        await sql`
+          SELECT id
+          FROM users
+          WHERE email = ${normalizedEmail}
+          LIMIT 1
+        `;
+
+      if (existing.length > 0) {
+        return res.status(400).json({
+          message:
+            "Bu e-posta zaten kayıtlı."
         });
       }
 
-      const hashedPassword = await bcrypt.hash(password, 10);
+      const hashedPassword =
+        await bcrypt.hash(
+          password,
+          10
+        );
 
-      const result = await sql`
-        INSERT INTO users (name, email, password)
-        VALUES (${name}, ${email}, ${hashedPassword})
-        RETURNING id, name, email, xp, streak
-      `;
+      const result =
+        await sql`
+          INSERT INTO users
+            (name, email, password)
+          VALUES
+            (
+              ${name.trim()},
+              ${normalizedEmail},
+              ${hashedPassword}
+            )
+          RETURNING
+            id,
+            name,
+            email,
+            xp,
+            streak,
+            created_at
+        `;
 
       const user = result[0];
 
       const token = jwt.sign(
         {
-          id: user.id,
-          email: user.email
+          userId: user.id
         },
-        JWT_SECRET,
-        { expiresIn: "7d" }
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "7d"
+        }
       );
+
+      sendCookie(res, token);
 
       return res.status(201).json({
         success: true,
-        message: "Kayıt başarılı 🎉",
-        user,
-        token
+        user
       });
     }
 
-    // =========================
-    // GİRİŞ
-    // =========================
-    if (action === "login") {
-      const { email, password } = req.body;
+    // =====================================
+    // LOGIN
+    // =====================================
+
+    if (
+      action === "login" &&
+      req.method === "POST"
+    ) {
+      const {
+        email,
+        password
+      } = req.body || {};
 
       if (!email || !password) {
         return res.status(400).json({
-          success: false,
-          message: "E-posta ve şifre zorunludur."
+          message:
+            "E-posta ve şifre gerekli."
         });
       }
 
-      const result = await sql`
-        SELECT id, name, email, password, xp, streak
-        FROM users
-        WHERE email = ${email}
-      `;
+      const normalizedEmail =
+        email.trim().toLowerCase();
+
+      const result =
+        await sql`
+          SELECT *
+          FROM users
+          WHERE email = ${normalizedEmail}
+          LIMIT 1
+        `;
 
       if (result.length === 0) {
         return res.status(401).json({
-          success: false,
-          message: "E-posta veya şifre yanlış."
+          message:
+            "E-posta veya şifre hatalı."
         });
       }
 
       const user = result[0];
 
-      const passwordCorrect = await bcrypt.compare(
-        password,
-        user.password
-      );
+      const valid =
+        await bcrypt.compare(
+          password,
+          user.password
+        );
 
-      if (!passwordCorrect) {
+      if (!valid) {
         return res.status(401).json({
-          success: false,
-          message: "E-posta veya şifre yanlış."
+          message:
+            "E-posta veya şifre hatalı."
         });
       }
 
       const token = jwt.sign(
         {
-          id: user.id,
-          email: user.email
+          userId: user.id
         },
-        JWT_SECRET,
-        { expiresIn: "7d" }
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "7d"
+        }
       );
 
-      delete user.password;
+      sendCookie(res, token);
 
       return res.status(200).json({
         success: true,
-        message: "Giriş başarılı 🚀",
-        user,
-        token
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          xp: user.xp,
+          streak: user.streak
+        }
       });
     }
 
-    // =========================
-    // GÖREVLERİ GETİR
-    // =========================
-    if (action === "tasks") {
-      const user = getUserFromToken(req);
+    // =====================================
+    // ME
+    // =====================================
 
-      if (!user) {
+    if (
+      action === "me" &&
+      req.method === "GET"
+    ) {
+      const userId = getUserId(req);
+
+      if (!userId) {
         return res.status(401).json({
-          success: false,
-          message: "Giriş yapmanız gerekiyor."
+          message: "Giriş yapılmamış."
         });
       }
 
-      const tasks = await sql`
-        SELECT id, title, completed, xp, created_at
-        FROM tasks
-        WHERE user_id = ${user.id}
-        ORDER BY created_at DESC
-      `;
+      const result =
+        await sql`
+          SELECT
+            id,
+            name,
+            email,
+            xp,
+            streak,
+            created_at
+          FROM users
+          WHERE id = ${userId}
+          LIMIT 1
+        `;
+
+      if (result.length === 0) {
+        return res.status(401).json({
+          message:
+            "Kullanıcı bulunamadı."
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        user: result[0]
+      });
+    }
+
+    // =====================================
+    // LOGOUT
+    // =====================================
+
+    if (
+      action === "logout" &&
+      req.method === "POST"
+    ) {
+      clearCookie(res);
+
+      return res.status(200).json({
+        success: true,
+        message: "Çıkış yapıldı."
+      });
+    }
+
+    // =====================================
+    // TASKS - GET
+    // =====================================
+
+    if (
+      action === "tasks" &&
+      req.method === "GET"
+    ) {
+      const userId = getUserId(req);
+
+      if (!userId) {
+        return res.status(401).json({
+          message: "Giriş yapmalısın."
+        });
+      }
+
+      const tasks =
+        await sql`
+          SELECT
+            id,
+            title,
+            completed,
+            xp,
+            created_at
+          FROM tasks
+          WHERE user_id = ${userId}
+          ORDER BY
+            completed ASC,
+            created_at DESC
+        `;
 
       return res.status(200).json({
         success: true,
@@ -176,145 +337,249 @@ export default async function handler(req, res) {
       });
     }
 
-    // =========================
-    // GÖREV EKLE
-    // =========================
-    if (action === "addTask") {
-      const user = getUserFromToken(req);
+    // =====================================
+    // TASKS - POST
+    // =====================================
 
-      if (!user) {
+    if (
+      action === "tasks" &&
+      req.method === "POST"
+    ) {
+      const userId = getUserId(req);
+
+      if (!userId) {
         return res.status(401).json({
-          success: false,
-          message: "Giriş yapmanız gerekiyor."
+          message: "Giriş yapmalısın."
         });
       }
 
-      const { title, xp = 50 } = req.body;
+      const { title } =
+        req.body || {};
 
-      if (!title) {
+      if (!title || !title.trim()) {
         return res.status(400).json({
-          success: false,
-          message: "Görev başlığı zorunludur."
+          message:
+            "Görev adı boş olamaz."
         });
       }
 
-      const result = await sql`
-        INSERT INTO tasks (user_id, title, xp)
-        VALUES (${user.id}, ${title}, ${xp})
-        RETURNING id, title, completed, xp, created_at
-      `;
+      const result =
+        await sql`
+          INSERT INTO tasks
+            (
+              user_id,
+              title,
+              completed,
+              xp
+            )
+          VALUES
+            (
+              ${userId},
+              ${title.trim()},
+              false,
+              50
+            )
+          RETURNING
+            id,
+            title,
+            completed,
+            xp,
+            created_at
+        `;
 
       return res.status(201).json({
         success: true,
-        message: "Görev eklendi 📚",
         task: result[0]
       });
     }
 
-    // =========================
-    // GÖREV TAMAMLA + XP
-    // =========================
-    if (action === "completeTask") {
-      const user = getUserFromToken(req);
+    // =====================================
+    // TASKS - PATCH
+    // =====================================
 
-      if (!user) {
+    if (
+      action === "tasks" &&
+      req.method === "PATCH"
+    ) {
+      const userId = getUserId(req);
+
+      if (!userId) {
         return res.status(401).json({
-          success: false,
-          message: "Giriş yapmanız gerekiyor."
+          message: "Giriş yapmalısın."
         });
       }
 
-      const { taskId } = req.body;
+      const { id } =
+        req.body || {};
 
-      if (!taskId) {
+      if (!id) {
         return res.status(400).json({
-          success: false,
-          message: "Görev ID gerekli."
+          message:
+            "Görev ID gerekli."
         });
       }
 
-      const taskResult = await sql`
-        SELECT id, xp, completed
-        FROM tasks
-        WHERE id = ${taskId}
-        AND user_id = ${user.id}
-      `;
+      const current =
+        await sql`
+          SELECT
+            id,
+            completed,
+            xp
+          FROM tasks
+          WHERE
+            id = ${id}
+            AND user_id = ${userId}
+          LIMIT 1
+        `;
 
-      if (taskResult.length === 0) {
+      if (current.length === 0) {
         return res.status(404).json({
-          success: false,
-          message: "Görev bulunamadı."
+          message:
+            "Görev bulunamadı."
         });
       }
 
-      const task = taskResult[0];
+      const oldCompleted =
+        current[0].completed;
 
-      if (task.completed) {
-        return res.status(400).json({
-          success: false,
-          message: "Bu görev zaten tamamlandı."
-        });
-      }
+      const newCompleted =
+        !oldCompleted;
+
+      const xp =
+        Number(current[0].xp) || 50;
 
       await sql`
         UPDATE tasks
-        SET completed = TRUE
-        WHERE id = ${taskId}
-        AND user_id = ${user.id}
+        SET completed =
+          ${newCompleted}
+        WHERE
+          id = ${id}
+          AND user_id = ${userId}
       `;
 
-      const userResult = await sql`
-        UPDATE users
-        SET xp = xp + ${task.xp}
-        WHERE id = ${user.id}
-        RETURNING id, name, email, xp, streak
+      // Görev tamamlandıysa XP ekle
+      if (
+        !oldCompleted &&
+        newCompleted
+      ) {
+        await sql`
+          UPDATE users
+          SET xp = xp + ${xp}
+          WHERE id = ${userId}
+        `;
+      }
+
+      // Görev geri açıldıysa XP çıkar
+      if (
+        oldCompleted &&
+        !newCompleted
+      ) {
+        await sql`
+          UPDATE users
+          SET xp = GREATEST(
+            0,
+            xp - ${xp}
+          )
+          WHERE id = ${userId}
+        `;
+      }
+
+      return res.status(200).json({
+        success: true,
+        completed: newCompleted
+      });
+    }
+
+    // =====================================
+    // TASKS - DELETE
+    // =====================================
+
+    if (
+      action === "tasks" &&
+      req.method === "DELETE"
+    ) {
+      const userId = getUserId(req);
+
+      if (!userId) {
+        return res.status(401).json({
+          message: "Giriş yapmalısın."
+        });
+      }
+
+      const { id } =
+        req.body || {};
+
+      const task =
+        await sql`
+          SELECT
+            completed,
+            xp
+          FROM tasks
+          WHERE
+            id = ${id}
+            AND user_id = ${userId}
+          LIMIT 1
+        `;
+
+      if (task.length === 0) {
+        return res.status(404).json({
+          message:
+            "Görev bulunamadı."
+        });
+      }
+
+      // Tamamlanmış görev siliniyorsa XP geri alınır
+      if (task[0].completed) {
+        const xp =
+          Number(task[0].xp) || 50;
+
+        await sql`
+          UPDATE users
+          SET xp = GREATEST(
+            0,
+            xp - ${xp}
+          )
+          WHERE id = ${userId}
+        `;
+      }
+
+      await sql`
+        DELETE FROM tasks
+        WHERE
+          id = ${id}
+          AND user_id = ${userId}
       `;
 
       return res.status(200).json({
         success: true,
-        message: `Görev tamamlandı! +${task.xp} XP ⭐`,
-        user: userResult[0]
+        message: "Görev silindi."
       });
     }
 
-    return res.status(400).json({
-      success: false,
-      message: "Geçersiz action."
+    // =====================================
+    // BULUNAMADI
+    // =====================================
+
+    return res.status(404).json({
+      message:
+        "API işlemi bulunamadı."
     });
 
   } catch (error) {
-    console.error(error);
+    console.error(
+      "API ERROR:",
+      error
+    );
 
     return res.status(500).json({
       success: false,
-      message: "Sunucu hatası.",
-      error: error.message
+      message:
+        "Sunucu hatası oluştu.",
+      error:
+        process.env.NODE_ENV ===
+        "development"
+          ? error.message
+          : undefined
     });
-  }
-}
-
-
-// =========================
-// TOKEN KONTROLÜ
-// =========================
-
-function getUserFromToken(req) {
-  try {
-    if (!JWT_SECRET) {
-      return null;
-    }
-
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader) {
-      return null;
-    }
-
-    const token = authHeader.replace("Bearer ", "");
-
-    return jwt.verify(token, JWT_SECRET);
-
-  } catch (error) {
-    return null;
   }
 }
