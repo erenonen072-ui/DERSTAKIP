@@ -1375,18 +1375,68 @@ async function addTask() {
   }
 
 
-  /*
-    Şimdilik backend'de görev ekleme
-    endpointini bir sonraki adımda
-    oluşturacağız.
-  */
+  try {
 
-  alert(
-    "Görev sistemi bir sonraki adımda gerçek veritabanına bağlanacak."
-  );
+    const response =
+      await fetch(
+        "/api/tasks",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+
+            title: title,
+
+            xp: 50
+
+          })
+
+        }
+      );
 
 
-  input.value = "";
+    const data =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      alert(
+        data.message ||
+        "Görev eklenemedi."
+      );
+
+      return;
+
+    }
+
+
+    input.value = "";
+
+
+    await loadTasks();
+
+
+    showTaskMessage(
+      "✅ Görev kaydedildi!"
+    );
+
+  }
+
+  catch (error) {
+
+    console.error(error);
+
+    alert(
+      "Sunucuya bağlanılamadı."
+    );
+
+  }
 
 }
 
