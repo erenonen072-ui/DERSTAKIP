@@ -520,7 +520,342 @@ app.get(
     }
 );
 
+// ================================
+// GÖREV EKLE
+// ================================
 
+app.post(
+    "/api/tasks",
+    requireLogin,
+    (req, res) => {
+
+        try {
+
+            const {
+                title,
+                xp
+            } = req.body;
+
+
+            if (!title || !title.trim()) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Görev adı boş olamaz."
+
+                });
+
+            }
+
+
+            const taskXP =
+                Number.isInteger(xp)
+                    ? xp
+                    : 50;
+
+
+            const result =
+                db.prepare(
+                    `
+                    INSERT INTO tasks
+                    (
+                        user_id,
+                        title,
+                        completed,
+                        xp
+                    )
+                    VALUES (?, ?, 0, ?)
+                    `
+                ).run(
+
+                    req.user.id,
+
+                    title.trim(),
+
+                    taskXP
+
+                );
+
+
+            const task =
+                db.prepare(
+                    `
+                    SELECT
+                        id,
+                        title,
+                        completed,
+                        xp,
+                        created_at
+                    FROM tasks
+                    WHERE id = ?
+                    `
+                ).get(
+                    result.lastInsertRowid
+                );
+
+
+            res.status(201).json({
+
+                success: true,
+
+                task
+
+            });
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Görev eklenirken hata oluştu."
+
+            });
+
+        }
+
+    }
+);
+
+
+// ================================
+// GÖREV TAMAMLA / GERİ AL
+// ================================
+
+app.patch(
+    "/api/tasks/:id",
+    requireLogin,
+    (req, res) => {
+
+        try {
+
+            const taskId =
+                Number(req.params.id);
+
+
+            const task =
+                db.prepare(
+                    `
+                    SELECT *
+                    FROM tasks
+                    WHERE id = ?
+                    AND user_id = ?
+                    `
+                ).get(
+
+                    taskId,
+
+                    req.user.id
+
+                );
+
+
+            if (!task) {
+
+                return res.status(404).json({
+
+                    success: false,
+
+                    message:
+                        "Görev bulunamadı."
+
+                });
+
+            }
+
+
+            const completed =
+                task.completed
+                    ? 0
+                    : 1;
+
+
+            db.prepare(
+                `
+                UPDATE tasks
+                SET completed = ?
+                WHERE id = ?
+                AND user_id = ?
+                `
+            ).run(
+
+                completed,
+
+                taskId,
+
+                req.user.id
+
+            );
+
+
+            // Görev tamamlandıysa XP ekle
+            if (
+                completed === 1
+            ) {
+
+                db.prepare(
+                    `
+                    UPDATE users
+                    SET xp = xp + ?
+                    WHERE id = ?
+                    `
+                ).run(
+
+                    task.xp,
+
+                    req.user.id
+
+                );
+
+            }
+
+            // Görev geri alındıysa XP çıkar
+            else {
+
+                db.prepare(
+                    `
+                    UPDATE users
+                    SET xp = MAX(0, xp - ?)
+                    WHERE id = ?
+                    `
+                ).run(
+
+                    task.xp,
+
+                    req.user.id
+
+                );
+
+            }
+
+
+            const updatedTask =
+                db.prepare(
+                    `
+                    SELECT
+                        id,
+                        title,
+                        completed,
+                        xp,
+                        created_at
+                    FROM tasks
+                    WHERE id = ?
+                    `
+                ).get(
+                    taskId
+                );
+
+
+            res.json({
+
+                success: true,
+
+                task:
+                    updatedTask
+
+            });
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Görev güncellenemedi."
+
+            });
+
+        }
+
+    }
+);
+
+
+// ================================
+// GÖREV SİL
+// ================================
+
+app.delete(
+    "/api/tasks/:id",
+    requireLogin,
+    (req, res) => {
+
+        try {
+
+            const taskId =
+                Number(req.params.id);
+
+
+            const result =
+                db.prepare(
+                    `
+                    DELETE FROM tasks
+                    WHERE id = ?
+                    AND user_id = ?
+                    `
+                ).run(
+
+                    taskId,
+
+                    req.user.id
+
+                );
+
+
+            if (
+                result.changes === 0
+            ) {
+
+                return res.status(404).json({
+
+                    success: false,
+
+                    message:
+                        "Görev bulunamadı."
+
+                });
+
+            }
+
+
+            res.json({
+
+                success: true
+
+            });
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Görev silinemedi."
+
+            });
+
+        }
+
+    }
+);
 // ================================
 // TEST
 // ================================
