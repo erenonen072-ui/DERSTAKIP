@@ -743,7 +743,279 @@ export default async function handler(req, res) {
         achievements
       });
     }
+// ==========================================
+// DERS KOÇU 🤖
+// ==========================================
+if (action === "coach" && req.method === "GET") {
+  const [
+    userResult,
+    tasksResult,
+    examsResult,
+    subjectsResult,
+    sessionsResult
+  ] = await Promise.all([
+    sql`
+      SELECT
+        name,
+        xp,
+        streak
+      FROM users
+      WHERE id = ${userId}
+      LIMIT 1
+    `,
 
+    sql`
+      SELECT
+        id,
+        title,
+        completed,
+        xp
+      FROM tasks
+      WHERE user_id = ${userId}
+      ORDER BY completed ASC, created_at DESC
+      LIMIT 20
+    `,
+
+    sql`
+      SELECT
+        id,
+        title,
+        exam_date,
+        topic,
+        subjects.name AS subject_name
+      FROM exams
+      LEFT JOIN subjects
+        ON subjects.id = exams.subject_id
+      WHERE exams.user_id = ${userId}
+      AND exams.exam_date >= NOW()
+      ORDER BY exams.exam_date ASC
+      LIMIT 5
+    `,
+
+    sql`
+      SELECT
+        id,
+        name
+      FROM subjects
+      WHERE user_id = ${userId}
+      ORDER BY created_at DESC
+    `,
+
+    sql`
+      SELECT
+        COALESCE(SUM(duration_minutes), 0)::int AS minutes,
+        COUNT(*)::int AS sessions
+      FROM study_sessions
+      WHERE user_id = ${userId}
+    `
+  ]);
+
+  if (userResult.length === 0) {
+    return send(res, 404, {
+      success: false,
+      message: "Kullanıcı bulunamadı."
+    });
+  }
+
+  const user = userResult[0];
+  const tasks = tasksResult;
+  const exams = examsResult;
+  const subjects = subjectsResult;
+  const sessions = sessionsResult[0];
+
+  const incompleteTasks =
+    tasks.filter(task => !task.completed);
+
+  const completedTasks =
+    tasks.filter(task => task.completed);
+
+  let advice = [];
+  let priority = "normal";
+
+  // ------------------------------------------
+  // SINAV ANALİZİ
+  // ------------------------------------------
+
+  if (exams.length > 0) {
+    const nextExam = exams[0];
+
+    const examDate =
+      new Date(nextExam.exam_date);
+
+    const now = new Date();
+
+    const daysLeft = Math.ceil(
+      (examDate - now) /
+      (1000 * 60 * 60 * 24)
+    );
+
+    if (daysLeft <= 1) {
+      priority = "urgent";
+
+      advice.push({
+        type: "danger",
+        icon: "🚨",
+        title: "Sınav çok yakın!",
+        text:
+          `${nextExam.subject_name || ""} ${nextExam.title} için son tekrarlarını yap.`
+      });
+    } else if (daysLeft <= 3) {
+      priority = "high";
+
+      advice.push({
+        type: "warning",
+        icon: "⚠️",
+        title: "Sınav yaklaşıyor",
+        text:
+          `${nextExam.title} sınavına ${daysLeft} gün kaldı. Bugün bu derse öncelik ver.`
+      });
+    } else {
+      advice.push({
+        type: "info",
+        icon: "📅",
+        title: "Yaklaşan sınav",
+        text:
+          `${nextExam.title} sınavına ${daysLeft} gün kaldı. Düzenli tekrar yapabilirsin.`
+      });
+    }
+  }
+
+  // ------------------------------------------
+  // GÖREV ANALİZİ
+  // ------------------------------------------
+
+  if (incompleteTasks.length === 0) {
+    advice.push({
+      type: "success",
+      icon: "🎉",
+      title: "Görevlerin tamam!",
+      text:
+        "Harika gidiyorsun. Yeni bir çalışma görevi ekleyebilirsin."
+    });
+  } else {
+    advice.push({
+      type: "task",
+      icon: "🎯",
+      title: "Bugünkü görev",
+      text:
+        `"${incompleteTasks[0].title}" görevini tamamlayarak başlayabilirsin.`
+    });
+  }
+
+  // ------------------------------------------
+  // ODAKLANMA ANALİZİ
+  // ------------------------------------------
+
+  if (sessions.minutes === 0) {
+    advice.push({
+      type: "focus",
+      icon: "⏱️",
+      title: "Odaklanma zamanı",
+      text:
+        "İlk 25 dakikalık odaklanma seansını başlat!"
+    });
+  } else if (sessions.minutes < 60) {
+    advice.push({
+      type: "focus",
+      icon: "⏱️",
+      title: "Biraz daha odaklan",
+      text:
+        "Toplam odaklanma süren 1 saatin altında. Bugün bir 25 dakika daha deneyebilirsin."
+    });
+  } else {
+    advice.push({
+      type: "focus",
+      icon: "🔥",
+      title: "Harika odaklanma!",
+      text:
+        `Toplam ${sessions.minutes} dakika çalışmışsın. Böyle devam et!`
+    });
+  }
+
+  // ------------------------------------------
+  // SERİ
+  // ------------------------------------------
+
+  if (Number(user.streak) >= 7) {
+    advice.push({
+      type: "streak",
+      icon: "🔥",
+      title: "Muhteşem seri!",
+      text:
+        `${user.streak} günlük serin var. Sakın bozma!`
+    });
+  } else if (Number(user.streak) > 0) {
+    advice.push({
+      type: "streak",
+      icon: "🔥",
+      title: "Serini koru",
+      text:
+        `${user.streak} günlük serin var. Bugün de çalışarak devam ettir.`
+    });
+  }
+
+  // ------------------------------------------
+  // GÜNLÜK HEDEF
+  // ------------------------------------------
+
+  const recommendedTasks =
+    Math.min(
+      3,
+      Math.max(
+        1,
+        incompleteTasks.length
+      )
+    );
+
+  const recommendedMinutes =
+    exams.length > 0 ? 50 : 25;
+
+  const recommendedXP =
+    recommendedTasks * 50 +
+    recommendedMinutes;
+
+  return send(res, 200, {
+    success: true,
+
+    coach: {
+      greeting:
+        `Merhaba, ${user.name}! 👋`,
+
+      priority,
+
+      xp: Number(user.xp) || 0,
+
+      streak:
+        Number(user.streak) || 0,
+
+      subjects:
+        subjects.length,
+
+      incomplete_tasks:
+        incompleteTasks.length,
+
+      completed_tasks:
+        completedTasks.length,
+
+      upcoming_exams:
+        exams.length,
+
+      focus_minutes:
+        Number(sessions.minutes) || 0,
+
+      focus_sessions:
+        Number(sessions.sessions) || 0,
+
+      recommended: {
+        tasks: recommendedTasks,
+        minutes: recommendedMinutes,
+        xp: recommendedXP
+      },
+
+      advice
+    }
+  });
+}
     // ==========================================
     // STATS
     // ==========================================
