@@ -1764,66 +1764,6 @@ Sıfırla
 </section>
 
 
-<!-- COACH -->
-
-<section id="page-coach" class="page">
-
-<div class="card">
-
-<h2>
-🤖 Ders Koçu
-</h2>
-
-<p
-class="coach-full-message"
-id="coachFull">
-Merhaba! Bugün hangi konuda çalışmak istiyorsun?
-</p>
-
-
-<div class="chat-box"
-id="chatBox">
-
-<div class="chat-message coach">
-
-<div class="chat-bubble">
-Merhaba! 👋 Ben DersTakip Koçu. Ders çalışma konusunda sana yardımcı olabilirim.
-</div>
-
-</div>
-
-</div>
-
-
-<div class="chat-input-area">
-
-<input
-id="coachInput"
-placeholder="Koça bir mesaj yaz..."
-onkeydown="if(event.key==='Enter')sendCoachMessage()">
-
-<button
-class="primary"
-onclick="sendCoachMessage()">
-Gönder
-</button>
-
-</div>
-
-
-<div style="margin-top:15px">
-
-<button
-class="secondary"
-onclick="newAdvice()">
-Yeni Öneri
-</button>
-
-</div>
-
-</div>
-
-</section>
 
 
 <!-- ACHIEVEMENTS -->
@@ -1842,7 +1782,83 @@ Yeni Öneri
 
 </section>
 
+<!-- ================= COACH ================= -->
+<section id="page-coach" class="page">
 
+  <div class="card coach-chat-card">
+
+    <div class="coach-chat-header">
+      <div class="coach-avatar">
+        🤖
+      </div>
+
+      <div>
+        <h2>Ders Koçu</h2>
+        <p style="color:var(--muted);margin-top:4px">
+          Sana çalışma konusunda yardımcı olabilirim.
+        </p>
+      </div>
+    </div>
+
+    <!-- MESAJLAR -->
+    <div id="coachMessages" class="coach-messages">
+
+      <div class="coach-message bot-message">
+        <div class="message-avatar">🤖</div>
+
+        <div class="message-content">
+          <strong>Ders Koçu</strong>
+          <p>
+            Merhaba! 👋 Ben DersTakip Koçun.
+            Bugün hangi ders hakkında konuşmak istersin?
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- HAZIR MESAJLAR -->
+    <div class="coach-suggestions">
+
+      <button onclick="sendCoachSuggestion('Bugün nasıl ders çalışmalıyım?')">
+        📚 Nasıl çalışmalıyım?
+      </button>
+
+      <button onclick="sendCoachSuggestion('Matematikte zorlanıyorum')">
+        📐 Matematikte zorlanıyorum
+      </button>
+
+      <button onclick="sendCoachSuggestion('Sınava nasıl hazırlanmalıyım?')">
+        📝 Sınava hazırlanma
+      </button>
+
+      <button onclick="sendCoachSuggestion('Ders çalışmaya motivasyonum yok')">
+        🔥 Motivasyon
+      </button>
+
+    </div>
+
+    <!-- MESAJ GİRİŞİ -->
+    <div class="coach-input-area">
+
+      <textarea
+        id="coachInput"
+        rows="2"
+        placeholder="Ders Koçuna bir şey sor..."
+        onkeydown="coachEnter(event)"
+      ></textarea>
+
+      <button
+        class="primary coach-send"
+        onclick="sendCoachMessage()">
+        Gönder 🚀
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
 <!-- STATS -->
 
 <section id="page-stats" class="page">
