@@ -2272,3 +2272,2171 @@ document.addEventListener(
   "DOMContentLoaded",
   init
 );
+/* =========================================================
+   DERS TAKİP 2.0 - YENİ MENÜ TASARIM SİSTEMİ
+   Mevcut API ve veriler korunur.
+   Her menü kendine özel görünüme sahip olur.
+   ========================================================= */
+
+(function injectNewMenuDesign() {
+
+  if (document.getElementById("dersTakipNewDesign")) return;
+
+  const style = document.createElement("style");
+  style.id = "dersTakipNewDesign";
+
+  style.textContent = `
+    /* ================================
+       GENEL
+    ================================= */
+
+    .dt-page {
+      animation: dtPageIn .35s ease;
+    }
+
+    @keyframes dtPageIn {
+      from {
+        opacity:0;
+        transform:translateY(12px);
+      }
+      to {
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    .dt-header {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+      margin-bottom:25px;
+      flex-wrap:wrap;
+    }
+
+    .dt-title {
+      font-size:28px;
+      font-weight:800;
+      margin:0;
+    }
+
+    .dt-subtitle {
+      margin-top:6px;
+      color:var(--muted);
+    }
+
+    .dt-card {
+      background:var(--white);
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:22px;
+      box-shadow:0 8px 30px rgba(40,40,80,.06);
+    }
+
+    .dt-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:18px;
+    }
+
+    .dt-big-number {
+      font-size:34px;
+      font-weight:900;
+      margin-top:8px;
+    }
+
+    .dt-label {
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .dt-icon {
+      width:52px;
+      height:52px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      font-size:26px;
+      background:#f1efff;
+    }
+
+    .dt-empty {
+      text-align:center;
+      padding:45px 20px;
+      color:var(--muted);
+    }
+
+    /* ================================
+       HOME
+    ================================= */
+
+    .dt-home {
+      display:grid;
+      grid-template-columns:1.5fr 1fr;
+      gap:20px;
+    }
+
+    .dt-welcome {
+      min-height:230px;
+      border-radius:28px;
+      padding:30px;
+      color:white;
+      background:
+        linear-gradient(
+          135deg,
+          #6c63ff,
+          #8c7cff,
+          #54b7ff
+        );
+      box-shadow:0 15px 40px rgba(108,99,255,.25);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .dt-welcome h1 {
+      font-size:34px;
+      margin:0;
+    }
+
+    .dt-welcome p {
+      opacity:.9;
+      margin-top:12px;
+      line-height:1.6;
+    }
+
+    .dt-welcome .emoji {
+      position:absolute;
+      right:25px;
+      bottom:15px;
+      font-size:100px;
+      opacity:.9;
+    }
+
+    .dt-stat-grid {
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
+    }
+
+    .dt-stat-card {
+      background:var(--white);
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:20px;
+    }
+
+    /* ================================
+       TASKS
+    ================================= */
+
+    .dt-task-page {
+      background:linear-gradient(180deg,#f8f7ff,transparent);
+      border-radius:28px;
+      padding:25px;
+    }
+
+    .dt-task-item {
+      display:flex;
+      align-items:center;
+      gap:15px;
+      padding:17px;
+      border-radius:18px;
+      margin-bottom:10px;
+      background:var(--white);
+      border:1px solid var(--border);
+      transition:.2s;
+    }
+
+    .dt-task-item:hover {
+      transform:translateX(4px);
+      box-shadow:0 8px 20px rgba(0,0,0,.06);
+    }
+
+    .dt-task-check {
+      width:38px;
+      height:38px;
+      border-radius:12px;
+      border:2px solid #6c63ff;
+      background:white;
+      cursor:pointer;
+      font-size:18px;
+    }
+
+    .dt-task-item.completed {
+      opacity:.6;
+    }
+
+    .dt-task-item.completed .task-title {
+      text-decoration:line-through;
+    }
+
+    .dt-task-title {
+      font-weight:700;
+    }
+
+    .dt-task-xp {
+      margin-left:auto;
+      color:#f4a000;
+      font-weight:800;
+    }
+
+    /* ================================
+       SUBJECTS
+    ================================= */
+
+    .dt-subject-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:18px;
+    }
+
+    .dt-subject {
+      border-radius:24px;
+      padding:24px;
+      min-height:180px;
+      background:linear-gradient(
+        145deg,
+        #ffffff,
+        #f2f0ff
+      );
+      border:1px solid var(--border);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .dt-subject:nth-child(2n) {
+      background:linear-gradient(
+        145deg,
+        #ffffff,
+        #eaf8ff
+      );
+    }
+
+    .dt-subject:nth-child(3n) {
+      background:linear-gradient(
+        145deg,
+        #ffffff,
+        #fff4e8
+      );
+    }
+
+    .dt-subject-icon {
+      font-size:45px;
+      margin-bottom:15px;
+    }
+
+    .dt-subject h3 {
+      margin:0;
+      font-size:20px;
+    }
+
+    /* ================================
+       EXAMS
+    ================================= */
+
+    .dt-exam-timeline {
+      position:relative;
+      padding-left:30px;
+    }
+
+    .dt-exam-timeline:before {
+      content:"";
+      position:absolute;
+      left:8px;
+      top:0;
+      bottom:0;
+      width:3px;
+      background:#6c63ff;
+      border-radius:5px;
+    }
+
+    .dt-exam {
+      position:relative;
+      background:var(--white);
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:20px;
+      margin-bottom:18px;
+    }
+
+    .dt-exam:before {
+      content:"";
+      position:absolute;
+      left:-28px;
+      top:25px;
+      width:13px;
+      height:13px;
+      background:#6c63ff;
+      border:4px solid var(--white);
+      border-radius:50%;
+      box-shadow:0 0 0 2px #6c63ff;
+    }
+
+    .dt-exam-date {
+      color:#6c63ff;
+      font-weight:800;
+      margin-bottom:8px;
+    }
+
+    /* ================================
+       FOCUS
+    ================================= */
+
+    .dt-focus {
+      min-height:500px;
+      border-radius:32px;
+      padding:40px 25px;
+      text-align:center;
+      background:
+        radial-gradient(
+          circle at top,
+          #e9e7ff,
+          #f8f9ff 45%,
+          #ffffff
+        );
+    }
+
+    .dt-focus h2 {
+      font-size:30px;
+    }
+
+    .dt-focus-timer {
+      width:280px;
+      height:280px;
+      border-radius:50%;
+      margin:35px auto;
+      display:grid;
+      place-items:center;
+      font-size:55px;
+      font-weight:900;
+      color:#6257df;
+      background:white;
+      border:15px solid #e8e5ff;
+      box-shadow:
+        0 20px 50px rgba(108,99,255,.18),
+        inset 0 0 30px rgba(108,99,255,.05);
+    }
+
+    .dt-focus-mode {
+      display:inline-block;
+      padding:8px 18px;
+      border-radius:50px;
+      background:#e9e7ff;
+      color:#6257df;
+      font-weight:700;
+    }
+
+    /* ================================
+       COACH
+    ================================= */
+
+    .dt-coach {
+      background:
+        linear-gradient(
+          135deg,
+          #17162b,
+          #2b2760
+        );
+      color:white;
+      border-radius:28px;
+      padding:30px;
+    }
+
+    .dt-coach-header {
+      display:flex;
+      align-items:center;
+      gap:18px;
+      margin-bottom:25px;
+    }
+
+    .dt-robot {
+      width:75px;
+      height:75px;
+      border-radius:22px;
+      display:grid;
+      place-items:center;
+      font-size:42px;
+      background:rgba(255,255,255,.12);
+    }
+
+    .dt-advice {
+      background:rgba(255,255,255,.09);
+      border:1px solid rgba(255,255,255,.12);
+      padding:18px;
+      border-radius:18px;
+      margin-top:12px;
+    }
+
+    /* ================================
+       PET
+    ================================= */
+
+    .dt-pet {
+      text-align:center;
+      padding:30px;
+      border-radius:30px;
+      background:
+        linear-gradient(
+          180deg,
+          #fff7e8,
+          #fff
+        );
+    }
+
+    .dt-pet-avatar {
+      width:230px;
+      height:230px;
+      border-radius:50%;
+      margin:25px auto;
+      display:grid;
+      place-items:center;
+      font-size:125px;
+      background:
+        radial-gradient(
+          circle,
+          #fff 35%,
+          #ffe4a8
+        );
+      box-shadow:
+        0 20px 50px rgba(255,184,77,.25);
+      animation:petFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes petFloat {
+      0%,100% {
+        transform:translateY(0);
+      }
+      50% {
+        transform:translateY(-10px);
+      }
+    }
+
+    /* ================================
+       MARKET
+    ================================= */
+
+    .dt-market {
+      background:
+        linear-gradient(
+          135deg,
+          #fff8df,
+          #fff
+        );
+      padding:25px;
+      border-radius:28px;
+    }
+
+    .dt-market-grid {
+      display:grid;
+      grid-template-columns:
+        repeat(auto-fit,minmax(190px,1fr));
+      gap:18px;
+      margin-top:20px;
+    }
+
+    .dt-product {
+      text-align:center;
+      background:white;
+      border-radius:24px;
+      padding:24px;
+      border:1px solid #eee;
+      transition:.2s;
+    }
+
+    .dt-product:hover {
+      transform:translateY(-6px);
+      box-shadow:0 15px 35px rgba(0,0,0,.08);
+    }
+
+    .dt-product-icon {
+      font-size:55px;
+    }
+
+    .dt-price {
+      font-size:20px;
+      font-weight:900;
+      color:#f39c12;
+      margin:12px;
+    }
+
+    /* ================================
+       ACHIEVEMENTS
+    ================================= */
+
+    .dt-achievements {
+      background:
+        linear-gradient(
+          135deg,
+          #fffbea,
+          #fff
+        );
+      border-radius:28px;
+      padding:25px;
+    }
+
+    .dt-badge-grid {
+      display:grid;
+      grid-template-columns:
+        repeat(auto-fit,minmax(180px,1fr));
+      gap:18px;
+      margin-top:20px;
+    }
+
+    .dt-badge {
+      text-align:center;
+      padding:25px 15px;
+      border-radius:24px;
+      background:white;
+      border:1px solid #eee;
+    }
+
+    .dt-badge-icon {
+      font-size:55px;
+      margin-bottom:12px;
+    }
+
+    .dt-badge.locked {
+      filter:grayscale(1);
+      opacity:.45;
+    }
+
+    /* ================================
+       STATS
+    ================================= */
+
+    .dt-stats {
+      background:
+        linear-gradient(
+          135deg,
+          #eef8ff,
+          #fff
+        );
+      padding:25px;
+      border-radius:28px;
+    }
+
+    .dt-progress-box {
+      margin-top:20px;
+      background:white;
+      padding:20px;
+      border-radius:20px;
+      border:1px solid var(--border);
+    }
+
+    .dt-progress {
+      height:14px;
+      background:#ececf5;
+      border-radius:20px;
+      overflow:hidden;
+      margin-top:12px;
+    }
+
+    .dt-progress span {
+      display:block;
+      height:100%;
+      border-radius:20px;
+      background:linear-gradient(
+        90deg,
+        #6c63ff,
+        #4dd4ac
+      );
+    }
+
+    /* ================================
+       PROFILE
+    ================================= */
+
+    .dt-profile {
+      max-width:850px;
+      margin:auto;
+    }
+
+    .dt-profile-head {
+      text-align:center;
+      padding:35px;
+      border-radius:30px;
+      background:
+        linear-gradient(
+          135deg,
+          #6c63ff,
+          #a18cff
+        );
+      color:white;
+    }
+
+    .dt-avatar {
+      width:100px;
+      height:100px;
+      border-radius:50%;
+      margin:auto;
+      display:grid;
+      place-items:center;
+      font-size:50px;
+      background:white;
+    }
+
+    .dt-profile-info {
+      margin-top:20px;
+      display:grid;
+      grid-template-columns:
+        repeat(auto-fit,minmax(180px,1fr));
+      gap:15px;
+    }
+
+    .dt-profile-stat {
+      background:var(--white);
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:20px;
+      text-align:center;
+    }
+
+    /* ================================
+       MOBİL
+    ================================= */
+
+    @media(max-width:800px) {
+
+      .dt-home {
+        grid-template-columns:1fr;
+      }
+
+      .dt-welcome h1 {
+        font-size:27px;
+      }
+
+      .dt-focus-timer {
+        width:220px;
+        height:220px;
+        font-size:42px;
+      }
+
+      .dt-pet-avatar {
+        width:190px;
+        height:190px;
+        font-size:100px;
+      }
+
+    }
+  `;
+
+  document.head.appendChild(style);
+
+})();
+
+
+/* =========================================================
+   YENİ HOME
+   ========================================================= */
+
+function renderHome() {
+
+  $("homeHero").style.display = "none";
+  $("tasksSection").style.display = "none";
+
+  const dynamic = $("dynamicSection");
+  dynamic.style.display = "block";
+
+  const total = tasks.length;
+  const completed =
+    tasks.filter(t => t.completed).length;
+
+  const xp = Number(currentUser?.xp) || 0;
+  const streak = Number(currentUser?.streak) || 0;
+  const level = calculateLevel(xp);
+
+  dynamic.innerHTML = `
+
+    <div class="dt-page">
+
+      <div class="dt-home">
+
+        <div class="dt-welcome">
+
+          <h1>
+            Hoş geldin,
+            ${escapeHTML(currentUser?.name || "Öğrenci")}! 👋
+          </h1>
+
+          <p>
+            Bugün de hedeflerine biraz daha yaklaş.
+            DersTakip senin için burada. 🚀
+          </p>
+
+          <div style="margin-top:25px">
+
+            <strong>
+              ${completed}/${total}
+            </strong>
+
+            görev tamamlandı
+
+          </div>
+
+          <div class="emoji">
+            📚
+          </div>
+
+        </div>
+
+
+        <div class="dt-stat-grid">
+
+          <div class="dt-stat-card">
+            <div class="dt-icon">⭐</div>
+            <div class="dt-big-number">${xp}</div>
+            <div class="dt-label">Toplam XP</div>
+          </div>
+
+          <div class="dt-stat-card">
+            <div class="dt-icon">🔥</div>
+            <div class="dt-big-number">${streak}</div>
+            <div class="dt-label">Günlük Seri</div>
+          </div>
+
+          <div class="dt-stat-card">
+            <div class="dt-icon">🏆</div>
+            <div class="dt-big-number">${level}</div>
+            <div class="dt-label">Seviye</div>
+          </div>
+
+          <div class="dt-stat-card">
+            <div class="dt-icon">🪙</div>
+            <div class="dt-big-number">${state.coins}</div>
+            <div class="dt-label">Coin</div>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div style="
+        margin-top:22px;
+        display:grid;
+        grid-template-columns:1.2fr .8fr;
+        gap:20px;
+      ">
+
+        <div class="dt-card">
+
+          <div class="dt-header">
+
+            <div>
+              <h2 class="dt-title">
+                🎯 Bugünkü Görevler
+              </h2>
+
+              <div class="dt-subtitle">
+                ${completed}/${total} tamamlandı
+              </div>
+            </div>
+
+            <button
+              class="primary-btn"
+              onclick="navigate('tasks')"
+            >
+              Tüm Görevler →
+            </button>
+
+          </div>
+
+          ${
+            tasks.length
+              ? tasks.slice(0,5).map(task => `
+
+                <div class="dt-task-item ${
+                  task.completed ? "completed" : ""
+                }">
+
+                  <button
+                    class="dt-task-check"
+                    onclick="toggleTask(${task.id})"
+                  >
+                    ${task.completed ? "✓" : ""}
+                  </button>
+
+                  <div>
+                    <div class="dt-task-title">
+                      ${escapeHTML(task.title)}
+                    </div>
+
+                    <small style="color:var(--muted)">
+                      ⭐ +${Number(task.xp) || 50} XP
+                    </small>
+                  </div>
+
+                </div>
+
+              `).join("")
+              :
+              `
+                <div class="dt-empty">
+                  <div style="font-size:50px">🎯</div>
+                  <h3>Henüz görev yok</h3>
+                  <p>İlk görevini ekleyerek başla!</p>
+
+                  <button
+                    class="primary-btn"
+                    onclick="navigate('tasks')"
+                  >
+                    + Görev Ekle
+                  </button>
+                </div>
+              `
+          }
+
+        </div>
+
+
+        <div class="dt-card">
+
+          <div class="dt-header">
+
+            <div>
+              <h2 class="dt-title">
+                🤖 Ders Koçu
+              </h2>
+
+              <div class="dt-subtitle">
+                Bugünkü önerin
+              </div>
+            </div>
+
+          </div>
+
+          <div style="
+            font-size:45px;
+            margin:10px 0;
+          ">
+            🤖
+          </div>
+
+          <p style="
+            line-height:1.7;
+            color:var(--muted);
+          ">
+
+            ${
+              coachData?.advice?.[0]
+                ? escapeHTML(
+                    coachData.advice[0].text
+                  )
+                : "Bugün küçük bir hedef belirle ve hemen başla! 💪"
+            }
+
+          </p>
+
+          <button
+            class="secondary-btn"
+            style="margin-top:15px"
+            onclick="navigate('coach')"
+          >
+            Koçu Aç →
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+  updateSectionTitle("home");
+  updateUserUI();
+}
+
+
+/* =========================================================
+   YENİ TASKS
+   ========================================================= */
+
+function renderTasksPage() {
+
+  $("homeHero").style.display = "none";
+  $("tasksSection").style.display = "none";
+
+  const dynamic = $("dynamicSection");
+  dynamic.style.display = "block";
+
+  const completed =
+    tasks.filter(t => t.completed).length;
+
+  dynamic.innerHTML = `
+
+    <div class="dt-page dt-task-page">
+
+      <div class="dt-header">
+
+        <div>
+
+          <h2 class="dt-title">
+            ✅ Görev Merkezi
+          </h2>
+
+          <div class="dt-subtitle">
+            ${completed}/${tasks.length}
+            görev tamamlandı
+          </div>
+
+        </div>
+
+        <div style="
+          font-size:20px;
+          font-weight:800;
+        ">
+          ⭐ ${Number(currentUser?.xp) || 0} XP
+        </div>
+
+      </div>
+
+
+      <div class="dt-card">
+
+        ${
+          tasks.length
+            ? tasks.map(task => `
+
+              <div class="dt-task-item ${
+                task.completed ? "completed" : ""
+              }">
+
+                <button
+                  class="dt-task-check"
+                  onclick="toggleTask(${task.id})"
+                >
+                  ${task.completed ? "✓" : ""}
+                </button>
+
+                <div style="flex:1">
+
+                  <div class="dt-task-title">
+                    ${escapeHTML(task.title)}
+                  </div>
+
+                  <small style="color:var(--muted)">
+                    Görev ödülü:
+                    ⭐ +${Number(task.xp) || 50} XP
+                  </small>
+
+                </div>
+
+                <button
+                  class="delete-task"
+                  onclick="deleteTask(${task.id})"
+                >
+                  🗑️
+                </button>
+
+              </div>
+
+            `).join("")
+            :
+            `
+              <div class="dt-empty">
+                <div style="font-size:55px">
+                  📝
+                </div>
+
+                <h3>Görev listen boş</h3>
+
+                <p>
+                  Bugün yapacağın ilk görevi ekle.
+                </p>
+              </div>
+            `
+        }
+
+      </div>
+
+
+      <div class="dt-card" style="margin-top:20px">
+
+        <h3>➕ Yeni Görev</h3>
+
+        <div style="
+          display:flex;
+          gap:10px;
+          margin-top:15px;
+        ">
+
+          <input
+            id="pageNewTask"
+            placeholder="Örneğin: 20 soru matematik çöz"
+            maxlength="150"
+            style="
+              flex:1;
+              padding:14px;
+              border-radius:14px;
+              border:1px solid var(--border);
+              background:var(--white);
+              color:var(--text);
+            "
+          >
+
+          <button
+            class="primary-btn"
+            onclick="addTaskFromPage()"
+          >
+            + Ekle
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   YENİ SUBJECTS
+   ========================================================= */
+
+function renderSubjectsPage() {
+
+  $("homeHero").style.display = "none";
+  $("tasksSection").style.display = "none";
+
+  const dynamic = $("dynamicSection");
+  dynamic.style.display = "block";
+
+  dynamic.innerHTML = `
+
+    <div class="dt-page">
+
+      <div class="dt-header">
+
+        <div>
+          <h2 class="dt-title">
+            📚 Derslerim
+          </h2>
+
+          <div class="dt-subtitle">
+            ${subjects.length} ders kayıtlı
+          </div>
+        </div>
+
+        <button
+          class="primary-btn"
+          onclick="openSubjectModal()"
+        >
+          + Ders Ekle
+        </button>
+
+      </div>
+
+
+      ${
+        subjects.length
+          ?
+          `
+          <div class="dt-subject-grid">
+
+            ${subjects.map((subject,index) => `
+
+              <div class="dt-subject">
+
+                <div class="dt-subject-icon">
+
+                  ${
+                    ["📐","🧪","📖","🌍","💻","🎨"][index % 6]
+                  }
+
+                </div>
+
+                <h3>
+                  ${escapeHTML(subject.name)}
+                </h3>
+
+                <p style="
+                  color:var(--muted);
+                  margin-top:7px;
+                ">
+                  Ders Takibi
+                </p>
+
+                <button
+                  class="danger-btn"
+                  style="margin-top:20px"
+                  onclick="deleteSubject(${subject.id})"
+                >
+                  Sil
+                </button>
+
+              </div>
+
+            `).join("")}
+
+          </div>
+          `
+          :
+          `
+          <div class="dt-card dt-empty">
+
+            <div style="font-size:65px">
+              📚
+            </div>
+
+            <h3>Henüz ders yok</h3>
+
+            <p>
+              Derslerini ekleyerek çalışma planını oluştur.
+            </p>
+
+            <button
+              class="primary-btn"
+              onclick="openSubjectModal()"
+            >
+              + İlk Dersi Ekle
+            </button>
+
+          </div>
+          `
+      }
+
+    </div>
+
+  `;
+}
+
+
+/* =========================================================
+   YENİ EXAMS
+   ========================================================= */
+
+function renderExamsPage() {
+
+  $("homeHero").style.display = "none";
+  $("tasksSection").style.display = "none";
+
+  const dynamic = $("dynamicSection");
+  dynamic.style.display = "block";
+
+  const sorted = [...exams].sort(
+    (a,b) =>
+      new Date(a.exam_date) -
+      new Date(b.exam_date)
+  );
+
+  dynamic.innerHTML = `
+
+    <div class="dt-page">
+
+      <div class="dt-header">
+
+        <div>
+          <h2 class="dt-title">
+            📅 Sınav Takvimi
+          </h2>
+
+          <div class="dt-subtitle">
+            Sınavlarını önceden planla.
+          </div>
+        </div>
+
+        <button
+          class="primary-btn"
+          onclick="openExamModal()"
+        >
+          + Sınav Ekle
+        </button>
+
+      </div>
+
+
+      ${
+        sorted.length
+          ?
+          `
+          <div class="dt-exam-timeline">
+
+            ${sorted.map(exam => `
+
+              <div class="dt-exam">
+
+                <div class="dt-exam-date">
+                  📅 ${formatDate(exam.exam_date)}
+                </div>
+
+                <h3>
+                  ${escapeHTML(exam.title)}
+                </h3>
+
+                <p style="
+                  color:var(--muted);
+                  margin-top:7px;
+                ">
+                  📚
+                  ${escapeHTML(
+                    exam.subject_name ||
+                    "Ders belirtilmedi"
+                  )}
+                </p>
+
+                ${
+                  exam.topic
+                    ?
+                    `
+                    <div style="
+                      margin-top:12px;
+                      padding:10px;
+                      border-radius:12px;
+                      background:#f5f3ff;
+                    ">
+                      🎯 Konu:
+                      ${escapeHTML(exam.topic)}
+                    </div>
+                    `
+                    : ""
+                }
+
+                <button
+                  class="danger-btn"
+                  style="margin-top:15px"
+                  onclick="deleteExam(${exam.id})"
+                >
+                  Sınavı Sil
+                </button>
+
+              </div>
+
+            `).join("")}
+
+          </div>
+          `
+          :
+          `
+          <div class="dt-card dt-empty">
+
+            <div style="font-size:65px">
+              📅
+            </div>
+
+            <h3>Takvim boş</h3>
+
+            <p>
+              Yaklaşan sınavlarını buraya ekle.
+            </p>
+
+            <button
+              class="primary-btn"
+              onclick="openExamModal()"
+            >
+              + Sınav Ekle
+            </button>
+
+          </div>
+          `
+      }
+
+    </div>
+
+  `;
+}
+
+
+/* =========================================================
+   YENİ FOCUS
+   ========================================================= */
+
+function renderFocusPage() {
+
+  $("homeHero").style.display = "none";
+  $("tasksSection").style.display = "none";
+
+  const dynamic = $("dynamicSection");
+  dynamic.style.display = "block";
+
+  dynamic.innerHTML = `
+
+    <div class="dt-page">
+
+      <div class="dt-focus">
+
+        <div class="dt-focus-mode">
+          ${timerMode}
+        </div>
+
+        <h2>
+          ⏱️ Odaklanma Modu
+        </h2>
+
+        <p style="
+          color:var(--muted);
+        ">
+          25 dakika boyunca sadece dersine odaklan.
+        </p>
+
+        <div
+          class="dt-focus-timer"
+          id="focusTimer"
+        >
+          ${formatTimer(timerSeconds)}
+        </div>
+
+        <div style="
+          display:flex;
+          justify-content:center;
+          gap:10px;
+          flex-wrap:wrap;
+        ">
+
+          <button
+            class="primary-btn"
+            onclick="startTimer()"
+          >
+            ▶ Başlat
+          </button>
+
+          <button
+            class="secondary-btn"
+            onclick="pauseTimer()"
+          >
+            ⏸ Duraklat
+          </button>
+
+          <button
+            class="secondary-btn"
+            onclick="resetTimer()"
+          >
+            🔄 Sıfırla
+          </button>
+
+        </div>
+
+        <div style="
+          margin-top:25px;
+          color:var(--muted);
+        ">
+          Tamamlanan her odak seansı XP kazandırır. ⭐
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+}
+
+
+/* =========================================================
+   YENİ COACH
+   ========================================================= */
+
+function renderCoachPage() {
+
+  $("homeHero").style.display = "none";
+  $("tasksSection").style.display = "none";
+
+  const dynamic = $("dynamicSection");
+  dynamic.style.display = "block";
+
+  if (!coachData) {
+
+    dynamic.innerHTML = `
+      <div class="dt-card dt-empty">
+        🤖 Ders Koçu hazırlanıyor...
+      </div>
+    `;
+
+    return;
+  }
+
+  const c = coachData;
+
+  dynamic.innerHTML = `
+
+    <div class="dt-page">
+
+      <div class="dt-coach">
+
+        <div class="dt-coach-header">
+
+          <div class="dt-robot">
+            🤖
+          </div>
+
+          <div>
+
+            <h2>
+              ${escapeHTML(
+                c.greeting || "Ders Koçun"
+              )}
+            </h2>
+
+            <div style="opacity:.7">
+              Sana özel çalışma planı
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="dt-grid">
+
+          <div class="dt-advice">
+
+            ⭐
+
+            <div class="dt-big-number">
+              ${c.xp}
+            </div>
+
+            XP
+
+          </div>
+
+          <div class="dt-advice">
+
+            🔥
+
+            <div class="dt-big-number">
+              ${c.streak}
+            </div>
+
+            Günlük Seri
+
+          </div>
+
+          <div class="dt-advice">
+
+            ⏱️
+
+            <div class="dt-big-number">
+              ${c.focus_minutes}
+            </div>
+
+            Dakika
+
+          </div>
+
+        </div>
+
+
+        <h3 style="margin-top:30px">
+          🎯 Bugünkü Öneriler
+        </h3>
+
+
+        ${
+          (c.advice || []).map(item => `
+
+            <div class="dt-advice">
+
+              <div style="
+                font-size:28px;
+                margin-bottom:8px;
+              ">
+                ${item.icon || "💡"}
+              </div>
+
+              <strong>
+                ${escapeHTML(item.title)}
+              </strong>
+
+              <p style="
+                opacity:.75;
+                line-height:1.6;
+                margin-top:6px;
+              ">
+                ${escapeHTML(item.text)}
+              </p>
+
+            </div>
+
+          `).join("")
+        }
+
+
+        <div class="dt-advice"
+          style="margin-top:25px">
+
+          🎯
+
+          <strong>
+            Günlük Hedef
+          </strong>
+
+          <p style="opacity:.75">
+            ${c.recommended.tasks}
+            görev +
+            ${c.recommended.minutes}
+            dakika odaklanma
+          </p>
+
+          <strong>
+            ⭐ +${c.recommended.xp} XP
+          </strong>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+}
+
+
+/* =========================================================
+   YENİ PET
+   ========================================================= */
+
+function renderPetPage() {
+
+  $("homeHero").style.display = "none";
+  $("tasksSection").style.display = "none";
+
+  const dynamic = $("dynamicSection");
+  dynamic.style.display = "block";
+
+  const xp =
+    Number(currentUser?.xp) || 0;
+
+  const level =
+    calculateLevel(xp);
+
+  state.pet.level = level;
+
+  const progress =
+    ((xp % 500) / 500) * 100;
+
+  dynamic.innerHTML = `
+
+    <div class="dt-page">
+
+      <div class="dt-pet">
+
+        <div style="
+          color:var(--muted);
+        ">
+          🐾 EVLİ HAYVANIN
+        </div>
+
+        <div class="dt-pet-avatar">
+
+          ${state.pet.emoji}
+
+        </div>
+
+        <h2>
+          ${escapeHTML(state.pet.name)}
+        </h2>
+
+        <p style="
+          color:var(--muted);
+        ">
+          Seviye ${level}
+        </p>
+
+        <div class="dt-progress"
+          style="
+            max-width:400px;
+            margin:20px auto;
+          "
+        >
+          <span
+            style="width:${progress}%"
+          ></span>
+        </div>
+
+        <p style="
+          color:var(--muted);
+        ">
+          ${xp % 500}/500 XP
+        </p>
+
+        <button
+          class="primary-btn"
+          style="margin-top:15px"
+          onclick="changePetName()"
+        >
+          ✏️ İsmini Değiştir
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+}
+
+
+/* =========================================================
+   YENİ MARKET
+   ========================================================= */
+
+function renderMarketPage() {
+
+  $("homeHero").style.display = "none";
+  $("tasksSection").style.display = "none";
+
+  const dynamic = $("dynamicSection");
+  dynamic.style.display = "block";
+
+  dynamic.innerHTML = `
+
+    <div class="dt-page dt-market">
+
+      <div class="dt-header">
+
+        <div>
+
+          <h2 class="dt-title">
+            🛒 Ödül Marketi
+          </h2>
+
+          <div class="dt-subtitle">
+            XP kazan, coin biriktir, ödüllerini al.
+          </div>
+
+        </div>
+
+        <div style="
+          font-size:24px;
+          font-weight:900;
+          color:#f39c12;
+        ">
+          🪙 ${state.coins}
+        </div>
+
+      </div>
+
+
+      <div class="dt-market-grid">
+
+        ${marketItems.map(item => `
+
+          <div class="dt-product">
+
+            <div class="dt-product-icon">
+              ${item.icon}
+            </div>
+
+            <h3>
+              ${escapeHTML(item.name)}
+            </h3>
+
+            <p style="
+              color:var(--muted);
+              min-height:40px;
+            ">
+              ${escapeHTML(item.description)}
+            </p>
+
+            <div class="dt-price">
+              🪙 ${item.price}
+            </div>
+
+            <button
+              class="primary-btn"
+              onclick="buyItem('${item.id}')"
+            >
+              Satın Al
+            </button>
+
+          </div>
+
+        `).join("")}
+
+      </div>
+
+    </div>
+
+  `;
+}
+
+
+/* =========================================================
+   YENİ ACHIEVEMENTS
+   ========================================================= */
+
+function renderAchievementsPage() {
+
+  $("homeHero").style.display = "none";
+  $("tasksSection").style.display = "none";
+
+  const dynamic = $("dynamicSection");
+  dynamic.style.display = "block";
+
+  const xp =
+    Number(currentUser?.xp) || 0;
+
+  const completed =
+    tasks.filter(t => t.completed).length;
+
+  const definitions = [
+    {
+      icon:"🌱",
+      title:"İlk Adım",
+      text:"İlk görevini tamamla.",
+      unlocked:completed >= 1
+    },
+    {
+      icon:"🔥",
+      title:"Çalışkan",
+      text:"5 görev tamamla.",
+      unlocked:completed >= 5
+    },
+    {
+      icon:"⭐",
+      title:"XP Avcısı",
+      text:"500 XP kazan.",
+      unlocked:xp >= 500
+    },
+    {
+      icon:"🏆",
+      title:"Usta Öğrenci",
+      text:"1000 XP kazan.",
+      unlocked:xp >= 1000
+    },
+    {
+      icon:"📚",
+      title:"Ders Sever",
+      text:"3 ders ekle.",
+      unlocked:subjects.length >= 3
+    },
+    {
+      icon:"📅",
+      title:"Planlı Öğrenci",
+      text:"3 sınav ekle.",
+      unlocked:exams.length >= 3
+    }
+  ];
+
+  dynamic.innerHTML = `
+
+    <div class="dt-page dt-achievements">
+
+      <div class="dt-header">
+
+        <div>
+
+          <h2 class="dt-title">
+            🏆 Başarı Koleksiyonum
+          </h2>
+
+          <div class="dt-subtitle">
+            Kazandığın rozetleri burada görebilirsin.
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="dt-badge-grid">
+
+        ${definitions.map(badge => `
+
+          <div class="dt-badge ${
+            badge.unlocked ? "" : "locked"
+          }">
+
+            <div class="dt-badge-icon">
+              ${badge.icon}
+            </div>
+
+            <h3>
+              ${badge.title}
+            </h3>
+
+            <p style="
+              color:var(--muted);
+              margin-top:8px;
+            ">
+              ${badge.text}
+            </p>
+
+            <strong style="
+              display:block;
+              margin-top:12px;
+            ">
+              ${
+                badge.unlocked
+                  ? "✅ KAZANILDI"
+                  : "🔒 KİLİTLİ"
+              }
+            </strong>
+
+          </div>
+
+        `).join("")}
+
+      </div>
+
+    </div>
+
+  `;
+}
+
+
+/* =========================================================
+   YENİ STATS
+   ========================================================= */
+
+async function renderStatsPage() {
+
+  $("homeHero").style.display = "none";
+  $("tasksSection").style.display = "none";
+
+  const dynamic = $("dynamicSection");
+  dynamic.style.display = "block";
+
+  dynamic.innerHTML = `
+
+    <div class="dt-card dt-empty">
+      📊 İstatistikler hazırlanıyor...
+    </div>
+
+  `;
+
+  try {
+
+    const data = await api("stats");
+    const s = data.stats;
+
+    const total =
+      Number(s.tasks?.total) || 0;
+
+    const completed =
+      Number(s.tasks?.completed) || 0;
+
+    const percent =
+      total
+        ? Math.round((completed / total) * 100)
+        : 0;
+
+    dynamic.innerHTML = `
+
+      <div class="dt-page dt-stats">
+
+        <div class="dt-header">
+
+          <div>
+
+            <h2 class="dt-title">
+              📊 Performansım
+            </h2>
+
+            <div class="dt-subtitle">
+              Çalışma alışkanlıklarını analiz et.
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="dt-grid">
+
+          <div class="dt-card">
+            <div class="dt-icon">🎯</div>
+            <div class="dt-big-number">${total}</div>
+            <div class="dt-label">
+              Toplam Görev
+            </div>
+          </div>
+
+          <div class="dt-card">
+            <div class="dt-icon">✅</div>
+            <div class="dt-big-number">${completed}</div>
+            <div class="dt-label">
+              Tamamlanan
+            </div>
+          </div>
+
+          <div class="dt-card">
+            <div class="dt-icon">📚</div>
+            <div class="dt-big-number">
+              ${s.subjects}
+            </div>
+            <div class="dt-label">
+              Ders
+            </div>
+          </div>
+
+          <div class="dt-card">
+            <div class="dt-icon">📅</div>
+            <div class="dt-big-number">
+              ${s.exams}
+            </div>
+            <div class="dt-label">
+              Sınav
+            </div>
+          </div>
+
+          <div class="dt-card">
+            <div class="dt-icon">⏱️</div>
+            <div class="dt-big-number">
+              ${s.sessions.minutes}
+            </div>
+            <div class="dt-label">
+              Odak Dakikası
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="dt-progress-box">
+
+          <h3>
+            🎯 Görev Başarı Oranı
+          </h3>
+
+          <div class="dt-progress">
+
+            <span
+              style="width:${percent}%"
+            ></span>
+
+          </div>
+
+          <strong style="
+            display:block;
+            margin-top:10px;
+            font-size:22px;
+          ">
+            ${percent}%
+          </strong>
+
+          <p style="
+            color:var(--muted);
+            margin-top:5px;
+          ">
+            ${
+              percent >= 80
+                ? "Harika! Çok iyi gidiyorsun! 🚀"
+                : percent >= 50
+                ? "Gayet iyi! Biraz daha devam et. 💪"
+                : "Bugün birkaç görev tamamlamaya ne dersin? 🎯"
+            }
+          </p>
+
+        </div>
+
+      </div>
+
+    `;
+
+  } catch(error) {
+
+    dynamic.innerHTML = `
+
+      <div class="dt-card">
+        ❌ ${escapeHTML(error.message)}
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* =========================================================
+   YENİ PROFILE
+   ========================================================= */
+
+function renderProfilePage() {
+
+  $("homeHero").style.display = "none";
+  $("tasksSection").style.display = "none";
+
+  const dynamic = $("dynamicSection");
+  dynamic.style.display = "block";
+
+  const name =
+    currentUser?.name || "Öğrenci";
+
+  const email =
+    currentUser?.email || "";
+
+  const xp =
+    Number(currentUser?.xp) || 0;
+
+  const streak =
+    Number(currentUser?.streak) || 0;
+
+  const level =
+    calculateLevel(xp);
+
+  dynamic.innerHTML = `
+
+    <div class="dt-page dt-profile">
+
+      <div class="dt-profile-head">
+
+        <div class="dt-avatar">
+          🎓
+        </div>
+
+        <h2 style="margin-top:15px">
+          ${escapeHTML(name)}
+        </h2>
+
+        <p style="opacity:.8;margin-top:5px">
+          ${escapeHTML(email)}
+        </p>
+
+      </div>
+
+
+      <div class="dt-profile-info">
+
+        <div class="dt-profile-stat">
+
+          <div style="font-size:30px">
+            ⭐
+          </div>
+
+          <div class="dt-big-number">
+            ${xp}
+          </div>
+
+          <div class="dt-label">
+            XP
+          </div>
+
+        </div>
+
+
+        <div class="dt-profile-stat">
+
+          <div style="font-size:30px">
+            🏆
+          </div>
+
+          <div class="dt-big-number">
+            ${level}
+          </div>
+
+          <div class="dt-label">
+            Seviye
+          </div>
+
+        </div>
+
+
+        <div class="dt-profile-stat">
+
+          <div style="font-size:30px">
+            🔥
+          </div>
+
+          <div class="dt-big-number">
+            ${streak}
+          </div>
+
+          <div class="dt-label">
+            Seri
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="dt-card" style="margin-top:20px">
+
+        <h3>
+          ⚙️ Hesap Ayarları
+        </h3>
+
+        <div style="
+          display:flex;
+          gap:10px;
+          flex-wrap:wrap;
+          margin-top:18px;
+        ">
+
+          <button
+            class="secondary-btn"
+            onclick="toggleDarkMode()"
+          >
+            🌙 Tema Değiştir
+          </button>
+
+          <button
+            class="danger-btn"
+            onclick="logout()"
+          >
+            🚪 Çıkış Yap
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   GÜNCEL SECTION TITLE
+   ========================================================= */
+
+const oldUpdateSectionTitle = updateSectionTitle;
+
+updateSectionTitle = function(page) {
+
+  const titles = {
+
+    home:
+      "📊 Genel bakış ve bugünkü çalışma planın",
+
+    tasks:
+      "🎯 Görevlerini yönet, tamamla ve XP kazan",
+
+    subjects:
+      "📚 Derslerini kendi çalışma sistemine göre düzenle",
+
+    exams:
+      "📅 Sınavlarını takvim şeklinde planla",
+
+    focus:
+      "⏱️ Pomodoro ile dikkatini tek noktaya topla",
+
+    coach:
+      "🤖 Yapay zekâ destekli çalışma koçun",
+
+    pet:
+      "🐼 Çalıştıkça gelişen evcil hayvanın",
+
+    market:
+      "🛒 Kazandığın coinleri ödüllere harca",
+
+    achievements:
+      "🏆 Çalışma başarılarını ve rozetlerini topla",
+
+    stats:
+      "📊 Çalışma performansını detaylı incele",
+
+    profile:
+      "👤 Profilin, seviyen ve hesap ayarların"
+
+  };
+
+  if ($("sectionSubtitle")) {
+    $("sectionSubtitle").textContent =
+      titles[page] || "";
+  }
+
+};
+
+
+/* =========================================================
+   BAŞLANGIÇ
+   ========================================================= */
+
+console.log(
+  "DersTakip 2.0 yeni menü tasarımı aktif 🚀"
+);
