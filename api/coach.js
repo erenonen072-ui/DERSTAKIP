@@ -1,393 +1,156 @@
 export default async function handler(req, res) {
-
   if (req.method !== "POST") {
-
     return res.status(405).json({
       success: false,
       error: "Sadece POST isteği kabul edilir."
     });
-
   }
 
   try {
-
-    const apiKey =
-      process.env.GEMINI_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-
       return res.status(500).json({
         success: false,
-        error: "GEMINI_API_KEY bulunamadı."
+        error: "GEMINI_API_KEY Vercel Environment Variables içinde bulunamadı."
       });
-
     }
 
+    const {
+      message,
+      history = [],
+      userName = "Öğrenci"
+    } = req.body || {};
 
-    const body =
-      req.body || {};
-
-
-    const message =
-      String(
-        body.message || ""
-      ).trim();
-
-
-    const history =
-      Array.isArray(body.history)
-        ? body.history
-        : [];
-
-
-    const student =
-      body.user || null;
-
-
-    const data =
-      body.data || {};
-
-
-    if (!message) {
-
+    if (!message || !message.trim()) {
       return res.status(400).json({
         success: false,
         error: "Mesaj boş olamaz."
       });
-
     }
 
-
-    /*
-      ============================
-      DERS KOÇU KİŞİLİĞİ
-      ============================
-    */
-
-    const systemPrompt = `
-
-Sen DersTakip uygulamasının
-yapay zeka destekli Ders Koçusun.
-
-Öğrencilerle doğal, samimi ve yardımcı
-bir şekilde konuş.
-
-ÇOK ÖNEMLİ KURALLAR:
-
-1. Her mesaja aynı cevabı verme.
-
-2. Öğrencinin söylediği şeyi gerçekten analiz et.
-
-3. Önceki konuşmaları dikkate al.
-
-4. Öğrencinin mevcut görevlerini,
-   sınavlarını, derslerini ve XP'sini
-   gerektiğinde kullan.
-
-5. Gereksiz şekilde aynı motivasyon
-   cümlelerini tekrar etme.
-
-6. Her cevabın sonunda sürekli
-   "Başka bir şey ister misin?"
-   yazma.
-
-7. Türkçe cevap ver.
-
-8. Öğrencinin seviyesine uygun,
-   kolay anlaşılır bir dil kullan.
-
-9. Gerektiğinde örnek ver.
-
-10. Matematik sorularında işlemleri
-    anlaşılır şekilde açıkla.
-
-11. Ders çalışma planı istenirse
-    uygulanabilir bir plan hazırla.
-
-12. Sınav yaklaşmışsa kalan zamana
-    göre gerçekçi çalışma öner.
-
-13. Öğrenci "bugün ne çalışayım?"
-    derse mevcut sınav ve görevlerine
-    göre öneri yap.
-
-14. Öğrenci motivasyonsuzsa sürekli
-    aynı "küçük adım" cümlesini kullanma.
-    Önce neden zorlandığını anlamaya çalış.
-
-15. Öğrenci bir konuda yanlış düşünüyorsa
-    nazikçe düzelt.
-
-16. Bilmediğin bir bilgiyi kesinmiş gibi
-    söyleme.
-
-17. Çok uzun cevaplar verme.
-    Gerektiğinde maddeler kullan.
-
-18. Öğrencinin kişisel bilgilerini
-    gereksiz yere tekrar etme.
-
-19. Ders Koçu bir öğretmen yardımcısı gibi
-    davranmalı; öğrencinin yerine ödev
-    yapmaya çalışmak yerine anlamasına
-    yardımcı olmalı.
-
-20. Konuşma doğal olmalı.
-
-ÖĞRENCİ:
-
-Ad:
-${student?.name || "Öğrenci"}
-
-TOPLAM XP:
-${data.xp || 0}
-
-SEVİYE:
-${Math.floor((data.xp || 0) / 100) + 1}
-
-ÇALIŞMA SERİSİ:
-${data.streak || 0} gün
-
-TAMAMLANAN GÖREV:
-${data.completed || 0}
-
-GÖREVLER:
-${JSON.stringify(data.tasks || [])}
-
-DERSLER:
-${JSON.stringify(data.subjects || [])}
-
-SINAVLAR:
-${JSON.stringify(data.exams || [])}
-
-NOTLAR:
-${JSON.stringify(data.notes || [])}
-
-`;
-
-
-    /*
-      ============================
-      GEMINI MESAJLARI
-      ============================
-    */
-
-    const contents = [];
-
-
-    /*
-      Sistem talimatını ilk kullanıcı
-      mesajı olarak gönderiyoruz.
-    */
-
-    contents.push({
-
-      role: "user",
-
-      parts: [
-        {
-          text: systemPrompt
-        }
-      ]
-
-    });
-
-
-    /*
-      Önceki konuşmalar
-    */
-
-    for (
-      const item of history.slice(-10)
-    ) {
-
-      if (
-        !item ||
-        !item.content
-      ) {
-        continue;
-      }
-
-
-      const role =
-        item.role === "assistant"
-          ? "model"
-          : "user";
-
-
-      contents.push({
-
-        role,
-
+    const contents = [
+      ...history.slice(-12).map(item => ({
+        role: item.role === "assistant" ? "model" : "user",
         parts: [
           {
-            text:
-              String(
-                item.content
-              )
+            text: String(item.text || "")
           }
         ]
+      })),
+      {
+        role: "user",
+        parts: [
+          {
+            text: message.trim()
+          }
+        ]
+      }
+    ];
 
-      });
+    const prompt = `
+Sen DersTakip uygulamasının yapay zekâ Ders Koçusun.
 
-    }
+Öğrencinin adı: ${userName}
 
+Görevin:
+- Öğrenciyle doğal bir şekilde konuş.
+- Her mesaja aynı cevabı verme.
+- Öğrencinin yazdığı mesaja doğrudan cevap ver.
+- Ders çalışma, sınav, ödev, motivasyon ve planlama konusunda yardımcı ol.
+- Öğrenci soru sorarsa sorusuna cevap ver.
+- Öğrenci "merhaba" derse merhaba de.
+- Öğrenci "nasılsın" derse doğal cevap ver.
+- Öğrenci moralinin bozuk olduğunu söylerse destekleyici ol.
+- Gereksiz yere sürekli "25 dakika çalış" deme.
+- Her cevapta aynı kalıpları kullanma.
+- Cevapları Türkçe ver.
+- Ortaokul/lise öğrencisinin kolay anlayacağı bir dil kullan.
+- Çok uzun cevaplar verme.
+- Gerektiğinde madde işaretleri kullan.
+- Matematik gibi ders sorularında çözümü anlaşılır şekilde göster.
+- Bilmediğin bir konuda kesinmiş gibi davranma.
 
-    /*
-      Yeni kullanıcı mesajı
-    */
+Önemli:
+Öğrencinin mesajının bağlamını dikkate al.
+Önceki mesajları kullanarak konuşmanın devamlılığını koru.
 
-    contents.push({
+Öğrenci mesajı:
+${message}
+`;
 
-      role: "user",
-
-      parts: [
-        {
-          text: message
-        }
-      ]
-
-    });
-
-
-    /*
-      ============================
-      GEMINI API
-      ============================
-    */
-
-    const response =
-      await fetch(
-
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" +
-        encodeURIComponent(apiKey),
-
-        {
-
-          method: "POST",
-
-          headers: {
-
-            "Content-Type":
-              "application/json"
-
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          systemInstruction: {
+            parts: [
+              {
+                text: prompt
+              }
+            ]
           },
+          contents,
+          generationConfig: {
+            temperature: 0.9,
+            maxOutputTokens: 700
+          }
+        })
+      }
+    );
 
-          body: JSON.stringify({
+    const raw = await response.text();
 
-            contents,
+    let result;
 
-            generationConfig: {
-
-              temperature: 0.8,
-
-              topP: 0.9,
-
-              maxOutputTokens: 1200
-
-            }
-
-          })
-
-        }
-
-      );
-
-
-    const result =
-      await response.json();
-
-
-    /*
-      Gemini hata verdi
-    */
+    try {
+      result = JSON.parse(raw);
+    } catch {
+      return res.status(502).json({
+        success: false,
+        error: "Gemini geçerli JSON döndürmedi."
+      });
+    }
 
     if (!response.ok) {
+      console.error("Gemini API:", result);
 
-      console.error(
-        "GEMINI COACH ERROR:",
-        result
-      );
-
-
-      return res
-        .status(
-          response.status
-        )
-        .json({
-
-          success: false,
-
-          error:
-            result?.error?.message ||
-            "Gemini API hatası."
-
-        });
-
+      return res.status(response.status).json({
+        success: false,
+        error:
+          result?.error?.message ||
+          "Gemini API isteği başarısız oldu."
+      });
     }
 
-
-    /*
-      Cevabı çıkar
-    */
-
     const answer =
-      result
-        ?.candidates?.[0]
-        ?.content?.parts
-        ?.map(
-          part =>
-            part.text || ""
-        )
+      result?.candidates?.[0]?.content?.parts
+        ?.map(part => part.text || "")
         .join("")
         .trim();
 
-
     if (!answer) {
-
-      return res.status(500).json({
-
+      return res.status(502).json({
         success: false,
-
-        error:
-          "Yapay zekadan cevap alınamadı."
-
+        error: "Yapay zekadan cevap alınamadı."
       });
-
     }
 
-
-    /*
-      BAŞARILI
-    */
-
     return res.status(200).json({
-
       success: true,
-
       answer
-
     });
-
 
   } catch (error) {
-
-    console.error(
-      "COACH SERVER ERROR:",
-      error
-    );
-
+    console.error("COACH ERROR:", error);
 
     return res.status(500).json({
-
       success: false,
-
-      error:
-        error.message ||
-        "Ders Koçu sunucu hatası."
-
+      error: error.message || "Ders Koçu sunucu hatası."
     });
-
   }
-
 }
