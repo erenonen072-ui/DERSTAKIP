@@ -2,2920 +2,2009 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<meta name="theme-color" content="#635BFF">
-<meta name="description" content="DersTakip - Akıllı öğrenci çalışma uygulaması">
-
-<title>DersTakip V3</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#6757f5">
+<title>DersTakip — Öğrenci Paneli</title>
 
 <style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
-
+*{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --primary:#635BFF;
-  --primary-dark:#5148e8;
-  --primary-soft:#efedff;
-
-  --bg:#f6f7fb;
-  --surface:#ffffff;
-  --surface2:#f9faff;
-
-  --text:#171a2b;
-  --muted:#7b8195;
-  --border:#e8eaf1;
-
-  --green:#20c997;
-  --red:#ff5b6e;
-  --yellow:#ffbd3c;
-  --blue:#3b82f6;
-
-  --sidebar:#15182b;
-
-  --shadow:0 10px 35px rgba(26,31,60,.07);
-  --shadow-lg:0 25px 70px rgba(26,31,60,.12);
-
-  --radius:20px;
+ --primary:#6757f5;
+ --primary2:#8d7cff;
+ --bg:#f5f6fb;
+ --card:#fff;
+ --text:#171927;
+ --muted:#7c8297;
+ --border:#e7e9f1;
+ --dark:#171a2d;
+ --dark2:#22263d;
+ --green:#20c997;
+ --red:#ff5b6e;
+ --yellow:#ffbd3c;
+ --blue:#3b82f6;
+ --shadow:0 12px 35px rgba(25,30,60,.07);
 }
-
 body.dark{
-  --bg:#0d1020;
-  --surface:#15192b;
-  --surface2:#1b2035;
-  --text:#f5f7ff;
-  --muted:#9ca4bd;
-  --border:#2a3048;
-  --sidebar:#090c18;
-
-  --shadow:0 10px 35px rgba(0,0,0,.2);
-  --shadow-lg:0 25px 70px rgba(0,0,0,.3);
+ --bg:#0f1220;
+ --card:#181c2d;
+ --text:#f5f6ff;
+ --muted:#9da5bd;
+ --border:#2a3047;
+ --shadow:0 12px 35px rgba(0,0,0,.22);
 }
-
-html{
-  scroll-behavior:smooth;
-}
-
 body{
-  font-family:
-    Inter,
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
-
-  background:var(--bg);
-  color:var(--text);
-
-  min-height:100vh;
-  transition:.25s;
+ font-family:Inter,Arial,sans-serif;
+ background:var(--bg);
+ color:var(--text);
+ min-height:100vh;
 }
-
-button,
-input,
-select,
-textarea{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-}
-
-/* =========================
-   LOGIN
-========================= */
-
-#authScreen{
-  min-height:100vh;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  padding:25px;
-
-  background:
-    radial-gradient(circle at 10% 10%,#bcb6ff 0,transparent 28%),
-    radial-gradient(circle at 90% 90%,#ffc4df 0,transparent 30%),
-    linear-gradient(135deg,#5b51ed,#9077ff);
-}
-
-.auth-wrapper{
-  width:100%;
-  max-width:1050px;
-
-  min-height:650px;
-
-  display:grid;
-  grid-template-columns:1.1fr .9fr;
-
-  overflow:hidden;
-
-  border-radius:32px;
-
-  background:rgba(255,255,255,.96);
-
-  box-shadow:0 35px 100px rgba(0,0,0,.25);
-}
-
-.auth-showcase{
-  padding:55px;
-
-  color:white;
-
-  background:
-    radial-gradient(circle at 80% 15%,#ffffff35,transparent 25%),
-    linear-gradient(145deg,#6153ef,#9378ff);
-}
-
-.auth-showcase h1{
-  font-size:45px;
-  line-height:1.05;
-  margin-bottom:20px;
-}
-
-.auth-showcase h1 span{
-  color:#ffe66d;
-}
-
-.auth-showcase>p{
-  font-size:17px;
-  line-height:1.7;
-  opacity:.9;
-}
-
-.auth-illustration{
-  width:280px;
-  height:280px;
-
-  margin:35px auto;
-
-  border-radius:50%;
-
-  display:grid;
-  place-items:center;
-
-  font-size:140px;
-
-  background:#ffffff18;
-
-  animation:float 3s ease-in-out infinite;
-}
-
-@keyframes float{
-  0%,100%{
-    transform:translateY(0);
-  }
-
-  50%{
-    transform:translateY(-12px);
-  }
-}
-
-.auth-features{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-}
-
-.auth-feature{
-  padding:12px;
-
-  border-radius:14px;
-
-  background:#ffffff15;
-  border:1px solid #ffffff20;
-
-  font-weight:800;
-  font-size:13px;
-}
-
-.auth-box{
-  padding:45px;
-
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
-
-.auth-logo{
-  text-align:center;
-
-  font-size:34px;
-  font-weight:950;
-
-  color:#171a2b;
-
-  margin-bottom:8px;
-}
-
-.auth-logo span{
-  color:var(--primary);
-}
-
-.auth-description{
-  text-align:center;
-
-  color:#7d8498;
-
-  margin-bottom:25px;
-}
-
-.auth-tabs{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-
-  gap:5px;
-
-  padding:5px;
-
-  background:#f0f1f6;
-
-  border-radius:13px;
-
-  margin-bottom:20px;
-}
-
-.auth-tabs button{
-  border:0;
-  padding:12px;
-
-  border-radius:9px;
-
-  background:transparent;
-
-  font-weight:800;
-}
-
-.auth-tabs button.active{
-  background:white;
-  box-shadow:0 4px 12px #0001;
-}
-
-.form-group{
-  margin-bottom:15px;
-}
-
-.form-group label{
-  display:block;
-
-  margin-bottom:7px;
-
-  font-size:13px;
-  font-weight:800;
-}
-
-.form-group input{
-  width:100%;
-
-  padding:14px;
-
-  border:1px solid #dfe3ec;
-
-  border-radius:13px;
-
-  outline:none;
-
-  background:white;
-  color:#171a2b;
-}
-
-.form-group input:focus{
-  border-color:var(--primary);
-
-  box-shadow:0 0 0 4px #635bff15;
-}
-
-.password-wrap{
-  position:relative;
-}
-
-.password-wrap input{
-  padding-right:50px;
-}
-
-.show-password{
-  position:absolute;
-
-  right:8px;
-  top:50%;
-
-  transform:translateY(-50%);
-
-  border:0;
-
-  background:transparent;
-
-  font-size:19px;
-}
-
-.auth-button{
-  width:100%;
-
-  border:0;
-
-  padding:14px;
-
-  border-radius:13px;
-
-  color:white;
-
-  background:linear-gradient(135deg,var(--primary),#917dff);
-
-  font-weight:900;
-
-  box-shadow:0 10px 25px #635bff30;
-}
-
-#authMessage{
-  margin-top:15px;
-
-  min-height:18px;
-
-  text-align:center;
-
-  font-size:13px;
-}
-
-/* =========================
-   APP
-========================= */
-
-#app{
-  display:none;
-
-  min-height:100vh;
-}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+button,input,textarea,select{outline:none}
 
 /* SIDEBAR */
-
 .sidebar{
-  position:fixed;
-
-  left:0;
-  top:0;
-  bottom:0;
-
-  width:250px;
-
-  padding:25px 16px;
-
-  background:var(--sidebar);
-
-  color:white;
-
-  z-index:100;
+ position:fixed;
+ left:0;top:0;bottom:0;
+ width:245px;
+ background:var(--dark);
+ color:#fff;
+ padding:25px 17px;
+ z-index:100;
 }
-
 .logo{
-  padding-left:12px;
-
-  margin-bottom:30px;
-
-  font-size:25px;
-  font-weight:950;
+ font-size:25px;
+ font-weight:950;
+ padding:0 10px;
+ margin-bottom:35px;
 }
-
-.logo span{
-  color:#8277ff;
+.logo span{color:#8175ff}
+.nav button{
+ width:100%;
+ border:0;
+ background:transparent;
+ color:#aeb4ca;
+ padding:13px;
+ border-radius:12px;
+ margin-bottom:5px;
+ text-align:left;
+ font-weight:800;
+ transition:.2s;
 }
-
-.menu{
-  display:flex;
-  flex-direction:column;
-  gap:5px;
+.nav button:hover,.nav button.active{
+ background:#292e49;
+ color:#fff;
+ transform:translateX(2px);
 }
-
-.menu button{
-  width:100%;
-
-  padding:12px 13px;
-
-  border:0;
-
-  border-radius:12px;
-
-  background:transparent;
-
-  color:#aeb4ca;
-
-  text-align:left;
-
-  font-weight:800;
-
-  transition:.2s;
+.sidebar-bottom{
+ position:absolute;
+ bottom:22px;
+ left:17px;
+ right:17px;
 }
-
-.menu button:hover{
-  background:#242943;
-
-  color:white;
-}
-
-.menu button.active{
-  background:linear-gradient(135deg,#635bff,#776dff);
-
-  color:white;
-
-  box-shadow:0 8px 20px #635bff30;
-}
-
-.logout{
-  position:absolute;
-
-  left:16px;
-  right:16px;
-  bottom:20px;
-}
-
-.logout button{
-  width:100%;
-
-  padding:12px;
-
-  border:0;
-
-  border-radius:12px;
-
-  background:#242943;
-
-  color:white;
-
-  font-weight:800;
+.sidebar-bottom button{
+ width:100%;
+ border:0;
+ background:#292e49;
+ color:#fff;
+ padding:12px;
+ border-radius:12px;
+ font-weight:800;
 }
 
 /* MAIN */
-
 .main{
-  margin-left:250px;
-
-  min-height:100vh;
-
-  padding:28px;
-
-  max-width:1700px;
+ margin-left:245px;
+ min-height:100vh;
+ padding:28px;
+ max-width:1700px;
 }
-
-/* TOPBAR */
-
 .topbar{
-  display:flex;
-
-  align-items:center;
-  justify-content:space-between;
-
-  gap:20px;
-
-  margin-bottom:28px;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ margin-bottom:28px;
 }
-
-.welcome h1{
-  font-size:clamp(25px,3vw,36px);
-
-  margin-bottom:5px;
+.welcome h1{font-size:30px;margin-bottom:5px}
+.welcome p{color:var(--muted)}
+.top-actions{
+ display:flex;
+ gap:10px;
+ align-items:center;
 }
-
-.welcome p{
-  color:var(--muted);
+.icon-btn{
+ width:44px;height:44px;
+ border:1px solid var(--border);
+ background:var(--card);
+ color:var(--text);
+ border-radius:13px;
+ box-shadow:var(--shadow);
 }
-
-.profile{
-  display:flex;
-
-  align-items:center;
-
-  gap:10px;
-
-  padding:8px 13px;
-
-  border-radius:15px;
-
-  background:var(--surface);
-
-  border:1px solid var(--border);
-
-  box-shadow:var(--shadow);
+.profile-mini{
+ display:flex;
+ align-items:center;
+ gap:10px;
+ background:var(--card);
+ border:1px solid var(--border);
+ padding:7px 12px 7px 7px;
+ border-radius:15px;
+ box-shadow:var(--shadow);
+ cursor:pointer;
 }
-
 .avatar{
-  width:40px;
-  height:40px;
-
-  display:grid;
-  place-items:center;
-
-  border-radius:50%;
-
-  background:var(--primary-soft);
+ width:38px;height:38px;
+ border-radius:50%;
+ background:#e9e5ff;
+ display:grid;
+ place-items:center;
 }
 
-/* PAGE */
-
-.page{
-  display:none;
-  animation:pageIn .25s ease;
-}
-
-.page.active{
-  display:block;
-}
-
+/* PAGES */
+.page{display:none;animation:pageIn .25s ease}
+.page.active{display:block}
 @keyframes pageIn{
-  from{
-    opacity:0;
-    transform:translateY(8px);
-  }
-
-  to{
-    opacity:1;
-    transform:none;
-  }
-}
-
-/* PAGE HEADER */
-
-.page-header{
-  display:flex;
-
-  align-items:flex-end;
-  justify-content:space-between;
-
-  gap:20px;
-
-  margin-bottom:24px;
-}
-
-.page-header h2{
-  font-size:30px;
-  margin-bottom:5px;
-}
-
-.page-header p{
-  color:var(--muted);
+ from{opacity:0;transform:translateY(7px)}
+ to{opacity:1;transform:none}
 }
 
 /* CARDS */
-
 .card{
-  background:var(--surface);
-
-  border:1px solid var(--border);
-
-  border-radius:var(--radius);
-
-  padding:22px;
-
-  box-shadow:var(--shadow);
+ background:var(--card);
+ border:1px solid var(--border);
+ border-radius:21px;
+ padding:22px;
+ box-shadow:var(--shadow);
 }
-
 .card-title{
-  display:flex;
-
-  align-items:center;
-  justify-content:space-between;
-
-  gap:10px;
-
-  margin-bottom:16px;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:10px;
+ margin-bottom:18px;
 }
-
-.card-title h3{
-  font-size:18px;
+.card-title h2{font-size:20px}
+.muted{color:var(--muted)}
+.btn{
+ border:0;
+ padding:11px 16px;
+ border-radius:11px;
+ font-weight:850;
 }
-
-/* HOME HERO */
-
-.home-hero{
-  position:relative;
-
-  overflow:hidden;
-
-  padding:32px;
-
-  margin-bottom:20px;
-
-  border-radius:25px;
-
-  color:white;
-
-  background:
-    radial-gradient(circle at 90% 15%,#ffffff30,transparent 28%),
-    linear-gradient(135deg,#5f55ef,#9078ff);
-
-  box-shadow:0 20px 50px #635bff25;
+.btn-primary{background:var(--primary);color:white}
+.btn-secondary{
+ background:var(--card);
+ color:var(--text);
+ border:1px solid var(--border);
 }
+.btn-danger{background:#fff0f2;color:#d73d50}
+body.dark .btn-danger{background:#38202a;color:#ff8290}
+.btn-green{background:#e5fbf4;color:#07956d}
 
-.home-hero h2{
-  font-size:27px;
-
-  margin-bottom:8px;
+/* DASHBOARD */
+.dashboard-hero{
+ background:
+ radial-gradient(circle at 90% 10%,#ffffff30,transparent 28%),
+ linear-gradient(135deg,#6254ef,#9278ff);
+ color:white;
+ border-radius:25px;
+ padding:30px;
+ margin-bottom:20px;
+ position:relative;
+ overflow:hidden;
 }
-
-.home-hero p{
-  opacity:.9;
-
-  margin-bottom:22px;
-}
-
+.dashboard-hero h2{font-size:25px;margin-bottom:8px}
+.dashboard-hero p{opacity:.9;max-width:600px}
 .hero-progress{
-  height:10px;
-
-  overflow:hidden;
-
-  border-radius:30px;
-
-  background:#ffffff30;
+ margin-top:23px;
+ height:10px;
+ background:#ffffff30;
+ border-radius:20px;
+ overflow:hidden;
 }
-
 .hero-progress span{
-  display:block;
-
-  height:100%;
-
-  width:0%;
-
-  border-radius:30px;
-
-  background:white;
-
-  transition:.4s;
+ display:block;height:100%;width:0;
+ background:white;
+ transition:.4s;
 }
-
 .hero-bottom{
-  display:flex;
-
-  justify-content:space-between;
-
-  margin-top:9px;
-
-  font-size:13px;
+ display:flex;
+ justify-content:space-between;
+ margin-top:9px;
+ font-size:13px;
 }
-
-/* HOME GRID */
-
-.home-grid{
-  display:grid;
-
-  grid-template-columns:2fr 1fr;
-
-  gap:20px;
+.dashboard-grid{
+ display:grid;
+ grid-template-columns:2fr 1fr;
+ gap:20px;
 }
-
 .quick-grid{
-  display:grid;
-
-  grid-template-columns:repeat(2,1fr);
-
-  gap:14px;
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:15px;
 }
-
-.quick-card{
-  min-height:130px;
-
-  padding:20px;
-
-  border:1px solid var(--border);
-
-  border-radius:18px;
-
-  background:var(--surface);
-
-  transition:.2s;
-
-  cursor:pointer;
+.quick{
+ padding:20px;
+ border:1px solid var(--border);
+ border-radius:17px;
+ background:var(--card);
+ cursor:pointer;
+ transition:.2s;
 }
-
-.quick-card:hover{
-  transform:translateY(-4px);
-
-  box-shadow:var(--shadow);
-}
-
-.quick-icon{
-  font-size:28px;
-
-  margin-bottom:12px;
-}
-
-.quick-card h3{
-  margin-bottom:5px;
-}
-
-.quick-card p{
-  color:var(--muted);
-
-  font-size:13px;
-}
-
-/* TASK */
-
-.task-list{
-  display:flex;
-  flex-direction:column;
-}
-
-.task{
-  display:flex;
-
-  align-items:center;
-
-  gap:13px;
-
-  padding:15px 0;
-
-  border-bottom:1px solid var(--border);
-}
-
-.task:last-child{
-  border-bottom:0;
-}
-
-.checkbox{
-  width:27px;
-  height:27px;
-
-  flex-shrink:0;
-
-  display:grid;
-  place-items:center;
-
-  border:2px solid #d7dce9;
-
-  border-radius:8px;
-}
-
-.task.completed .checkbox{
-  background:var(--green);
-
-  border-color:var(--green);
-
-  color:white;
-}
-
-.task-content{
-  flex:1;
-  min-width:0;
-}
-
-.task-name{
-  font-weight:800;
-
-  overflow-wrap:anywhere;
-}
-
-.task.completed .task-name{
-  text-decoration:line-through;
-
-  color:var(--muted);
-}
-
-.task-xp{
-  padding:6px 10px;
-
-  border-radius:20px;
-
-  background:var(--primary-soft);
-
-  color:var(--primary);
-
-  font-size:11px;
-
-  font-weight:900;
-}
-
-.delete-task{
-  border:0;
-
-  background:transparent;
-
-  font-size:16px;
-}
-
-.add-task{
-  display:flex;
-
-  gap:8px;
-
-  margin-top:15px;
-}
-
-.add-task input{
-  flex:1;
-
-  padding:13px;
-
-  border:1px solid var(--border);
-
-  border-radius:11px;
-
-  outline:none;
-
-  background:var(--surface);
-
-  color:var(--text);
-}
-
-/* BUTTONS */
-
-.primary-btn,
-.secondary-btn,
-.danger-btn{
-  border-radius:11px;
-
-  padding:11px 16px;
-
-  font-weight:850;
-}
-
-.primary-btn{
-  border:0;
-
-  color:white;
-
-  background:var(--primary);
-}
-
-.secondary-btn{
-  border:1px solid var(--border);
-
-  color:var(--text);
-
-  background:var(--surface);
-}
-
-.danger-btn{
-  border:0;
-
-  color:#d63c4e;
-
-  background:#fff0f2;
-}
-
-/* STATS */
-
+.quick:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.quick-icon{font-size:27px;margin-bottom:10px}
+.quick strong{display:block;margin-bottom:5px}
 .stats-grid{
-  display:grid;
-
-  grid-template-columns:repeat(4,1fr);
-
-  gap:15px;
-
-  margin-bottom:20px;
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:15px;
+ margin-top:20px;
 }
-
-.stat-card{
-  padding:20px;
-
-  border:1px solid var(--border);
-
-  border-radius:18px;
-
-  background:var(--surface);
-
-  box-shadow:var(--shadow);
+.stat{
+ padding:20px;
+ border:1px solid var(--border);
+ background:var(--card);
+ border-radius:18px;
 }
-
-.stat-icon{
-  font-size:25px;
+.stat-icon{font-size:24px}
+.stat strong{
+ display:block;
+ font-size:27px;
+ margin:7px 0 3px;
 }
+.stat small{color:var(--muted)}
 
-.stat-card strong{
-  display:block;
-
-  font-size:27px;
-
-  margin:8px 0 3px;
+/* TASKS */
+.task{
+ display:flex;
+ align-items:center;
+ gap:12px;
+ padding:14px 0;
+ border-bottom:1px solid var(--border);
 }
-
-.stat-card small{
-  color:var(--muted);
+.check{
+ width:27px;height:27px;
+ border:2px solid #d8dce7;
+ border-radius:8px;
+ display:grid;
+ place-items:center;
+ flex-shrink:0;
 }
-
-/* TABLE */
-
-.table-wrap{
-  overflow:auto;
+.task.done .check{
+ background:var(--green);
+ border-color:var(--green);
+ color:#fff;
 }
-
-table{
-  width:100%;
-
-  border-collapse:collapse;
+.task.done .task-text{
+ text-decoration:line-through;
+ color:var(--muted);
 }
-
-th,
-td{
-  padding:14px;
-
-  border-bottom:1px solid var(--border);
-
-  text-align:left;
+.task-text{font-weight:800;flex:1}
+.task-sub{font-size:12px;color:var(--muted);margin-top:3px}
+.task-actions{
+ display:flex;
+ gap:5px;
 }
-
-th{
-  color:var(--muted);
-
-  font-size:12px;
+.task-actions button{
+ border:0;background:transparent;
+ padding:5px;
 }
+.add-row{
+ display:flex;
+ gap:8px;
+ margin-top:15px;
+}
+.input{
+ width:100%;
+ border:1px solid var(--border);
+ background:var(--card);
+ color:var(--text);
+ padding:12px 13px;
+ border-radius:11px;
+}
+textarea.input{min-height:150px;resize:vertical}
 
 /* SUBJECTS */
-
 .subject-grid{
-  display:grid;
-
-  grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
-
-  gap:16px;
+ display:grid;
+ grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+ gap:15px;
 }
-
-.subject-card{
-  padding:20px;
-
-  border:1px solid var(--border);
-
-  border-radius:18px;
-
-  background:var(--surface);
+.subject{
+ border:1px solid var(--border);
+ border-radius:18px;
+ padding:20px;
+ background:var(--card);
+ position:relative;
+ overflow:hidden;
 }
-
-.subject-icon{
-  width:48px;
-  height:48px;
-
-  display:grid;
-  place-items:center;
-
-  border-radius:15px;
-
-  background:var(--primary-soft);
-
-  font-size:24px;
-
-  margin-bottom:14px;
+.subject-top{
+ display:flex;
+ justify-content:space-between;
+ margin-bottom:15px;
 }
-
-.subject-card h3{
-  margin-bottom:5px;
+.subject-icon{font-size:35px}
+.subject h3{margin-bottom:6px}
+.subject p{color:var(--muted);font-size:13px}
+.subject-progress{
+ height:8px;background:var(--border);
+ border-radius:10px;
+ margin:15px 0 8px;
+ overflow:hidden;
 }
-
-.subject-card p{
-  color:var(--muted);
-
-  font-size:13px;
-
-  margin-bottom:15px;
+.subject-progress span{
+ display:block;height:100%;
+ background:var(--primary);
 }
+.subject-actions{display:flex;gap:7px}
 
-.mini-progress{
-  height:7px;
-
-  overflow:hidden;
-
-  border-radius:20px;
-
-  background:var(--border);
+/* NOTES */
+.note-toolbar{
+ display:flex;
+ gap:10px;
+ margin-bottom:18px;
+ flex-wrap:wrap;
 }
-
-.mini-progress span{
-  display:block;
-
-  height:100%;
-
-  width:50%;
-
-  background:var(--primary);
-
-  border-radius:20px;
+.note-toolbar .input{flex:1;min-width:180px}
+.note-grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+ gap:15px;
+}
+.note{
+ border:1px solid var(--border);
+ border-radius:18px;
+ padding:18px;
+ background:var(--card);
+ min-height:180px;
+ position:relative;
+ transition:.2s;
+}
+.note:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.note.pinned{border-color:#a69bff}
+.note-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:flex-start;
+ gap:8px;
+}
+.note h3{font-size:17px;margin-bottom:8px}
+.note-body{
+ color:var(--muted);
+ line-height:1.6;
+ white-space:pre-wrap;
+ word-break:break-word;
+}
+.note-footer{
+ position:absolute;
+ bottom:15px;
+ left:18px;
+ right:18px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+}
+.note-color{
+ width:10px;height:10px;
+ border-radius:50%;
+ background:var(--primary);
+}
+.note-buttons button{
+ border:0;background:transparent;padding:4px;
 }
 
 /* EXAMS */
-
-.exam-grid{
-  display:grid;
-
-  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-
-  gap:16px;
+.exam-list{display:grid;gap:12px}
+.exam{
+ display:flex;
+ align-items:center;
+ gap:15px;
+ padding:17px;
+ border:1px solid var(--border);
+ border-radius:17px;
 }
-
-.exam-card{
-  padding:20px;
-
-  border:1px solid var(--border);
-
-  border-radius:18px;
-
-  background:var(--surface);
-}
-
 .exam-date{
-  display:inline-block;
-
-  padding:7px 10px;
-
-  border-radius:10px;
-
-  background:#fff2d5;
-
-  color:#a86d00;
-
-  font-size:12px;
-
-  font-weight:900;
-
-  margin-bottom:14px;
+ width:65px;
+ height:65px;
+ border-radius:15px;
+ background:#eeeaff;
+ color:#5e50dd;
+ display:grid;
+ place-items:center;
+ text-align:center;
+ font-weight:900;
 }
-
-.exam-card h3{
-  margin-bottom:6px;
-}
-
-.exam-card p{
-  color:var(--muted);
-}
+.exam-info{flex:1}
+.exam-info h3{margin-bottom:5px}
+.exam-info p{color:var(--muted);font-size:13px}
 
 /* FOCUS */
-
-.focus-card{
-  max-width:700px;
-
-  margin:auto;
-
-  text-align:center;
-}
-
-.focus-mode{
-  display:inline-flex;
-
-  padding:6px;
-
-  gap:5px;
-
-  background:var(--bg);
-
-  border-radius:13px;
-
-  margin-bottom:20px;
-}
-
-.focus-mode button{
-  border:0;
-
-  padding:9px 14px;
-
-  border-radius:9px;
-
-  background:transparent;
-
-  color:var(--muted);
-
-  font-weight:800;
-}
-
-.focus-mode button.active{
-  background:var(--primary);
-
-  color:white;
-}
-
+.focus-box{text-align:center;max-width:700px;margin:auto}
 .timer{
-  font-size:85px;
-
-  font-weight:950;
-
-  letter-spacing:3px;
-
-  margin:20px 0;
+ font-size:90px;
+ font-weight:950;
+ margin:35px 0;
+ letter-spacing:3px;
 }
-
-.focus-buttons{
-  display:flex;
-
-  justify-content:center;
-
-  gap:10px;
+.timer-mode{
+ display:flex;
+ justify-content:center;
+ gap:8px;
 }
-
-/* COACH */
-
-.coach-box{
-  display:grid;
-
-  grid-template-columns:100px 1fr;
-
-  gap:25px;
-
-  align-items:center;
-
-  padding:28px;
-
-  border-radius:24px;
-
-  background:
-    linear-gradient(135deg,#eeecff,#faf9ff);
-
-  border:1px solid #dfdcff;
+.timer-mode button.active{
+ background:var(--primary);
+ color:#fff;
 }
-
-body.dark .coach-box{
-  background:#1d2237;
-
-  border-color:#303653;
-}
-
-.coach-avatar{
-  width:90px;
-  height:90px;
-
-  display:grid;
-  place-items:center;
-
-  border-radius:25px;
-
-  background:#ddd9ff;
-
-  font-size:50px;
-}
+.focus-actions{display:flex;justify-content:center;gap:10px}
 
 /* PET */
-
-.pet-page{
-  display:grid;
-
-  grid-template-columns:1fr 1fr;
-
-  gap:20px;
+.pet-layout{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:20px;
 }
-
-.pet-big{
-  min-height:360px;
-
-  display:grid;
-  place-items:center;
-
-  border-radius:25px;
-
-  background:
-    radial-gradient(circle,#fff5c7,#ffddec);
-
-  font-size:160px;
-
-  animation:float 3s ease-in-out infinite;
+.pet-show{
+ text-align:center;
+ background:linear-gradient(135deg,#fff0b6,#ffd8ed);
+ border-radius:22px;
+ padding:35px;
 }
-
-.pet-info h2{
-  font-size:30px;
-
-  margin-bottom:8px;
+.pet-emoji{font-size:130px;animation:petFloat 3s ease-in-out infinite}
+@keyframes petFloat{
+ 0%,100%{transform:translateY(0)}
+ 50%{transform:translateY(-9px)}
 }
-
-.pet-info p{
-  color:var(--muted);
-
-  line-height:1.7;
+.pet-name{font-size:25px;font-weight:950;margin-top:10px}
+.pet-level{color:var(--muted);margin-top:5px}
+.pet-stats{display:grid;gap:12px}
+.pet-stat{
+ border:1px solid var(--border);
+ border-radius:16px;
+ padding:17px;
 }
-
-.pet-xp{
-  margin-top:25px;
+.pet-stat-head{
+ display:flex;
+ justify-content:space-between;
+ margin-bottom:8px;
 }
-
-.pet-xp-bar{
-  height:12px;
-
-  margin-top:8px;
-
-  border-radius:20px;
-
-  background:var(--border);
-
-  overflow:hidden;
+.bar{
+ height:9px;
+ background:var(--border);
+ border-radius:20px;
+ overflow:hidden;
 }
-
-.pet-xp-bar span{
-  display:block;
-
-  width:0%;
-
-  height:100%;
-
-  background:var(--primary);
+.bar span{
+ display:block;
+ height:100%;
+ background:var(--primary);
 }
 
 /* MARKET */
-
 .market-grid{
-  display:grid;
-
-  grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
-
-  gap:16px;
+ display:grid;
+ grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+ gap:15px;
 }
-
-.shop-item{
-  padding:20px;
-
-  text-align:center;
-
-  border:1px solid var(--border);
-
-  border-radius:18px;
-
-  background:var(--surface);
-
-  transition:.2s;
+.shop{
+ border:1px solid var(--border);
+ border-radius:19px;
+ padding:20px;
+ text-align:center;
+ background:var(--card);
 }
+.shop-icon{font-size:52px;margin-bottom:10px}
+.shop h3{margin-bottom:5px}
+.shop p{color:var(--muted);font-size:13px;margin-bottom:12px}
+.price{font-weight:950;color:#d59a00;margin-bottom:10px}
 
-.shop-item:hover{
-  transform:translateY(-5px);
-
-  box-shadow:var(--shadow);
-}
-
-.shop-icon{
-  font-size:52px;
-
-  margin-bottom:10px;
-}
-
-.shop-item p{
-  color:var(--muted);
-
-  font-size:13px;
-
-  margin:7px 0 13px;
-}
-
-.price{
-  color:#d69a00;
-
-  font-weight:950;
-
-  margin-bottom:10px;
-}
-
-/* ACHIEVEMENTS */
-
+/* BADGES */
 .badges{
-  display:grid;
-
-  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
-
-  gap:14px;
+ display:grid;
+ grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+ gap:15px;
 }
-
 .badge{
-  padding:20px 10px;
+ border:1px solid var(--border);
+ border-radius:18px;
+ padding:20px 10px;
+ text-align:center;
+}
+.badge.locked{opacity:.35;filter:grayscale(1)}
+.badge-icon{font-size:42px;margin-bottom:8px}
+.badge strong{display:block;margin-bottom:5px}
+.badge small{color:var(--muted)}
 
-  text-align:center;
-
-  border:1px solid var(--border);
-
-  border-radius:18px;
-
-  background:var(--surface);
+/* STATS */
+.chart{
+ height:260px;
+ display:flex;
+ align-items:flex-end;
+ gap:10px;
+ padding-top:25px;
+}
+.chart-bar{
+ flex:1;
+ background:linear-gradient(to top,var(--primary),var(--primary2));
+ border-radius:8px 8px 2px 2px;
+ min-height:5px;
+ position:relative;
+}
+.chart-bar span{
+ position:absolute;
+ bottom:-23px;
+ left:50%;
+ transform:translateX(-50%);
+ font-size:11px;
+ color:var(--muted);
 }
 
-.badge-icon{
-  font-size:42px;
-
-  margin-bottom:8px;
+/* COACH */
+.coach-hero{
+ background:linear-gradient(135deg,#eeecff,#f9f8ff);
+ border:1px solid #dedaff;
+ padding:25px;
+ border-radius:20px;
+ margin-bottom:20px;
 }
-
-.badge small{
-  color:var(--muted);
+body.dark .coach-hero{background:#20253b;border-color:#353b5a}
+.coach-avatar{
+ width:60px;height:60px;
+ display:grid;place-items:center;
+ background:#ddd9ff;
+ border-radius:18px;
+ font-size:32px;
+ margin-bottom:13px;
 }
-
-.badge.locked{
-  opacity:.4;
-
-  filter:grayscale(1);
+.tip-grid{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:15px;
+}
+.tip{
+ border:1px solid var(--border);
+ padding:20px;
+ border-radius:17px;
+ background:var(--card);
 }
 
 /* PROFILE */
-
-.profile-grid{
-  display:grid;
-
-  grid-template-columns:1fr 2fr;
-
-  gap:20px;
+.profile-card{
+ max-width:800px;
+}
+.profile-big{
+ display:flex;
+ align-items:center;
+ gap:18px;
+ padding-bottom:25px;
+ border-bottom:1px solid var(--border);
+ margin-bottom:25px;
+}
+.profile-avatar{
+ width:80px;height:80px;
+ border-radius:25px;
+ background:#e9e5ff;
+ display:grid;place-items:center;
+ font-size:40px;
+}
+.form-grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:15px;
 }
 
-.profile-avatar-big{
-  width:110px;
-  height:110px;
-
-  margin:10px auto 20px;
-
-  display:grid;
-  place-items:center;
-
-  border-radius:50%;
-
-  background:var(--primary-soft);
-
-  font-size:60px;
+/* MODAL */
+.modal{
+ position:fixed;
+ inset:0;
+ background:#0008;
+ backdrop-filter:blur(6px);
+ display:none;
+ align-items:center;
+ justify-content:center;
+ padding:20px;
+ z-index:10000;
 }
-
-.profile-center{
-  text-align:center;
+.modal.show{display:flex}
+.modal-box{
+ width:100%;
+ max-width:500px;
+ max-height:90vh;
+ overflow:auto;
+ background:var(--card);
+ color:var(--text);
+ border-radius:23px;
+ padding:25px;
 }
-
-/* EMPTY */
-
-.empty{
-  padding:40px 20px;
-
-  text-align:center;
-
-  color:var(--muted);
+.modal-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:20px;
 }
-
-.empty-icon{
-  font-size:45px;
-
-  margin-bottom:10px;
+.close{
+ border:0;background:transparent;
+ color:var(--text);
+ font-size:24px;
 }
 
 /* TOAST */
-
-#toastContainer{
-  position:fixed;
-
-  right:20px;
-  bottom:20px;
-
-  z-index:20000;
-
-  display:flex;
-
-  flex-direction:column;
-
-  gap:10px;
+#toast{
+ position:fixed;
+ right:20px;
+ bottom:20px;
+ z-index:20000;
+ display:grid;
+ gap:8px;
 }
-
 .toast{
-  min-width:270px;
-
-  padding:15px 18px;
-
-  border-radius:15px;
-
-  background:var(--sidebar);
-
-  color:white;
-
-  box-shadow:0 15px 35px #0003;
-
-  animation:toastIn .3s ease;
+ background:var(--dark);
+ color:#fff;
+ padding:14px 17px;
+ border-radius:13px;
+ box-shadow:0 15px 35px #0004;
+ animation:toast .3s ease;
 }
-
-@keyframes toastIn{
-  from{
-    opacity:0;
-    transform:translateY(20px);
-  }
-
-  to{
-    opacity:1;
-    transform:none;
-  }
+@keyframes toast{
+ from{opacity:0;transform:translateY(15px)}
+ to{opacity:1;transform:none}
 }
 
 /* MOBILE */
-
-.mobile-menu-button{
-  display:none;
-
-  position:fixed;
-
-  right:15px;
-  top:15px;
-
-  z-index:9998;
-
-  width:48px;
-  height:48px;
-
-  border:0;
-
-  border-radius:15px;
-
-  background:var(--sidebar);
-
-  color:white;
-
-  font-size:22px;
+.mobile-menu{
+ display:none;
+ position:fixed;
+ right:15px;
+ top:15px;
+ width:45px;height:45px;
+ border:0;
+ border-radius:13px;
+ background:var(--dark);
+ color:white;
+ z-index:500;
+ font-size:21px;
 }
-
 .mobile-drawer{
-  display:none;
+ display:none;
 }
-
-/* RESPONSIVE */
-
-@media(max-width:1100px){
-
-  .sidebar{
-    width:82px;
-  }
-
-  .logo{
-    font-size:0;
-    text-align:center;
-    padding:0;
-  }
-
-  .logo::before{
-    content:"DT";
-    font-size:22px;
-  }
-
-  .logo span{
-    display:none;
-  }
-
-  .menu button{
-    font-size:0;
-    text-align:center;
-  }
-
-  .menu button::first-letter{
-    font-size:20px;
-  }
-
-  .logout button{
-    font-size:0;
-  }
-
-  .logout button::before{
-    content:"🚪";
-    font-size:20px;
-  }
-
-  .main{
-    margin-left:82px;
-  }
-
-  .home-grid{
-    grid-template-columns:1fr;
-  }
-
-  .stats-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .profile-grid,
-  .pet-page{
-    grid-template-columns:1fr;
-  }
+@media(max-width:1050px){
+ .sidebar{width:78px}
+ .logo{font-size:0;text-align:center;padding:0}
+ .logo:before{content:"DT";font-size:22px}
+ .nav button{font-size:0;text-align:center}
+ .nav button::first-letter{font-size:20px}
+ .sidebar-bottom button{font-size:0}
+ .sidebar-bottom button:before{content:"🚪";font-size:20px}
+ .main{margin-left:78px}
+ .dashboard-grid{grid-template-columns:1fr}
 }
-
 @media(max-width:700px){
-
-  .sidebar{
-    display:none;
-  }
-
-  .main{
-    margin-left:0;
-
-    padding:15px;
-  }
-
-  .mobile-menu-button{
-    display:grid;
-    place-items:center;
-  }
-
-  .mobile-drawer{
-    display:block;
-
-    position:fixed;
-
-    right:-290px;
-    top:0;
-
-    width:280px;
-    height:100vh;
-
-    padding:22px 17px;
-
-    background:var(--sidebar);
-
-    color:white;
-
-    z-index:9999;
-
-    transition:right .25s;
-
-    box-shadow:-15px 0 40px #0003;
-  }
-
-  .mobile-drawer.open{
-    right:0;
-  }
-
-  .mobile-drawer-head{
-    display:flex;
-
-    align-items:center;
-    justify-content:space-between;
-
-    margin-bottom:25px;
-  }
-
-  .mobile-drawer-head button{
-    border:0;
-
-    background:transparent;
-
-    color:white;
-
-    font-size:25px;
-  }
-
-  .mobile-menu-item{
-    width:100%;
-
-    padding:13px;
-
-    border:0;
-
-    border-radius:12px;
-
-    background:transparent;
-
-    color:#aeb4ca;
-
-    text-align:left;
-
-    font-weight:800;
-
-    margin-bottom:5px;
-  }
-
-  .mobile-menu-item.active{
-    background:#292d49;
-
-    color:white;
-  }
-
-  .topbar{
-    padding-right:60px;
-  }
-
-  .profile{
-    display:none;
-  }
-
-  .home-hero{
-    padding:24px;
-  }
-
-  .quick-grid{
-    grid-template-columns:1fr;
-  }
-
-  .stats-grid{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .page-header{
-    align-items:flex-start;
-
-    flex-direction:column;
-  }
-
-  .coach-box{
-    grid-template-columns:1fr;
-
-    text-align:center;
-  }
-
-  .coach-avatar{
-    margin:auto;
-  }
-
-  .timer{
-    font-size:58px;
-  }
-
-  .add-task{
-    flex-direction:column;
-  }
-
-  .add-task button{
-    width:100%;
-  }
-
-  .auth-wrapper{
-    grid-template-columns:1fr;
-  }
-
-  .auth-showcase{
-    display:none;
-  }
-
-  .auth-box{
-    padding:30px 22px;
-  }
-}
-
-@media(max-width:420px){
-
-  .stats-grid{
-    grid-template-columns:1fr;
-  }
-
-  .market-grid,
-  .subject-grid,
-  .exam-grid{
-    grid-template-columns:1fr;
-  }
-
-  .timer{
-    font-size:50px;
-  }
+ .sidebar{display:none}
+ .main{margin-left:0;padding:15px}
+ .mobile-menu{display:block}
+ .topbar{padding-right:55px}
+ .profile-mini{display:none}
+ .dashboard-grid,.pet-layout{grid-template-columns:1fr}
+ .quick-grid,.stats-grid{grid-template-columns:1fr}
+ .form-grid,.tip-grid{grid-template-columns:1fr}
+ .timer{font-size:58px}
+ .mobile-drawer{
+  display:block;
+  position:fixed;
+  right:-290px;
+  top:0;
+  bottom:0;
+  width:280px;
+  background:var(--dark);
+  color:white;
+  z-index:1000;
+  padding:25px 18px;
+  transition:.25s;
+ }
+ .mobile-drawer.open{right:0}
+ .drawer-head{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:25px;
+ }
+ .drawer-head button{
+  border:0;background:transparent;color:#fff;font-size:23px
+ }
+ .drawer-item{
+  width:100%;
+  border:0;
+  background:transparent;
+  color:#aeb4ca;
+  padding:13px;
+  text-align:left;
+  border-radius:11px;
+  margin-bottom:5px;
+  font-weight:800;
+ }
+ .drawer-item.active{background:#292e49;color:#fff}
 }
 </style>
 </head>
 
 <body>
 
-<!-- ==================================================
-     AUTH
-================================================== -->
+<!-- SIDEBAR -->
+<aside class="sidebar">
+ <div class="logo">Ders<span>Takip</span></div>
 
-<section id="authScreen">
+ <nav class="nav">
+  <button class="active" onclick="go('home',this)">🏠 Ana Sayfa</button>
+  <button onclick="go('tasks',this)">✅ Görevler</button>
+  <button onclick="go('notes',this)">📝 Notlarım</button>
+  <button onclick="go('subjects',this)">📚 Dersler</button>
+  <button onclick="go('exams',this)">📅 Sınavlar</button>
+  <button onclick="go('focus',this)">⏱️ Odaklan</button>
+  <button onclick="go('coach',this)">🤖 Ders Koçu</button>
+  <button onclick="go('pet',this)">🐣 Evcil Hayvan</button>
+  <button onclick="go('market',this)">🛒 Market</button>
+  <button onclick="go('badges',this)">🏆 Rozetler</button>
+  <button onclick="go('stats',this)">📊 İstatistikler</button>
+  <button onclick="go('profile',this)">👤 Profil</button>
+ </nav>
 
-  <div class="auth-wrapper">
+ <div class="sidebar-bottom">
+  <button onclick="toggleDark()">🌙 Tema Değiştir</button>
+ </div>
+</aside>
 
-    <div class="auth-showcase">
+<button class="mobile-menu" onclick="toggleDrawer()">☰</button>
 
-      <h1>
-        Ders çalışmak artık
-        <span>oyun gibi!</span> 🎮
-      </h1>
+<div class="mobile-drawer" id="drawer">
+ <div class="drawer-head">
+  <strong>DersTakip</strong>
+  <button onclick="toggleDrawer()">✕</button>
+ </div>
 
-      <p>
-        Görevlerini tamamla, XP kazan,
-        seviyeni yükselt ve hedeflerine ulaş.
-      </p>
+ <button class="drawer-item active" onclick="mobileGo('home')">🏠 Ana Sayfa</button>
+ <button class="drawer-item" onclick="mobileGo('tasks')">✅ Görevler</button>
+ <button class="drawer-item" onclick="mobileGo('notes')">📝 Notlarım</button>
+ <button class="drawer-item" onclick="mobileGo('subjects')">📚 Dersler</button>
+ <button class="drawer-item" onclick="mobileGo('exams')">📅 Sınavlar</button>
+ <button class="drawer-item" onclick="mobileGo('focus')">⏱️ Odaklan</button>
+ <button class="drawer-item" onclick="mobileGo('coach')">🤖 Ders Koçu</button>
+ <button class="drawer-item" onclick="mobileGo('pet')">🐣 Evcil Hayvan</button>
+ <button class="drawer-item" onclick="mobileGo('market')">🛒 Market</button>
+ <button class="drawer-item" onclick="mobileGo('badges')">🏆 Rozetler</button>
+ <button class="drawer-item" onclick="mobileGo('stats')">📊 İstatistikler</button>
+ <button class="drawer-item" onclick="mobileGo('profile')">👤 Profil</button>
+</div>
 
-      <div class="auth-illustration">
-        🐼
-      </div>
+<main class="main">
 
-      <div class="auth-features">
+<header class="topbar">
+ <div class="welcome">
+  <h1 id="pageTitle">Merhaba! 👋</h1>
+  <p id="pageSubtitle">Bugün küçük bir adım, yarın büyük bir başarı.</p>
+ </div>
 
-        <div class="auth-feature">🎯 Hedef Takibi</div>
-        <div class="auth-feature">⏱️ Odaklan</div>
-        <div class="auth-feature">📚 Dersler</div>
-        <div class="auth-feature">📅 Sınavlar</div>
-        <div class="auth-feature">🏆 Rozetler</div>
-        <div class="auth-feature">🐼 Evcil Hayvan</div>
-
-      </div>
-
-    </div>
-
-    <div class="auth-box">
-
-      <div class="auth-logo">
-        Ders<span>Takip</span>
-      </div>
-
-      <p class="auth-description">
-        Başarı yolculuğuna bugün başla 🚀
-      </p>
-
-      <div class="auth-tabs">
-
-        <button
-          id="loginTab"
-          class="active"
-          onclick="showLogin()"
-        >
-          Giriş Yap
-        </button>
-
-        <button
-          id="registerTab"
-          onclick="showRegister()"
-        >
-          Kayıt Ol
-        </button>
-
-      </div>
-
-      <form
-        id="loginForm"
-        onsubmit="login(event)"
-      >
-
-        <div class="form-group">
-
-          <label>E-posta</label>
-
-          <input
-            id="loginEmail"
-            type="email"
-            required
-            placeholder="ornek@mail.com"
-          >
-
-        </div>
-
-        <div class="form-group">
-
-          <label>Şifre</label>
-
-          <div class="password-wrap">
-
-            <input
-              id="loginPassword"
-              type="password"
-              required
-              placeholder="Şifren"
-            >
-
-            <button
-              type="button"
-              class="show-password"
-              onclick="togglePassword('loginPassword',this)"
-            >
-              👁️
-            </button>
-
-          </div>
-
-        </div>
-
-        <button
-          class="auth-button"
-          type="submit"
-        >
-          Giriş Yap 🚀
-        </button>
-
-      </form>
-
-      <form
-        id="registerForm"
-        onsubmit="register(event)"
-        style="display:none"
-      >
-
-        <div class="form-group">
-
-          <label>Ad Soyad</label>
-
-          <input
-            id="registerName"
-            required
-            placeholder="Adın"
-          >
-
-        </div>
-
-        <div class="form-group">
-
-          <label>E-posta</label>
-
-          <input
-            id="registerEmail"
-            type="email"
-            required
-            placeholder="ornek@mail.com"
-          >
-
-        </div>
-
-        <div class="form-group">
-
-          <label>Şifre</label>
-
-          <div class="password-wrap">
-
-            <input
-              id="registerPassword"
-              type="password"
-              minlength="6"
-              required
-              placeholder="En az 6 karakter"
-            >
-
-            <button
-              type="button"
-              class="show-password"
-              onclick="togglePassword('registerPassword',this)"
-            >
-              👁️
-            </button>
-
-          </div>
-
-        </div>
-
-        <button
-          class="auth-button"
-          type="submit"
-        >
-          Hesap Oluştur ✨
-        </button>
-
-      </form>
-
-      <div id="authMessage"></div>
-
-    </div>
-
+ <div class="top-actions">
+  <button class="icon-btn" onclick="toggleDark()">🌙</button>
+  <div class="profile-mini" onclick="go('profile')">
+   <div class="avatar">🎓</div>
+   <strong id="topName">Öğrenci</strong>
   </div>
+ </div>
+</header>
+
+<!-- HOME -->
+<section id="page-home" class="page active">
+
+ <div class="dashboard-hero">
+  <h2>Bugünkü çalışma planın 🎯</h2>
+  <p id="homeMessage">Bugün kendin için güzel bir adım atmaya ne dersin?</p>
+
+  <div class="hero-progress">
+   <span id="homeProgress"></span>
+  </div>
+
+  <div class="hero-bottom">
+   <span id="homeProgressText">0 / 0 görev</span>
+   <span id="homeXP">0 XP</span>
+  </div>
+ </div>
+
+ <div class="dashboard-grid">
+
+  <div class="card">
+   <div class="card-title">
+    <h2>⚡ Hızlı İşlemler</h2>
+   </div>
+
+   <div class="quick-grid">
+    <div class="quick" onclick="go('tasks')">
+     <div class="quick-icon">✅</div>
+     <strong>Görev Ekle</strong>
+     <small class="muted">Bugünkü görevlerini planla</small>
+    </div>
+
+    <div class="quick" onclick="newNote()">
+     <div class="quick-icon">📝</div>
+     <strong>Not Yaz</strong>
+     <small class="muted">Yeni ders notu oluştur</small>
+    </div>
+
+    <div class="quick" onclick="go('focus')">
+     <div class="quick-icon">⏱️</div>
+     <strong>Odaklan</strong>
+     <small class="muted">Çalışma süreni başlat</small>
+    </div>
+   </div>
+  </div>
+
+  <div class="card">
+   <div class="card-title">
+    <h2>🔥 Bugünkü Durum</h2>
+   </div>
+   <p class="muted">Çalışma serin</p>
+   <h1 style="font-size:40px;margin:8px 0" id="homeStreak">0</h1>
+   <p class="muted">gün üst üste</p>
+  </div>
+
+ </div>
+
+ <div class="stats-grid">
+  <div class="stat">
+   <div class="stat-icon">⭐</div>
+   <strong id="statXP">0</strong>
+   <small>Toplam XP</small>
+  </div>
+
+  <div class="stat">
+   <div class="stat-icon">🔥</div>
+   <strong id="statStreak">0</strong>
+   <small>Çalışma serisi</small>
+  </div>
+
+  <div class="stat">
+   <div class="stat-icon">🪙</div>
+   <strong id="statCoins">100</strong>
+   <small>Coin</small>
+  </div>
+ </div>
 
 </section>
 
+<!-- TASKS -->
+<section id="page-tasks" class="page">
 
-<!-- ==================================================
-     APP
-================================================== -->
+ <div class="card">
+  <div class="card-title">
+   <div>
+    <h2>✅ Görevlerim</h2>
+    <p class="muted" style="margin-top:5px">Bugün yapman gerekenleri düzenle.</p>
+   </div>
+   <span id="taskCount">0 / 0</span>
+  </div>
 
-<div id="app">
+  <div id="taskList"></div>
 
-  <!-- SIDEBAR -->
+  <div class="add-row">
+   <input class="input" id="taskInput" placeholder="Örn: Matematik testini çöz..." maxlength="150">
+   <button class="btn btn-primary" onclick="addTask()">+ Ekle</button>
+  </div>
+ </div>
 
-  <aside class="sidebar">
+</section>
 
-    <div class="logo">
-      Ders<span>Takip</span>
+<!-- NOTES -->
+<section id="page-notes" class="page">
+
+ <div class="card">
+  <div class="card-title">
+   <div>
+    <h2>📝 Notlarım</h2>
+    <p class="muted" style="margin-top:5px">Ders notlarını tek yerde sakla.</p>
+   </div>
+   <button class="btn btn-primary" onclick="newNote()">+ Yeni Not</button>
+  </div>
+
+  <div class="note-toolbar">
+   <input class="input" id="noteSearch" placeholder="🔎 Notlarda ara..." oninput="renderNotes()">
+   <select class="input" id="noteFilter" onchange="renderNotes()" style="max-width:180px">
+    <option value="all">Tüm Notlar</option>
+    <option value="pinned">📌 Sabitlenenler</option>
+   </select>
+  </div>
+
+  <div class="note-grid" id="noteGrid"></div>
+ </div>
+
+</section>
+
+<!-- SUBJECTS -->
+<section id="page-subjects" class="page">
+
+ <div class="card">
+  <div class="card-title">
+   <div>
+    <h2>📚 Derslerim</h2>
+    <p class="muted" style="margin-top:5px">Derslerini ve ilerlemeni takip et.</p>
+   </div>
+   <button class="btn btn-primary" onclick="addSubject()">+ Ders Ekle</button>
+  </div>
+
+  <div class="subject-grid" id="subjectGrid"></div>
+ </div>
+
+</section>
+
+<!-- EXAMS -->
+<section id="page-exams" class="page">
+
+ <div class="card">
+  <div class="card-title">
+   <div>
+    <h2>📅 Sınav Takvimi</h2>
+    <p class="muted" style="margin-top:5px">Yaklaşan sınavlarını takip et.</p>
+   </div>
+   <button class="btn btn-primary" onclick="addExam()">+ Sınav Ekle</button>
+  </div>
+
+  <div class="exam-list" id="examList"></div>
+ </div>
+
+</section>
+
+<!-- FOCUS -->
+<section id="page-focus" class="page">
+
+ <div class="card focus-box">
+  <h2>⏱️ Odaklanma Zamanı</h2>
+  <p class="muted" style="margin-top:7px">Telefonunu bırak, hedefin için çalış.</p>
+
+  <div class="timer-mode" style="margin-top:22px">
+   <button class="btn btn-secondary active" onclick="setTimer(25,this)">25 dk</button>
+   <button class="btn btn-secondary" onclick="setTimer(5,this)">5 dk</button>
+   <button class="btn btn-secondary" onclick="setTimer(50,this)">50 dk</button>
+  </div>
+
+  <div class="timer" id="timer">25:00</div>
+
+  <div class="focus-actions">
+   <button class="btn btn-primary" id="timerButton" onclick="toggleTimer()">▶ Başlat</button>
+   <button class="btn btn-secondary" onclick="resetTimer()">↻ Sıfırla</button>
+  </div>
+
+  <p class="muted" style="margin-top:20px" id="focusInfo">
+   Odaklanma tamamlandığında XP kazanırsın.
+  </p>
+ </div>
+
+</section>
+
+<!-- COACH -->
+<section id="page-coach" class="page">
+
+ <div class="coach-hero">
+  <div class="coach-avatar">🤖</div>
+  <h2 id="coachTitle">Ders Koçun burada!</h2>
+  <p class="muted" id="coachText" style="margin-top:8px">
+   Bugün kısa ama verimli bir çalışma yapabilirsin.
+  </p>
+  <button class="btn btn-primary" style="margin-top:17px" onclick="newAdvice()">
+   ✨ Yeni Öneri
+  </button>
+ </div>
+
+ <div class="tip-grid">
+  <div class="tip">
+   <h3>🎯 Küçük hedef koy</h3>
+   <p class="muted" style="margin-top:8px">“2 saat çalışacağım” yerine “20 soru çözeceğim” gibi net hedefler belirle.</p>
+  </div>
+
+  <div class="tip">
+   <h3>🧠 Aktif tekrar yap</h3>
+   <p class="muted" style="margin-top:8px">Kitabı sadece okumak yerine kendine sorular sor.</p>
+  </div>
+
+  <div class="tip">
+   <h3>⏰ Molayı unutma</h3>
+   <p class="muted" style="margin-top:8px">Uzun çalışma seanslarında kısa molalar ver.</p>
+  </div>
+
+  <div class="tip">
+   <h3>🌟 Kendini ödüllendir</h3>
+   <p class="muted" style="margin-top:8px">Tamamladığın görevlerden sonra küçük ödüller belirle.</p>
+  </div>
+ </div>
+
+</section>
+
+<!-- PET -->
+<section id="page-pet" class="page">
+
+ <div class="pet-layout">
+
+  <div class="card pet-show">
+   <div class="pet-emoji" id="petEmoji">🐼</div>
+   <div class="pet-name" id="petName">Panda</div>
+   <div class="pet-level" id="petLevel">Seviye 1</div>
+   <button class="btn btn-primary" style="margin-top:18px" onclick="feedPet()">🍎 Besle</button>
+  </div>
+
+  <div class="card">
+   <div class="card-title">
+    <h2>🐣 Evcil Hayvanım</h2>
+   </div>
+
+   <div class="pet-stats">
+
+    <div class="pet-stat">
+     <div class="pet-stat-head">
+      <strong>❤️ Mutluluk</strong>
+      <span id="petHappyText">70%</span>
+     </div>
+     <div class="bar"><span id="petHappyBar" style="width:70%"></span></div>
     </div>
 
-    <div class="menu">
-
-      <button
-        class="active"
-        onclick="navigate('home',this)"
-      >
-        🏠 Ana Sayfa
-      </button>
-
-      <button onclick="navigate('tasks',this)">
-        ✅ Görevler
-      </button>
-
-      <button onclick="navigate('subjects',this)">
-        📚 Dersler
-      </button>
-
-      <button onclick="navigate('exams',this)">
-        📅 Sınavlar
-      </button>
-
-      <button onclick="navigate('focus',this)">
-        ⏱️ Odaklan
-      </button>
-
-      <button onclick="navigate('coach',this)">
-        🤖 Ders Koçu
-      </button>
-
-      <button onclick="navigate('pet',this)">
-        🐼 Evcil Hayvan
-      </button>
-
-      <button onclick="navigate('market',this)">
-        🛒 Market
-      </button>
-
-      <button onclick="navigate('achievements',this)">
-        🏆 Rozetler
-      </button>
-
-      <button onclick="navigate('stats',this)">
-        📊 İstatistikler
-      </button>
-
-      <button onclick="navigate('profile',this)">
-        👤 Profil
-      </button>
-
+    <div class="pet-stat">
+     <div class="pet-stat-head">
+      <strong>⚡ Enerji</strong>
+      <span id="petEnergyText">80%</span>
+     </div>
+     <div class="bar"><span id="petEnergyBar" style="width:80%"></span></div>
     </div>
 
-    <div class="logout">
-
-      <button onclick="logout()">
-        🚪 Çıkış Yap
-      </button>
-
+    <div class="pet-stat">
+     <div class="pet-stat-head">
+      <strong>⭐ XP</strong>
+      <span id="petXPText">0 / 100</span>
+     </div>
+     <div class="bar"><span id="petXPBar" style="width:0%"></span></div>
     </div>
 
-  </aside>
+   </div>
+  </div>
 
+ </div>
 
-  <!-- MOBILE -->
+</section>
 
-  <button
-    class="mobile-menu-button"
-    onclick="toggleMobileMenu()"
-  >
-    ☰
+<!-- MARKET -->
+<section id="page-market" class="page">
+
+ <div class="card">
+  <div class="card-title">
+   <div>
+    <h2>🛒 Ödül Marketi</h2>
+    <p class="muted" style="margin-top:5px">Coinlerini ödüllere dönüştür.</p>
+   </div>
+   <strong>🪙 <span id="marketCoins">100</span></strong>
+  </div>
+
+  <div class="market-grid" id="marketGrid"></div>
+ </div>
+
+</section>
+
+<!-- BADGES -->
+<section id="page-badges" class="page">
+
+ <div class="card">
+  <div class="card-title">
+   <div>
+    <h2>🏆 Rozetler</h2>
+    <p class="muted" style="margin-top:5px">Başarılarını toplamaya devam et.</p>
+   </div>
+  </div>
+
+  <div class="badges" id="badgeGrid"></div>
+ </div>
+
+</section>
+
+<!-- STATS -->
+<section id="page-stats" class="page">
+
+ <div class="card">
+  <div class="card-title">
+   <div>
+    <h2>📊 İstatistikler</h2>
+    <p class="muted" style="margin-top:5px">Çalışma performansını gör.</p>
+   </div>
+  </div>
+
+  <div class="stats-grid">
+   <div class="stat">
+    <div class="stat-icon">⭐</div>
+    <strong id="bigXP">0</strong>
+    <small>Toplam XP</small>
+   </div>
+   <div class="stat">
+    <div class="stat-icon">⏱️</div>
+    <strong id="focusMinutes">0</strong>
+    <small>Odaklanma dakikası</small>
+   </div>
+   <div class="stat">
+    <div class="stat-icon">✅</div>
+    <strong id="completedTasks">0</strong>
+    <small>Tamamlanan görev</small>
+   </div>
+  </div>
+
+  <div style="margin-top:30px">
+   <h3>📈 Haftalık Aktivite</h3>
+   <div class="chart" id="chart"></div>
+  </div>
+ </div>
+
+</section>
+
+<!-- PROFILE -->
+<section id="page-profile" class="page">
+
+ <div class="card profile-card">
+
+  <div class="profile-big">
+   <div class="profile-avatar">🎓</div>
+   <div>
+    <h2 id="profileName">Öğrenci</h2>
+    <p class="muted">DersTakip öğrencisi</p>
+   </div>
+  </div>
+
+  <div class="form-grid">
+
+   <div>
+    <label class="muted">Adın</label>
+    <input class="input" id="profileNameInput" style="margin-top:7px">
+   </div>
+
+   <div>
+    <label class="muted">Sınıf</label>
+    <select class="input" id="profileClass" style="margin-top:7px">
+     <option>5. Sınıf</option>
+     <option>6. Sınıf</option>
+     <option>7. Sınıf</option>
+     <option>8. Sınıf</option>
+     <option>9. Sınıf</option>
+     <option>10. Sınıf</option>
+     <option>11. Sınıf</option>
+     <option>12. Sınıf</option>
+    </select>
+   </div>
+
+  </div>
+
+  <button class="btn btn-primary" style="margin-top:18px" onclick="saveProfile()">
+   💾 Profili Kaydet
   </button>
 
-  <aside
-    id="mobileDrawer"
-    class="mobile-drawer"
-  >
-
-    <div class="mobile-drawer-head">
-
-      <strong>DersTakip 🚀</strong>
-
-      <button onclick="toggleMobileMenu()">
-        ✕
-      </button>
-
-    </div>
-
-    <button class="mobile-menu-item active"
-      onclick="navigateMobile('home')">
-      🏠 Ana Sayfa
-    </button>
-
-    <button class="mobile-menu-item"
-      onclick="navigateMobile('tasks')">
-      ✅ Görevler
-    </button>
-
-    <button class="mobile-menu-item"
-      onclick="navigateMobile('subjects')">
-      📚 Dersler
-    </button>
-
-    <button class="mobile-menu-item"
-      onclick="navigateMobile('exams')">
-      📅 Sınavlar
-    </button>
-
-    <button class="mobile-menu-item"
-      onclick="navigateMobile('focus')">
-      ⏱️ Odaklan
-    </button>
-
-    <button class="mobile-menu-item"
-      onclick="navigateMobile('coach')">
-      🤖 Ders Koçu
-    </button>
-
-    <button class="mobile-menu-item"
-      onclick="navigateMobile('pet')">
-      🐼 Evcil Hayvan
-    </button>
-
-    <button class="mobile-menu-item"
-      onclick="navigateMobile('market')">
-      🛒 Market
-    </button>
-
-    <button class="mobile-menu-item"
-      onclick="navigateMobile('achievements')">
-      🏆 Rozetler
-    </button>
-
-    <button class="mobile-menu-item"
-      onclick="navigateMobile('stats')">
-      📊 İstatistikler
-    </button>
-
-    <button class="mobile-menu-item"
-      onclick="navigateMobile('profile')">
-      👤 Profil
-    </button>
-
-    <button
-      class="mobile-menu-item"
-      onclick="logout()"
-      style="margin-top:20px"
-    >
-      🚪 Çıkış Yap
-    </button>
-
-  </aside>
-
-
-  <!-- MAIN -->
-
-  <main class="main">
-
-    <div class="topbar">
-
-      <div class="welcome">
-
-        <h1 id="welcomeText">
-          Merhaba! 👋
-        </h1>
-
-        <p id="sectionSubtitle">
-          Bugün küçük bir adım, yarın büyük bir başarı.
-        </p>
-
-      </div>
-
-      <div
-        class="profile"
-        onclick="navigate('profile')"
-      >
-
-        <div
-          class="avatar"
-          id="topAvatar"
-        >
-          🎓
-        </div>
-
-        <strong id="levelText">
-          Seviye 1
-        </strong>
-
-      </div>
-
-    </div>
-
-
-    <!-- ==================================================
-         HOME
-    ================================================== -->
-
-    <section
-      id="page-home"
-      class="page active"
-    >
-
-      <div class="home-hero">
-
-        <h2>
-          Bugünkü hedefin 🎯
-        </h2>
-
-        <p id="taskSummary">
-          Bugün için henüz görev eklemedin.
-        </p>
-
-        <div class="hero-progress">
-
-          <span id="progressBar"></span>
-
-        </div>
-
-        <div class="hero-bottom">
-
-          <span id="progressText">
-            0 / 0 görev
-          </span>
-
-          <span id="xpText">
-            0 XP
-          </span>
-
-        </div>
-
-      </div>
-
-
-      <div class="home-grid">
-
-        <div>
-
-          <div class="card">
-
-            <div class="card-title">
-
-              <h3>
-                Bugünkü Görevler
-              </h3>
-
-              <button
-                class="secondary-btn"
-                onclick="navigate('tasks')"
-              >
-                Tümünü Gör
-              </button>
-
-            </div>
-
-            <div
-              id="homeTaskList"
-              class="task-list"
-            ></div>
-
-          </div>
-
-        </div>
-
-
-        <div>
-
-          <div class="card">
-
-            <div class="card-title">
-
-              <h3>
-                Hızlı Erişim
-              </h3>
-
-            </div>
-
-            <div class="quick-grid">
-
-              <div
-                class="quick-card"
-                onclick="navigate('focus')"
-              >
-
-                <div class="quick-icon">
-                  ⏱️
-                </div>
-
-                <h3>
-                  Odaklan
-                </h3>
-
-                <p>
-                  Çalışma süreni başlat.
-                </p>
-
-              </div>
-
-              <div
-                class="quick-card"
-                onclick="navigate('subjects')"
-              >
-
-                <div class="quick-icon">
-                  📚
-                </div>
-
-                <h3>
-                  Dersler
-                </h3>
-
-                <p>
-                  Derslerini takip et.
-                </p>
-
-              </div>
-
-              <div
-                class="quick-card"
-                onclick="navigate('exams')"
-              >
-
-                <div class="quick-icon">
-                  📅
-                </div>
-
-                <h3>
-                  Sınavlar
-                </h3>
-
-                <p>
-                  Yaklaşan sınavlarına bak.
-                </p>
-
-              </div>
-
-              <div
-                class="quick-card"
-                onclick="navigate('coach')"
-              >
-
-                <div class="quick-icon">
-                  🤖
-                </div>
-
-                <h3>
-                  Ders Koçu
-                </h3>
-
-                <p>
-                  Bugünkü önerini al.
-                </p>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- ==================================================
-         TASKS
-    ================================================== -->
-
-    <section
-      id="page-tasks"
-      class="page"
-    >
-
-      <div class="page-header">
-
-        <div>
-
-          <h2>
-            Görevler ✅
-          </h2>
-
-          <p>
-            Bugün yapman gerekenleri burada yönet.
-          </p>
-
-        </div>
-
-      </div>
-
-      <div class="card">
-
-        <div class="card-title">
-
-          <h3>
-            Görev Listem
-          </h3>
-
-          <span id="taskCounter">
-            0 / 0
-          </span>
-
-        </div>
-
-        <div
-          id="taskList"
-          class="task-list"
-        ></div>
-
-        <div class="add-task">
-
-          <input
-            id="newTask"
-            maxlength="150"
-            placeholder="Yeni görev ekle..."
-            onkeydown="if(event.key==='Enter') addTask()"
-          >
-
-          <button
-            class="primary-btn"
-            onclick="addTask()"
-          >
-            + Görev Ekle
-          </button>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- ==================================================
-         SUBJECTS
-    ================================================== -->
-
-    <section
-      id="page-subjects"
-      class="page"
-    >
-
-      <div class="page-header">
-
-        <div>
-
-          <h2>
-            Dersler 📚
-          </h2>
-
-          <p>
-            Ders bazında ilerlemeni takip et.
-          </p>
-
-        </div>
-
-        <button
-          class="primary-btn"
-          onclick="addSubject()"
-        >
-          + Ders Ekle
-        </button>
-
-      </div>
-
-      <div
-        id="subjectGrid"
-        class="subject-grid"
-      ></div>
-
-    </section>
-
-
-    <!-- ==================================================
-         EXAMS
-    ================================================== -->
-
-    <section
-      id="page-exams"
-      class="page"
-    >
-
-      <div class="page-header">
-
-        <div>
-
-          <h2>
-            Sınavlar 📅
-          </h2>
-
-          <p>
-            Yaklaşan sınavlarını unutma.
-          </p>
-
-        </div>
-
-        <button
-          class="primary-btn"
-          onclick="addExam()"
-        >
-          + Sınav Ekle
-        </button>
-
-      </div>
-
-      <div
-        id="examGrid"
-        class="exam-grid"
-      ></div>
-
-    </section>
-
-
-    <!-- ==================================================
-         FOCUS
-    ================================================== -->
-
-    <section
-      id="page-focus"
-      class="page"
-    >
-
-      <div class="page-header">
-
-        <div>
-
-          <h2>
-            Odaklan ⏱️
-          </h2>
-
-          <p>
-            Telefonu bırak ve çalışmaya başla.
-          </p>
-
-        </div>
-
-      </div>
-
-      <div class="card focus-card">
-
-        <div class="focus-mode">
-
-          <button
-            class="active"
-            onclick="setFocusMode(25,this)"
-          >
-            25 dk
-          </button>
-
-          <button
-            onclick="setFocusMode(50,this)"
-          >
-            50 dk
-          </button>
-
-          <button
-            onclick="setFocusMode(90,this)"
-          >
-            90 dk
-          </button>
-
-        </div>
-
-        <div
-          id="timer"
-          class="timer"
-        >
-          25:00
-        </div>
-
-        <div class="focus-buttons">
-
-          <button
-            id="timerButton"
-            class="primary-btn"
-            onclick="toggleTimer()"
-          >
-            ▶ Başlat
-          </button>
-
-          <button
-            class="secondary-btn"
-            onclick="resetTimer()"
-          >
-            ↻ Sıfırla
-          </button>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- ==================================================
-         COACH
-    ================================================== -->
-
-    <section
-      id="page-coach"
-      class="page"
-    >
-
-      <div class="page-header">
-
-        <div>
-
-          <h2>
-            Ders Koçu 🤖
-          </h2>
-
-          <p>
-            Sana özel çalışma önerileri.
-          </p>
-
-        </div>
-
-        <button
-          class="primary-btn"
-          onclick="newCoachAdvice()"
-        >
-          Yeni Öneri
-        </button>
-
-      </div>
-
-      <div class="coach-box">
-
-        <div class="coach-avatar">
-          🤖
-        </div>
-
-        <div>
-
-          <h2>
-            Bugünün önerisi
-          </h2>
-
-          <p
-            id="coachMessage"
-            style="color:var(--muted);line-height:1.7;margin-top:10px"
-          >
-            Önce en zor dersinden 25 dakika çalış.
-            Sonra kısa bir mola ver.
-          </p>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- ==================================================
-         PET
-    ================================================== -->
-
-    <section
-      id="page-pet"
-      class="page"
-    >
-
-      <div class="page-header">
-
-        <div>
-
-          <h2>
-            Evcil Hayvanım 🐼
-          </h2>
-
-          <p>
-            Çalıştıkça evcil hayvanın gelişir.
-          </p>
-
-        </div>
-
-      </div>
-
-      <div class="pet-page">
-
-        <div class="card">
-
-          <div
-            id="petBig"
-            class="pet-big"
-          >
-            🐼
-          </div>
-
-        </div>
-
-        <div class="card pet-info">
-
-          <h2 id="petName">
-            Panda
-          </h2>
-
-          <p>
-            Çalışmaya devam ettikçe Panda
-            seviye atlayacak.
-          </p>
-
-          <div class="pet-xp">
-
-            <strong id="petLevel">
-              Seviye 1
-            </strong>
-
-            <div class="pet-xp-bar">
-
-              <span id="petXPBar"></span>
-
-            </div>
-
-            <small
-              id="petXPText"
-              style="color:var(--muted)"
-            >
-              0 / 100 XP
-            </small>
-
-          </div>
-
-          <button
-            class="primary-btn"
-            style="margin-top:25px"
-            onclick="feedPet()"
-          >
-            🍎 Panda'yı Besle
-          </button>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- ==================================================
-         MARKET
-    ================================================== -->
-
-    <section
-      id="page-market"
-      class="page"
-    >
-
-      <div class="page-header">
-
-        <div>
-
-          <h2>
-            Ödül Marketi 🛒
-          </h2>
-
-          <p>
-            Coinlerini harcayarak ödüller kazan.
-          </p>
-
-        </div>
-
-        <strong>
-          🪙 <span id="marketCoins">0</span> Coin
-        </strong>
-
-      </div>
-
-      <div
-        id="marketGrid"
-        class="market-grid"
-      ></div>
-
-    </section>
-
-
-    <!-- ==================================================
-         ACHIEVEMENTS
-    ================================================== -->
-
-    <section
-      id="page-achievements"
-      class="page"
-    >
-
-      <div class="page-header">
-
-        <div>
-
-          <h2>
-            Rozetler 🏆
-          </h2>
-
-          <p>
-            Başarılarını topla ve koleksiyonunu tamamla.
-          </p>
-
-        </div>
-
-      </div>
-
-      <div
-        id="badges"
-        class="badges"
-      ></div>
-
-    </section>
-
-
-    <!-- ==================================================
-         STATS
-    ================================================== -->
-
-    <section
-      id="page-stats"
-      class="page"
-    >
-
-      <div class="page-header">
-
-        <div>
-
-          <h2>
-            İstatistikler 📊
-          </h2>
-
-          <p>
-            Çalışma performansını incele.
-          </p>
-
-        </div>
-
-      </div>
-
-      <div class="stats-grid">
-
-        <div class="stat-card">
-
-          <div class="stat-icon">
-            ⭐
-          </div>
-
-          <strong id="statXP">
-            0
-          </strong>
-
-          <small>
-            Toplam XP
-          </small>
-
-        </div>
-
-        <div class="stat-card">
-
-          <div class="stat-icon">
-            🔥
-          </div>
-
-          <strong id="statStreak">
-            0
-          </strong>
-
-          <small>
-            Günlük seri
-          </small>
-
-        </div>
-
-        <div class="stat-card">
-
-          <div class="stat-icon">
-            🪙
-          </div>
-
-          <strong id="statCoins">
-            0
-          </strong>
-
-          <small>
-            Coin
-          </small>
-
-        </div>
-
-        <div class="stat-card">
-
-          <div class="stat-icon">
-            ⏱️
-          </div>
-
-          <strong id="statMinutes">
-            0
-          </strong>
-
-          <small>
-            Çalışma dakikası
-          </small>
-
-        </div>
-
-      </div>
-
-      <div class="card">
-
-        <div class="card-title">
-
-          <h3>
-            Son Aktiviteler
-          </h3>
-
-        </div>
-
-        <div id="activityList"></div>
-
-      </div>
-
-    </section>
-
-
-    <!-- ==================================================
-         PROFILE
-    ================================================== -->
-
-    <section
-      id="page-profile"
-      class="page"
-    >
-
-      <div class="page-header">
-
-        <div>
-
-          <h2>
-            Profil 👤
-          </h2>
-
-          <p>
-            Hesabını ve uygulama ayarlarını yönet.
-          </p>
-
-        </div>
-
-      </div>
-
-      <div class="profile-grid">
-
-        <div class="card profile-center">
-
-          <div
-            id="profileAvatar"
-            class="profile-avatar-big"
-          >
-            🎓
-          </div>
-
-          <h2 id="profileName">
-            Öğrenci
-          </h2>
-
-          <p
-            id="profileEmail"
-            style="color:var(--muted);margin-top:5px"
-          >
-            -
-          </p>
-
-          <button
-            class="primary-btn"
-            style="margin-top:20px"
-            onclick="changeAvatar()"
-          >
-            Avatarı Değiştir
-          </button>
-
-        </div>
-
-        <div class="card">
-
-          <div class="card-title">
-
-            <h3>
-              Ayarlar ⚙️
-            </h3>
-
-          </div>
-
-          <div
-            style="
-              display:flex;
-              align-items:center;
-              justify-content:space-between;
-              padding:15px 0;
-              border-bottom:1px solid var(--border)
-            "
-          >
-
-            <div>
-
-              <strong>
-                Karanlık Mod
-              </strong>
-
-              <p style="color:var(--muted);font-size:13px">
-                Gece kullanımını kolaylaştır.
-              </p>
-
-            </div>
-
-            <button
-              class="secondary-btn"
-              onclick="toggleDarkMode()"
-            >
-              🌙 Değiştir
-            </button>
-
-          </div>
-
-          <div
-            style="
-              display:flex;
-              align-items:center;
-              justify-content:space-between;
-              padding:15px 0
-            "
-          >
-
-            <div>
-
-              <strong>
-                Verileri Sıfırla
-              </strong>
-
-              <p style="color:var(--muted);font-size:13px">
-                Tüm yerel çalışma verilerini sil.
-              </p>
-
-            </div>
-
-            <button
-              class="danger-btn"
-              onclick="resetData()"
-            >
-              Sıfırla
-            </button>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
-
+  <div style="margin-top:30px;padding-top:25px;border-top:1px solid var(--border)">
+   <h3>⚙️ Ayarlar</h3>
+
+   <button class="btn btn-secondary" style="margin-top:15px" onclick="toggleDark()">
+    🌙 Karanlık / Aydınlık Mod
+   </button>
+
+   <button class="btn btn-danger" style="margin:15px 0 0 8px" onclick="resetApp()">
+    🗑️ Tüm Verileri Sıfırla
+   </button>
+  </div>
+
+ </div>
+
+</section>
+
+</main>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+ <div class="modal-box">
+  <div class="modal-head">
+   <h2 id="modalTitle">DersTakip</h2>
+   <button class="close" onclick="closeModal()">✕</button>
+  </div>
+  <div id="modalContent"></div>
+ </div>
 </div>
 
+<div id="toast"></div>
 
-<!-- TOAST -->
+<script>
+/* =====================================================
+   DERS TAKİP — TEK DOSYA UYGULAMA
+===================================================== */
 
-<div id="toastContainer"></div>
+const defaultData={
+ name:"Öğrenci",
+ className:"8. Sınıf",
+ xp:0,
+ coins:100,
+ streak:0,
+ completed:0,
+ focusMinutes:0,
+ tasks:[],
+ notes:[],
+ subjects:[
+  {id:1,name:"Matematik",icon:"📐",progress:35},
+  {id:2,name:"Türkçe",icon:"📖",progress:55},
+  {id:3,name:"Fen Bilimleri",icon:"🔬",progress:25},
+  {id:4,name:"İngilizce",icon:"🌍",progress:45}
+ ],
+ exams:[
+  {id:1,subject:"Matematik",date:"2026-09-05",time:"10:00"},
+  {id:2,subject:"Fen Bilimleri",date:"2026-09-12",time:"09:00"}
+ ],
+ pet:{
+  emoji:"🐼",
+  name:"Panda",
+  level:1,
+  happy:70,
+  energy:80,
+  xp:0
+ },
+ activity:[2,4,3,6,4,7,5]
+};
 
+let data=JSON.parse(localStorage.getItem("dersTakipV3"))||defaultData;
 
-<script src="/app.js"></script>
+function save(){
+ localStorage.setItem("dersTakipV3",JSON.stringify(data));
+}
+
+const titles={
+ home:["Merhaba! 👋","Bugün küçük bir adım, yarın büyük bir başarı."],
+ tasks:["Görevlerim ✅","Bugün yapacaklarını planla ve tamamla."],
+ notes:["Notlarım 📝","Önemli bilgilerini düzenli şekilde sakla."],
+ subjects:["Derslerim 📚","Derslerini ve ilerlemeni takip et."],
+ exams:["Sınavlar 📅","Yaklaşan sınavlarına hazırlan."],
+ focus:["Odaklan ⏱️","Dikkatini topla ve çalışmaya başla."],
+ coach:["Ders Koçu 🤖","Bugün için çalışma önerilerini al."],
+ pet:["Evcil Hayvan 🐣","Çalıştıkça evcil hayvanını geliştir."],
+ market:["Ödül Marketi 🛒","Kazandığın coinlerle ödüller al."],
+ badges:["Rozetler 🏆","Başarılarını toplamaya devam et."],
+ stats:["İstatistikler 📊","Çalışma performansını incele."],
+ profile:["Profil 👤","Hesabını ve tercihlerini yönet."]
+};
+
+function go(page,btn){
+ document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+ const el=document.getElementById("page-"+page);
+ if(el)el.classList.add("active");
+
+ document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
+ if(btn)btn.classList.add("active");
+
+ if(titles[page]){
+  pageTitle.textContent=titles[page][0];
+  pageSubtitle.textContent=titles[page][1];
+ }
+
+ if(page==="tasks")renderTasks();
+ if(page==="notes")renderNotes();
+ if(page==="subjects")renderSubjects();
+ if(page==="exams")renderExams();
+ if(page==="pet")renderPet();
+ if(page==="market")renderMarket();
+ if(page==="badges")renderBadges();
+ if(page==="stats")renderStats();
+ if(page==="profile")renderProfile();
+
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function mobileGo(page){
+ document.querySelectorAll(".drawer-item").forEach(x=>x.classList.remove("active"));
+ event?.target?.classList.add("active");
+ toggleDrawer();
+ go(page);
+}
+
+function toggleDrawer(){
+ document.getElementById("drawer").classList.toggle("open");
+}
+
+function toggleDark(){
+ document.body.classList.toggle("dark");
+ localStorage.setItem("dersTakipDark",document.body.classList.contains("dark"));
+}
+
+if(localStorage.getItem("dersTakipDark")==="true"){
+ document.body.classList.add("dark");
+}
+
+/* TASKS */
+function addTask(){
+ const input=document.getElementById("taskInput");
+ const text=input.value.trim();
+
+ if(!text){
+  toast("Bir görev yazmalısın.");
+  return;
+ }
+
+ data.tasks.push({
+  id:Date.now(),
+  text,
+  done:false
+ });
+
+ input.value="";
+ save();
+ renderTasks();
+ updateDashboard();
+ toast("✅ Görev eklendi!");
+}
+
+function renderTasks(){
+ const list=document.getElementById("taskList");
+
+ if(!data.tasks.length){
+  list.innerHTML=`
+   <div style="text-align:center;padding:35px 10px">
+    <div style="font-size:45px">🎯</div>
+    <h3 style="margin:10px 0">Henüz görev yok</h3>
+    <p class="muted">Bugün yapmak istediğin ilk görevi ekle.</p>
+   </div>`;
+ }else{
+  list.innerHTML=data.tasks.map(t=>`
+   <div class="task ${t.done?"done":""}">
+    <button class="check" onclick="toggleTask(${t.id})">
+     ${t.done?"✓":""}
+    </button>
+    <div class="task-text">
+     ${escapeHTML(t.text)}
+     <div class="task-sub">${t.done?"Tamamlandı":"Bekliyor"}</div>
+    </div>
+    <div class="task-actions">
+     <button onclick="deleteTask(${t.id})">🗑️</button>
+    </div>
+   </div>
+  `).join("");
+ }
+
+ const done=data.tasks.filter(x=>x.done).length;
+ document.getElementById("taskCount").textContent=done+" / "+data.tasks.length;
+}
+
+function toggleTask(id){
+ const task=data.tasks.find(x=>x.id===id);
+ if(!task)return;
+
+ task.done=!task.done;
+
+ if(task.done){
+  data.xp+=50;
+  data.coins+=10;
+  data.completed++;
+  data.pet.xp+=20;
+
+  if(data.pet.xp>=100){
+   data.pet.xp-=100;
+   data.pet.level++;
+   toast("🎉 Panda seviye atladı!");
+  }else{
+   toast("✨ Görev tamamlandı! +50 XP");
+  }
+ }
+
+ save();
+ renderTasks();
+ updateDashboard();
+ renderPet();
+ renderStats();
+}
+
+function deleteTask(id){
+ data.tasks=data.tasks.filter(x=>x.id!==id);
+ save();
+ renderTasks();
+ updateDashboard();
+ toast("Görev silindi.");
+}
+
+/* NOTES */
+function newNote(id=null){
+ let note=id?data.notes.find(n=>n.id===id):null;
+
+ modalTitle.textContent=note?"Notu Düzenle":"Yeni Not";
+
+ modalContent.innerHTML=`
+  <label class="muted">Başlık</label>
+  <input class="input" id="noteTitle" placeholder="Örn: Matematik — Üslü Sayılar"
+   value="${note?escapeAttr(note.title):""}" style="margin:7px 0 15px">
+
+  <label class="muted">Ders</label>
+  <input class="input" id="noteSubject" placeholder="Örn: Matematik"
+   value="${note?escapeAttr(note.subject||""):""}" style="margin:7px 0 15px">
+
+  <label class="muted">Not</label>
+  <textarea class="input" id="noteBody" placeholder="Notunu buraya yaz...">${note?escapeHTML(note.body):""}</textarea>
+
+  <div style="display:flex;gap:10px;margin-top:17px">
+   <button class="btn btn-primary" onclick="saveNote(${id||"null"})">💾 Kaydet</button>
+   <button class="btn btn-secondary" onclick="closeModal()">Vazgeç</button>
+  </div>
+ `;
+
+ modal.classList.add("show");
+ setTimeout(()=>document.getElementById("noteTitle")?.focus(),100);
+}
+
+function saveNote(id){
+ const title=document.getElementById("noteTitle").value.trim();
+ const subject=document.getElementById("noteSubject").value.trim();
+ const body=document.getElementById("noteBody").value.trim();
+
+ if(!title||!body){
+  toast("Başlık ve not alanını doldur.");
+  return;
+ }
+
+ if(id){
+  const n=data.notes.find(x=>x.id===id);
+  if(n){
+   n.title=title;
+   n.subject=subject;
+   n.body=body;
+  }
+ }else{
+  data.notes.unshift({
+   id:Date.now(),
+   title,
+   subject,
+   body,
+   pinned:false
+  });
+ }
+
+ save();
+ closeModal();
+ renderNotes();
+ toast("📝 Not kaydedildi!");
+}
+
+function renderNotes(){
+ const grid=document.getElementById("noteGrid");
+ const search=(document.getElementById("noteSearch")?.value||"").toLowerCase();
+ const filter=document.getElementById("noteFilter")?.value||"all";
+
+ let notes=data.notes.filter(n=>{
+  const matches=(n.title+" "+n.body+" "+(n.subject||"")).toLowerCase().includes(search);
+  const pin=filter==="all"||n.pinned;
+  return matches&&pin;
+ });
+
+ if(!notes.length){
+  grid.innerHTML=`
+   <div style="grid-column:1/-1;text-align:center;padding:50px">
+    <div style="font-size:50px">📝</div>
+    <h3 style="margin:12px 0">Henüz not yok</h3>
+    <p class="muted">İlk ders notunu oluştur.</p>
+   </div>`;
+  return;
+ }
+
+ grid.innerHTML=notes.map(n=>`
+  <div class="note ${n.pinned?"pinned":""}">
+   <div class="note-head">
+    <div>
+     <h3>${n.pinned?"📌 ":""}${escapeHTML(n.title)}</h3>
+     <small class="muted">${escapeHTML(n.subject||"Genel")}</small>
+    </div>
+    <div class="note-buttons">
+     <button onclick="togglePin(${n.id})">${n.pinned?"📌":"📍"}</button>
+     <button onclick="newNote(${n.id})">✏️</button>
+     <button onclick="deleteNote(${n.id})">🗑️</button>
+    </div>
+   </div>
+
+   <p class="note-body" style="margin-top:14px">${escapeHTML(n.body).slice(0,250)}</p>
+
+   <div class="note-footer">
+    <span class="note-color"></span>
+    <small class="muted">DersTakip notu</small>
+   </div>
+  </div>
+ `).join("");
+}
+
+function togglePin(id){
+ const n=data.notes.find(x=>x.id===id);
+ if(n)n.pinned=!n.pinned;
+ save();
+ renderNotes();
+}
+
+function deleteNote(id){
+ if(!confirm("Bu not silinsin mi?"))return;
+ data.notes=data.notes.filter(x=>x.id!==id);
+ save();
+ renderNotes();
+ toast("Not silindi.");
+}
+
+/* SUBJECTS */
+function addSubject(){
+ modalTitle.textContent="Yeni Ders";
+
+ modalContent.innerHTML=`
+  <label class="muted">Ders adı</label>
+  <input class="input" id="subjectName" placeholder="Örn: Tarih" style="margin:7px 0 15px">
+
+  <label class="muted">Emoji</label>
+  <input class="input" id="subjectIcon" placeholder="📚" value="📚" style="margin:7px 0 15px">
+
+  <button class="btn btn-primary" onclick="saveSubject()">Dersi Ekle</button>
+ `;
+
+ modal.classList.add("show");
+}
+
+function saveSubject(){
+ const name=document.getElementById("subjectName").value.trim();
+ const icon=document.getElementById("subjectIcon").value.trim()||"📚";
+
+ if(!name){
+  toast("Ders adı yaz.");
+  return;
+ }
+
+ data.subjects.push({
+  id:Date.now(),
+  name,
+  icon,
+  progress:0
+ });
+
+ save();
+ closeModal();
+ renderSubjects();
+ toast("📚 Ders eklendi!");
+}
+
+function renderSubjects(){
+ const grid=document.getElementById("subjectGrid");
+
+ grid.innerHTML=data.subjects.map(s=>`
+  <div class="subject">
+   <div class="subject-top">
+    <div class="subject-icon">${escapeHTML(s.icon)}</div>
+    <button style="border:0;background:transparent" onclick="deleteSubject(${s.id})">🗑️</button>
+   </div>
+
+   <h3>${escapeHTML(s.name)}</h3>
+   <p>${s.progress}% çalışma ilerlemesi</p>
+
+   <div class="subject-progress">
+    <span style="width:${s.progress}%"></span>
+   </div>
+
+   <div style="display:flex;justify-content:space-between;align-items:center">
+    <small class="muted">İlerleme</small>
+    <strong>${s.progress}%</strong>
+   </div>
+
+   <div class="subject-actions" style="margin-top:13px">
+    <button class="btn btn-secondary" onclick="increaseSubject(${s.id})">+ İlerle</button>
+   </div>
+  </div>
+ `).join("");
+}
+
+function increaseSubject(id){
+ const s=data.subjects.find(x=>x.id===id);
+ if(!s)return;
+
+ s.progress=Math.min(100,s.progress+10);
+ data.xp+=10;
+ save();
+ renderSubjects();
+ updateDashboard();
+ toast("📚 Ders ilerlemesi güncellendi!");
+}
+
+function deleteSubject(id){
+ data.subjects=data.subjects.filter(x=>x.id!==id);
+ save();
+ renderSubjects();
+ toast("Ders silindi.");
+}
+
+/* EXAMS */
+function addExam(){
+ modalTitle.textContent="Sınav Ekle";
+
+ modalContent.innerHTML=`
+  <label class="muted">Ders</label>
+  <input class="input" id="examSubject" placeholder="Örn: Matematik" style="margin:7px 0 15px">
+
+  <label class="muted">Tarih</label>
+  <input class="input" id="examDate" type="date" style="margin:7px 0 15px">
+
+  <label class="muted">Saat</label>
+  <input class="input" id="examTime" type="time" value="10:00" style="margin:7px 0 15px">
+
+  <button class="btn btn-primary" onclick="saveExam()">Sınavı Ekle</button>
+ `;
+
+ modal.classList.add("show");
+}
+
+function saveExam(){
+ const subject=document.getElementById("examSubject").value.trim();
+ const date=document.getElementById("examDate").value;
+ const time=document.getElementById("examTime").value;
+
+ if(!subject||!date){
+  toast("Ders ve tarih gerekli.");
+  return;
+ }
+
+ data.exams.push({
+  id:Date.now(),
+  subject,
+  date,
+  time
+ });
+
+ save();
+ closeModal();
+ renderExams();
+ toast("📅 Sınav eklendi!");
+}
+
+function renderExams(){
+ const list=document.getElementById("examList");
+
+ const exams=[...data.exams].sort((a,b)=>a.date.localeCompare(b.date));
+
+ if(!exams.length){
+  list.innerHTML=`<div style="text-align:center;padding:40px" class="muted">Henüz sınav eklenmedi.</div>`;
+  return;
+ }
+
+ list.innerHTML=exams.map(e=>{
+  const d=new Date(e.date+"T00:00:00");
+  const day=d.getDate();
+  const month=d.toLocaleDateString("tr-TR",{month:"short"});
+
+  return`
+   <div class="exam">
+    <div class="exam-date">
+     <strong style="font-size:22px">${day}</strong>
+     <small>${month}</small>
+    </div>
+
+    <div class="exam-info">
+     <h3>${escapeHTML(e.subject)}</h3>
+     <p>📅 ${formatDate(e.date)} · ⏰ ${escapeHTML(e.time)}</p>
+    </div>
+
+    <button class="btn btn-danger" onclick="deleteExam(${e.id})">Sil</button>
+   </div>
+  `;
+ }).join("");
+}
+
+function deleteExam(id){
+ data.exams=data.exams.filter(x=>x.id!==id);
+ save();
+ renderExams();
+ toast("Sınav silindi.");
+}
+
+/* FOCUS */
+let timerSeconds=1500;
+let timerRunning=false;
+let timerInterval=null;
+
+function setTimer(minutes,button){
+ clearInterval(timerInterval);
+ timerRunning=false;
+ timerSeconds=minutes*60;
+
+ document.querySelectorAll(".timer-mode button").forEach(x=>x.classList.remove("active"));
+ button.classList.add("active");
+
+ timerButton.textContent="▶ Başlat";
+ updateTimer();
+}
+
+function updateTimer(){
+ const min=String(Math.floor(timerSeconds/60)).padStart(2,"0");
+ const sec=String(timerSeconds%60).padStart(2,"0");
+ document.getElementById("timer").textContent=min+":"+sec;
+}
+
+function toggleTimer(){
+ if(timerRunning){
+  clearInterval(timerInterval);
+  timerRunning=false;
+  timerButton.textContent="▶ Devam Et";
+  return;
+ }
+
+ timerRunning=true;
+ timerButton.textContent="⏸ Duraklat";
+
+ timerInterval=setInterval(()=>{
+  timerSeconds--;
+  updateTimer();
+
+  if(timerSeconds<=0){
+   clearInterval(timerInterval);
+   timerRunning=false;
+
+   data.focusMinutes+=25;
+   data.xp+=50;
+   data.coins+=10;
+
+   data.activity[data.activity.length-1]++;
+   save();
+
+   timerButton.textContent="▶ Başlat";
+   timerSeconds=1500;
+   updateTimer();
+
+   updateDashboard();
+   renderStats();
+
+   toast("🎉 Odaklanma tamamlandı! +50 XP");
+  }
+ },1000);
+}
+
+function resetTimer(){
+ clearInterval(timerInterval);
+ timerRunning=false;
+ timerSeconds=1500;
+ timerButton.textContent="▶ Başlat";
+ updateTimer();
+}
+
+/* COACH */
+const advices=[
+ "Bugün önce en zor dersinden başla. Zihnin daha dinçken daha kolay ilerlersin.",
+ "25 dakika boyunca sadece tek bir konuya odaklanmayı dene.",
+ "Çözemediğin soruları işaretle ve çalışmanın sonunda tekrar dön.",
+ "Notlarını kendi cümlelerinle yazmak öğrenmeyi güçlendirir.",
+ "Bugün 10 soru bile çözsen, hiç başlamamaktan çok daha iyidir.",
+ "Çalışırken bildirimlerini kapat ve dikkat dağıtıcı şeyleri uzaklaştır."
+];
+
+function newAdvice(){
+ const advice=advices[Math.floor(Math.random()*advices.length)];
+ document.getElementById("coachText").textContent=advice;
+ toast("🤖 Yeni çalışma önerisi!");
+}
+
+/* PET */
+function renderPet(){
+ const p=data.pet;
+
+ petEmoji.textContent=p.emoji;
+ petName.textContent=p.name;
+ petLevel.textContent="Seviye "+p.level;
+
+ petHappyText.textContent=p.happy+"%";
+ petHappyBar.style.width=p.happy+"%";
+
+ petEnergyText.textContent=p.energy+"%";
+ petEnergyBar.style.width=p.energy+"%";
+
+ petXPText.textContent=p.xp+" / 100";
+ petXPBar.style.width=p.xp+"%";
+}
+
+function feedPet(){
+ if(data.coins<10){
+  toast("🪙 Panda'yı beslemek için 10 coin gerekiyor.");
+  return;
+ }
+
+ data.coins-=10;
+ data.pet.happy=Math.min(100,data.pet.happy+10);
+ data.pet.energy=Math.min(100,data.pet.energy+5);
+
+ save();
+ renderPet();
+ updateDashboard();
+ toast("🍎 Panda çok mutlu!");
+}
+
+/* MARKET */
+const shopItems=[
+ {id:1,icon:"🍕",name:"Pizza Molası",desc:"Çalışma sonrası küçük ödül.",price:30},
+ {id:2,icon:"🎮",name:"Oyun Molası",desc:"30 dakika oyun zamanı.",price:50},
+ {id:3,icon:"🍫",name:"Çikolata",desc:"Tatlı bir motivasyon.",price:25},
+ {id:4,icon:"🎬",name:"Film Zamanı",desc:"Çalışma sonrası film.",price:80},
+ {id:5,icon:"⭐",name:"Özel Rozet",desc:"Profiline özel ödül.",price:100},
+ {id:6,icon:"🎁",name:"Sürpriz Kutu",desc:"İçinden ne çıkacak?",price:60}
+];
+
+function renderMarket(){
+ marketCoins.textContent=data.coins;
+
+ marketGrid.innerHTML=shopItems.map(i=>`
+  <div class="shop">
+   <div class="shop-icon">${i.icon}</div>
+   <h3>${i.name}</h3>
+   <p>${i.desc}</p>
+   <div class="price">🪙 ${i.price}</div>
+   <button class="btn btn-primary" onclick="buyItem(${i.id})">Satın Al</button>
+  </div>
+ `).join("");
+}
+
+function buyItem(id){
+ const item=shopItems.find(x=>x.id===id);
+
+ if(data.coins<item.price){
+  toast("🪙 Yeterli coin yok.");
+  return;
+ }
+
+ data.coins-=item.price;
+ save();
+
+ renderMarket();
+ updateDashboard();
+
+ toast("🎁 "+item.name+" satın alındı!");
+}
+
+/* BADGES */
+function renderBadges(){
+ const badges=[
+  ["🐣","İlk Adım","İlk görevini tamamla",data.completed>=1],
+  ["🔥","Seri Başlangıcı","Çalışmaya başla",data.streak>=1],
+  ["⭐","100 XP","100 XP kazan",data.xp>=100],
+  ["🏆","Çalışkan","5 görev tamamla",data.completed>=5],
+  ["🚀","Hızlı Başlangıç","10 görev tamamla",data.completed>=10],
+  ["📝","Not Tutucu","İlk notunu oluştur",data.notes.length>=1],
+  ["📚","Ders Kaşifi","3 ders ekle",data.subjects.length>=3],
+  ["⏱️","Odak Ustası","İlk odaklanmanı tamamla",data.focusMinutes>=25],
+  ["💎","Zengin Öğrenci","500 coin kazan",data.coins>=500]
+ ];
+
+ badgeGrid.innerHTML=badges.map(b=>`
+  <div class="badge ${b[3]?"":"locked"}">
+   <div class="badge-icon">${b[0]}</div>
+   <strong>${b[1]}</strong>
+   <small>${b[2]}</small>
+   <div style="margin-top:8px">${b[3]?"✅ Kazanıldı":"🔒 Kilitli"}</div>
+  </div>
+ `).join("");
+}
+
+/* STATS */
+function renderStats(){
+ bigXP.textContent=data.xp;
+ focusMinutes.textContent=data.focusMinutes;
+ completedTasks.textContent=data.completed;
+
+ chart.innerHTML=data.activity.map((v,i)=>{
+  const height=Math.max(8,v*13);
+  const days=["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"];
+
+  return`
+   <div class="chart-bar" style="height:${height}px">
+    <span>${days[i]}</span>
+   </div>
+  `;
+ }).join("");
+}
+
+/* PROFILE */
+function renderProfile(){
+ profileName.textContent=data.name;
+ profileNameInput.value=data.name;
+ profileClass.value=data.className;
+ topName.textContent=data.name;
+}
+
+function saveProfile(){
+ const name=profileNameInput.value.trim()||"Öğrenci";
+
+ data.name=name;
+ data.className=profileClass.value;
+
+ save();
+ renderProfile();
+ updateDashboard();
+
+ toast("👤 Profil kaydedildi!");
+}
+
+/* DASHBOARD */
+function updateDashboard(){
+ const total=data.tasks.length;
+ const done=data.tasks.filter(x=>x.done).length;
+ const percent=total?Math.round(done/total*100):0;
+
+ homeProgress.style.width=percent+"%";
+ homeProgressText.textContent=done+" / "+total+" görev";
+ homeXP.textContent=data.xp+" XP";
+
+ statXP.textContent=data.xp;
+ statStreak.textContent=data.streak;
+ statCoins.textContent=data.coins;
+ homeStreak.textContent=data.streak;
+
+ topName.textContent=data.name;
+
+ if(done===0){
+  homeMessage.textContent="Bugün kendin için güzel bir adım atmaya ne dersin?";
+ }else if(done<total){
+  homeMessage.textContent="Harika gidiyorsun! Birkaç görev daha kaldı. 💪";
+ }else{
+  homeMessage.textContent="🎉 Bugünkü görevlerinin tamamını bitirdin!";
+ }
+}
+
+/* MODAL */
+function closeModal(){
+ modal.classList.remove("show");
+}
+
+modal.addEventListener("click",e=>{
+ if(e.target===modal)closeModal();
+});
+
+/* TOAST */
+function toast(message){
+ const box=document.createElement("div");
+ box.className="toast";
+ box.textContent=message;
+
+ document.getElementById("toast").appendChild(box);
+
+ setTimeout(()=>box.remove(),2800);
+}
+
+/* RESET */
+function resetApp(){
+ if(!confirm("TÜM DersTakip verileri silinsin mi?"))return;
+
+ localStorage.removeItem("dersTakipV3");
+ location.reload();
+}
+
+/* HELPERS */
+function escapeHTML(value){
+ return String(value??"")
+  .replaceAll("&","&amp;")
+  .replaceAll("<","&lt;")
+  .replaceAll(">","&gt;")
+  .replaceAll('"',"&quot;")
+  .replaceAll("'","&#039;");
+}
+
+function escapeAttr(value){
+ return escapeHTML(value);
+}
+
+function formatDate(date){
+ return new Date(date+"T00:00:00").toLocaleDateString("tr-TR",{
+  day:"numeric",
+  month:"long",
+  year:"numeric"
+ });
+}
+
+/* ENTER */
+document.getElementById("taskInput").addEventListener("keydown",e=>{
+ if(e.key==="Enter")addTask();
+});
+
+/* START */
+renderTasks();
+renderNotes();
+renderSubjects();
+renderExams();
+renderPet();
+renderMarket();
+renderBadges();
+renderStats();
+renderProfile();
+updateDashboard();
+updateTimer();
+</script>
 
 </body>
 </html>
