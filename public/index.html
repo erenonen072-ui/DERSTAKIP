@@ -1,945 +1,957 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZC2X3K9CHX"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-ZC2X3K9CHX');
 </script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#635bff">
 <title>DersTakip Pro</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0
+}
 
 :root{
- --primary:#635bff;
- --primary2:#8b7cff;
- --bg:#f5f6fa;
- --card:#fff;
- --text:#171923;
- --muted:#7c8191;
- --border:#e8eaf1;
- --dark:#171a2b;
- --dark2:#22263c;
- --green:#16b979;
- --red:#ef5364;
- --yellow:#f5ad24;
- --blue:#3b82f6;
- --shadow:0 12px 35px rgba(31,35,60,.07);
+  --primary:#635bff;
+  --primary2:#8b7cff;
+  --bg:#f5f6fa;
+  --card:#fff;
+  --text:#171923;
+  --muted:#7c8191;
+  --border:#e8eaf1;
+  --dark:#171a2b;
+  --dark2:#22263c;
+  --green:#16b979;
+  --red:#ef5364;
+  --yellow:#f5ad24;
+  --blue:#3b82f6;
+  --shadow:0 12px 35px rgba(31,35,60,.07);
 }
 
 body.dark{
- --bg:#10131f;
- --card:#181c2b;
- --text:#f5f7ff;
- --muted:#9ba2b8;
- --border:#2a3043;
- --shadow:0 12px 35px rgba(0,0,0,.25);
+  --bg:#10131f;
+  --card:#181c2b;
+  --text:#f5f7ff;
+  --muted:#9ba2b8;
+  --border:#2a3043;
+  --shadow:0 12px 35px rgba(0,0,0,.25);
 }
 
 body{
- font-family:Inter,Arial,sans-serif;
- background:var(--bg);
- color:var(--text);
- min-height:100vh;
+  font-family:Inter,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
 }
 
-button,input,textarea,select{font:inherit}
+button,input,textarea,select{
+  font:inherit
+}
 
-button{cursor:pointer}
+button{
+  cursor:pointer
+}
 
-.hidden{display:none!important}
+.hidden{
+  display:none!important
+}
 
 /* AUTH */
 
 #auth{
- min-height:100vh;
- display:flex;
- align-items:center;
- justify-content:center;
- padding:20px;
- background:
- radial-gradient(circle at 10% 20%,#b9b0ff,transparent 30%),
- radial-gradient(circle at 90% 80%,#ffc8df,transparent 30%),
- linear-gradient(135deg,#5b52ec,#907dff);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:
+    radial-gradient(circle at 10% 20%,#b9b0ff,transparent 30%),
+    radial-gradient(circle at 90% 80%,#ffc8df,transparent 30%),
+    linear-gradient(135deg,#5b52ec,#907dff);
 }
 
 .auth-box{
- width:100%;
- max-width:950px;
- min-height:580px;
- display:grid;
- grid-template-columns:1fr 1fr;
- background:white;
- border-radius:30px;
- overflow:hidden;
- box-shadow:0 30px 90px #0004;
+  width:100%;
+  max-width:950px;
+  min-height:580px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  background:white;
+  border-radius:30px;
+  overflow:hidden;
+  box-shadow:0 30px 90px #0004;
 }
 
 .auth-left{
- padding:50px;
- color:white;
- background:linear-gradient(145deg,#5e55ed,#917dff);
- display:flex;
- flex-direction:column;
- justify-content:center;
+  padding:50px;
+  color:white;
+  background:linear-gradient(145deg,#5e55ed,#917dff);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
 }
 
 .auth-left h1{
- font-size:43px;
- margin-bottom:15px;
+  font-size:43px;
+  margin-bottom:15px;
 }
 
-.auth-left h1 span{color:#ffe66d}
+.auth-left h1 span{
+  color:#ffe66d
+}
 
 .auth-left p{
- line-height:1.7;
- opacity:.9;
+  line-height:1.7;
+  opacity:.9;
 }
 
 .auth-icon{
- font-size:130px;
- text-align:center;
- margin:30px 0;
+  font-size:130px;
+  text-align:center;
+  margin:30px 0;
 }
 
 .auth-right{
- padding:45px;
- display:flex;
- flex-direction:column;
- justify-content:center;
+  padding:45px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
 }
 
 .auth-logo{
- text-align:center;
- font-size:32px;
- font-weight:900;
- margin-bottom:5px;
+  text-align:center;
+  font-size:32px;
+  font-weight:900;
+  margin-bottom:5px;
 }
 
-.auth-logo span{color:var(--primary)}
+.auth-logo span{
+  color:var(--primary)
+}
 
 .auth-subtitle{
- text-align:center;
- color:#777;
- margin-bottom:25px;
+  text-align:center;
+  color:#777;
+  margin-bottom:25px;
 }
 
 .auth-tabs{
- display:grid;
- grid-template-columns:1fr 1fr;
- background:#f0f1f5;
- padding:5px;
- border-radius:12px;
- margin-bottom:20px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  background:#f0f1f5;
+  padding:5px;
+  border-radius:12px;
+  margin-bottom:20px;
 }
 
 .auth-tabs button{
- border:0;
- background:transparent;
- padding:12px;
- border-radius:9px;
- font-weight:800;
+  border:0;
+  background:transparent;
+  padding:12px;
+  border-radius:9px;
+  font-weight:800;
 }
 
 .auth-tabs button.active{
- background:white;
- box-shadow:0 4px 15px #0001;
+  background:white;
+  box-shadow:0 4px 15px #0001;
 }
 
-.field{margin-bottom:15px}
+.field{
+  margin-bottom:15px
+}
 
 .field label{
- display:block;
- font-size:13px;
- font-weight:800;
- margin-bottom:7px;
+  display:block;
+  font-size:13px;
+  font-weight:800;
+  margin-bottom:7px;
 }
 
 .field input,
 .field textarea,
 .field select{
- width:100%;
- border:1px solid #dfe2eb;
- border-radius:11px;
- padding:13px;
- outline:none;
- background:white;
- color:#171923;
+  width:100%;
+  border:1px solid #dfe2eb;
+  border-radius:11px;
+  padding:13px;
+  outline:none;
+  background:white;
+  color:#171923;
 }
 
 .auth-btn{
- width:100%;
- border:0;
- background:linear-gradient(135deg,#635bff,#8b7cff);
- color:white;
- padding:14px;
- border-radius:12px;
- font-weight:900;
+  width:100%;
+  border:0;
+  background:linear-gradient(135deg,#635bff,#8b7cff);
+  color:white;
+  padding:14px;
+  border-radius:12px;
+  font-weight:900;
 }
 
 #authMsg{
- text-align:center;
- margin-top:12px;
- min-height:20px;
- font-size:13px;
+  text-align:center;
+  margin-top:12px;
+  min-height:20px;
+  font-size:13px;
 }
 
 /* APP */
 
-#app{display:none}
+#app{
+  display:none
+}
 
 .sidebar{
- position:fixed;
- left:0;
- top:0;
- bottom:0;
- width:245px;
- background:var(--dark);
- color:white;
- padding:25px 17px;
- z-index:100;
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:245px;
+  background:var(--dark);
+  color:white;
+  padding:25px 17px;
+  z-index:100;
 }
 
 .logo{
- font-size:25px;
- font-weight:950;
- padding-left:10px;
- margin-bottom:35px;
+  font-size:25px;
+  font-weight:950;
+  padding-left:10px;
+  margin-bottom:35px;
 }
 
-.logo span{color:#8b7cff}
+.logo span{
+  color:#8b7cff
+}
 
 .menu button{
- width:100%;
- border:0;
- background:transparent;
- color:#aeb4c8;
- padding:12px;
- border-radius:11px;
- margin-bottom:5px;
- text-align:left;
- font-weight:800;
- transition:.2s;
+  width:100%;
+  border:0;
+  background:transparent;
+  color:#aeb4c8;
+  padding:12px;
+  border-radius:11px;
+  margin-bottom:5px;
+  text-align:left;
+  font-weight:800;
+  transition:.2s;
 }
 
 .menu button:hover,
 .menu button.active{
- background:#292e48;
- color:white;
+  background:#292e48;
+  color:white;
 }
 
 .logout{
- position:absolute;
- bottom:20px;
- left:17px;
- right:17px;
+  position:absolute;
+  bottom:20px;
+  left:17px;
+  right:17px;
 }
 
 .logout button{
- width:100%;
- border:0;
- background:#292e48;
- color:white;
- padding:12px;
- border-radius:11px;
- font-weight:800;
+  width:100%;
+  border:0;
+  background:#292e48;
+  color:white;
+  padding:12px;
+  border-radius:11px;
+  font-weight:800;
 }
 
 .main{
- margin-left:245px;
- padding:30px;
- max-width:1650px;
+  margin-left:245px;
+  padding:30px;
+  max-width:1650px;
 }
 
 .topbar{
- display:flex;
- justify-content:space-between;
- align-items:center;
- margin-bottom:25px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:25px;
 }
 
 .welcome h1{
- font-size:32px;
- margin-bottom:5px;
+  font-size:32px;
+  margin-bottom:5px;
 }
 
-.welcome p{color:var(--muted)}
+.welcome p{
+  color:var(--muted)
+}
 
 .profile{
- display:flex;
- align-items:center;
- gap:10px;
- background:var(--card);
- padding:8px 13px;
- border-radius:13px;
- box-shadow:var(--shadow);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:var(--card);
+  padding:8px 13px;
+  border-radius:13px;
+  box-shadow:var(--shadow);
 }
 
 .avatar{
- width:40px;
- height:40px;
- border-radius:50%;
- background:#e8e5ff;
- display:grid;
- place-items:center;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:#e8e5ff;
+  display:grid;
+  place-items:center;
 }
 
 /* HERO */
 
 .hero{
- background:
- radial-gradient(circle at 90% 15%,#ffffff30,transparent 30%),
- linear-gradient(135deg,#635bff,#8c78ff);
- color:white;
- padding:28px;
- border-radius:22px;
- margin-bottom:20px;
- box-shadow:0 15px 40px #635bff30;
+  background:
+    radial-gradient(circle at 90% 15%,#ffffff30,transparent 30%),
+    linear-gradient(135deg,#635bff,#8c78ff);
+  color:white;
+  padding:28px;
+  border-radius:22px;
+  margin-bottom:20px;
+  box-shadow:0 15px 40px #635bff30;
 }
 
-.hero h2{margin-bottom:8px}
+.hero h2{
+  margin-bottom:8px
+}
 
 .hero p{
- opacity:.9;
- margin-bottom:18px;
+  opacity:.9;
+  margin-bottom:18px;
 }
 
 .progress{
- height:10px;
- background:#ffffff30;
- border-radius:20px;
- overflow:hidden;
+  height:10px;
+  background:#ffffff30;
+  border-radius:20px;
+  overflow:hidden;
 }
 
 .progress span{
- display:block;
- height:100%;
- width:0%;
- background:white;
- transition:.4s;
+  display:block;
+  height:100%;
+  width:0%;
+  background:white;
+  transition:.4s;
 }
 
 .xp{
- margin-top:8px;
- font-size:13px;
+  margin-top:8px;
+  font-size:13px;
 }
 
 /* CONTENT */
 
 .grid{
- display:grid;
- grid-template-columns:2fr 1fr;
- gap:20px;
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:20px;
 }
 
 .card{
- background:var(--card);
- border:1px solid var(--border);
- border-radius:20px;
- padding:21px;
- box-shadow:var(--shadow);
- margin-bottom:20px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:21px;
+  box-shadow:var(--shadow);
+  margin-bottom:20px;
 }
 
 .card-title{
- display:flex;
- align-items:center;
- justify-content:space-between;
- margin-bottom:16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:16px;
 }
 
-.card-title h2{font-size:19px}
+.card-title h2{
+  font-size:19px
+}
 
 .primary{
- border:0;
- background:var(--primary);
- color:white;
- padding:10px 15px;
- border-radius:10px;
- font-weight:800;
+  border:0;
+  background:var(--primary);
+  color:white;
+  padding:10px 15px;
+  border-radius:10px;
+  font-weight:800;
 }
 
 .secondary{
- border:1px solid var(--border);
- background:var(--card);
- color:var(--text);
- padding:10px 15px;
- border-radius:10px;
- font-weight:800;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  padding:10px 15px;
+  border-radius:10px;
+  font-weight:800;
 }
-<!-- AI SOLVE -->
-<section id="page-ai-solve" class="page">
-  <div class="card">
-    <div class="card-title">
-      <div>
-        <h2>🧠 Yapay Zeka ile Soru Çöz</h2>
-        <p style="color:var(--muted);margin-top:5px">
-          Sorunu yaz veya fotoğrafını yükle, DersTakip senin için adım adım çözsün.
-        </p>
-      </div>
-    </div>
 
-    <div class="field">
-      <label>Ders</label>
-      <select id="aiSubject">
-        <option>Matematik</option>
-        <option>Türkçe</option>
-        <option>Fen Bilimleri</option>
-        <option>Sosyal Bilgiler</option>
-        <option>İngilizce</option>
-        <option>Din Kültürü</option>
-        <option>Bilişim Teknolojileri</option>
-        <option>Diğer</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>Anlatım Şekli</label>
-      <select id="aiMode">
-        <option value="Adım adım">Adım adım</option>
-        <option value="Kısa ve kolay">Kısa ve kolay</option>
-        <option value="Detaylı">Detaylı</option>
-        <option value="Sınav için hızlı çözüm">Sınav için hızlı çözüm</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>Soruyu Yaz</label>
-      <textarea
-        id="aiQuestion"
-        rows="6"
-        placeholder="Örneğin: 2x + 5 = 17 ise x kaçtır?"
-      ></textarea>
-    </div>
-
-    <div class="field">
-      <label>Veya Soru Fotoğrafı Yükle</label>
-      <input
-        id="aiImage"
-        type="file"
-        accept="image/*"
-        onchange="previewAIImage(event)"
-      >
-    </div>
-
-    <div id="aiImagePreview" style="display:none;margin-bottom:15px">
-      <img
-        id="aiPreview"
-        style="max-width:100%;max-height:300px;border-radius:15px;border:1px solid var(--border)"
-      >
-    </div>
-
-    <button
-      class="primary"
-      id="aiSolveButton"
-      onclick="solveAIQuestion()"
-      style="width:100%;padding:14px;font-size:16px"
-    >
-      🧠 Soruyu Çöz
-    </button>
-
-    <div
-      id="aiLoading"
-      style="display:none;text-align:center;padding:25px;color:var(--muted)"
-    >
-      <div style="font-size:35px">🤖</div>
-      <strong>Yapay zeka soruyu çözüyor...</strong>
-      <p style="margin-top:5px">
-        Lütfen birkaç saniye bekle.
-      </p>
-    </div>
-
-    <div
-      id="aiResult"
-      style="
-        display:none;
-        margin-top:20px;
-        padding:20px;
-        border-radius:16px;
-        background:var(--bg);
-        border:1px solid var(--border);
-        line-height:1.8;
-        white-space:pre-wrap;
-      "
-    ></div>
-  </div>
-</section>
 /* TASKS */
 
 .task{
- display:flex;
- align-items:center;
- gap:12px;
- padding:13px 0;
- border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px 0;
+  border-bottom:1px solid var(--border);
 }
 
 .check{
- width:27px;
- height:27px;
- border:2px solid #d7dbe5;
- border-radius:8px;
- display:grid;
- place-items:center;
- flex-shrink:0;
+  width:27px;
+  height:27px;
+  border:2px solid #d7dbe5;
+  border-radius:8px;
+  display:grid;
+  place-items:center;
+  flex-shrink:0;
 }
 
 .task.done .check{
- background:var(--green);
- border-color:var(--green);
- color:white;
+  background:var(--green);
+  border-color:var(--green);
+  color:white;
 }
 
 .task.done .task-name{
- text-decoration:line-through;
- color:var(--muted);
+  text-decoration:line-through;
+  color:var(--muted);
 }
 
-.task-name{font-weight:800}
+.task-name{
+  font-weight:800
+}
 
 .task-xp{
- margin-left:auto;
- font-size:11px;
- background:#efeeff;
- color:#635bff;
- padding:6px 9px;
- border-radius:20px;
+  margin-left:auto;
+  font-size:11px;
+  background:#efeeff;
+  color:#635bff;
+  padding:6px 9px;
+  border-radius:20px;
 }
 
 .delete{
- border:0;
- background:transparent;
- padding:5px;
+  border:0;
+  background:transparent;
+  padding:5px;
 }
 
 .add{
- display:flex;
- gap:8px;
- margin-top:14px;
+  display:flex;
+  gap:8px;
+  margin-top:14px;
 }
 
 .add input{
- flex:1;
- border:1px solid var(--border);
- background:var(--card);
- color:var(--text);
- border-radius:10px;
- padding:12px;
- outline:none;
+  flex:1;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  border-radius:10px;
+  padding:12px;
+  outline:none;
 }
 
 /* STATS */
 
 .stats{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:15px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
 }
 
 .stat{
- background:var(--card);
- border:1px solid var(--border);
- border-radius:17px;
- padding:18px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:18px;
 }
 
 .stat strong{
- display:block;
- font-size:25px;
- margin:8px 0;
+  display:block;
+  font-size:25px;
+  margin:8px 0;
 }
 
-.stat small{color:var(--muted)}
+.stat small{
+  color:var(--muted)
+}
 
 /* COACH */
 
 .coach{
- background:linear-gradient(135deg,#f0efff,#faf9ff);
+  background:linear-gradient(135deg,#f0efff,#faf9ff);
 }
 
 body.dark .coach{
- background:#20253a;
+  background:#20253a;
 }
 
 .coach-icon{
- font-size:30px;
- margin-bottom:10px;
+  font-size:30px;
+  margin-bottom:10px;
 }
 
 .coach-message{
- color:var(--muted);
- line-height:1.7;
+  color:var(--muted);
+  line-height:1.7;
 }
 
 /* PAGE */
 
-.page{display:none}
+.page{
+  display:none
+}
 
-.page.active{display:block}
+.page.active{
+  display:block
+}
 
 /* SUBJECTS */
 
 .subject-grid{
- display:grid;
- grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
- gap:15px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
+  gap:15px;
 }
 
 .subject{
- border:1px solid var(--border);
- border-radius:17px;
- padding:18px;
- background:var(--card);
- transition:.2s;
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:18px;
+  background:var(--card);
+  transition:.2s;
 }
 
 .subject:hover{
- transform:translateY(-3px);
- box-shadow:var(--shadow);
+  transform:translateY(-3px);
+  box-shadow:var(--shadow);
 }
 
 .subject-icon{
- font-size:34px;
- margin-bottom:10px;
+  font-size:34px;
+  margin-bottom:10px;
 }
 
-.subject h3{margin-bottom:5px}
+.subject h3{
+  margin-bottom:5px
+}
 
 .subject p{
- color:var(--muted);
- font-size:12px;
+  color:var(--muted);
+  font-size:12px;
 }
 
 .subject button{
- margin-top:12px;
- width:100%;
+  margin-top:12px;
+  width:100%;
 }
 
 /* EXAMS */
 
 .exam{
- border:1px solid var(--border);
- border-radius:16px;
- padding:17px;
- margin-bottom:12px;
- display:flex;
- justify-content:space-between;
- gap:15px;
- align-items:center;
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:17px;
+  margin-bottom:12px;
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  align-items:center;
 }
 
 .exam-date{
- color:var(--primary);
- font-weight:900;
+  color:var(--primary);
+  font-weight:900;
 }
 
 .exam-actions{
- display:flex;
- gap:6px;
+  display:flex;
+  gap:6px;
 }
 
 /* NOTES */
 
 .notes-grid{
- display:grid;
- grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
- gap:15px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:15px;
 }
 
 .note{
- border:1px solid var(--border);
- border-radius:16px;
- padding:17px;
- background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:17px;
+  background:var(--card);
 }
 
 .note h3{
- margin-bottom:8px;
+  margin-bottom:8px;
 }
 
 .note p{
- color:var(--muted);
- line-height:1.6;
- white-space:pre-wrap;
+  color:var(--muted);
+  line-height:1.6;
+  white-space:pre-wrap;
 }
 
 .note-footer{
- margin-top:15px;
- display:flex;
- justify-content:space-between;
- color:var(--muted);
- font-size:12px;
+  margin-top:15px;
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:12px;
 }
 
 /* FOCUS */
 
-.focus-box{text-align:center}
+.focus-box{
+  text-align:center
+}
 
 .timer{
- font-size:80px;
- font-weight:950;
- margin:30px 0;
+  font-size:80px;
+  font-weight:950;
+  margin:30px 0;
 }
 
 .focus-buttons{
- display:flex;
- justify-content:center;
- gap:10px;
- flex-wrap:wrap;
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
 }
 
 /* ACHIEVEMENTS */
 
 .badges{
- display:grid;
- grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
- gap:14px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:14px;
 }
 
 .badge{
- border:1px solid var(--border);
- border-radius:17px;
- padding:18px;
- text-align:center;
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:18px;
+  text-align:center;
 }
 
 .badge-icon{
- font-size:40px;
- margin-bottom:8px;
+  font-size:40px;
+  margin-bottom:8px;
 }
 
-.badge small{color:var(--muted)}
+.badge small{
+  color:var(--muted)
+}
 
 .badge.locked{
- opacity:.35;
- filter:grayscale(1);
+  opacity:.35;
+  filter:grayscale(1);
 }
 
 /* PROFILE */
 
 .profile-card{
- max-width:700px;
+  max-width:700px;
 }
 
 .profile-avatar{
- width:90px;
- height:90px;
- border-radius:50%;
- background:#e9e6ff;
- display:grid;
- place-items:center;
- font-size:45px;
- margin-bottom:15px;
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  background:#e9e6ff;
+  display:grid;
+  place-items:center;
+  font-size:45px;
+  margin-bottom:15px;
 }
 
 .profile-info{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:15px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
 }
 
 .profile-item{
- background:var(--bg);
- padding:15px;
- border-radius:12px;
+  background:var(--bg);
+  padding:15px;
+  border-radius:12px;
 }
 
 .profile-item span{
- display:block;
- color:var(--muted);
- font-size:12px;
- margin-bottom:5px;
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:5px;
 }
 
 /* MODAL */
 
 .modal{
- position:fixed;
- inset:0;
- background:#0008;
- backdrop-filter:blur(6px);
- display:none;
- align-items:center;
- justify-content:center;
- z-index:9999;
- padding:20px;
+  position:fixed;
+  inset:0;
+  background:#0008;
+  backdrop-filter:blur(6px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  padding:20px;
 }
 
-.modal.show{display:flex}
+.modal.show{
+  display:flex
+}
 
 .modal-box{
- width:100%;
- max-width:520px;
- background:var(--card);
- color:var(--text);
- border-radius:22px;
- padding:23px;
- max-height:90vh;
- overflow:auto;
+  width:100%;
+  max-width:520px;
+  background:var(--card);
+  color:var(--text);
+  border-radius:22px;
+  padding:23px;
+  max-height:90vh;
+  overflow:auto;
 }
 
 .modal-head{
- display:flex;
- justify-content:space-between;
- align-items:center;
- margin-bottom:20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
 }
 
 .close{
- border:0;
- background:transparent;
- font-size:24px;
- color:var(--text);
+  border:0;
+  background:transparent;
+  font-size:24px;
+  color:var(--text);
 }
 
 /* TOAST */
 
 #toast{
- position:fixed;
- right:20px;
- bottom:20px;
- z-index:20000;
- display:flex;
- flex-direction:column;
- gap:8px;
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:20000;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
 }
 
 .toast{
- background:var(--dark);
- color:white;
- padding:13px 17px;
- border-radius:13px;
- box-shadow:0 15px 35px #0004;
- animation:toast .3s;
+  background:var(--dark);
+  color:white;
+  padding:13px 17px;
+  border-radius:13px;
+  box-shadow:0 15px 35px #0004;
+  animation:toast .3s;
 }
 
 @keyframes toast{
- from{opacity:0;transform:translateY(15px)}
- to{opacity:1;transform:translateY(0)}
+  from{
+    opacity:0;
+    transform:translateY(15px)
+  }
+  to{
+    opacity:1;
+    transform:translateY(0)
+  }
 }
 
 /* MOBILE */
 
 .mobile-btn{
- display:none;
- position:fixed;
- right:15px;
- top:15px;
- z-index:500;
- width:46px;
- height:46px;
- border:0;
- border-radius:13px;
- background:var(--dark);
- color:white;
- font-size:22px;
+  display:none;
+  position:fixed;
+  right:15px;
+  top:15px;
+  z-index:500;
+  width:46px;
+  height:46px;
+  border:0;
+  border-radius:13px;
+  background:var(--dark);
+  color:white;
+  font-size:22px;
 }
 
 @media(max-width:1000px){
- .sidebar{width:80px}
- .logo{
-  font-size:0;
-  text-align:center;
-  padding:0;
- }
- .logo:after{
-  content:"DT";
-  font-size:22px;
- }
- .menu button{
-  font-size:0;
-  text-align:center;
- }
- .menu button::first-letter{font-size:20px}
- .logout button{
-  font-size:0;
- }
- .logout button:after{
-  content:"🚪";
-  font-size:20px;
- }
- .main{margin-left:80px}
- .grid{grid-template-columns:1fr}
+
+  .sidebar{
+    width:80px
+  }
+
+  .logo{
+    font-size:0;
+    text-align:center;
+    padding:0;
+  }
+
+  .logo:after{
+    content:"DT";
+    font-size:22px;
+  }
+
+  .menu button{
+    font-size:0;
+    text-align:center;
+  }
+
+  .menu button::first-letter{
+    font-size:20px
+  }
+
+  .logout button{
+    font-size:0;
+  }
+
+  .logout button:after{
+    content:"🚪";
+    font-size:20px;
+  }
+
+  .main{
+    margin-left:80px
+  }
+
+  .grid{
+    grid-template-columns:1fr
+  }
 }
 
 @media(max-width:700px){
- .sidebar{display:none}
- .mobile-btn{display:block}
- .main{
-  margin-left:0;
-  padding:15px;
- }
- .topbar{
-  padding-right:60px;
- }
- .profile{display:none}
- .welcome h1{font-size:25px}
- .stats{grid-template-columns:1fr}
- .auth-box{grid-template-columns:1fr}
- .auth-left{display:none}
- .auth-right{padding:30px 22px}
- .add{flex-direction:column}
- .subject-grid{grid-template-columns:1fr 1fr}
- .profile-info{grid-template-columns:1fr}
- .exam{
-  flex-direction:column;
-  align-items:flex-start;
- }
- .timer{font-size:58px}
+
+  .sidebar{
+    display:none
+  }
+
+  .mobile-btn{
+    display:block
+  }
+
+  .main{
+    margin-left:0;
+    padding:15px;
+  }
+
+  .topbar{
+    padding-right:60px;
+  }
+
+  .profile{
+    display:none
+  }
+
+  .welcome h1{
+    font-size:25px
+  }
+
+  .stats{
+    grid-template-columns:1fr
+  }
+
+  .auth-box{
+    grid-template-columns:1fr
+  }
+
+  .auth-left{
+    display:none
+  }
+
+  .auth-right{
+    padding:30px 22px
+  }
+
+  .add{
+    flex-direction:column
+  }
+
+  .subject-grid{
+    grid-template-columns:1fr 1fr
+  }
+
+  .profile-info{
+    grid-template-columns:1fr
+  }
+
+  .exam{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .timer{
+    font-size:58px
+  }
 }
 
 .mobile-menu{
- position:fixed;
- top:0;
- right:-290px;
- width:280px;
- height:100vh;
- background:var(--dark);
- color:white;
- z-index:1000;
- padding:25px 18px;
- transition:.25s;
+  position:fixed;
+  top:0;
+  right:-290px;
+  width:280px;
+  height:100vh;
+  background:var(--dark);
+  color:white;
+  z-index:1000;
+  padding:25px 18px;
+  transition:.25s;
 }
 
-.mobile-menu.open{right:0}
+.mobile-menu.open{
+  right:0
+}
 
 .mobile-menu button{
- width:100%;
- border:0;
- background:transparent;
- color:#adb4c8;
- padding:13px;
- border-radius:10px;
- text-align:left;
- margin-bottom:5px;
- font-weight:800;
+  width:100%;
+  border:0;
+  background:transparent;
+  color:#adb4c8;
+  padding:13px;
+  border-radius:10px;
+  text-align:left;
+  margin-bottom:5px;
+  font-weight:800;
 }
 
 .mobile-menu button.active{
- background:#292e48;
- color:white;
+  background:#292e48;
+  color:white;
 }
 
 .mobile-head{
- display:flex;
- justify-content:space-between;
- margin-bottom:20px;
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:20px;
 }
 
 .mobile-head button{
- width:auto;
- color:white;
- font-size:22px;
+  width:auto;
+  color:white;
+  font-size:22px;
 }
 </style>
+
 </head>
 
 <body>
@@ -948,1931 +960,3539 @@ body.dark .coach{
 
 <section id="auth">
 
-<div class="auth-box">
+  <div class="auth-box">
 
-<div class="auth-left">
+    <div class="auth-left">
 
-<h1>Ders çalışmak<br><span>artık daha kolay.</span></h1>
+      <h1>
+        Ders çalışmak<br>
+        <span>artık daha kolay.</span>
+      </h1>
 
-<p>
-Derslerini, görevlerini, sınavlarını ve notlarını
-tek bir yerden yönet. Hedeflerini takip et ve
-çalışma alışkanlığını geliştir.
-</p>
+      <p>
+        Derslerini, görevlerini, sınavlarını ve notlarını
+        tek bir yerden yönet. Hedeflerini takip et ve
+        çalışma alışkanlığını geliştir.
+      </p>
 
-<div class="auth-icon">📚</div>
+      <div class="auth-icon">📚</div>
 
-</div>
+    </div>
 
-<div class="auth-right">
+    <div class="auth-right">
 
-<div class="auth-logo">Ders<span>Takip</span></div>
+      <div class="auth-logo">
+        Ders<span>Takip</span>
+      </div>
 
-<p class="auth-subtitle">
-Kendi çalışma sistemini oluştur.
-</p>
+      <p class="auth-subtitle">
+        Kendi çalışma sistemini oluştur.
+      </p>
 
-<div class="auth-tabs">
+      <div class="auth-tabs">
 
-<button id="loginTab" class="active" onclick="showLogin()">
-Giriş Yap
-</button>
+        <button
+          id="loginTab"
+          class="active"
+          onclick="showLogin()"
+        >
+          Giriş Yap
+        </button>
 
-<button id="registerTab" onclick="showRegister()">
-Kayıt Ol
-</button>
+        <button
+          id="registerTab"
+          onclick="showRegister()"
+        >
+          Kayıt Ol
+        </button>
 
-</div>
+      </div>
 
-<form id="loginForm" onsubmit="login(event)">
+      <form id="loginForm" onsubmit="login(event)">
 
-<div class="field">
-<label>E-posta</label>
-<input id="loginEmail" type="email" required>
-</div>
+        <div class="field">
 
-<div class="field">
-<label>Şifre</label>
-<input id="loginPassword" type="password" required>
-</div>
+          <label>E-posta</label>
 
-<button class="auth-btn">
-Giriş Yap 🚀
-</button>
+          <input
+            id="loginEmail"
+            type="email"
+            required
+          >
 
-</form>
+        </div>
 
-<form id="registerForm" class="hidden" onsubmit="register(event)">
+        <div class="field">
 
-<div class="field">
-<label>Ad Soyad</label>
-<input id="registerName" required>
-</div>
+          <label>Şifre</label>
 
-<div class="field">
-<label>E-posta</label>
-<input id="registerEmail" type="email" required>
-</div>
+          <input
+            id="loginPassword"
+            type="password"
+            required
+          >
 
-<div class="field">
-<label>Şifre</label>
-<input id="registerPassword" type="password" minlength="6" required>
-</div>
+        </div>
 
-<button class="auth-btn">
-Hesap Oluştur ✨
-</button>
+        <button class="auth-btn">
+          Giriş Yap 🚀
+        </button>
 
-</form>
+      </form>
 
-<div id="authMsg"></div>
+      <form
+        id="registerForm"
+        class="hidden"
+        onsubmit="register(event)"
+      >
 
-</div>
-</div>
+        <div class="field">
+
+          <label>Ad Soyad</label>
+
+          <input
+            id="registerName"
+            required
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>E-posta</label>
+
+          <input
+            id="registerEmail"
+            type="email"
+            required
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>Şifre</label>
+
+          <input
+            id="registerPassword"
+            type="password"
+            minlength="6"
+            required
+          >
+
+        </div>
+
+        <button class="auth-btn">
+          Hesap Oluştur ✨
+        </button>
+
+      </form>
+
+      <div id="authMsg"></div>
+
+    </div>
+
+  </div>
+
 </section>
+
 
 <!-- ================= APP ================= -->
 
 <div id="app">
 
-<aside class="sidebar">
+  <aside class="sidebar">
 
-<div class="logo">
-Ders<span>Takip</span>
+    <div class="logo">
+      Ders<span>Takip</span>
+    </div>
+
+    <div class="menu">
+
+      <button
+        data-page="home"
+        class="active"
+        onclick="navigate('home')"
+      >
+        🏠 Ana Sayfa
+      </button>
+
+      <button
+        data-page="ai-solve"
+        onclick="navigate('ai-solve')"
+      >
+        🧠 Soru Çöz
+      </button>
+
+      <button
+        data-page="tasks"
+        onclick="navigate('tasks')"
+      >
+        ✅ Görevler
+      </button>
+
+      <button
+        data-page="subjects"
+        onclick="navigate('subjects')"
+      >
+        📚 Dersler
+      </button>
+
+      <button
+        data-page="exams"
+        onclick="navigate('exams')"
+      >
+        📅 Sınavlar
+      </button>
+
+      <button
+        data-page="notes"
+        onclick="navigate('notes')"
+      >
+        📝 Notlar
+      </button>
+
+      <button
+        data-page="focus"
+        onclick="navigate('focus')"
+      >
+        ⏱️ Odaklan
+      </button>
+
+      <button
+        data-page="coach"
+        onclick="navigate('coach')"
+      >
+        🤖 Ders Koçu
+      </button>
+
+      <button
+        data-page="achievements"
+        onclick="navigate('achievements')"
+      >
+        🏆 Rozetler
+      </button>
+
+      <button
+        data-page="stats"
+        onclick="navigate('stats')"
+      >
+        📊 İstatistikler
+      </button>
+
+      <button
+        data-page="profile"
+        onclick="navigate('profile')"
+      >
+        👤 Profil
+      </button>
+
+    </div>
+
+    <div class="logout">
+
+      <button onclick="logout()">
+        🚪 Çıkış Yap
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <button
+    class="mobile-btn"
+    onclick="toggleMobile()"
+  >
+    ☰
+  </button>
+
+
+  <div
+    class="mobile-menu"
+    id="mobileMenu"
+  >
+
+    <div class="mobile-head">
+
+      <strong>DersTakip</strong>
+
+      <button onclick="toggleMobile()">
+        ✕
+      </button>
+
+    </div>
+
+    <button onclick="navigateMobile('home')">
+      🏠 Ana Sayfa
+    </button>
+
+    <button onclick="navigateMobile('ai-solve')">
+      🧠 Soru Çöz
+    </button>
+
+    <button onclick="navigateMobile('tasks')">
+      ✅ Görevler
+    </button>
+
+    <button onclick="navigateMobile('subjects')">
+      📚 Dersler
+    </button>
+
+    <button onclick="navigateMobile('exams')">
+      📅 Sınavlar
+    </button>
+
+    <button onclick="navigateMobile('notes')">
+      📝 Notlar
+    </button>
+
+    <button onclick="navigateMobile('focus')">
+      ⏱️ Odaklan
+    </button>
+
+    <button onclick="navigateMobile('coach')">
+      🤖 Ders Koçu
+    </button>
+
+    <button onclick="navigateMobile('achievements')">
+      🏆 Rozetler
+    </button>
+
+    <button onclick="navigateMobile('stats')">
+      📊 İstatistikler
+    </button>
+
+    <button onclick="navigateMobile('profile')">
+      👤 Profil
+    </button>
+
+  </div>
+
+
+  <main class="main">
+
+    <!-- TOPBAR -->
+
+    <div class="topbar">
+
+      <div class="welcome">
+
+        <h1 id="welcome">
+          Merhaba! 👋
+        </h1>
+
+        <p id="subtitle">
+          Bugün küçük bir adım, yarın büyük bir başarı.
+        </p>
+
+      </div>
+
+      <div class="profile">
+
+        <div class="avatar">
+          🎓
+        </div>
+
+        <strong id="topLevel">
+          Seviye 1
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <!-- ================= AI SOLVE ================= -->
+
+    <section
+      id="page-ai-solve"
+      class="page"
+    >
+
+      <div class="card">
+
+        <div class="card-title">
+
+          <div>
+
+            <h2>
+              🧠 Yapay Zeka ile Soru Çöz
+            </h2>
+
+            <p
+              style="color:var(--muted);margin-top:5px"
+            >
+              Sorunu yaz veya fotoğrafını yükle,
+              DersTakip senin için adım adım çözsün.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>Ders</label>
+
+          <select id="aiSubject">
+
+            <option>Matematik</option>
+            <option>Türkçe</option>
+            <option>Fen Bilimleri</option>
+            <option>Sosyal Bilgiler</option>
+            <option>İngilizce</option>
+            <option>Din Kültürü</option>
+            <option>Bilişim Teknolojileri</option>
+            <option>Diğer</option>
+
+          </select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>Anlatım Şekli</label>
+
+          <select id="aiMode">
+
+            <option value="Adım adım">
+              Adım adım
+            </option>
+
+            <option value="Kısa ve kolay">
+              Kısa ve kolay
+            </option>
+
+            <option value="Detaylı">
+              Detaylı
+            </option>
+
+            <option value="Sınav için hızlı çözüm">
+              Sınav için hızlı çözüm
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>Soruyu Yaz</label>
+
+          <textarea
+            id="aiQuestion"
+            rows="6"
+            placeholder="Örneğin: 2x + 5 = 17 ise x kaçtır?"
+          ></textarea>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Veya Soru Fotoğrafı Yükle
+          </label>
+
+          <input
+            id="aiImage"
+            type="file"
+            accept="image/*"
+            onchange="previewAIImage(event)"
+          >
+
+        </div>
+
+
+        <div
+          id="aiImagePreview"
+          style="display:none;margin-bottom:15px"
+        >
+
+          <img
+            id="aiPreview"
+            style="
+              max-width:100%;
+              max-height:300px;
+              border-radius:15px;
+              border:1px solid var(--border)
+            "
+          >
+
+        </div>
+
+
+        <button
+          class="primary"
+          id="aiSolveButton"
+          onclick="solveAIQuestion()"
+          style="
+            width:100%;
+            padding:14px;
+            font-size:16px
+          "
+        >
+          🧠 Soruyu Çöz
+        </button>
+
+
+        <div
+          id="aiLoading"
+          style="
+            display:none;
+            text-align:center;
+            padding:25px;
+            color:var(--muted)
+          "
+        >
+
+          <div style="font-size:35px">
+            🤖
+          </div>
+
+          <strong>
+            Yapay zeka soruyu çözüyor...
+          </strong>
+
+          <p style="margin-top:5px">
+            Lütfen birkaç saniye bekle.
+          </p>
+
+        </div>
+
+
+        <div
+          id="aiResult"
+          style="
+            display:none;
+            margin-top:20px;
+            padding:20px;
+            border-radius:16px;
+            background:var(--bg);
+            border:1px solid var(--border);
+            line-height:1.8;
+            white-space:pre-wrap;
+          "
+        ></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= HOME ================= -->
+
+    <section
+      id="page-home"
+      class="page active"
+    >
+
+      <div class="hero">
+
+        <h2>
+          Bugünkü çalışma durumun 🎯
+        </h2>
+
+        <p id="homeSummary">
+          Bugün için henüz görev eklemedin.
+        </p>
+
+        <div class="progress">
+
+          <span id="progress"></span>
+
+        </div>
+
+        <div
+          class="xp"
+          id="homeXP"
+        >
+          0 XP
+        </div>
+
+      </div>
+
+
+      <div class="grid">
+
+        <div>
+
+          <div class="card coach">
+
+            <div class="coach-icon">
+              🤖
+            </div>
+
+            <h2>
+              Ders Koçu
+            </h2>
+
+            <p
+              class="coach-message"
+              id="homeCoach"
+            >
+              Bugün verimli çalışmak için
+              küçük bir hedef belirle.
+            </p>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="card-title">
+
+              <h2>
+                Bugünkü Görevler
+              </h2>
+
+              <span id="taskCounter">
+                0 / 0
+              </span>
+
+            </div>
+
+            <div id="homeTasks"></div>
+
+            <button
+              class="secondary"
+              onclick="navigate('tasks')"
+            >
+              Tüm Görevleri Gör
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div>
+
+          <div class="card">
+
+            <h2>
+              Bugünün Özeti
+            </h2>
+
+            <div
+              class="profile-info"
+              style="margin-top:15px"
+            >
+
+              <div class="profile-item">
+
+                <span>⭐ XP</span>
+
+                <strong id="homeStatXP">
+                  0
+                </strong>
+
+              </div>
+
+
+              <div class="profile-item">
+
+                <span>🔥 Seri</span>
+
+                <strong id="homeStatStreak">
+                  0 gün
+                </strong>
+
+              </div>
+
+
+              <div class="profile-item">
+
+                <span>📚 Ders</span>
+
+                <strong id="homeStatSubjects">
+                  0
+                </strong>
+
+              </div>
+
+
+              <div class="profile-item">
+
+                <span>📅 Sınav</span>
+
+                <strong id="homeStatExams">
+                  0
+                </strong>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= TASKS ================= -->
+
+    <section
+      id="page-tasks"
+      class="page"
+    >
+
+      <div class="card">
+
+        <div class="card-title">
+
+          <div>
+
+            <h2>
+              Görevler
+            </h2>
+
+            <p
+              style="color:var(--muted);margin-top:5px"
+            >
+              Çalışma hedeflerini buradan yönet.
+            </p>
+
+          </div>
+
+          <button
+            class="primary"
+            onclick="openTaskModal()"
+          >
+            + Görev
+          </button>
+
+        </div>
+
+        <div id="allTasks"></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= SUBJECTS ================= -->
+
+    <section
+      id="page-subjects"
+      class="page"
+    >
+
+      <div class="card">
+
+        <div class="card-title">
+
+          <div>
+
+            <h2>
+              Derslerim 📚
+            </h2>
+
+            <p
+              style="color:var(--muted);margin-top:5px"
+            >
+              Çalıştığın dersleri seç veya kendin ekle.
+            </p>
+
+          </div>
+
+          <button
+            class="primary"
+            onclick="openSubjectModal()"
+          >
+            + Ders Ekle
+          </button>
+
+        </div>
+
+        <div
+          class="subject-grid"
+          id="subjectsGrid"
+        ></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= EXAMS ================= -->
+
+    <section
+      id="page-exams"
+      class="page"
+    >
+
+      <div class="card">
+
+        <div class="card-title">
+
+          <div>
+
+            <h2>
+              Sınav Takvimi 📅
+            </h2>
+
+            <p
+              style="color:var(--muted);margin-top:5px"
+            >
+              Sınavlarını ve tarihlerini takip et.
+            </p>
+
+          </div>
+
+          <button
+            class="primary"
+            onclick="openExamModal()"
+          >
+            + Sınav Ekle
+          </button>
+
+        </div>
+
+        <div id="examList"></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= NOTES ================= -->
+
+    <section
+      id="page-notes"
+      class="page"
+    >
+
+      <div class="card">
+
+        <div class="card-title">
+
+          <div>
+
+            <h2>
+              Notlarım 📝
+            </h2>
+
+            <p
+              style="color:var(--muted);margin-top:5px"
+            >
+              Ders çalışırken önemli bilgilerini kaydet.
+            </p>
+
+          </div>
+
+          <button
+            class="primary"
+            onclick="openNoteModal()"
+          >
+            + Yeni Not
+          </button>
+
+        </div>
+
+        <div
+          class="notes-grid"
+          id="notesGrid"
+        ></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= FOCUS ================= -->
+
+    <section
+      id="page-focus"
+      class="page"
+    >
+
+      <div class="card focus-box">
+
+        <h2>
+          Odaklanma Modu ⏱️
+        </h2>
+
+        <p
+          style="color:var(--muted);margin-top:7px"
+        >
+          Telefonunu bırak ve sadece çalışmaya odaklan.
+        </p>
+
+        <div
+          class="timer"
+          id="timer"
+        >
+          25:00
+        </div>
+
+        <div class="focus-buttons">
+
+          <button
+            class="primary"
+            onclick="startTimer()"
+          >
+            Başlat
+          </button>
+
+          <button
+            class="secondary"
+            onclick="pauseTimer()"
+          >
+            Duraklat
+          </button>
+
+          <button
+            class="secondary"
+            onclick="resetTimer()"
+          >
+            Sıfırla
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= COACH ================= -->
+
+    <section
+      id="page-coach"
+      class="page"
+    >
+
+      <div class="card">
+
+        <h2>
+          🤖 Ders Koçu
+        </h2>
+
+        <p
+          id="coachFull"
+          style="
+            margin-top:15px;
+            line-height:1.8;
+            color:var(--muted)
+          "
+        ></p>
+
+        <div style="margin-top:20px">
+
+          <button
+            class="primary"
+            onclick="newAdvice()"
+          >
+            Yeni Öneri
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= ACHIEVEMENTS ================= -->
+
+    <section
+      id="page-achievements"
+      class="page"
+    >
+
+      <div class="card">
+
+        <h2 style="margin-bottom:18px">
+          🏆 Başarı Rozetleri
+        </h2>
+
+        <div
+          class="badges"
+          id="badges"
+        ></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= STATS ================= -->
+
+    <section
+      id="page-stats"
+      class="page"
+    >
+
+      <div class="card">
+
+        <h2>
+          📊 İstatistikler
+        </h2>
+
+        <div
+          class="stats"
+          style="margin-top:20px"
+        >
+
+          <div class="stat">
+
+            <span>⭐</span>
+
+            <strong id="statsXP">
+              0
+            </strong>
+
+            <small>
+              Toplam XP
+            </small>
+
+          </div>
+
+
+          <div class="stat">
+
+            <span>🔥</span>
+
+            <strong id="statsStreak">
+              0
+            </strong>
+
+            <small>
+              Çalışma serisi
+            </small>
+
+          </div>
+
+
+          <div class="stat">
+
+            <span>✅</span>
+
+            <strong id="statsCompleted">
+              0
+            </strong>
+
+            <small>
+              Tamamlanan görev
+            </small>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <h2>
+          Çalışma Durumu
+        </h2>
+
+        <div style="margin-top:20px">
+
+          <div
+            style="
+              display:flex;
+              justify-content:space-between;
+              margin-bottom:8px
+            "
+          >
+
+            <span>
+              Görev tamamlama
+            </span>
+
+            <strong id="statsPercent">
+              0%
+            </strong>
+
+          </div>
+
+          <div
+            class="progress"
+            style="background:var(--border)"
+          >
+
+            <span
+              id="statsProgress"
+              style="background:var(--primary)"
+            ></span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= PROFILE ================= -->
+
+    <section
+      id="page-profile"
+      class="page"
+    >
+
+      <div class="card profile-card">
+
+        <div class="profile-avatar">
+          🎓
+        </div>
+
+        <h2 id="profileName">
+          Öğrenci
+        </h2>
+
+        <p
+          id="profileEmail"
+          style="color:var(--muted);margin-top:5px"
+        >
+          -
+        </p>
+
+        <div
+          class="profile-info"
+          style="margin-top:25px"
+        >
+
+          <div class="profile-item">
+
+            <span>
+              Seviye
+            </span>
+
+            <strong id="profileLevel">
+              1
+            </strong>
+
+          </div>
+
+
+          <div class="profile-item">
+
+            <span>
+              Toplam XP
+            </span>
+
+            <strong id="profileXP">
+              0
+            </strong>
+
+          </div>
+
+
+          <div class="profile-item">
+
+            <span>
+              Görev
+            </span>
+
+            <strong id="profileTasks">
+              0
+            </strong>
+
+          </div>
+
+
+          <div class="profile-item">
+
+            <span>
+              Ders
+            </span>
+
+            <strong id="profileSubjects">
+              0
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div
+          style="
+            margin-top:25px;
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap
+          "
+        >
+
+          <button
+            class="secondary"
+            onclick="toggleDark()"
+          >
+            🌙 Tema Değiştir
+          </button>
+
+          <button
+            class="secondary"
+            onclick="clearData()"
+          >
+            Verileri Sıfırla
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
 </div>
 
-<div class="menu">
 
-<button data-page="home" class="active" onclick="navigate('home')">
-🏠 Ana Sayfa
-</button>
-<button onclick="navigate('ai-solve',this)">
-  🧠 Soru Çöz
-</button>
-<button data-page="tasks" onclick="navigate('tasks')">
-✅ Görevler
-</button>
+<!-- ================= MODAL ================= -->
 
-<button data-page="subjects" onclick="navigate('subjects')">
-📚 Dersler
-</button>
+<div
+  class="modal"
+  id="modal"
+>
 
-<button data-page="exams" onclick="navigate('exams')">
-📅 Sınavlar
-</button>
+  <div class="modal-box">
 
-<button data-page="notes" onclick="navigate('notes')">
-📝 Notlar
-</button>
+    <div class="modal-head">
 
-<button data-page="focus" onclick="navigate('focus')">
-⏱️ Odaklan
-</button>
+      <h2 id="modalTitle">
+        Yeni
+      </h2>
 
-<button data-page="coach" onclick="navigate('coach')">
-🤖 Ders Koçu
-</button>
+      <button
+        class="close"
+        onclick="closeModal()"
+      >
+        ✕
+      </button>
 
-<button data-page="achievements" onclick="navigate('achievements')">
-🏆 Rozetler
-</button>
+    </div>
 
-<button data-page="stats" onclick="navigate('stats')">
-📊 İstatistikler
-</button>
+    <div id="modalBody"></div>
 
-<button data-page="profile" onclick="navigate('profile')">
-👤 Profil
-</button>
+  </div>
 
 </div>
 
-<div class="logout">
-<button onclick="logout()">🚪 Çıkış Yap</button>
-</div>
-
-</aside>
-
-<button class="mobile-btn" onclick="toggleMobile()">☰</button>
-
-<div class="mobile-menu" id="mobileMenu">
-
-<div class="mobile-head">
-<strong>DersTakip</strong>
-<button onclick="toggleMobile()">✕</button>
-</div>
-
-<button onclick="navigateMobile('home')">🏠 Ana Sayfa</button>
-<button onclick="navigateMobile('tasks')">✅ Görevler</button>
-<button onclick="navigateMobile('subjects')">📚 Dersler</button>
-<button onclick="navigateMobile('exams')">📅 Sınavlar</button>
-<button onclick="navigateMobile('notes')">📝 Notlar</button>
-<button onclick="navigateMobile('focus')">⏱️ Odaklan</button>
-<button onclick="navigateMobile('coach')">🤖 Ders Koçu</button>
-<button onclick="navigateMobile('achievements')">🏆 Rozetler</button>
-<button onclick="navigateMobile('stats')">📊 İstatistikler</button>
-<button onclick="navigateMobile('profile')">👤 Profil</button>
-
-</div>
-
-<main class="main">
-
-<div class="topbar">
-
-<div class="welcome">
-
-<h1 id="welcome">Merhaba! 👋</h1>
-
-<p id="subtitle">
-Bugün küçük bir adım, yarın büyük bir başarı.
-</p>
-
-</div>
-
-<div class="profile">
-
-<div class="avatar">🎓</div>
-
-<strong id="topLevel">
-Seviye 1
-</strong>
-
-</div>
-
-</div>
-
-<!-- HOME -->
-
-<section id="page-home" class="page active">
-
-<div class="hero">
-
-<h2>Bugünkü çalışma durumun 🎯</h2>
-
-<p id="homeSummary">
-Bugün için henüz görev eklemedin.
-</p>
-
-<div class="progress">
-<span id="progress"></span>
-</div>
-
-<div class="xp" id="homeXP">
-0 XP
-</div>
-
-</div>
-
-<div class="grid">
-
-<div>
-
-<div class="card coach">
-
-<div class="coach-icon">🤖</div>
-
-<h2>Ders Koçu</h2>
-
-<p class="coach-message" id="homeCoach">
-Bugün verimli çalışmak için küçük bir hedef belirle.
-</p>
-
-</div>
-
-<div class="card">
-
-<div class="card-title">
-
-<h2>Bugünkü Görevler</h2>
-
-<span id="taskCounter">0 / 0</span>
-
-</div>
-
-<div id="homeTasks"></div>
-
-<button class="secondary" onclick="navigate('tasks')">
-Tüm Görevleri Gör
-</button>
-
-</div>
-
-</div>
-
-<div>
-
-<div class="card">
-
-<h2>Bugünün Özeti</h2>
-
-<div class="profile-info" style="margin-top:15px">
-
-<div class="profile-item">
-<span>⭐ XP</span>
-<strong id="homeStatXP">0</strong>
-</div>
-
-<div class="profile-item">
-<span>🔥 Seri</span>
-<strong id="homeStatStreak">0 gün</strong>
-</div>
-
-<div class="profile-item">
-<span>📚 Ders</span>
-<strong id="homeStatSubjects">0</strong>
-</div>
-
-<div class="profile-item">
-<span>📅 Sınav</span>
-<strong id="homeStatExams">0</strong>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- TASKS -->
-
-<section id="page-tasks" class="page">
-
-<div class="card">
-
-<div class="card-title">
-
-<div>
-<h2>Görevler</h2>
-<p style="color:var(--muted);margin-top:5px">
-Çalışma hedeflerini buradan yönet.
-</p>
-</div>
-
-<button class="primary" onclick="openTaskModal()">
-+ Görev
-</button>
-
-</div>
-
-<div id="allTasks"></div>
-
-</div>
-
-</section>
-
-<!-- SUBJECTS -->
-
-<section id="page-subjects" class="page">
-
-<div class="card">
-
-<div class="card-title">
-
-<div>
-<h2>Derslerim 📚</h2>
-<p style="color:var(--muted);margin-top:5px">
-Çalıştığın dersleri seç veya kendin ekle.
-</p>
-</div>
-
-<button class="primary" onclick="openSubjectModal()">
-+ Ders Ekle
-</button>
-
-</div>
-
-<div class="subject-grid" id="subjectsGrid"></div>
-
-</div>
-
-</section>
-
-<!-- EXAMS -->
-
-<section id="page-exams" class="page">
-
-<div class="card">
-
-<div class="card-title">
-
-<div>
-<h2>Sınav Takvimi 📅</h2>
-<p style="color:var(--muted);margin-top:5px">
-Sınavlarını ve tarihlerini takip et.
-</p>
-</div>
-
-<button class="primary" onclick="openExamModal()">
-+ Sınav Ekle
-</button>
-
-</div>
-
-<div id="examList"></div>
-
-</div>
-
-</section>
-
-<!-- NOTES -->
-
-<section id="page-notes" class="page">
-
-<div class="card">
-
-<div class="card-title">
-
-<div>
-<h2>Notlarım 📝</h2>
-<p style="color:var(--muted);margin-top:5px">
-Ders çalışırken önemli bilgilerini kaydet.
-</p>
-</div>
-
-<button class="primary" onclick="openNoteModal()">
-+ Yeni Not
-</button>
-
-</div>
-
-<div class="notes-grid" id="notesGrid"></div>
-
-</div>
-
-</section>
-
-<!-- FOCUS -->
-
-<section id="page-focus" class="page">
-
-<div class="card focus-box">
-
-<h2>Odaklanma Modu ⏱️</h2>
-
-<p style="color:var(--muted);margin-top:7px">
-Telefonunu bırak ve sadece çalışmaya odaklan.
-</p>
-
-<div class="timer" id="timer">
-25:00
-</div>
-
-<div class="focus-buttons">
-
-<button class="primary" onclick="startTimer()">
-Başlat
-</button>
-
-<button class="secondary" onclick="pauseTimer()">
-Duraklat
-</button>
-
-<button class="secondary" onclick="resetTimer()">
-Sıfırla
-</button>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- COACH -->
-
-<section id="page-coach" class="page">
-
-<div class="card">
-
-<h2>🤖 Ders Koçu</h2>
-
-<p id="coachFull" style="margin-top:15px;line-height:1.8;color:var(--muted)">
-</p>
-
-<div style="margin-top:20px">
-
-<button class="primary" onclick="newAdvice()">
-Yeni Öneri
-</button>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- ACHIEVEMENTS -->
-
-<section id="page-achievements" class="page">
-
-<div class="card">
-
-<h2 style="margin-bottom:18px">
-🏆 Başarı Rozetleri
-</h2>
-
-<div class="badges" id="badges"></div>
-
-</div>
-
-</section>
-
-<!-- STATS -->
-
-<section id="page-stats" class="page">
-
-<div class="card">
-
-<h2>📊 İstatistikler</h2>
-
-<div class="stats" style="margin-top:20px">
-
-<div class="stat">
-<span>⭐</span>
-<strong id="statsXP">0</strong>
-<small>Toplam XP</small>
-</div>
-
-<div class="stat">
-<span>🔥</span>
-<strong id="statsStreak">0</strong>
-<small>Çalışma serisi</small>
-</div>
-
-<div class="stat">
-<span>✅</span>
-<strong id="statsCompleted">0</strong>
-<small>Tamamlanan görev</small>
-</div>
-
-</div>
-
-</div>
-
-<div class="card">
-
-<h2>Çalışma Durumu</h2>
-
-<div style="margin-top:20px">
-
-<div style="display:flex;justify-content:space-between;margin-bottom:8px">
-<span>Görev tamamlama</span>
-<strong id="statsPercent">0%</strong>
-</div>
-
-<div class="progress" style="background:var(--border)">
-<span id="statsProgress" style="background:var(--primary)"></span>
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- PROFILE -->
-
-<section id="page-profile" class="page">
-
-<div class="card profile-card">
-
-<div class="profile-avatar">🎓</div>
-
-<h2 id="profileName">Öğrenci</h2>
-
-<p id="profileEmail" style="color:var(--muted);margin-top:5px">
--
-</p>
-
-<div class="profile-info" style="margin-top:25px">
-
-<div class="profile-item">
-<span>Seviye</span>
-<strong id="profileLevel">1</strong>
-</div>
-
-<div class="profile-item">
-<span>Toplam XP</span>
-<strong id="profileXP">0</strong>
-</div>
-
-<div class="profile-item">
-<span>Görev</span>
-<strong id="profileTasks">0</strong>
-</div>
-
-<div class="profile-item">
-<span>Ders</span>
-<strong id="profileSubjects">0</strong>
-</div>
-
-</div>
-
-<div style="margin-top:25px;display:flex;gap:10px;flex-wrap:wrap">
-
-<button class="secondary" onclick="toggleDark()">
-🌙 Tema Değiştir
-</button>
-
-<button class="secondary" onclick="clearData()">
-Verileri Sıfırla
-</button>
-
-</div>
-
-</div>
-
-</section>
-
-</main>
-
-</div>
-
-<!-- MODAL -->
-
-<div class="modal" id="modal">
-
-<div class="modal-box">
-
-<div class="modal-head">
-
-<h2 id="modalTitle">Yeni</h2>
-
-<button class="close" onclick="closeModal()">✕</button>
-
-</div>
-
-<div id="modalBody"></div>
-
-</div>
-
-</div>
 
 <div id="toast"></div>
+
 
 <script>
 
 /* =========================
- DATA
+DATA
 ========================= */
 
-let user=JSON.parse(localStorage.getItem("dt_user")||"null");
+let user =
+  JSON.parse(
+    localStorage.getItem("dt_user") || "null"
+  );
 
-let data=JSON.parse(localStorage.getItem("dt_data")||"null")||{
- tasks:[],
- subjects:[],
- exams:[],
- notes:[],
- xp:0,
- streak:0,
- completed:0,
- lastDay:""
-};
+let data =
+  JSON.parse(
+    localStorage.getItem("dt_data") || "null"
+  ) || {
+    tasks:[],
+    subjects:[],
+    exams:[],
+    notes:[],
+    xp:0,
+    streak:0,
+    completed:0,
+    lastDay:""
+  };
 
-const subjectsDefault=[
- ["Matematik","📐"],
- ["Türkçe","📖"],
- ["Fen Bilimleri","🔬"],
- ["Sosyal Bilgiler","🌍"],
- ["İngilizce","🇬🇧"],
- ["Din Kültürü","📚"],
- ["Beden Eğitimi","⚽"],
- ["Müzik","🎵"],
- ["Görsel Sanatlar","🎨"],
- ["Bilişim Teknolojileri","💻"]
+
+const subjectsDefault = [
+
+  ["Matematik","📐"],
+  ["Türkçe","📖"],
+  ["Fen Bilimleri","🔬"],
+  ["Sosyal Bilgiler","🌍"],
+  ["İngilizce","🇬🇧"],
+  ["Din Kültürü","📚"],
+  ["Beden Eğitimi","⚽"],
+  ["Müzik","🎵"],
+  ["Görsel Sanatlar","🎨"],
+  ["Bilişim Teknolojileri","💻"]
+
 ];
 
-const advices=[
- "Bugün önce en zor dersinden başla. Zor işi bitirmek motivasyonunu artırır.",
- "25 dakika boyunca sadece tek bir derse odaklanmayı dene.",
- "Sınavın varsa bugün kısa tekrar yapmak son gün çalışmaktan daha etkilidir.",
- "Bir konuyu öğrendikten sonra kendi cümlelerinle anlatmayı dene.",
- "Ders çalışırken telefonunu başka bir odaya koymayı deneyebilirsin.",
- "Küçük hedefler belirle. Bir anda her şeyi bitirmeye çalışma.",
- "Bugün sadece 20 dakika çalışmak bile hiç çalışmamaktan daha iyidir."
+
+const advices = [
+
+  "Bugün önce en zor dersinden başla. Zor işi bitirmek motivasyonunu artırır.",
+
+  "25 dakika boyunca sadece tek bir derse odaklanmayı dene.",
+
+  "Sınavın varsa bugün kısa tekrar yapmak son gün çalışmaktan daha etkilidir.",
+
+  "Bir konuyu öğrendikten sonra kendi cümlelerinle anlatmayı dene.",
+
+  "Ders çalışırken telefonunu başka bir odaya koymayı deneyebilirsin.",
+
+  "Küçük hedefler belirle. Bir anda her şeyi bitirmeye çalışma.",
+
+  "Bugün sadece 20 dakika çalışmak bile hiç çalışmamaktan daha iyidir."
+
 ];
+
 
 /* =========================
- AUTH
+AUTH
 ========================= */
 
 function showLogin(){
 
- loginForm.classList.remove("hidden");
- registerForm.classList.add("hidden");
+  loginForm.classList.remove("hidden");
 
- loginTab.classList.add("active");
- registerTab.classList.remove("active");
+  registerForm.classList.add("hidden");
 
- authMsg.textContent="";
+  loginTab.classList.add("active");
+
+  registerTab.classList.remove("active");
+
+  authMsg.textContent="";
+
 }
+
 
 function showRegister(){
 
- loginForm.classList.add("hidden");
- registerForm.classList.remove("hidden");
+  loginForm.classList.add("hidden");
 
- loginTab.classList.remove("active");
- registerTab.classList.add("active");
+  registerForm.classList.remove("hidden");
 
- authMsg.textContent="";
+  loginTab.classList.remove("active");
+
+  registerTab.classList.add("active");
+
+  authMsg.textContent="";
+
 }
+
 
 function register(e){
 
- e.preventDefault();
+  e.preventDefault();
 
- const name=registerName.value.trim();
- const email=registerEmail.value.trim();
- const password=registerPassword.value;
+  const name =
+    registerName.value.trim();
 
- if(password.length<6){
-  authMsg.textContent="Şifre en az 6 karakter olmalı.";
-  return;
- }
+  const email =
+    registerEmail.value.trim();
 
- user={
-  name,
-  email,
-  password
- };
+  const password =
+    registerPassword.value;
 
- localStorage.setItem("dt_user",JSON.stringify(user));
+  if(password.length < 6){
 
- authMsg.style.color="green";
- authMsg.textContent="Hesap oluşturuldu. Giriş yapabilirsin.";
+    authMsg.style.color="red";
 
- showLogin();
+    authMsg.textContent =
+      "Şifre en az 6 karakter olmalı.";
 
- loginEmail.value=email;
+    return;
+
+  }
+
+  user = {
+    name,
+    email,
+    password
+  };
+
+  localStorage.setItem(
+    "dt_user",
+    JSON.stringify(user)
+  );
+
+  authMsg.style.color="green";
+
+  authMsg.textContent =
+    "Hesap oluşturuldu. Giriş yapabilirsin.";
+
+  showLogin();
+
+  loginEmail.value=email;
+
 }
+
 
 function login(e){
 
- e.preventDefault();
+  e.preventDefault();
 
- const saved=JSON.parse(localStorage.getItem("dt_user")||"null");
+  const saved =
+    JSON.parse(
+      localStorage.getItem("dt_user") || "null"
+    );
 
- if(!saved){
-  authMsg.style.color="red";
-  authMsg.textContent="Önce kayıt olmalısın.";
-  return;
- }
+  if(!saved){
 
- if(
- saved.email!==loginEmail.value.trim() ||
- saved.password!==loginPassword.value
- ){
-  authMsg.style.color="red";
-  authMsg.textContent="E-posta veya şifre yanlış.";
-  return;
- }
+    authMsg.style.color="red";
 
- user=saved;
+    authMsg.textContent =
+      "Önce kayıt olmalısın.";
 
- localStorage.setItem("dt_logged","1");
+    return;
 
- openApp();
+  }
+
+  if(
+    saved.email !== loginEmail.value.trim() ||
+    saved.password !== loginPassword.value
+  ){
+
+    authMsg.style.color="red";
+
+    authMsg.textContent =
+      "E-posta veya şifre yanlış.";
+
+    return;
+
+  }
+
+  user=saved;
+
+  localStorage.setItem(
+    "dt_logged",
+    "1"
+  );
+
+  openApp();
+
 }
+
 
 function logout(){
 
- localStorage.removeItem("dt_logged");
+  localStorage.removeItem("dt_logged");
 
- location.reload();
+  location.reload();
+
 }
+
 
 function openApp(){
 
- auth.style.display="none";
- app.style.display="block";
+  auth.style.display="none";
 
- renderAll();
+  app.style.display="block";
+
+  renderAll();
 
 }
 
+
 /* =========================
- NAVIGATION
+NAVIGATION
 ========================= */
 
 function navigate(page){
 
- document.querySelectorAll(".page").forEach(x=>{
-  x.classList.remove("active");
- });
+  document
+    .querySelectorAll(".page")
+    .forEach(x=>{
+      x.classList.remove("active");
+    });
 
- const target=document.getElementById("page-"+page);
+  const target =
+    document.getElementById(
+      "page-"+page
+    );
 
- if(target)target.classList.add("active");
+  if(target){
+    target.classList.add("active");
+  }
 
- document.querySelectorAll(".menu button").forEach(btn=>{
-  btn.classList.toggle("active",btn.dataset.page===page);
- });
 
- const titles={
-  home:"Ana Sayfa",
-  tasks:"Görevler",
-  subjects:"Dersler",
-  exams:"Sınavlar",
-  notes:"Notlar",
-  focus:"Odaklan",
-  coach:"Ders Koçu",
-  achievements:"Rozetler",
-  stats:"İstatistikler",
-  profile:"Profil"
- };
+  document
+    .querySelectorAll(".menu button")
+    .forEach(btn=>{
 
- document.getElementById("subtitle").textContent=
- titles[page]||"DersTakip";
+      btn.classList.toggle(
+        "active",
+        btn.dataset.page === page
+      );
 
- if(page==="coach")newAdvice();
+    });
 
- if(page==="achievements")renderBadges();
 
- closeMobile();
+  const titles={
+
+    home:"Ana Sayfa",
+
+    "ai-solve":"Soru Çöz",
+
+    tasks:"Görevler",
+
+    subjects:"Dersler",
+
+    exams:"Sınavlar",
+
+    notes:"Notlar",
+
+    focus:"Odaklan",
+
+    coach:"Ders Koçu",
+
+    achievements:"Rozetler",
+
+    stats:"İstatistikler",
+
+    profile:"Profil"
+
+  };
+
+
+  document.getElementById(
+    "subtitle"
+  ).textContent =
+    titles[page] || "DersTakip";
+
+
+  if(page==="coach"){
+    newAdvice();
+  }
+
+  if(page==="achievements"){
+    renderBadges();
+  }
+
+  closeMobile();
+
 }
+
 
 function navigateMobile(page){
 
- navigate(page);
+  navigate(page);
+
 }
+
 
 function toggleMobile(){
 
- mobileMenu.classList.toggle("open");
+  mobileMenu.classList.toggle("open");
+
 }
+
 
 function closeMobile(){
 
- mobileMenu.classList.remove("open");
+  mobileMenu.classList.remove("open");
+
 }
 
+
 /* =========================
- TASKS
+TASKS
 ========================= */
 
 function addTask(){
 
- const input=document.getElementById("taskInput");
+  const input =
+    document.getElementById("taskInput");
 
- if(!input)return;
+  if(!input)return;
 
- const name=input.value.trim();
+  const name =
+    input.value.trim();
 
- if(!name)return;
+  if(!name)return;
 
- data.tasks.push({
-  id:Date.now(),
-  name,
-  done:false,
-  xp:20
- });
+  data.tasks.push({
 
- save();
+    id:Date.now(),
 
- closeModal();
+    name,
 
- renderAll();
+    done:false,
 
- toast("Görev eklendi ✅");
+    xp:20
+
+  });
+
+  save();
+
+  closeModal();
+
+  renderAll();
+
+  toast("Görev eklendi ✅");
+
 }
+
 
 function toggleTask(id){
 
- const task=data.tasks.find(x=>x.id===id);
+  const task =
+    data.tasks.find(
+      x=>x.id===id
+    );
 
- if(!task)return;
+  if(!task)return;
 
- task.done=!task.done;
+  task.done=!task.done;
 
- if(task.done){
 
-  data.xp+=task.xp;
-  data.completed++;
+  if(task.done){
 
-  updateStreak();
+    data.xp += task.xp;
 
-  toast("Görev tamamlandı! +"+task.xp+" XP ⭐");
+    data.completed++;
 
- }else{
+    updateStreak();
 
-  data.xp=Math.max(0,data.xp-task.xp);
-  data.completed=Math.max(0,data.completed-1);
- }
+    toast(
+      "Görev tamamlandı! +"+
+      task.xp+
+      " XP ⭐"
+    );
 
- save();
- renderAll();
+  }else{
+
+    data.xp =
+      Math.max(
+        0,
+        data.xp-task.xp
+      );
+
+    data.completed =
+      Math.max(
+        0,
+        data.completed-1
+      );
+
+  }
+
+  save();
+
+  renderAll();
+
 }
+
 
 function deleteTask(id){
 
- data.tasks=data.tasks.filter(x=>x.id!==id);
+  data.tasks =
+    data.tasks.filter(
+      x=>x.id!==id
+    );
 
- save();
- renderAll();
+  save();
 
- toast("Görev silindi.");
+  renderAll();
+
+  toast("Görev silindi.");
+
 }
+
 
 function renderTasks(){
 
- const html=data.tasks.length?
- data.tasks.map(task=>`
+  const html =
+    data.tasks.length
 
- <div class="task ${task.done?"done":""}">
+    ?
 
- <button class="check" onclick="toggleTask(${task.id})">
- ${task.done?"✓":""}
- </button>
+    data.tasks
+      .map(task=>`
 
- <span class="task-name">
- ${escapeHTML(task.name)}
- </span>
+        <div class="task ${task.done?"done":""}">
 
- <span class="task-xp">
- +${task.xp} XP
- </span>
+          <button
+            class="check"
+            onclick="toggleTask(${task.id})"
+          >
+            ${task.done?"✓":""}
+          </button>
 
- <button class="delete" onclick="deleteTask(${task.id})">
- 🗑️
- </button>
+          <span class="task-name">
+            ${escapeHTML(task.name)}
+          </span>
 
- </div>
+          <span class="task-xp">
+            +${task.xp} XP
+          </span>
 
- `).join("")
- :
- `<p style="color:var(--muted);padding:20px 0">
- Henüz görev yok. İlk görevini ekle!
- </p>`;
+          <button
+            class="delete"
+            onclick="deleteTask(${task.id})"
+          >
+            🗑️
+          </button>
 
- document.getElementById("allTasks").innerHTML=html;
+        </div>
 
- const home=data.tasks.slice(0,5);
+      `)
+      .join("")
 
- document.getElementById("homeTasks").innerHTML=
- home.length?
- home.map(task=>`
+    :
 
- <div class="task ${task.done?"done":""}">
+    `
+      <p
+        style="color:var(--muted);padding:20px 0"
+      >
+        Henüz görev yok. İlk görevini ekle!
+      </p>
+    `;
 
- <button class="check" onclick="toggleTask(${task.id})">
- ${task.done?"✓":""}
- </button>
 
- <span class="task-name">
- ${escapeHTML(task.name)}
- </span>
+  document.getElementById(
+    "allTasks"
+  ).innerHTML=html;
 
- </div>
 
- `).join("")
- :
- `<p style="color:var(--muted)">
- Henüz görev eklemedin.
- </p>`;
+  const home =
+    data.tasks.slice(0,5);
 
- const total=data.tasks.length;
- const done=data.tasks.filter(x=>x.done).length;
 
- document.getElementById("taskCounter").textContent=
- `${done} / ${total}`;
+  document.getElementById(
+    "homeTasks"
+  ).innerHTML =
 
- const percent=total?Math.round(done/total*100):0;
+    home.length
 
- document.getElementById("progress").style.width=percent+"%";
+    ?
 
- document.getElementById("homeSummary").textContent=
- total?
- `${done} görevden ${done} tanesini tamamladın.`
- :
- "Bugün için henüz görev eklemedin.";
+    home
+      .map(task=>`
 
- document.getElementById("homeXP").textContent=
- `${data.xp} XP`;
+        <div class="task ${task.done?"done":""}">
+
+          <button
+            class="check"
+            onclick="toggleTask(${task.id})"
+          >
+            ${task.done?"✓":""}
+          </button>
+
+          <span class="task-name">
+            ${escapeHTML(task.name)}
+          </span>
+
+        </div>
+
+      `)
+      .join("")
+
+    :
+
+    `
+      <p style="color:var(--muted)">
+        Henüz görev eklemedin.
+      </p>
+    `;
+
+
+  const total =
+    data.tasks.length;
+
+  const done =
+    data.tasks.filter(
+      x=>x.done
+    ).length;
+
+
+  document.getElementById(
+    "taskCounter"
+  ).textContent =
+    `${done} / ${total}`;
+
+
+  const percent =
+    total
+      ? Math.round(done/total*100)
+      : 0;
+
+
+  document.getElementById(
+    "progress"
+  ).style.width =
+    percent+"%";
+
+
+  document.getElementById(
+    "homeSummary"
+  ).textContent =
+
+    total
+
+    ?
+
+    `${done} görevden ${done} tanesini tamamladın.`
+
+    :
+
+    "Bugün için henüz görev eklemedin.";
+
+
+  document.getElementById(
+    "homeXP"
+  ).textContent =
+    `${data.xp} XP`;
 
 }
 
+
 /* =========================
- TASK MODAL
+TASK MODAL
 ========================= */
 
 function openTaskModal(){
 
- openModal(
- "Yeni Görev",
- `
+  openModal(
 
- <div class="field">
+    "Yeni Görev",
 
- <label>Görev</label>
+    `
+      <div class="field">
 
- <input id="taskInput"
- placeholder="Örn. Matematik 20 soru çöz"
- autofocus>
+        <label>
+          Görev
+        </label>
 
- </div>
+        <input
+          id="taskInput"
+          placeholder="Örn. Matematik 20 soru çöz"
+          autofocus
+        >
 
- <button class="primary" onclick="addTask()">
- Görevi Ekle
- </button>
+      </div>
 
- `
- );
+      <button
+        class="primary"
+        onclick="addTask()"
+      >
+        Görevi Ekle
+      </button>
+    `
 
- setTimeout(()=>{
-  document.getElementById("taskInput")?.focus();
- },100);
+  );
+
+
+  setTimeout(()=>{
+
+    document
+      .getElementById("taskInput")
+      ?.focus();
+
+  },100);
+
 }
 
+
 /* =========================
- SUBJECTS
+SUBJECTS
 ========================= */
 
 function renderSubjects(){
 
- if(!data.subjects.length){
+  if(!data.subjects.length){
 
-  data.subjects=subjectsDefault.map((x,i)=>({
-   id:"default-"+i,
-   name:x[0],
-   icon:x[1]
-  }));
+    data.subjects =
+      subjectsDefault.map(
+        (x,i)=>({
 
-  save();
- }
+          id:"default-"+i,
 
- document.getElementById("subjectsGrid").innerHTML=
- data.subjects.map(s=>`
+          name:x[0],
 
- <div class="subject">
+          icon:x[1]
 
- <div class="subject-icon">
- ${s.icon}
- </div>
+        })
+      );
 
- <h3>${escapeHTML(s.name)}</h3>
+    save();
 
- <p>Ders çalışma alanı</p>
+  }
 
- <button class="secondary"
- onclick="subjectTask('${escapeAttr(s.name)}')">
- Görev Oluştur
- </button>
 
- </div>
+  document.getElementById(
+    "subjectsGrid"
+  ).innerHTML =
 
- `).join("");
+    data.subjects
+      .map(s=>`
+
+        <div class="subject">
+
+          <div class="subject-icon">
+            ${s.icon}
+          </div>
+
+          <h3>
+            ${escapeHTML(s.name)}
+          </h3>
+
+          <p>
+            Ders çalışma alanı
+          </p>
+
+          <button
+            class="secondary"
+            onclick="subjectTask('${escapeAttr(s.name)}')"
+          >
+            Görev Oluştur
+          </button>
+
+        </div>
+
+      `)
+      .join("");
+
 }
+
 
 function subjectTask(name){
 
- navigate("tasks");
+  navigate("tasks");
 
- setTimeout(()=>{
-  openTaskModalWithSubject(name);
- },150);
+  setTimeout(()=>{
+
+    openTaskModalWithSubject(name);
+
+  },150);
+
 }
+
 
 function openTaskModalWithSubject(name){
 
- openModal(
- "Yeni "+name+" Görevi",
- `
+  openModal(
 
- <div class="field">
+    "Yeni "+name+" Görevi",
 
- <label>Görev</label>
+    `
+      <div class="field">
 
- <input id="taskInput"
- value="${escapeAttr(name)} - "
- autofocus>
+        <label>
+          Görev
+        </label>
 
- </div>
+        <input
+          id="taskInput"
+          value="${escapeAttr(name)} - "
+          autofocus
+        >
 
- <button class="primary" onclick="addTask()">
- Görevi Ekle
- </button>
+      </div>
 
- `
- );
+      <button
+        class="primary"
+        onclick="addTask()"
+      >
+        Görevi Ekle
+      </button>
+    `
+
+  );
 
 }
+
 
 function openSubjectModal(){
 
- openModal(
- "Ders Ekle",
- `
+  openModal(
 
- <div class="field">
- <label>Ders adı</label>
- <input id="subjectName" placeholder="Örn. Almanca">
- </div>
+    "Ders Ekle",
 
- <div class="field">
- <label>Simge</label>
- <input id="subjectIcon" value="📘" maxlength="2">
- </div>
+    `
+      <div class="field">
 
- <button class="primary" onclick="addSubject()">
- Dersi Ekle
- </button>
+        <label>
+          Ders adı
+        </label>
 
- `
- );
+        <input
+          id="subjectName"
+          placeholder="Örn. Almanca"
+        >
+
+      </div>
+
+      <div class="field">
+
+        <label>
+          Simge
+        </label>
+
+        <input
+          id="subjectIcon"
+          value="📘"
+          maxlength="2"
+        >
+
+      </div>
+
+      <button
+        class="primary"
+        onclick="addSubject()"
+      >
+        Dersi Ekle
+      </button>
+    `
+
+  );
+
 }
+
 
 function addSubject(){
 
- const name=document.getElementById("subjectName").value.trim();
- const icon=document.getElementById("subjectIcon").value||"📘";
+  const name =
+    document
+      .getElementById("subjectName")
+      .value
+      .trim();
 
- if(!name)return;
+  const icon =
+    document
+      .getElementById("subjectIcon")
+      .value || "📘";
 
- data.subjects.push({
-  id:Date.now(),
-  name,
-  icon
- });
 
- save();
- closeModal();
- renderSubjects();
+  if(!name)return;
 
- toast("Ders eklendi 📚");
+
+  data.subjects.push({
+
+    id:Date.now(),
+
+    name,
+
+    icon
+
+  });
+
+
+  save();
+
+  closeModal();
+
+  renderSubjects();
+
+  toast("Ders eklendi 📚");
+
 }
 
+
 /* =========================
- EXAMS
+EXAMS
 ========================= */
 
 function openExamModal(){
 
- openModal(
- "Sınav Ekle",
- `
+  openModal(
 
- <div class="field">
- <label>Ders</label>
+    "Sınav Ekle",
 
- <select id="examSubject">
+    `
+      <div class="field">
 
- ${data.subjects.map(s=>
- `<option>${escapeHTML(s.name)}</option>`
- ).join("")}
+        <label>
+          Ders
+        </label>
 
- </select>
+        <select id="examSubject">
 
- </div>
+          ${data.subjects
+            .map(s=>
+              `
+                <option>
+                  ${escapeHTML(s.name)}
+                </option>
+              `
+            )
+            .join("")
+          }
 
- <div class="field">
- <label>Sınav adı</label>
- <input id="examName" placeholder="1. Yazılı">
- </div>
+        </select>
 
- <div class="field">
- <label>Tarih</label>
- <input id="examDate" type="date">
- </div>
+      </div>
 
- <div class="field">
- <label>Not / Hedef</label>
- <input id="examTarget" placeholder="Örn. 90">
- </div>
+      <div class="field">
 
- <button class="primary" onclick="addExam()">
- Sınavı Kaydet
- </button>
+        <label>
+          Sınav adı
+        </label>
 
- `
- );
+        <input
+          id="examName"
+          placeholder="1. Yazılı"
+        >
+
+      </div>
+
+      <div class="field">
+
+        <label>
+          Tarih
+        </label>
+
+        <input
+          id="examDate"
+          type="date"
+        >
+
+      </div>
+
+      <div class="field">
+
+        <label>
+          Not / Hedef
+        </label>
+
+        <input
+          id="examTarget"
+          placeholder="Örn. 90"
+        >
+
+      </div>
+
+      <button
+        class="primary"
+        onclick="addExam()"
+      >
+        Sınavı Kaydet
+      </button>
+    `
+
+  );
+
 }
+
 
 function addExam(){
 
- const subject=document.getElementById("examSubject").value;
- const name=document.getElementById("examName").value.trim();
- const date=document.getElementById("examDate").value;
- const target=document.getElementById("examTarget").value;
+  const subject =
+    document.getElementById(
+      "examSubject"
+    ).value;
 
- if(!name||!date)return;
+  const name =
+    document.getElementById(
+      "examName"
+    ).value.trim();
 
- data.exams.push({
-  id:Date.now(),
-  subject,
-  name,
-  date,
-  target
- });
+  const date =
+    document.getElementById(
+      "examDate"
+    ).value;
 
- save();
- closeModal();
- renderExams();
+  const target =
+    document.getElementById(
+      "examTarget"
+    ).value;
 
- toast("Sınav takvime eklendi 📅");
+
+  if(!name || !date)return;
+
+
+  data.exams.push({
+
+    id:Date.now(),
+
+    subject,
+
+    name,
+
+    date,
+
+    target
+
+  });
+
+
+  save();
+
+  closeModal();
+
+  renderExams();
+
+  toast("Sınav takvime eklendi 📅");
+
 }
+
 
 function deleteExam(id){
 
- data.exams=data.exams.filter(x=>x.id!==id);
+  data.exams =
+    data.exams.filter(
+      x=>x.id!==id
+    );
 
- save();
- renderExams();
+  save();
 
- toast("Sınav silindi.");
+  renderExams();
+
+  toast("Sınav silindi.");
+
 }
+
 
 function renderExams(){
 
- const list=document.getElementById("examList");
+  const list =
+    document.getElementById(
+      "examList"
+    );
 
- if(!data.exams.length){
 
-  list.innerHTML=
-  `<p style="color:var(--muted);padding:20px 0">
-  Henüz sınav eklemedin.
-  </p>`;
+  if(!data.exams.length){
 
-  return;
- }
+    list.innerHTML = `
 
- const sorted=[...data.exams].sort(
-  (a,b)=>new Date(a.date)-new Date(b.date)
- );
+      <p
+        style="color:var(--muted);padding:20px 0"
+      >
+        Henüz sınav eklemedin.
+      </p>
 
- list.innerHTML=sorted.map(e=>{
+    `;
 
-  const days=Math.ceil(
-   (new Date(e.date)-new Date())/86400000
-  );
+    return;
 
-  let remaining;
+  }
 
-  if(days<0)remaining="Geçmiş";
-  else if(days===0)remaining="Bugün";
-  else remaining=days+" gün kaldı";
 
-  return`
+  const sorted =
+    [...data.exams].sort(
+      (a,b)=>
+        new Date(a.date) -
+        new Date(b.date)
+    );
 
-  <div class="exam">
 
-  <div>
+  list.innerHTML =
+    sorted
+      .map(e=>{
 
-  <strong>${escapeHTML(e.name)}</strong>
+        const days =
+          Math.ceil(
+            (
+              new Date(e.date) -
+              new Date()
+            ) /
+            86400000
+          );
 
-  <p style="color:var(--muted);margin-top:5px">
-  ${escapeHTML(e.subject)}
-  ${e.target?` • Hedef: ${escapeHTML(e.target)}`:""}
-  </p>
 
-  </div>
+        let remaining;
 
-  <div style="text-align:right">
 
-  <div class="exam-date">
-  ${formatDate(e.date)}
-  </div>
+        if(days<0){
 
-  <small style="color:var(--muted)">
-  ${remaining}
-  </small>
+          remaining="Geçmiş";
 
-  <div class="exam-actions">
-  <button class="delete" onclick="deleteExam(${e.id})">
-  🗑️
-  </button>
-  </div>
+        }else if(days===0){
 
-  </div>
+          remaining="Bugün";
 
-  </div>
+        }else{
 
-  `;
+          remaining =
+            days+" gün kaldı";
 
- }).join("");
+        }
+
+
+        return `
+
+          <div class="exam">
+
+            <div>
+
+              <strong>
+                ${escapeHTML(e.name)}
+              </strong>
+
+              <p
+                style="
+                  color:var(--muted);
+                  margin-top:5px
+                "
+              >
+
+                ${escapeHTML(e.subject)}
+
+                ${
+                  e.target
+                  ?
+                  ` • Hedef: ${escapeHTML(e.target)}`
+                  :
+                  ""
+                }
+
+              </p>
+
+            </div>
+
+
+            <div style="text-align:right">
+
+              <div class="exam-date">
+
+                ${formatDate(e.date)}
+
+              </div>
+
+              <small
+                style="color:var(--muted)"
+              >
+                ${remaining}
+              </small>
+
+              <div class="exam-actions">
+
+                <button
+                  class="delete"
+                  onclick="deleteExam(${e.id})"
+                >
+                  🗑️
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        `;
+
+      })
+      .join("");
+
 }
 
+
 /* =========================
- NOTES
+NOTES
 ========================= */
 
 function openNoteModal(){
 
- openModal(
- "Yeni Not",
- `
+  openModal(
 
- <div class="field">
+    "Yeni Not",
 
- <label>Başlık</label>
+    `
+      <div class="field">
 
- <input id="noteTitle" placeholder="Örn. Matematik - Kesirler">
+        <label>
+          Başlık
+        </label>
 
- </div>
+        <input
+          id="noteTitle"
+          placeholder="Örn. Matematik - Kesirler"
+        >
 
- <div class="field">
+      </div>
 
- <label>Ders</label>
+      <div class="field">
 
- <select id="noteSubject">
+        <label>
+          Ders
+        </label>
 
- <option>Genel</option>
+        <select id="noteSubject">
 
- ${data.subjects.map(s=>
- `<option>${escapeHTML(s.name)}</option>`
- ).join("")}
+          <option>
+            Genel
+          </option>
 
- </select>
+          ${data.subjects
+            .map(s=>
+              `
+                <option>
+                  ${escapeHTML(s.name)}
+                </option>
+              `
+            )
+            .join("")
+          }
 
- </div>
+        </select>
 
- <div class="field">
+      </div>
 
- <label>Not</label>
+      <div class="field">
 
- <textarea id="noteText"
- rows="8"
- placeholder="Notlarını buraya yaz..."></textarea>
+        <label>
+          Not
+        </label>
 
- </div>
+        <textarea
+          id="noteText"
+          rows="8"
+          placeholder="Notlarını buraya yaz..."
+        ></textarea>
 
- <button class="primary" onclick="addNote()">
- Notu Kaydet
- </button>
+      </div>
 
- `
- );
+      <button
+        class="primary"
+        onclick="addNote()"
+      >
+        Notu Kaydet
+      </button>
+    `
+
+  );
+
 }
+
 
 function addNote(){
 
- const title=document.getElementById("noteTitle").value.trim();
- const subject=document.getElementById("noteSubject").value;
- const text=document.getElementById("noteText").value.trim();
+  const title =
+    document
+      .getElementById("noteTitle")
+      .value
+      .trim();
 
- if(!title||!text)return;
+  const subject =
+    document
+      .getElementById("noteSubject")
+      .value;
 
- data.notes.unshift({
-  id:Date.now(),
-  title,
-  subject,
-  text,
-  date:new Date().toISOString()
- });
+  const text =
+    document
+      .getElementById("noteText")
+      .value
+      .trim();
 
- save();
- closeModal();
- renderNotes();
 
- toast("Not kaydedildi 📝");
+  if(!title || !text)return;
+
+
+  data.notes.unshift({
+
+    id:Date.now(),
+
+    title,
+
+    subject,
+
+    text,
+
+    date:new Date().toISOString()
+
+  });
+
+
+  save();
+
+  closeModal();
+
+  renderNotes();
+
+  toast("Not kaydedildi 📝");
+
 }
+
 
 function deleteNote(id){
 
- data.notes=data.notes.filter(x=>x.id!==id);
+  data.notes =
+    data.notes.filter(
+      x=>x.id!==id
+    );
 
- save();
- renderNotes();
+  save();
 
- toast("Not silindi.");
+  renderNotes();
+
+  toast("Not silindi.");
+
 }
+
 
 function renderNotes(){
 
- const grid=document.getElementById("notesGrid");
+  const grid =
+    document.getElementById(
+      "notesGrid"
+    );
 
- if(!data.notes.length){
 
-  grid.innerHTML=
-  `<p style="color:var(--muted)">
-  Henüz notun yok.
-  </p>`;
+  if(!data.notes.length){
 
-  return;
- }
+    grid.innerHTML = `
 
- grid.innerHTML=data.notes.map(n=>`
+      <p style="color:var(--muted)">
+        Henüz notun yok.
+      </p>
 
- <div class="note">
+    `;
 
- <h3>${escapeHTML(n.title)}</h3>
+    return;
 
- <small style="color:var(--primary)">
- ${escapeHTML(n.subject)}
- </small>
+  }
 
- <p style="margin-top:10px">
- ${escapeHTML(n.text)}
- </p>
 
- <div class="note-footer">
+  grid.innerHTML =
+    data.notes
+      .map(n=>`
 
- <span>${formatDateTime(n.date)}</span>
+        <div class="note">
 
- <button class="delete"
- onclick="deleteNote(${n.id})">
- 🗑️
- </button>
+          <h3>
+            ${escapeHTML(n.title)}
+          </h3>
 
- </div>
+          <small
+            style="color:var(--primary)"
+          >
+            ${escapeHTML(n.subject)}
+          </small>
 
- </div>
+          <p style="margin-top:10px">
+            ${escapeHTML(n.text)}
+          </p>
 
- `).join("");
+          <div class="note-footer">
+
+            <span>
+              ${formatDateTime(n.date)}
+            </span>
+
+            <button
+              class="delete"
+              onclick="deleteNote(${n.id})"
+            >
+              🗑️
+            </button>
+
+          </div>
+
+        </div>
+
+      `)
+      .join("");
+
 }
 
+
 /* =========================
- FOCUS
+FOCUS
 ========================= */
 
 let timerSeconds=25*60;
+
 let timerInterval=null;
+
 
 function updateTimer(){
 
- const min=Math.floor(timerSeconds/60)
- .toString().padStart(2,"0");
+  const min =
+    Math.floor(
+      timerSeconds/60
+    )
+    .toString()
+    .padStart(2,"0");
 
- const sec=(timerSeconds%60)
- .toString().padStart(2,"0");
 
- document.getElementById("timer").textContent=
- `${min}:${sec}`;
+  const sec =
+    (timerSeconds%60)
+    .toString()
+    .padStart(2,"0");
+
+
+  document.getElementById(
+    "timer"
+  ).textContent =
+    `${min}:${sec}`;
+
 }
+
 
 function startTimer(){
 
- if(timerInterval)return;
+  if(timerInterval)return;
 
- timerInterval=setInterval(()=>{
 
-  if(timerSeconds<=0){
+  timerInterval =
+    setInterval(()=>{
 
-   clearInterval(timerInterval);
-   timerInterval=null;
+      if(timerSeconds<=0){
 
-   data.xp+=50;
+        clearInterval(
+          timerInterval
+        );
 
-   save();
-   renderAll();
+        timerInterval=null;
 
-   toast("Odaklanma tamamlandı! +50 XP ⭐");
+        data.xp+=50;
 
-   timerSeconds=25*60;
-   updateTimer();
+        save();
 
-   return;
-  }
+        renderAll();
 
-  timerSeconds--;
-  updateTimer();
+        toast(
+          "Odaklanma tamamlandı! +50 XP ⭐"
+        );
 
- },1000);
+        timerSeconds=25*60;
+
+        updateTimer();
+
+        return;
+
+      }
+
+
+      timerSeconds--;
+
+      updateTimer();
+
+    },1000);
+
 }
+
 
 function pauseTimer(){
 
- clearInterval(timerInterval);
- timerInterval=null;
+  clearInterval(
+    timerInterval
+  );
+
+  timerInterval=null;
+
 }
+
 
 function resetTimer(){
 
- pauseTimer();
+  pauseTimer();
 
- timerSeconds=25*60;
+  timerSeconds=25*60;
 
- updateTimer();
+  updateTimer();
+
 }
 
+
 /* =========================
- COACH
+COACH
 ========================= */
 
 function newAdvice(){
 
- const text=
- advices[Math.floor(Math.random()*advices.length)];
+  const text =
+    advices[
+      Math.floor(
+        Math.random() *
+        advices.length
+      )
+    ];
 
- document.getElementById("coachFull").textContent=text;
 
- document.getElementById("homeCoach").textContent=text;
+  document.getElementById(
+    "coachFull"
+  ).textContent=text;
+
+
+  document.getElementById(
+    "homeCoach"
+  ).textContent=text;
+
 }
 
+
 /* =========================
- BADGES
+BADGES
 ========================= */
 
 function renderBadges(){
 
- const badges=[
+  const badges=[
 
- ["🌱","İlk Adım","İlk görevini tamamla",data.completed>=1],
+    [
+      "🌱",
+      "İlk Adım",
+      "İlk görevini tamamla",
+      data.completed>=1
+    ],
 
- ["⭐","10 XP","10 XP kazan",data.xp>=10],
+    [
+      "⭐",
+      "10 XP",
+      "10 XP kazan",
+      data.xp>=10
+    ],
 
- ["🔥","Kararlı","3 görev tamamla",data.completed>=3],
+    [
+      "🔥",
+      "Kararlı",
+      "3 görev tamamla",
+      data.completed>=3
+    ],
 
- ["🏆","Çalışkan","10 görev tamamla",data.completed>=10],
+    [
+      "🏆",
+      "Çalışkan",
+      "10 görev tamamla",
+      data.completed>=10
+    ],
 
- ["📚","Ders Sever","3 ders ekle",data.subjects.length>=3],
+    [
+      "📚",
+      "Ders Sever",
+      "3 ders ekle",
+      data.subjects.length>=3
+    ],
 
- ["📝","Not Tutucu","İlk notunu oluştur",data.notes.length>=1],
+    [
+      "📝",
+      "Not Tutucu",
+      "İlk notunu oluştur",
+      data.notes.length>=1
+    ],
 
- ["📅","Planlı","İlk sınavını ekle",data.exams.length>=1],
+    [
+      "📅",
+      "Planlı",
+      "İlk sınavını ekle",
+      data.exams.length>=1
+    ],
 
- ["🚀","Seviye 2","100 XP kazan",data.xp>=100]
+    [
+      "🚀",
+      "Seviye 2",
+      "100 XP kazan",
+      data.xp>=100
+    ]
 
- ];
+  ];
 
- document.getElementById("badges").innerHTML=
- badges.map(b=>`
 
- <div class="badge ${b[3]?"":"locked"}">
+  document.getElementById(
+    "badges"
+  ).innerHTML =
 
- <div class="badge-icon">${b[0]}</div>
+    badges
+      .map(b=>`
 
- <strong>${b[1]}</strong>
+        <div
+          class="badge ${b[3]?"":"locked"}"
+        >
 
- <br>
+          <div class="badge-icon">
+            ${b[0]}
+          </div>
 
- <small>${b[2]}</small>
+          <strong>
+            ${b[1]}
+          </strong>
 
- </div>
+          <br>
 
- `).join("");
+          <small>
+            ${b[2]}
+          </small>
+
+        </div>
+
+      `)
+      .join("");
+
 }
 
+
 /* =========================
- STATS
+STATS
 ========================= */
 
 function renderStats(){
 
- document.getElementById("statsXP").textContent=data.xp;
- document.getElementById("statsStreak").textContent=data.streak;
- document.getElementById("statsCompleted").textContent=data.completed;
+  document.getElementById(
+    "statsXP"
+  ).textContent=data.xp;
 
- const total=data.tasks.length;
 
- const done=data.tasks.filter(x=>x.done).length;
+  document.getElementById(
+    "statsStreak"
+  ).textContent=data.streak;
 
- const percent=total?
- Math.round(done/total*100):0;
 
- document.getElementById("statsPercent").textContent=
- percent+"%";
+  document.getElementById(
+    "statsCompleted"
+  ).textContent=data.completed;
 
- document.getElementById("statsProgress").style.width=
- percent+"%";
+
+  const total =
+    data.tasks.length;
+
+
+  const done =
+    data.tasks.filter(
+      x=>x.done
+    ).length;
+
+
+  const percent =
+    total
+      ?
+      Math.round(
+        done/total*100
+      )
+      :
+      0;
+
+
+  document.getElementById(
+    "statsPercent"
+  ).textContent =
+    percent+"%";
+
+
+  document.getElementById(
+    "statsProgress"
+  ).style.width =
+    percent+"%";
 
 }
 
+
 /* =========================
- PROFILE
+PROFILE
 ========================= */
 
 function getLevel(){
 
- return Math.max(
-  1,
-  Math.floor(data.xp/100)+1
- );
+  return Math.max(
+    1,
+    Math.floor(
+      data.xp/100
+    )+1
+  );
+
 }
+
 
 function renderProfile(){
 
- const level=getLevel();
+  const level =
+    getLevel();
 
- document.getElementById("profileName").textContent=
- user?.name||"Öğrenci";
 
- document.getElementById("profileEmail").textContent=
- user?.email||"-";
+  document.getElementById(
+    "profileName"
+  ).textContent =
+    user?.name ||
+    "Öğrenci";
 
- document.getElementById("profileLevel").textContent=
- level;
 
- document.getElementById("profileXP").textContent=
- data.xp;
+  document.getElementById(
+    "profileEmail"
+  ).textContent =
+    user?.email ||
+    "-";
 
- document.getElementById("profileTasks").textContent=
- data.tasks.length;
 
- document.getElementById("profileSubjects").textContent=
- data.subjects.length;
+  document.getElementById(
+    "profileLevel"
+  ).textContent =
+    level;
 
- document.getElementById("topLevel").textContent=
- "Seviye "+level;
 
- document.getElementById("welcome").textContent=
- `Merhaba, ${user?.name?.split(" ")[0]||"Öğrenci"}! 👋`;
+  document.getElementById(
+    "profileXP"
+  ).textContent =
+    data.xp;
+
+
+  document.getElementById(
+    "profileTasks"
+  ).textContent =
+    data.tasks.length;
+
+
+  document.getElementById(
+    "profileSubjects"
+  ).textContent =
+    data.subjects.length;
+
+
+  document.getElementById(
+    "topLevel"
+  ).textContent =
+    "Seviye "+level;
+
+
+  document.getElementById(
+    "welcome"
+  ).textContent =
+    `Merhaba, ${
+      user?.name?.split(" ")[0] ||
+      "Öğrenci"
+    }! 👋`;
+
 }
 
+
 /* =========================
- HOME
+HOME
 ========================= */
 
 function renderHomeStats(){
 
- document.getElementById("homeStatXP").textContent=data.xp;
+  document.getElementById(
+    "homeStatXP"
+  ).textContent =
+    data.xp;
 
- document.getElementById("homeStatStreak").textContent=
- data.streak+" gün";
 
- document.getElementById("homeStatSubjects").textContent=
- data.subjects.length;
+  document.getElementById(
+    "homeStatStreak"
+  ).textContent =
+    data.streak+" gün";
 
- document.getElementById("homeStatExams").textContent=
- data.exams.length;
+
+  document.getElementById(
+    "homeStatSubjects"
+  ).textContent =
+    data.subjects.length;
+
+
+  document.getElementById(
+    "homeStatExams"
+  ).textContent =
+    data.exams.length;
+
 }
 
+
 /* =========================
- STREAK
+STREAK
 ========================= */
 
 function updateStreak(){
 
- const today=new Date().toISOString().slice(0,10);
+  const today =
+    new Date()
+      .toISOString()
+      .slice(0,10);
 
- if(data.lastDay===today)return;
 
- const yesterday=new Date();
+  if(data.lastDay===today)return;
 
- yesterday.setDate(yesterday.getDate()-1);
 
- const yesterdayString=
- yesterday.toISOString().slice(0,10);
+  const yesterday =
+    new Date();
 
- if(data.lastDay===yesterdayString){
 
-  data.streak++;
+  yesterday.setDate(
+    yesterday.getDate()-1
+  );
 
- }else{
 
-  data.streak=1;
+  const yesterdayString =
+    yesterday
+      .toISOString()
+      .slice(0,10);
 
- }
 
- data.lastDay=today;
+  if(
+    data.lastDay===
+    yesterdayString
+  ){
+
+    data.streak++;
+
+  }else{
+
+    data.streak=1;
+
+  }
+
+
+  data.lastDay=today;
 
 }
 
+
 /* =========================
- MODAL
+MODAL
 ========================= */
 
 function openModal(title,body){
 
- document.getElementById("modalTitle").textContent=title;
+  document.getElementById(
+    "modalTitle"
+  ).textContent=title;
 
- document.getElementById("modalBody").innerHTML=body;
 
- document.getElementById("modal").classList.add("show");
+  document.getElementById(
+    "modalBody"
+  ).innerHTML=body;
+
+
+  document.getElementById(
+    "modal"
+  ).classList.add("show");
+
 }
+
 
 function closeModal(){
 
- document.getElementById("modal").classList.remove("show");
+  document.getElementById(
+    "modal"
+  ).classList.remove("show");
+
 }
 
+
 /* =========================
- TOAST
+TOAST
 ========================= */
 
 function toast(message){
 
- const box=document.createElement("div");
+  const box =
+    document.createElement(
+      "div"
+    );
 
- box.className="toast";
 
- box.textContent=message;
+  box.className="toast";
 
- document.getElementById("toast").appendChild(box);
+  box.textContent=message;
 
- setTimeout(()=>{
-  box.remove();
- },3000);
+
+  document.getElementById(
+    "toast"
+  ).appendChild(box);
+
+
+  setTimeout(()=>{
+
+    box.remove();
+
+  },3000);
+
 }
 
+
 /* =========================
- DARK
+DARK
 ========================= */
 
 function toggleDark(){
 
- document.body.classList.toggle("dark");
+  document.body.classList.toggle(
+    "dark"
+  );
 
- localStorage.setItem(
-  "dt_dark",
-  document.body.classList.contains("dark")?"1":"0"
- );
+
+  localStorage.setItem(
+
+    "dt_dark",
+
+    document.body.classList.contains(
+      "dark"
+    )
+      ?
+      "1"
+      :
+      "0"
+
+  );
+
 }
 
+
 /* =========================
- RESET
+RESET
 ========================= */
 
 function clearData(){
 
- if(!confirm(
- "Tüm görev, ders, sınav ve not verilerin silinecek. Emin misin?"
- ))return;
+  if(
+    !confirm(
+      "Tüm görev, ders, sınav ve not verilerin silinecek. Emin misin?"
+    )
+  ){
+    return;
+  }
 
- data={
-  tasks:[],
-  subjects:[],
-  exams:[],
-  notes:[],
-  xp:0,
-  streak:0,
-  completed:0,
-  lastDay:""
- };
 
- save();
- renderAll();
+  data={
 
- toast("Veriler temizlendi.");
+    tasks:[],
+
+    subjects:[],
+
+    exams:[],
+
+    notes:[],
+
+    xp:0,
+
+    streak:0,
+
+    completed:0,
+
+    lastDay:""
+
+  };
+
+
+  save();
+
+  renderAll();
+
+  toast(
+    "Veriler temizlendi."
+  );
+
 }
 
+
 /* =========================
- STORAGE
+STORAGE
 ========================= */
 
 function save(){
 
- localStorage.setItem(
-  "dt_data",
-  JSON.stringify(data)
- );
+  localStorage.setItem(
+    "dt_data",
+    JSON.stringify(data)
+  );
+
 }
+
+
 /* =========================
- AI SORU ÇÖZ
+AI SORU ÇÖZ
 ========================= */
 
 let aiImageData = "";
 
-function previewAIImage(event) {
-  const file = event.target.files[0];
 
-  if (!file) {
-    aiImageData = "";
-    document.getElementById("aiImagePreview").style.display = "none";
+function previewAIImage(event){
+
+  const file =
+    event.target.files[0];
+
+
+  if(!file){
+
+    aiImageData="";
+
+    document.getElementById(
+      "aiImagePreview"
+    ).style.display="none";
+
     return;
+
   }
 
-  if (!file.type.startsWith("image/")) {
-    toast("Lütfen bir görsel seç.");
-    event.target.value = "";
+
+  if(
+    !file.type.startsWith("image/")
+  ){
+
+    toast(
+      "Lütfen bir görsel seç."
+    );
+
+    event.target.value="";
+
     return;
+
   }
 
-  const reader = new FileReader();
 
-  reader.onload = function(e) {
-    aiImageData = e.target.result;
+  const reader =
+    new FileReader();
 
-    document.getElementById("aiPreview").src = aiImageData;
-    document.getElementById("aiImagePreview").style.display = "block";
+
+  reader.onload=function(e){
+
+    aiImageData =
+      e.target.result;
+
+
+    document.getElementById(
+      "aiPreview"
+    ).src =
+      aiImageData;
+
+
+    document.getElementById(
+      "aiImagePreview"
+    ).style.display =
+      "block";
+
   };
 
+
   reader.readAsDataURL(file);
+
 }
 
 
-async function solveAIQuestion() {
+async function solveAIQuestion(){
 
   const question =
-    document.getElementById("aiQuestion").value.trim();
+    document.getElementById(
+      "aiQuestion"
+    ).value.trim();
+
 
   const subject =
-    document.getElementById("aiSubject").value;
+    document.getElementById(
+      "aiSubject"
+    ).value;
+
 
   const mode =
-    document.getElementById("aiMode").value;
+    document.getElementById(
+      "aiMode"
+    ).value;
+
 
   const result =
-    document.getElementById("aiResult");
+    document.getElementById(
+      "aiResult"
+    );
+
 
   const loading =
-    document.getElementById("aiLoading");
+    document.getElementById(
+      "aiLoading"
+    );
+
 
   const button =
-    document.getElementById("aiSolveButton");
+    document.getElementById(
+      "aiSolveButton"
+    );
 
 
-  if (!question && !aiImageData) {
-    toast("Lütfen soru yaz veya fotoğraf yükle.");
+  if(
+    !question &&
+    !aiImageData
+  ){
+
+    toast(
+      "Lütfen soru yaz veya fotoğraf yükle."
+    );
+
     return;
+
   }
 
 
-  result.style.display = "none";
-  result.textContent = "";
+  result.style.display="none";
 
-  loading.style.display = "block";
+  result.textContent="";
 
-  button.disabled = true;
-  button.style.opacity = "0.6";
-  button.textContent = "🤖 Çözülüyor...";
+  loading.style.display="block";
 
+  button.disabled=true;
 
-  try {
+  button.style.opacity="0.6";
 
-    const response = await fetch("/api/solve", {
-      method: "POST",
-
-      headers: {
-        "Content-Type": "application/json"
-      },
-
-      body: JSON.stringify({
-        image: aiImageData || null,
-        question: question || null,
-        subject: subject,
-        mode: mode
-      })
-    });
+  button.textContent=
+    "🤖 Çözülüyor...";
 
 
-    const data = await response.json();
+  try{
+
+    const response =
+      await fetch(
+        "/api/solve",
+        {
+
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:JSON.stringify({
+
+            image:
+              aiImageData ||
+              null,
+
+            question:
+              question ||
+              null,
+
+            subject:
+              subject,
+
+            mode:
+              mode
+
+          })
+
+        }
+      );
 
 
-    if (!response.ok || !data.success) {
+    const responseData =
+      await response.json();
+
+
+    if(
+      !response.ok ||
+      !responseData.success
+    ){
 
       throw new Error(
-        data.error ||
+        responseData.error ||
         "Yapay zeka soruyu çözemedi."
       );
 
     }
 
 
-    result.textContent = data.answer || "Yanıt alınamadı.";
-
-    result.style.display = "block";
-
-    toast("Soru başarıyla çözüldü 🧠✅");
+    result.textContent =
+      responseData.answer ||
+      "Yanıt alınamadı.";
 
 
-  } catch (error) {
+    result.style.display="block";
 
-    console.error("AI SOLVE ERROR:", error);
+
+    toast(
+      "Soru başarıyla çözüldü 🧠✅"
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "AI SOLVE ERROR:",
+      error
+    );
+
 
     result.textContent =
       "❌ Hata oluştu.\n\n" +
-      (error.message ||
-       "Yapay zeka servisine bağlanılamadı.");
-
-    result.style.display = "block";
-
-    toast("Soru çözülürken hata oluştu.");
+      (
+        error.message ||
+        "Yapay zeka servisine bağlanılamadı."
+      );
 
 
-  } finally {
+    result.style.display="block";
 
-    loading.style.display = "none";
 
-    button.disabled = false;
-    button.style.opacity = "1";
-    button.textContent = "🧠 Soruyu Çöz";
+    toast(
+      "Soru çözülürken hata oluştu."
+    );
+
+
+  }finally{
+
+    loading.style.display="none";
+
+    button.disabled=false;
+
+    button.style.opacity="1";
+
+    button.textContent=
+      "🧠 Soruyu Çöz";
 
   }
+
 }
+
+
 /* =========================
- HELPERS
+HELPERS
 ========================= */
 
 function formatDate(date){
 
- if(!date)return "-";
+  if(!date)return "-";
 
- return new Date(date).toLocaleDateString(
-  "tr-TR",
-  {
-   day:"2-digit",
-   month:"long",
-   year:"numeric"
-  }
- );
+
+  return new Date(date)
+    .toLocaleDateString(
+      "tr-TR",
+      {
+        day:"2-digit",
+        month:"long",
+        year:"numeric"
+      }
+    );
+
 }
+
 
 function formatDateTime(date){
 
- return new Date(date).toLocaleDateString(
-  "tr-TR",
-  {
-   day:"2-digit",
-   month:"2-digit",
-   year:"numeric"
-  }
- );
+  return new Date(date)
+    .toLocaleDateString(
+      "tr-TR",
+      {
+        day:"2-digit",
+        month:"2-digit",
+        year:"numeric"
+      }
+    );
+
 }
+
 
 function escapeHTML(str){
 
- return String(str)
- .replaceAll("&","&amp;")
- .replaceAll("<","&lt;")
- .replaceAll(">","&gt;")
- .replaceAll('"',"&quot;")
- .replaceAll("'","&#039;");
+  return String(str)
+
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
 }
+
 
 function escapeAttr(str){
 
- return escapeHTML(str);
+  return escapeHTML(str);
+
 }
 
+
 /* =========================
- RENDER
+RENDER
 ========================= */
 
 function renderAll(){
 
- renderTasks();
- renderSubjects();
- renderExams();
- renderNotes();
- renderBadges();
- renderStats();
- renderProfile();
- renderHomeStats();
- updateTimer();
+  renderTasks();
 
- document.getElementById("coachFull").textContent=
- advices[0];
+  renderSubjects();
+
+  renderExams();
+
+  renderNotes();
+
+  renderBadges();
+
+  renderStats();
+
+  renderProfile();
+
+  renderHomeStats();
+
+  updateTimer();
+
+
+  document.getElementById(
+    "coachFull"
+  ).textContent =
+    advices[0];
+
 }
+
 
 /* =========================
- START
+START
 ========================= */
 
-if(localStorage.getItem("dt_dark")==="1"){
- document.body.classList.add("dark");
-}
-
-document.getElementById("modal").addEventListener("click",e=>{
- if(e.target.id==="modal")closeModal();
-});
-
 if(
- localStorage.getItem("dt_logged")==="1" &&
- localStorage.getItem("dt_user")
+  localStorage.getItem(
+    "dt_dark"
+  ) === "1"
 ){
 
- user=JSON.parse(localStorage.getItem("dt_user"));
+  document.body.classList.add(
+    "dark"
+  );
 
- openApp();
+}
+
+
+document.getElementById(
+  "modal"
+).addEventListener(
+  "click",
+  e=>{
+
+    if(
+      e.target.id==="modal"
+    ){
+
+      closeModal();
+
+    }
+
+  }
+);
+
+
+if(
+
+  localStorage.getItem(
+    "dt_logged"
+  ) === "1"
+
+  &&
+
+  localStorage.getItem(
+    "dt_user"
+  )
+
+){
+
+  user =
+    JSON.parse(
+      localStorage.getItem(
+        "dt_user"
+      )
+    );
+
+
+  openApp();
 
 }else{
 
- auth.style.display="flex";
- app.style.display="none";
+  auth.style.display="flex";
+
+  app.style.display="none";
 
 }
 
