@@ -4,24 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#635bff">
-
+<meta name="description" content="DersTakip Pro - Derslerini, görevlerini, sınavlarını ve notlarını tek yerden yönet.">
 <title>DersTakip Pro</title>
 
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZC2X3K9CHX"></script>
 <script>
 window.dataLayer = window.dataLayer || [];
-
 function gtag(){
   dataLayer.push(arguments);
 }
-
 gtag('js', new Date());
 gtag('config', 'G-ZC2X3K9CHX');
 </script>
 
 <style>
-
 *{
   box-sizing:border-box;
   margin:0;
@@ -31,23 +28,17 @@ gtag('config', 'G-ZC2X3K9CHX');
 :root{
   --primary:#635bff;
   --primary2:#8b7cff;
-
   --bg:#f5f6fa;
   --card:#ffffff;
-
   --text:#171923;
   --muted:#7c8191;
-
   --border:#e8eaf1;
-
   --dark:#171a2b;
   --dark2:#22263c;
-
   --green:#16b979;
   --red:#ef5364;
   --yellow:#f5ad24;
   --blue:#3b82f6;
-
   --shadow:0 12px 35px rgba(31,35,60,.07);
 }
 
@@ -57,7 +48,6 @@ body.dark{
   --text:#f5f7ff;
   --muted:#9ba2b8;
   --border:#2a3043;
-
   --shadow:0 12px 35px rgba(0,0,0,.25);
 }
 
@@ -89,13 +79,10 @@ AUTH
 
 #auth{
   min-height:100vh;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   padding:20px;
-
   background:
     radial-gradient(circle at 10% 20%,#b9b0ff,transparent 30%),
     radial-gradient(circle at 90% 80%,#ffc8df,transparent 30%),
@@ -106,31 +93,23 @@ AUTH
   width:100%;
   max-width:950px;
   min-height:580px;
-
   display:grid;
   grid-template-columns:1fr 1fr;
-
   background:white;
-
   border-radius:30px;
-
   overflow:hidden;
-
   box-shadow:0 30px 90px #0004;
 }
 
 .auth-left{
   padding:50px;
-
   color:white;
-
   background:
     linear-gradient(
       145deg,
       #5e55ed,
       #917dff
     );
-
   display:flex;
   flex-direction:column;
   justify-content:center;
@@ -158,7 +137,6 @@ AUTH
 
 .auth-right{
   padding:45px;
-
   display:flex;
   flex-direction:column;
   justify-content:center;
@@ -184,24 +162,17 @@ AUTH
 .auth-tabs{
   display:grid;
   grid-template-columns:1fr 1fr;
-
   background:#f0f1f5;
-
   padding:5px;
-
   border-radius:12px;
-
   margin-bottom:20px;
 }
 
 .auth-tabs button{
   border:0;
   background:transparent;
-
   padding:12px;
-
   border-radius:9px;
-
   font-weight:800;
 }
 
@@ -216,10 +187,8 @@ AUTH
 
 .field label{
   display:block;
-
   font-size:13px;
   font-weight:800;
-
   margin-bottom:7px;
 }
 
@@ -227,47 +196,33 @@ AUTH
 .field textarea,
 .field select{
   width:100%;
-
   border:1px solid #dfe2eb;
-
   border-radius:11px;
-
   padding:13px;
-
   outline:none;
-
   background:white;
   color:#171923;
 }
 
 .auth-btn{
   width:100%;
-
   border:0;
-
   background:
     linear-gradient(
       135deg,
       #635bff,
       #8b7cff
     );
-
   color:white;
-
   padding:14px;
-
   border-radius:12px;
-
   font-weight:900;
 }
 
 #authMsg{
   text-align:center;
-
   margin-top:12px;
-
   min-height:20px;
-
   font-size:13px;
 }
 
@@ -281,30 +236,21 @@ APP
 
 .sidebar{
   position:fixed;
-
   left:0;
   top:0;
   bottom:0;
-
   width:245px;
-
   background:var(--dark);
-
   color:white;
-
   padding:25px 17px;
-
   z-index:100;
-
   overflow-y:auto;
 }
 
 .logo{
   font-size:25px;
   font-weight:950;
-
   padding-left:10px;
-
   margin-bottom:35px;
 }
 
@@ -314,23 +260,14 @@ APP
 
 .menu button{
   width:100%;
-
   border:0;
-
   background:transparent;
-
   color:#aeb4c8;
-
   padding:12px;
-
   border-radius:11px;
-
   margin-bottom:5px;
-
   text-align:left;
-
   font-weight:800;
-
   transition:.2s;
 }
 
@@ -346,40 +283,29 @@ APP
 
 .logout button{
   width:100%;
-
   border:0;
-
   background:#292e48;
-
   color:white;
-
   padding:12px;
-
   border-radius:11px;
-
   font-weight:800;
 }
 
 .main{
   margin-left:245px;
-
   padding:30px;
-
   max-width:1650px;
 }
 
 .topbar{
   display:flex;
-
   justify-content:space-between;
   align-items:center;
-
   margin-bottom:25px;
 }
 
 .welcome h1{
   font-size:32px;
-
   margin-bottom:5px;
 }
 
@@ -389,28 +315,19 @@ APP
 
 .profile{
   display:flex;
-
   align-items:center;
-
   gap:10px;
-
   background:var(--card);
-
   padding:8px 13px;
-
   border-radius:13px;
-
   box-shadow:var(--shadow);
 }
 
 .avatar{
   width:40px;
   height:40px;
-
   border-radius:50%;
-
   background:#e8e5ff;
-
   display:grid;
   place-items:center;
 }
@@ -423,15 +340,10 @@ HERO
   background:
     radial-gradient(circle at 90% 15%,#ffffff30,transparent 30%),
     linear-gradient(135deg,#635bff,#8c78ff);
-
   color:white;
-
   padding:28px;
-
   border-radius:22px;
-
   margin-bottom:20px;
-
   box-shadow:0 15px 40px #635bff30;
 }
 
@@ -446,29 +358,21 @@ HERO
 
 .progress{
   height:10px;
-
   background:#ffffff30;
-
   border-radius:20px;
-
   overflow:hidden;
 }
 
 .progress span{
   display:block;
-
   height:100%;
-
   width:0%;
-
   background:white;
-
   transition:.4s;
 }
 
 .xp{
   margin-top:8px;
-
   font-size:13px;
 }
 
@@ -478,32 +382,23 @@ CONTENT
 
 .grid{
   display:grid;
-
   grid-template-columns:2fr 1fr;
-
   gap:20px;
 }
 
 .card{
   background:var(--card);
-
   border:1px solid var(--border);
-
   border-radius:20px;
-
   padding:21px;
-
   box-shadow:var(--shadow);
-
   margin-bottom:20px;
 }
 
 .card-title{
   display:flex;
-
   align-items:center;
   justify-content:space-between;
-
   margin-bottom:16px;
 }
 
@@ -513,29 +408,19 @@ CONTENT
 
 .primary{
   border:0;
-
   background:var(--primary);
-
   color:white;
-
   padding:10px 15px;
-
   border-radius:10px;
-
   font-weight:800;
 }
 
 .secondary{
   border:1px solid var(--border);
-
   background:var(--card);
-
   color:var(--text);
-
   padding:10px 15px;
-
   border-radius:10px;
-
   font-weight:800;
 }
 
@@ -557,44 +442,31 @@ TASKS
 
 .task{
   display:flex;
-
   align-items:center;
-
   gap:12px;
-
   padding:13px 0;
-
   border-bottom:1px solid var(--border);
 }
 
 .check{
   width:27px;
   height:27px;
-
   border:2px solid #d7dbe5;
-
   border-radius:8px;
-
   display:grid;
-
   place-items:center;
-
   flex-shrink:0;
-
   background:transparent;
 }
 
 .task.done .check{
   background:var(--green);
-
   border-color:var(--green);
-
   color:white;
 }
 
 .task.done .task-name{
   text-decoration:line-through;
-
   color:var(--muted);
 }
 
@@ -604,23 +476,16 @@ TASKS
 
 .task-xp{
   margin-left:auto;
-
   font-size:11px;
-
   background:#efeeff;
-
   color:#635bff;
-
   padding:6px 9px;
-
   border-radius:20px;
 }
 
 .delete{
   border:0;
-
   background:transparent;
-
   padding:5px;
 }
 
@@ -630,27 +495,20 @@ STATS
 
 .stats{
   display:grid;
-
   grid-template-columns:repeat(3,1fr);
-
   gap:15px;
 }
 
 .stat{
   background:var(--card);
-
   border:1px solid var(--border);
-
   border-radius:17px;
-
   padding:18px;
 }
 
 .stat strong{
   display:block;
-
   font-size:25px;
-
   margin:8px 0;
 }
 
@@ -677,13 +535,11 @@ body.dark .coach{
 
 .coach-icon{
   font-size:30px;
-
   margin-bottom:10px;
 }
 
 .coach-message{
   color:var(--muted);
-
   line-height:1.7;
 }
 
@@ -697,13 +553,11 @@ AI SOLVE
 
 #page-ai-solve textarea{
   resize:vertical;
-
   min-height:120px;
 }
 
 #aiResult{
   white-space:pre-wrap;
-
   word-break:break-word;
 }
 
@@ -713,37 +567,25 @@ SUBJECTS
 
 .subject-grid{
   display:grid;
-
-  grid-template-columns:
-    repeat(
-      auto-fill,
-      minmax(170px,1fr)
-    );
-
+  grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
   gap:15px;
 }
 
 .subject{
   border:1px solid var(--border);
-
   border-radius:17px;
-
   padding:18px;
-
   background:var(--card);
-
   transition:.2s;
 }
 
 .subject:hover{
   transform:translateY(-3px);
-
   box-shadow:var(--shadow);
 }
 
 .subject-icon{
   font-size:34px;
-
   margin-bottom:10px;
 }
 
@@ -753,13 +595,11 @@ SUBJECTS
 
 .subject p{
   color:var(--muted);
-
   font-size:12px;
 }
 
 .subject button{
   margin-top:12px;
-
   width:100%;
 }
 
@@ -769,31 +609,22 @@ EXAMS
 
 .exam{
   border:1px solid var(--border);
-
   border-radius:16px;
-
   padding:17px;
-
   margin-bottom:12px;
-
   display:flex;
-
   justify-content:space-between;
-
   gap:15px;
-
   align-items:center;
 }
 
 .exam-date{
   color:var(--primary);
-
   font-weight:900;
 }
 
 .exam-actions{
   display:flex;
-
   gap:6px;
 }
 
@@ -803,23 +634,14 @@ NOTES
 
 .notes-grid{
   display:grid;
-
-  grid-template-columns:
-    repeat(
-      auto-fill,
-      minmax(240px,1fr)
-    );
-
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
   gap:15px;
 }
 
 .note{
   border:1px solid var(--border);
-
   border-radius:16px;
-
   padding:17px;
-
   background:var(--card);
 }
 
@@ -829,21 +651,15 @@ NOTES
 
 .note p{
   color:var(--muted);
-
   line-height:1.6;
-
   white-space:pre-wrap;
 }
 
 .note-footer{
   margin-top:15px;
-
   display:flex;
-
   justify-content:space-between;
-
   color:var(--muted);
-
   font-size:12px;
 }
 
@@ -857,19 +673,14 @@ FOCUS
 
 .timer{
   font-size:80px;
-
   font-weight:950;
-
   margin:30px 0;
 }
 
 .focus-buttons{
   display:flex;
-
   justify-content:center;
-
   gap:10px;
-
   flex-wrap:wrap;
 }
 
@@ -879,29 +690,19 @@ BADGES
 
 .badges{
   display:grid;
-
-  grid-template-columns:
-    repeat(
-      auto-fill,
-      minmax(150px,1fr)
-    );
-
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
   gap:14px;
 }
 
 .badge{
   border:1px solid var(--border);
-
   border-radius:17px;
-
   padding:18px;
-
   text-align:center;
 }
 
 .badge-icon{
   font-size:40px;
-
   margin-bottom:8px;
 }
 
@@ -911,7 +712,6 @@ BADGES
 
 .badge.locked{
   opacity:.35;
-
   filter:grayscale(1);
 }
 
@@ -926,43 +726,30 @@ PROFILE
 .profile-avatar{
   width:90px;
   height:90px;
-
   border-radius:50%;
-
   background:#e9e6ff;
-
   display:grid;
-
   place-items:center;
-
   font-size:45px;
-
   margin-bottom:15px;
 }
 
 .profile-info{
   display:grid;
-
   grid-template-columns:1fr 1fr;
-
   gap:15px;
 }
 
 .profile-item{
   background:var(--bg);
-
   padding:15px;
-
   border-radius:12px;
 }
 
 .profile-item span{
   display:block;
-
   color:var(--muted);
-
   font-size:12px;
-
   margin-bottom:5px;
 }
 
@@ -976,33 +763,24 @@ DERS KOÇU
 
 .coach-header{
   display:flex;
-
   align-items:center;
-
   gap:14px;
-
   margin-bottom:20px;
 }
 
 .coach-avatar{
   width:55px;
   height:55px;
-
   border-radius:16px;
-
   background:
     linear-gradient(
       135deg,
       #635bff,
       #9b8cff
     );
-
   color:white;
-
   display:grid;
-
   place-items:center;
-
   font-size:28px;
 }
 
@@ -1012,7 +790,6 @@ DERS KOÇU
 
 .coach-title p{
   color:var(--muted);
-
   font-size:13px;
 }
 
@@ -1020,41 +797,27 @@ DERS KOÇU
 
 .chat-box{
   height:500px;
-
   overflow-y:auto;
-
   padding:20px;
-
   background:var(--bg);
-
   border-radius:18px;
-
   border:1px solid var(--border);
-
   margin-bottom:15px;
-
   scroll-behavior:smooth;
 }
 
 .chat-empty{
   min-height:100%;
-
   display:flex;
-
   align-items:center;
-
   justify-content:center;
-
   text-align:center;
-
   color:var(--muted);
-
   padding:30px;
 }
 
 .chat-message{
   display:flex;
-
   margin-bottom:16px;
 }
 
@@ -1068,47 +831,32 @@ DERS KOÇU
 
 .message-bubble{
   max-width:78%;
-
   padding:13px 16px;
-
   border-radius:17px;
-
   line-height:1.6;
-
   white-space:pre-wrap;
-
   word-break:break-word;
-
   font-size:14px;
 }
 
 .chat-message.user .message-bubble{
   background:var(--primary);
-
   color:white;
-
   border-bottom-right-radius:5px;
 }
 
 .chat-message.ai .message-bubble{
   background:var(--card);
-
   color:var(--text);
-
   border:1px solid var(--border);
-
   border-bottom-left-radius:5px;
-
   box-shadow:0 5px 18px rgba(0,0,0,.04);
 }
 
 .message-label{
   font-size:10px;
-
   color:var(--muted);
-
   margin-bottom:4px;
-
   font-weight:700;
 }
 
@@ -1118,20 +866,15 @@ DERS KOÇU
 
 .typing{
   display:inline-flex;
-
   gap:4px;
-
   align-items:center;
 }
 
 .typing span{
   width:6px;
   height:6px;
-
   border-radius:50%;
-
   background:var(--muted);
-
   animation:typing 1s infinite;
 }
 
@@ -1157,104 +900,70 @@ DERS KOÇU
 
 .chat-options{
   display:flex;
-
   gap:8px;
-
   flex-wrap:wrap;
-
   margin-bottom:12px;
 }
 
 .chat-option{
   border:1px solid var(--border);
-
   background:var(--card);
-
   color:var(--text);
-
   padding:8px 12px;
-
   border-radius:20px;
-
   font-size:12px;
-
   font-weight:700;
 }
 
 .chat-option:hover{
   border-color:var(--primary);
-
   color:var(--primary);
 }
 
 .chat-input-area{
   display:flex;
-
   gap:10px;
-
   align-items:flex-end;
 }
 
 #coachInput{
   flex:1;
-
   min-height:52px;
-
   max-height:150px;
-
   resize:none;
-
   border:1px solid var(--border);
-
   border-radius:15px;
-
   padding:14px;
-
   outline:none;
-
   background:var(--card);
-
   color:var(--text);
 }
 
 #coachInput:focus{
   border-color:var(--primary);
-
-  box-shadow:
-    0 0 0 3px
-    rgba(99,91,255,.12);
+  box-shadow:0 0 0 3px rgba(99,91,255,.12);
 }
 
 .send-button{
   width:54px;
   height:52px;
-
   border:0;
-
   border-radius:15px;
-
   background:var(--primary);
-
   color:white;
-
   font-size:21px;
-
   flex-shrink:0;
 }
 
 .send-button:disabled{
   opacity:.5;
-
   cursor:not-allowed;
 }
 
 .coach-tools{
   display:flex;
-
   justify-content:space-between;
-
   align-items:center;
-
   margin-top:12px;
 }
 
@@ -1264,12 +973,110 @@ DERS KOÇU
 
 .new-chat{
   border:0;
-
   background:transparent;
-
   color:var(--primary);
-
   font-weight:800;
+}
+
+/* =========================
+LEGAL / INFORMATION PAGES
+========================= */
+
+.legal-page{
+  max-width:950px;
+}
+
+.legal-page h2{
+  margin-bottom:20px;
+}
+
+.legal-page h3{
+  margin-top:25px;
+  margin-bottom:9px;
+  font-size:17px;
+}
+
+.legal-page p{
+  color:var(--muted);
+  line-height:1.8;
+  margin-bottom:12px;
+}
+
+.legal-page ul{
+  margin:10px 0 15px 22px;
+  color:var(--muted);
+  line-height:1.9;
+}
+
+.info-highlight{
+  padding:16px;
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:14px;
+  margin:15px 0;
+}
+
+.contact-box{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+  margin-top:20px;
+}
+
+.contact-item{
+  background:var(--bg);
+  padding:18px;
+  border-radius:15px;
+  border:1px solid var(--border);
+}
+
+.contact-item strong{
+  display:block;
+  margin-bottom:7px;
+}
+
+.contact-item span{
+  color:var(--muted);
+  line-height:1.6;
+}
+
+/* =========================
+FOOTER
+========================= */
+
+.site-footer{
+  margin-top:40px;
+  padding:25px 10px 10px;
+  border-top:1px solid var(--border);
+  color:var(--muted);
+  text-align:center;
+}
+
+.footer-links{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px 18px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+
+.footer-links button{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+  padding:5px;
+}
+
+.footer-links button:hover{
+  color:var(--primary);
+}
+
+.footer-copy{
+  font-size:12px;
 }
 
 /* =========================
@@ -1278,21 +1085,13 @@ MODAL
 
 .modal{
   position:fixed;
-
   inset:0;
-
   background:#0008;
-
   backdrop-filter:blur(6px);
-
   display:none;
-
   align-items:center;
-
   justify-content:center;
-
   z-index:9999;
-
   padding:20px;
 }
 
@@ -1302,39 +1101,26 @@ MODAL
 
 .modal-box{
   width:100%;
-
   max-width:520px;
-
   background:var(--card);
-
   color:var(--text);
-
   border-radius:22px;
-
   padding:23px;
-
   max-height:90vh;
-
   overflow:auto;
 }
 
 .modal-head{
   display:flex;
-
   justify-content:space-between;
-
   align-items:center;
-
   margin-bottom:20px;
 }
 
 .close{
   border:0;
-
   background:transparent;
-
   font-size:24px;
-
   color:var(--text);
 }
 
@@ -1344,31 +1130,20 @@ TOAST
 
 #toast{
   position:fixed;
-
   right:20px;
-
   bottom:20px;
-
   z-index:20000;
-
   display:flex;
-
   flex-direction:column;
-
   gap:8px;
 }
 
 .toast{
   background:var(--dark);
-
   color:white;
-
   padding:13px 17px;
-
   border-radius:13px;
-
   box-shadow:0 15px 35px #0004;
-
   animation:toast .3s;
 }
 
@@ -1390,48 +1165,32 @@ MOBILE
 
 .mobile-btn{
   display:none;
-
   position:fixed;
-
   right:15px;
   top:15px;
-
   z-index:500;
-
   width:46px;
   height:46px;
-
   border:0;
-
   border-radius:13px;
-
   background:var(--dark);
-
   color:white;
-
   font-size:22px;
 }
 
 .mobile-menu{
   position:fixed;
-
   top:0;
-
   right:-290px;
-
   width:280px;
-
   height:100vh;
-
   background:var(--dark);
-
   color:white;
-
   z-index:1000;
-
   padding:25px 18px;
-
   transition:.25s;
+  overflow-y:auto;
+  box-shadow:-15px 0 40px rgba(0,0,0,.2);
 }
 
 .mobile-menu.open{
@@ -1440,37 +1199,31 @@ MOBILE
 
 .mobile-menu button{
   width:100%;
-
   border:0;
-
   background:transparent;
-
   color:#adb4c8;
-
   padding:13px;
-
   border-radius:10px;
-
   text-align:left;
-
   margin-bottom:5px;
-
   font-weight:800;
+}
+
+.mobile-menu button:hover{
+  background:#292e48;
+  color:white;
 }
 
 .mobile-head{
   display:flex;
-
   justify-content:space-between;
-
+  align-items:center;
   margin-bottom:20px;
 }
 
 .mobile-head button{
   width:auto;
-
   color:white;
-
   font-size:22px;
 }
 
@@ -1486,21 +1239,17 @@ RESPONSIVE
 
   .logo{
     font-size:0;
-
     text-align:center;
-
     padding:0;
   }
 
   .logo:after{
     content:"DT";
-
     font-size:22px;
   }
 
   .menu button{
     font-size:0;
-
     text-align:center;
   }
 
@@ -1514,7 +1263,6 @@ RESPONSIVE
 
   .logout button:after{
     content:"🚪";
-
     font-size:20px;
   }
 
@@ -1539,7 +1287,6 @@ RESPONSIVE
 
   .main{
     margin-left:0;
-
     padding:15px;
   }
 
@@ -1581,7 +1328,6 @@ RESPONSIVE
 
   .exam{
     flex-direction:column;
-
     align-items:flex-start;
   }
 
@@ -1591,7 +1337,6 @@ RESPONSIVE
 
   .chat-box{
     height:55vh;
-
     padding:12px;
   }
 
@@ -1609,13 +1354,41 @@ RESPONSIVE
 
   .coach-tools{
     flex-direction:column;
-
     align-items:flex-start;
-
     gap:8px;
+  }
+
+  .contact-box{
+    grid-template-columns:1fr;
+  }
+
+  .footer-links{
+    gap:5px 12px;
+  }
+
+  .legal-page{
+    padding:5px;
   }
 }
 
+@media(max-width:400px){
+
+  .subject-grid{
+    grid-template-columns:1fr;
+  }
+
+  .hero{
+    padding:20px;
+  }
+
+  .card{
+    padding:17px;
+  }
+
+  .auth-right{
+    padding:25px 17px;
+  }
+}
 </style>
 </head>
 
@@ -1627,144 +1400,149 @@ AUTH
 
 <section id="auth">
 
-<div class="auth-box">
+  <div class="auth-box">
 
-<div class="auth-left">
+    <div class="auth-left">
 
-<h1>
-Ders çalışmak<br>
-<span>artık daha kolay.</span>
-</h1>
+      <h1>
+        Ders çalışmak<br>
+        <span>artık daha kolay.</span>
+      </h1>
 
-<p>
-Derslerini, görevlerini, sınavlarını ve notlarını
-tek bir yerden yönet.
-</p>
+      <p>
+        Derslerini, görevlerini, sınavlarını ve notlarını
+        tek bir yerden yönet.
+      </p>
 
-<div class="auth-icon">
-📚
-</div>
+      <div class="auth-icon">
+        📚
+      </div>
 
-</div>
+    </div>
 
-<div class="auth-right">
+    <div class="auth-right">
 
-<div class="auth-logo">
-Ders<span>Takip</span>
-</div>
+      <div class="auth-logo">
+        Ders<span>Takip</span>
+      </div>
 
-<p class="auth-subtitle">
-Kendi çalışma sistemini oluştur.
-</p>
+      <p class="auth-subtitle">
+        Kendi çalışma sistemini oluştur.
+      </p>
 
-<div class="auth-tabs">
+      <div class="auth-tabs">
 
-<button
-id="loginTab"
-class="active"
-onclick="showLogin()">
-Giriş Yap
-</button>
+        <button
+          id="loginTab"
+          class="active"
+          onclick="showLogin()">
+          Giriş Yap
+        </button>
 
-<button
-id="registerTab"
-onclick="showRegister()">
-Kayıt Ol
-</button>
+        <button
+          id="registerTab"
+          onclick="showRegister()">
+          Kayıt Ol
+        </button>
 
-</div>
+      </div>
 
-<form
-id="loginForm"
-onsubmit="login(event)">
+      <form
+        id="loginForm"
+        onsubmit="login(event)">
 
-<div class="field">
+        <div class="field">
 
-<label>
-E-posta
-</label>
+          <label>
+            E-posta
+          </label>
 
-<input
-id="loginEmail"
-type="email"
-required>
+          <input
+            id="loginEmail"
+            type="email"
+            autocomplete="email"
+            required>
 
-</div>
+        </div>
 
-<div class="field">
+        <div class="field">
 
-<label>
-Şifre
-</label>
+          <label>
+            Şifre
+          </label>
 
-<input
-id="loginPassword"
-type="password"
-required>
+          <input
+            id="loginPassword"
+            type="password"
+            autocomplete="current-password"
+            required>
 
-</div>
+        </div>
 
-<button class="auth-btn">
-Giriş Yap 🚀
-</button>
+        <button class="auth-btn">
+          Giriş Yap 🚀
+        </button>
 
-</form>
+      </form>
 
-<form
-id="registerForm"
-class="hidden"
-onsubmit="register(event)">
+      <form
+        id="registerForm"
+        class="hidden"
+        onsubmit="register(event)">
 
-<div class="field">
+        <div class="field">
 
-<label>
-Ad Soyad
-</label>
+          <label>
+            Ad Soyad
+          </label>
 
-<input
-id="registerName"
-required>
+          <input
+            id="registerName"
+            autocomplete="name"
+            required>
 
-</div>
+        </div>
 
-<div class="field">
+        <div class="field">
 
-<label>
-E-posta
-</label>
+          <label>
+            E-posta
+          </label>
 
-<input
-id="registerEmail"
-type="email"
-required>
+          <input
+            id="registerEmail"
+            type="email"
+            autocomplete="email"
+            required>
 
-</div>
+        </div>
 
-<div class="field">
+        <div class="field">
 
-<label>
-Şifre
-</label>
+          <label>
+            Şifre
+          </label>
 
-<input
-id="registerPassword"
-type="password"
-minlength="6"
-required>
+          <input
+            id="registerPassword"
+            type="password"
+            minlength="6"
+            autocomplete="new-password"
+            required>
 
-</div>
+        </div>
 
-<button class="auth-btn">
-Hesap Oluştur ✨
-</button>
+        <button class="auth-btn">
+          Hesap Oluştur ✨
+        </button>
 
-</form>
+      </form>
 
-<div id="authMsg"></div>
+      <div id="authMsg"></div>
 
-</div>
+    </div>
 
-</div>
+  </div>
 
 </section>
 
@@ -1775,1114 +1553,1636 @@ APP
 
 <div id="app">
 
-<aside class="sidebar">
-
-<div class="logo">
-Ders<span>Takip</span>
-</div>
-
-<div class="menu">
-
-<button
-data-page="home"
-class="active"
-onclick="navigate('home')">
-🏠 Ana Sayfa
-</button>
-
-<button
-data-page="ai-solve"
-onclick="navigate('ai-solve')">
-🧠 Soru Çöz
-</button>
-
-<button
-data-page="tasks"
-onclick="navigate('tasks')">
-✅ Görevler
-</button>
-
-<button
-data-page="subjects"
-onclick="navigate('subjects')">
-📚 Dersler
-</button>
-
-<button
-data-page="exams"
-onclick="navigate('exams')">
-📅 Sınavlar
-</button>
-
-<button
-data-page="notes"
-onclick="navigate('notes')">
-📝 Notlar
-</button>
-
-<button
-data-page="focus"
-onclick="navigate('focus')">
-⏱️ Odaklan
-</button>
-
-<button
-data-page="coach"
-onclick="navigate('coach')">
-🤖 Ders Koçu
-</button>
-
-<button
-data-page="achievements"
-onclick="navigate('achievements')">
-🏆 Rozetler
-</button>
+  <aside class="sidebar">
+
+    <div class="logo">
+      Ders<span>Takip</span>
+    </div>
+
+    <div class="menu">
+
+      <button
+        data-page="home"
+        class="active"
+        onclick="navigate('home')">
+        🏠 Ana Sayfa
+      </button>
+
+      <button
+        data-page="ai-solve"
+        onclick="navigate('ai-solve')">
+        🧠 Soru Çöz
+      </button>
+
+      <button
+        data-page="tasks"
+        onclick="navigate('tasks')">
+        ✅ Görevler
+      </button>
+
+      <button
+        data-page="subjects"
+        onclick="navigate('subjects')">
+        📚 Dersler
+      </button>
+
+      <button
+        data-page="exams"
+        onclick="navigate('exams')">
+        📅 Sınavlar
+      </button>
+
+      <button
+        data-page="notes"
+        onclick="navigate('notes')">
+        📝 Notlar
+      </button>
+
+      <button
+        data-page="focus"
+        onclick="navigate('focus')">
+        ⏱️ Odaklan
+      </button>
+
+      <button
+        data-page="coach"
+        onclick="navigate('coach')">
+        🤖 Ders Koçu
+      </button>
+
+      <button
+        data-page="achievements"
+        onclick="navigate('achievements')">
+        🏆 Rozetler
+      </button>
+
+      <button
+        data-page="stats"
+        onclick="navigate('stats')">
+        📊 İstatistikler
+      </button>
 
-<button
-data-page="stats"
-onclick="navigate('stats')">
-📊 İstatistikler
-</button>
+      <button
+        data-page="profile"
+        onclick="navigate('profile')">
+        👤 Profil
+      </button>
+
+    </div>
 
-<button
-data-page="profile"
-onclick="navigate('profile')">
-👤 Profil
-</button>
+    <div class="logout">
+
+      <button onclick="logout()">
+        🚪 Çıkış Yap
+      </button>
+
+    </div>
 
-</div>
+  </aside>
+
+
+  <!-- MOBILE MENU BUTTON -->
+
+  <button
+    class="mobile-btn"
+    onclick="toggleMobile()"
+    aria-label="Menüyü aç">
+    ☰
+  </button>
 
-<div class="logout">
 
-<button onclick="logout()">
-🚪 Çıkış Yap
-</button>
+  <!-- MOBILE MENU -->
 
-</div>
+  <div
+    class="mobile-menu"
+    id="mobileMenu">
 
-</aside>
+    <div class="mobile-head">
 
+      <strong>
+        DersTakip
+      </strong>
 
-<button
-class="mobile-btn"
-onclick="toggleMobile()">
-☰
-</button>
+      <button
+        onclick="toggleMobile()"
+        aria-label="Menüyü kapat">
+        ✕
+      </button>
 
+    </div>
 
-<div
-class="mobile-menu"
-id="mobileMenu">
+    <button onclick="navigateMobile('home')">
+      🏠 Ana Sayfa
+    </button>
 
-<div class="mobile-head">
+    <button onclick="navigateMobile('ai-solve')">
+      🧠 Soru Çöz
+    </button>
 
-<strong>
-DersTakip
-</strong>
+    <button onclick="navigateMobile('tasks')">
+      ✅ Görevler
+    </button>
 
-<button onclick="toggleMobile()">
-✕
-</button>
+    <button onclick="navigateMobile('subjects')">
+      📚 Dersler
+    </button>
 
-</div>
+    <button onclick="navigateMobile('exams')">
+      📅 Sınavlar
+    </button>
 
-<button onclick="navigateMobile('home')">
-🏠 Ana Sayfa
-</button>
+    <button onclick="navigateMobile('notes')">
+      📝 Notlar
+    </button>
 
-<button onclick="navigateMobile('ai-solve')">
-🧠 Soru Çöz
-</button>
+    <button onclick="navigateMobile('focus')">
+      ⏱️ Odaklan
+    </button>
 
-<button onclick="navigateMobile('tasks')">
-✅ Görevler
-</button>
+    <button onclick="navigateMobile('coach')">
+      🤖 Ders Koçu
+    </button>
 
-<button onclick="navigateMobile('subjects')">
-📚 Dersler
-</button>
+    <button onclick="navigateMobile('achievements')">
+      🏆 Rozetler
+    </button>
 
-<button onclick="navigateMobile('exams')">
-📅 Sınavlar
-</button>
+    <button onclick="navigateMobile('stats')">
+      📊 İstatistikler
+    </button>
 
-<button onclick="navigateMobile('notes')">
-📝 Notlar
-</button>
+    <button onclick="navigateMobile('profile')">
+      👤 Profil
+    </button>
 
-<button onclick="navigateMobile('focus')">
-⏱️ Odaklan
-</button>
+    <hr style="border:0;border-top:1px solid #292e48;margin:15px 0;">
 
-<button onclick="navigateMobile('coach')">
-🤖 Ders Koçu
-</button>
+    <button onclick="navigateMobile('about')">
+      ℹ️ Hakkımızda
+    </button>
 
-<button onclick="navigateMobile('achievements')">
-🏆 Rozetler
-</button>
+    <button onclick="navigateMobile('privacy')">
+      🔒 Gizlilik Politikası
+    </button>
 
-<button onclick="navigateMobile('stats')">
-📊 İstatistikler
-</button>
+    <button onclick="navigateMobile('cookies')">
+      🍪 Çerez Politikası
+    </button>
 
-<button onclick="navigateMobile('profile')">
-👤 Profil
-</button>
+    <button onclick="navigateMobile('terms')">
+      📜 Kullanım Koşulları
+    </button>
 
-</div>
+    <button onclick="navigateMobile('disclaimer')">
+      ⚠️ Sorumluluk Reddi
+    </button>
 
+    <button onclick="navigateMobile('contact')">
+      📩 İletişim
+    </button>
 
-<main class="main">
+    <hr style="border:0;border-top:1px solid #292e48;margin:15px 0;">
 
-<div class="topbar">
+    <button onclick="logout()">
+      🚪 Çıkış Yap
+    </button>
 
-<div class="welcome">
+  </div>
 
-<h1 id="welcome">
-Merhaba! 👋
-</h1>
 
-<p id="subtitle">
-Bugün küçük bir adım, yarın büyük bir başarı.
-</p>
+  <main class="main">
 
-</div>
+    <div class="topbar">
 
-<div class="profile">
+      <div class="welcome">
 
-<div class="avatar">
-🎓
-</div>
+        <h1 id="welcome">
+          Merhaba! 👋
+        </h1>
 
-<strong id="topLevel">
-Seviye 1
-</strong>
+        <p id="subtitle">
+          Bugün küçük bir adım, yarın büyük bir başarı.
+        </p>
 
-</div>
+      </div>
 
-</div>
+      <div class="profile">
 
+        <div class="avatar">
+          🎓
+        </div>
 
-<!-- =====================================================
-HOME
-===================================================== -->
+        <strong id="topLevel">
+          Seviye 1
+        </strong>
 
-<section
-id="page-home"
-class="page active">
+      </div>
 
-<div class="hero">
+    </div>
 
-<h2>
-Bugünkü çalışma durumun 🎯
-</h2>
 
-<p id="homeSummary">
-Bugün için henüz görev eklemedin.
-</p>
+    <!-- =====================================================
+    HOME
+    ===================================================== -->
 
-<div class="progress">
+    <section
+      id="page-home"
+      class="page active">
 
-<span id="progress"></span>
+      <div class="hero">
 
-</div>
+        <h2>
+          Bugünkü çalışma durumun 🎯
+        </h2>
 
-<div
-class="xp"
-id="homeXP">
-0 XP
-</div>
+        <p id="homeSummary">
+          Bugün için henüz görev eklemedin.
+        </p>
 
-</div>
+        <div class="progress">
+          <span id="progress"></span>
+        </div>
 
+        <div
+          class="xp"
+          id="homeXP">
+          0 XP
+        </div>
 
-<div class="grid">
+      </div>
 
-<div>
 
-<div class="card coach">
+      <div class="grid">
 
-<div class="coach-icon">
-🤖
-</div>
+        <div>
 
-<h2>
-Ders Koçu
-</h2>
+          <div class="card coach">
 
-<p
-class="coach-message"
-id="homeCoach">
-Ders Koçu'na giderek benimle konuşabilirsin.
-</p>
+            <div class="coach-icon">
+              🤖
+            </div>
 
-<br>
+            <h2>
+              Ders Koçu
+            </h2>
 
-<button
-class="primary"
-onclick="navigate('coach')">
-Ders Koçuyla Konuş
-</button>
+            <p
+              class="coach-message"
+              id="homeCoach">
+              Ders Koçu'na giderek benimle konuşabilirsin.
+            </p>
 
-</div>
+            <br>
 
+            <button
+              class="primary"
+              onclick="navigate('coach')">
+              Ders Koçuyla Konuş
+            </button>
 
-<div class="card">
+          </div>
 
-<div class="card-title">
 
-<h2>
-Bugünkü Görevler
-</h2>
+          <div class="card">
 
-<span id="taskCounter">
-0 / 0
-</span>
+            <div class="card-title">
 
-</div>
+              <h2>
+                Bugünkü Görevler
+              </h2>
 
-<div id="homeTasks"></div>
+              <span id="taskCounter">
+                0 / 0
+              </span>
 
-<button
-class="secondary"
-onclick="navigate('tasks')">
+            </div>
 
-Tüm Görevleri Gör
+            <div id="homeTasks"></div>
 
-</button>
+            <button
+              class="secondary"
+              onclick="navigate('tasks')">
+              Tüm Görevleri Gör
+            </button>
 
-</div>
+          </div>
 
-</div>
+        </div>
 
 
-<div>
+        <div>
 
-<div class="card">
+          <div class="card">
 
-<h2>
-Bugünün Özeti
-</h2>
+            <h2>
+              Bugünün Özeti
+            </h2>
 
-<div
-class="profile-info"
-style="margin-top:15px">
+            <div
+              class="profile-info"
+              style="margin-top:15px">
 
-<div class="profile-item">
+              <div class="profile-item">
 
-<span>
-⭐ XP
-</span>
+                <span>
+                  ⭐ XP
+                </span>
 
-<strong id="homeStatXP">
-0
-</strong>
+                <strong id="homeStatXP">
+                  0
+                </strong>
 
-</div>
+              </div>
 
-<div class="profile-item">
+              <div class="profile-item">
 
-<span>
-🔥 Seri
-</span>
+                <span>
+                  🔥 Seri
+                </span>
 
-<strong id="homeStatStreak">
-0 gün
-</strong>
+                <strong id="homeStatStreak">
+                  0 gün
+                </strong>
 
-</div>
+              </div>
 
-<div class="profile-item">
+              <div class="profile-item">
 
-<span>
-📚 Ders
-</span>
+                <span>
+                  📚 Ders
+                </span>
 
-<strong id="homeStatSubjects">
-0
-</strong>
+                <strong id="homeStatSubjects">
+                  0
+                </strong>
 
-</div>
+              </div>
 
-<div class="profile-item">
+              <div class="profile-item">
 
-<span>
-📅 Sınav
-</span>
+                <span>
+                  📅 Sınav
+                </span>
 
-<strong id="homeStatExams">
-0
-</strong>
+                <strong id="homeStatExams">
+                  0
+                </strong>
 
-</div>
+              </div>
 
-</div>
+            </div>
 
-</div>
+          </div>
 
-</div>
+        </div>
 
-</div>
+      </div>
 
-</section>
+    </section>
 
 
-<!-- =====================================================
-AI SOLVE
-===================================================== -->
+    <!-- =====================================================
+    AI SOLVE
+    ===================================================== -->
 
-<section
-id="page-ai-solve"
-class="page">
+    <section
+      id="page-ai-solve"
+      class="page">
 
-<div class="card">
+      <div class="card">
 
-<div class="card-title">
+        <div class="card-title">
 
-<div>
+          <div>
 
-<h2>
-🧠 Yapay Zeka ile Soru Çöz
-</h2>
+            <h2>
+              🧠 Yapay Zeka ile Soru Çöz
+            </h2>
 
-<p
-style="color:var(--muted);margin-top:5px">
+            <p style="color:var(--muted);margin-top:5px">
+              Sorunu yaz veya fotoğrafını yükle.
+            </p>
 
-Sorunu yaz veya fotoğrafını yükle.
+          </div>
 
-</p>
+        </div>
 
-</div>
 
-</div>
+        <div class="field">
 
+          <label>
+            Ders
+          </label>
 
-<div class="field">
+          <select id="aiSubject">
 
-<label>
-Ders
-</label>
+            <option>Matematik</option>
+            <option>Türkçe</option>
+            <option>Fen Bilimleri</option>
+            <option>Sosyal Bilgiler</option>
+            <option>İngilizce</option>
+            <option>Din Kültürü</option>
+            <option>Bilişim Teknolojileri</option>
+            <option>Diğer</option>
 
-<select id="aiSubject">
+          </select>
 
-<option>Matematik</option>
-<option>Türkçe</option>
-<option>Fen Bilimleri</option>
-<option>Sosyal Bilgiler</option>
-<option>İngilizce</option>
-<option>Din Kültürü</option>
-<option>Bilişim Teknolojileri</option>
-<option>Diğer</option>
+        </div>
 
-</select>
 
-</div>
+        <div class="field">
 
+          <label>
+            Anlatım Şekli
+          </label>
 
-<div class="field">
+          <select id="aiMode">
 
-<label>
-Anlatım Şekli
-</label>
+            <option value="Adım adım">
+              Adım adım
+            </option>
 
-<select id="aiMode">
+            <option value="Kısa ve kolay">
+              Kısa ve kolay
+            </option>
 
-<option value="Adım adım">
-Adım adım
-</option>
+            <option value="Detaylı">
+              Detaylı
+            </option>
 
-<option value="Kısa ve kolay">
-Kısa ve kolay
-</option>
+            <option value="Sınav için hızlı çözüm">
+              Sınav için hızlı çözüm
+            </option>
 
-<option value="Detaylı">
-Detaylı
-</option>
+          </select>
 
-<option value="Sınav için hızlı çözüm">
-Sınav için hızlı çözüm
-</option>
+        </div>
 
-</select>
 
-</div>
+        <div class="field">
 
+          <label>
+            Soruyu Yaz
+          </label>
 
-<div class="field">
+          <textarea
+            id="aiQuestion"
+            rows="6"
+            placeholder="Örneğin: 2x + 5 = 17 ise x kaçtır?"></textarea>
 
-<label>
-Soruyu Yaz
-</label>
+        </div>
 
-<textarea
-id="aiQuestion"
-rows="6"
-placeholder="Örneğin: 2x + 5 = 17 ise x kaçtır?"></textarea>
 
-</div>
+        <div class="field">
 
+          <label>
+            Veya Soru Fotoğrafı Yükle
+          </label>
 
-<div class="field">
+          <input
+            id="aiImage"
+            type="file"
+            accept="image/*"
+            onchange="previewAIImage(event)">
 
-<label>
-Veya Soru Fotoğrafı Yükle
-</label>
+        </div>
 
-<input
-id="aiImage"
-type="file"
-accept="image/*"
-onchange="previewAIImage(event)">
 
-</div>
+        <div
+          id="aiImagePreview"
+          style="display:none;margin-bottom:15px">
 
+          <img
+            id="aiPreview"
+            alt="Soru önizleme"
+            style="max-width:100%;max-height:300px;border-radius:15px;border:1px solid var(--border)">
 
-<div
-id="aiImagePreview"
-style="display:none;margin-bottom:15px">
+        </div>
 
-<img
-id="aiPreview"
-style="max-width:100%;max-height:300px;border-radius:15px;border:1px solid var(--border)">
 
-</div>
+        <button
+          class="primary"
+          id="aiSolveButton"
+          onclick="solveAIQuestion()"
+          style="width:100%;padding:14px;font-size:16px">
 
+          🧠 Soruyu Çöz
 
-<button
-class="primary"
-id="aiSolveButton"
-onclick="solveAIQuestion()"
-style="width:100%;padding:14px;font-size:16px">
+        </button>
 
-🧠 Soruyu Çöz
 
-</button>
+        <div
+          id="aiLoading"
+          style="display:none;text-align:center;padding:25px;color:var(--muted)">
 
+          <div style="font-size:35px">
+            🤖
+          </div>
 
-<div
-id="aiLoading"
-style="display:none;text-align:center;padding:25px;color:var(--muted)">
+          <strong>
+            Yapay zeka soruyu çözüyor...
+          </strong>
 
-<div style="font-size:35px">
-🤖
-</div>
+        </div>
 
-<strong>
-Yapay zeka soruyu çözüyor...
-</strong>
 
-</div>
+        <div
+          id="aiResult"
+          style="
+          display:none;
+          margin-top:20px;
+          padding:20px;
+          border-radius:16px;
+          background:var(--bg);
+          border:1px solid var(--border);
+          line-height:1.8;
+          white-space:pre-wrap;
+          ">
+        </div>
 
+      </div>
 
-<div
-id="aiResult"
-style="
-display:none;
-margin-top:20px;
-padding:20px;
-border-radius:16px;
-background:var(--bg);
-border:1px solid var(--border);
-line-height:1.8;
-white-space:pre-wrap;
-">
+    </section>
 
-</div>
 
-</div>
+    <!-- =====================================================
+    TASKS
+    ===================================================== -->
 
-</section>
+    <section
+      id="page-tasks"
+      class="page">
 
+      <div class="card">
 
-<!-- =====================================================
-TASKS
-===================================================== -->
+        <div class="card-title">
 
-<section
-id="page-tasks"
-class="page">
+          <div>
 
-<div class="card">
+            <h2>
+              Görevler
+            </h2>
 
-<div class="card-title">
+            <p style="color:var(--muted);margin-top:5px">
+              Çalışma hedeflerini buradan yönet.
+            </p>
 
-<div>
+          </div>
 
-<h2>
-Görevler
-</h2>
+          <button
+            class="primary"
+            onclick="openTaskModal()">
+            + Görev
+          </button>
 
-<p style="color:var(--muted);margin-top:5px">
-Çalışma hedeflerini buradan yönet.
-</p>
+        </div>
 
-</div>
+        <div id="allTasks"></div>
 
-<button
-class="primary"
-onclick="openTaskModal()">
-+ Görev
-</button>
+      </div>
 
-</div>
+    </section>
 
-<div id="allTasks"></div>
 
-</div>
+    <!-- =====================================================
+    SUBJECTS
+    ===================================================== -->
 
-</section>
+    <section
+      id="page-subjects"
+      class="page">
 
+      <div class="card">
 
-<!-- =====================================================
-SUBJECTS
-===================================================== -->
+        <div class="card-title">
 
-<section
-id="page-subjects"
-class="page">
+          <div>
 
-<div class="card">
+            <h2>
+              Derslerim 📚
+            </h2>
 
-<div class="card-title">
+            <p style="color:var(--muted);margin-top:5px">
+              Çalıştığın dersleri yönet.
+            </p>
 
-<div>
+          </div>
 
-<h2>
-Derslerim 📚
-</h2>
+          <button
+            class="primary"
+            onclick="openSubjectModal()">
+            + Ders Ekle
+          </button>
 
-<p style="color:var(--muted);margin-top:5px">
-Çalıştığın dersleri yönet.
-</p>
+        </div>
 
-</div>
+        <div
+          class="subject-grid"
+          id="subjectsGrid">
+        </div>
 
-<button
-class="primary"
-onclick="openSubjectModal()">
-+ Ders Ekle
-</button>
+      </div>
 
-</div>
+    </section>
 
-<div
-class="subject-grid"
-id="subjectsGrid">
 
-</div>
+    <!-- =====================================================
+    EXAMS
+    ===================================================== -->
 
-</div>
+    <section
+      id="page-exams"
+      class="page">
 
-</section>
+      <div class="card">
 
+        <div class="card-title">
 
-<!-- =====================================================
-EXAMS
-===================================================== -->
+          <div>
 
-<section
-id="page-exams"
-class="page">
+            <h2>
+              Sınav Takvimi 📅
+            </h2>
 
-<div class="card">
+            <p style="color:var(--muted);margin-top:5px">
+              Sınavlarını takip et.
+            </p>
 
-<div class="card-title">
+          </div>
 
-<div>
+          <button
+            class="primary"
+            onclick="openExamModal()">
+            + Sınav Ekle
+          </button>
 
-<h2>
-Sınav Takvimi 📅
-</h2>
+        </div>
 
-<p style="color:var(--muted);margin-top:5px">
-Sınavlarını takip et.
-</p>
+        <div id="examList"></div>
 
-</div>
+      </div>
 
-<button
-class="primary"
-onclick="openExamModal()">
-+ Sınav Ekle
-</button>
+    </section>
 
-</div>
 
-<div id="examList"></div>
+    <!-- =====================================================
+    NOTES
+    ===================================================== -->
 
-</div>
+    <section
+      id="page-notes"
+      class="page">
 
-</section>
+      <div class="card">
 
+        <div class="card-title">
 
-<!-- =====================================================
-NOTES
-===================================================== -->
+          <div>
 
-<section
-id="page-notes"
-class="page">
+            <h2>
+              Notlarım 📝
+            </h2>
 
-<div class="card">
+          </div>
 
-<div class="card-title">
+          <button
+            class="primary"
+            onclick="openNoteModal()">
+            + Yeni Not
+          </button>
 
-<div>
+        </div>
 
-<h2>
-Notlarım 📝
-</h2>
+        <div
+          class="notes-grid"
+          id="notesGrid">
+        </div>
 
-</div>
+      </div>
 
-<button
-class="primary"
-onclick="openNoteModal()">
-+ Yeni Not
-</button>
+    </section>
 
-</div>
 
-<div
-class="notes-grid"
-id="notesGrid">
+    <!-- =====================================================
+    FOCUS
+    ===================================================== -->
 
-</div>
+    <section
+      id="page-focus"
+      class="page">
 
-</div>
+      <div class="card focus-box">
 
-</section>
+        <h2>
+          Odaklanma Modu ⏱️
+        </h2>
 
+        <p style="color:var(--muted);margin-top:7px">
+          Telefonunu bırak ve sadece çalışmaya odaklan.
+        </p>
 
-<!-- =====================================================
-FOCUS
-===================================================== -->
+        <div
+          class="timer"
+          id="timer">
+          25:00
+        </div>
 
-<section
-id="page-focus"
-class="page">
+        <div class="focus-buttons">
 
-<div class="card focus-box">
+          <button
+            class="primary"
+            onclick="startTimer()">
+            Başlat
+          </button>
 
-<h2>
-Odaklanma Modu ⏱️
-</h2>
+          <button
+            class="secondary"
+            onclick="pauseTimer()">
+            Duraklat
+          </button>
 
-<p style="color:var(--muted);margin-top:7px">
-Telefonunu bırak ve sadece çalışmaya odaklan.
-</p>
+          <button
+            class="secondary"
+            onclick="resetTimer()">
+            Sıfırla
+          </button>
 
-<div
-class="timer"
-id="timer">
-25:00
-</div>
+        </div>
 
-<div class="focus-buttons">
+      </div>
 
-<button
-class="primary"
-onclick="startTimer()">
-Başlat
-</button>
+    </section>
 
-<button
-class="secondary"
-onclick="pauseTimer()">
-Duraklat
-</button>
 
-<button
-class="secondary"
-onclick="resetTimer()">
-Sıfırla
-</button>
+    <!-- =====================================================
+    DERS KOÇU
+    ===================================================== -->
 
-</div>
+    <section
+      id="page-coach"
+      class="page">
 
-</div>
+      <div class="card coach-page">
 
-</section>
+        <div class="coach-header">
 
+          <div class="coach-avatar">
+            🤖
+          </div>
 
-<!-- =====================================================
-DERS KOÇU
-===================================================== -->
+          <div class="coach-title">
 
-<section
-id="page-coach"
-class="page">
+            <h2>
+              Ders Koçu
+            </h2>
 
-<div class="card coach-page">
+            <p>
+              Sorularını sor, birlikte çalışalım.
+            </p>
 
-<div class="coach-header">
+          </div>
 
-<div class="coach-avatar">
-🤖
-</div>
+        </div>
 
-<div class="coach-title">
 
-<h2>
-Ders Koçu
-</h2>
+        <div
+          class="chat-box"
+          id="chatBox">
 
-<p>
-Sorularını sor, birlikte çalışalım.
-</p>
+          <div
+            class="chat-empty"
+            id="chatEmpty">
 
-</div>
+            <div>
 
-</div>
+              <div style="font-size:50px;margin-bottom:15px">
+                🤖
+              </div>
 
+              <h3>
+                Merhaba!
+              </h3>
 
-<div
-class="chat-box"
-id="chatBox">
+              <p style="margin-top:8px">
 
-<div
-class="chat-empty"
-id="chatEmpty">
+                Ben DersTakip Ders Koçu'yum.
+                <br>
 
-<div>
+                Derslerin, sınavların veya çalışma planın
+                hakkında bana soru sorabilirsin.
 
-<div style="font-size:50px;margin-bottom:15px">
-🤖
-</div>
+              </p>
 
-<h3>
-Merhaba!
-</h3>
+            </div>
 
-<p style="margin-top:8px">
+          </div>
 
-Ben DersTakip Ders Koçu'yum.
-<br>
+        </div>
 
-Derslerin, sınavların veya çalışma planın
-hakkında bana soru sorabilirsin.
 
-</p>
+        <div class="chat-options">
 
-</div>
+          <button
+            class="chat-option"
+            onclick="quickCoach('Bugün nasıl ders çalışmalıyım?')">
+            🎯 Bugün ne çalışmalıyım?
+          </button>
 
-</div>
+          <button
+            class="chat-option"
+            onclick="quickCoach('Matematikte nasıl daha iyi olabilirim?')">
+            📐 Matematik
+          </button>
 
-</div>
+          <button
+            class="chat-option"
+            onclick="quickCoach('Sınava nasıl hazırlanmalıyım?')">
+            📅 Sınav planı
+          </button>
 
+          <button
+            class="chat-option"
+            onclick="quickCoach('Ders çalışmak için motivasyon verir misin?')">
+            🔥 Motivasyon
+          </button>
 
-<div class="chat-options">
+        </div>
 
-<button
-class="chat-option"
-onclick="quickCoach('Bugün nasıl ders çalışmalıyım?')">
 
-🎯 Bugün ne çalışmalıyım?
+        <div class="chat-input-area">
 
-</button>
+          <textarea
+            id="coachInput"
+            placeholder="Ders Koçu'na bir şey sor..."
+            rows="1"
+            onkeydown="coachKeyDown(event)"></textarea>
 
-<button
-class="chat-option"
-onclick="quickCoach('Matematikte nasıl daha iyi olabilirim?')">
+          <button
+            class="send-button"
+            id="coachSend"
+            onclick="sendCoachMessage()">
+            ➤
+          </button>
 
-📐 Matematik
+        </div>
 
-</button>
 
-<button
-class="chat-option"
-onclick="quickCoach('Sınava nasıl hazırlanmalıyım?')">
+        <div class="coach-tools">
 
-📅 Sınav planı
+          <small>
+            🧠 DersTakip AI
+          </small>
 
-</button>
+          <button
+            class="new-chat"
+            onclick="newCoachChat()">
+            Yeni sohbet
+          </button>
 
-<button
-class="chat-option"
-onclick="quickCoach('Ders çalışmak için motivasyon verir misin?')">
+        </div>
 
-🔥 Motivasyon
+      </div>
 
-</button>
+    </section>
 
-</div>
 
+    <!-- =====================================================
+    ACHIEVEMENTS
+    ===================================================== -->
 
-<div class="chat-input-area">
+    <section
+      id="page-achievements"
+      class="page">
 
-<textarea
-id="coachInput"
-placeholder="Ders Koçu'na bir şey sor..."
-rows="1"
-onkeydown="coachKeyDown(event)"></textarea>
+      <div class="card">
 
-<button
-class="send-button"
-id="coachSend"
-onclick="sendCoachMessage()">
+        <h2 style="margin-bottom:18px">
+          🏆 Başarı Rozetleri
+        </h2>
 
-➤
+        <div
+          class="badges"
+          id="badges">
+        </div>
 
-</button>
+      </div>
 
-</div>
+    </section>
 
 
-<div class="coach-tools">
+    <!-- =====================================================
+    STATS
+    ===================================================== -->
 
-<small>
-🧠 DersTakip AI
-</small>
+    <section
+      id="page-stats"
+      class="page">
 
-<button
-class="new-chat"
-onclick="newCoachChat()">
+      <div class="card">
 
-Yeni sohbet
+        <h2>
+          📊 İstatistikler
+        </h2>
 
-</button>
+        <div
+          class="stats"
+          style="margin-top:20px">
 
-</div>
+          <div class="stat">
 
-</div>
+            <span>⭐</span>
 
-</section>
+            <strong id="statsXP">
+              0
+            </strong>
 
+            <small>
+              Toplam XP
+            </small>
 
-<!-- =====================================================
-ACHIEVEMENTS
-===================================================== -->
+          </div>
 
-<section
-id="page-achievements"
-class="page">
+          <div class="stat">
 
-<div class="card">
+            <span>🔥</span>
 
-<h2 style="margin-bottom:18px">
-🏆 Başarı Rozetleri
-</h2>
+            <strong id="statsStreak">
+              0
+            </strong>
 
-<div
-class="badges"
-id="badges">
+            <small>
+              Çalışma serisi
+            </small>
 
-</div>
+          </div>
 
-</div>
+          <div class="stat">
 
-</section>
+            <span>✅</span>
 
+            <strong id="statsCompleted">
+              0
+            </strong>
 
-<!-- =====================================================
-STATS
-===================================================== -->
+            <small>
+              Tamamlanan görev
+            </small>
 
-<section
-id="page-stats"
-class="page">
+          </div>
 
-<div class="card">
+        </div>
 
-<h2>
-📊 İstatistikler
-</h2>
+      </div>
 
-<div
-class="stats"
-style="margin-top:20px">
 
-<div class="stat">
+      <div class="card">
 
-<span>⭐</span>
+        <h2>
+          Çalışma Durumu
+        </h2>
 
-<strong id="statsXP">
-0
-</strong>
+        <div style="margin-top:20px">
 
-<small>
-Toplam XP
-</small>
+          <div
+            style="display:flex;justify-content:space-between;margin-bottom:8px">
 
-</div>
+            <span>
+              Görev tamamlama
+            </span>
 
+            <strong id="statsPercent">
+              0%
+            </strong>
 
-<div class="stat">
+          </div>
 
-<span>🔥</span>
+          <div
+            class="progress"
+            style="background:var(--border)">
 
-<strong id="statsStreak">
-0
-</strong>
+            <span
+              id="statsProgress"
+              style="background:var(--primary)">
+            </span>
 
-<small>
-Çalışma serisi
-</small>
+          </div>
 
-</div>
+        </div>
 
+      </div>
 
-<div class="stat">
+    </section>
 
-<span>✅</span>
 
-<strong id="statsCompleted">
-0
-</strong>
+    <!-- =====================================================
+    PROFILE
+    ===================================================== -->
 
-<small>
-Tamamlanan görev
-</small>
+    <section
+      id="page-profile"
+      class="page">
 
-</div>
+      <div class="card profile-card">
 
-</div>
+        <div class="profile-avatar">
+          🎓
+        </div>
 
-</div>
+        <h2 id="profileName">
+          Öğrenci
+        </h2>
 
+        <p
+          id="profileEmail"
+          style="color:var(--muted);margin-top:5px">
+          -
+        </p>
 
-<div class="card">
+        <div
+          class="profile-info"
+          style="margin-top:25px">
 
-<h2>
-Çalışma Durumu
-</h2>
+          <div class="profile-item">
 
-<div style="margin-top:20px">
+            <span>
+              Seviye
+            </span>
 
-<div
-style="display:flex;justify-content:space-between;margin-bottom:8px">
+            <strong id="profileLevel">
+              1
+            </strong>
 
-<span>
-Görev tamamlama
-</span>
+          </div>
 
-<strong id="statsPercent">
-0%
-</strong>
+          <div class="profile-item">
 
-</div>
+            <span>
+              Toplam XP
+            </span>
 
-<div
-class="progress"
-style="background:var(--border)">
+            <strong id="profileXP">
+              0
+            </strong>
 
-<span
-id="statsProgress"
-style="background:var(--primary)">
-</span>
+          </div>
 
-</div>
+          <div class="profile-item">
 
-</div>
+            <span>
+              Görev
+            </span>
 
-</div>
+            <strong id="profileTasks">
+              0
+            </strong>
 
-</section>
+          </div>
 
+          <div class="profile-item">
 
-<!-- =====================================================
-PROFILE
-===================================================== -->
+            <span>
+              Ders
+            </span>
 
-<section
-id="page-profile"
-class="page">
+            <strong id="profileSubjects">
+              0
+            </strong>
 
-<div class="card profile-card">
+          </div>
 
-<div class="profile-avatar">
-🎓
-</div>
+        </div>
 
-<h2 id="profileName">
-Öğrenci
-</h2>
+        <div
+          style="margin-top:25px;display:flex;gap:10px;flex-wrap:wrap">
 
-<p
-id="profileEmail"
-style="color:var(--muted);margin-top:5px">
--
-</p>
+          <button
+            class="secondary"
+            onclick="toggleDark()">
+            🌙 Tema Değiştir
+          </button>
 
-<div
-class="profile-info"
-style="margin-top:25px">
+          <button
+            class="secondary"
+            onclick="clearData()">
+            Verileri Sıfırla
+          </button>
 
-<div class="profile-item">
+        </div>
 
-<span>
-Seviye
-</span>
+      </div>
 
-<strong id="profileLevel">
-1
-</strong>
+    </section>
 
-</div>
 
-<div class="profile-item">
+    <!-- =====================================================
+    HAKKIMIZDA
+    ===================================================== -->
 
-<span>
-Toplam XP
-</span>
+    <section
+      id="page-about"
+      class="page">
 
-<strong id="profileXP">
-0
-</strong>
+      <div class="card legal-page">
 
-</div>
+        <h2>
+          ℹ️ Hakkımızda
+        </h2>
 
-<div class="profile-item">
+        <p>
+          DersTakip Pro, öğrencilerin ders çalışma süreçlerini
+          daha düzenli ve verimli hale getirmek amacıyla
+          geliştirilmiş bir öğrenci platformudur.
+        </p>
 
-<span>
-Görev
-</span>
+        <h3>
+          🎯 Amacımız
+        </h3>
 
-<strong id="profileTasks">
-0
-</strong>
+        <p>
+          Dersleri, görevleri, sınavları ve çalışma notlarını
+          tek bir yerde yönetmeyi kolaylaştırmak ve öğrencilerin
+          kendi çalışma düzenlerini oluşturmasına yardımcı olmaktır.
+        </p>
 
-</div>
+        <h3>
+          📚 Neler Sunuyoruz?
+        </h3>
 
-<div class="profile-item">
+        <ul>
+          <li>Görev ve çalışma hedefleri oluşturma</li>
+          <li>Dersleri düzenleme</li>
+          <li>Sınav takibi</li>
+          <li>Ders notları oluşturma</li>
+          <li>Odaklanma zamanlayıcısı</li>
+          <li>Başarı ve XP sistemi</li>
+          <li>Ders Koçu</li>
+          <li>Yapay zeka ile soru çözme</li>
+        </ul>
 
-<span>
-Ders
-</span>
+        <h3>
+          🚀 Gelecek
+        </h3>
 
-<strong id="profileSubjects">
-0
-</strong>
+        <p>
+          DersTakip Pro'yu sürekli geliştirmeyi ve öğrencilerin
+          ihtiyaçlarına göre yeni özellikler eklemeyi hedefliyoruz.
+        </p>
 
-</div>
+      </div>
 
-</div>
+    </section>
 
 
-<div
-style="margin-top:25px;display:flex;gap:10px;flex-wrap:wrap">
+    <!-- =====================================================
+    GİZLİLİK POLİTİKASI
+    ===================================================== -->
 
-<button
-class="secondary"
-onclick="toggleDark()">
-🌙 Tema Değiştir
-</button>
+    <section
+      id="page-privacy"
+      class="page">
 
-<button
-class="secondary"
-onclick="clearData()">
-Verileri Sıfırla
-</button>
+      <div class="card legal-page">
 
-</div>
+        <h2>
+          🔒 Gizlilik Politikası
+        </h2>
 
-</div>
+        <p>
+          DersTakip Pro kullanıcı gizliliğine önem verir.
+          Bu sayfa, platform içerisinde hangi tür bilgilerin
+          kullanılabileceği ve bu bilgilerin hangi amaçlarla
+          işlenebileceği hakkında genel bilgi vermektedir.
+        </p>
 
-</section>
+        <div class="info-highlight">
 
+          <strong>
+            Son güncelleme: 19 Ağustos 2026
+          </strong>
 
-</main>
+          <p style="margin-top:7px;margin-bottom:0">
+            Bu metin genel bilgilendirme amacıyla hazırlanmıştır.
+          </p>
+
+        </div>
+
+        <h3>
+          📌 Toplanan Bilgiler
+        </h3>
+
+        <p>
+          Hesap oluştururken ad-soyad ve e-posta adresi gibi
+          bilgiler girilebilir. Uygulama içerisinde oluşturulan
+          görevler, dersler, sınavlar ve notlar da uygulamanın
+          sunduğu özelliklerin çalışması için kullanılabilir.
+        </p>
+
+        <h3>
+          💾 Verilerin Saklanması
+        </h3>
+
+        <p>
+          Uygulamanın mevcut istemci tarafı özelliklerinde bazı
+          kullanıcı verileri tarayıcının yerel depolama alanında
+          (localStorage) saklanmaktadır.
+        </p>
+
+        <h3>
+          🤖 Yapay Zeka Özellikleri
+        </h3>
+
+        <p>
+          Ders Koçu ve yapay zeka ile soru çözme özelliklerinde
+          gönderdiğin içerikler, ilgili özelliğin çalışması için
+          uygulamanın sunucu tarafına gönderilebilir.
+        </p>
+
+        <h3>
+          📊 Google Analytics
+        </h3>
+
+        <p>
+          DersTakip Pro kullanım istatistiklerini anlamak amacıyla
+          Google Analytics kullanmaktadır. Google Analytics,
+          ziyaret ve kullanım hakkında teknik bilgiler
+          toplayabilir.
+        </p>
+
+        <h3>
+          🔐 Güvenlik
+        </h3>
+
+        <p>
+          Verilerin korunması için makul teknik ve idari önlemler
+          alınması hedeflenmektedir. Bununla birlikte internet
+          üzerinden yapılan hiçbir veri aktarımının tamamen
+          risksiz olduğu garanti edilemez.
+        </p>
+
+        <h3>
+          👤 Kullanıcı Hakları
+        </h3>
+
+        <p>
+          Kullanıcılar kendileriyle ilgili bilgilerin nasıl
+          kullanıldığı hakkında bilgi talep edebilir ve uygun
+          durumlarda verilerinin düzeltilmesini veya silinmesini
+          isteyebilir.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+    ÇEREZ POLİTİKASI
+    ===================================================== -->
+
+    <section
+      id="page-cookies"
+      class="page">
+
+      <div class="card legal-page">
+
+        <h2>
+          🍪 Çerez Politikası
+        </h2>
+
+        <p>
+          DersTakip Pro, sitenin ve uygulamanın düzgün çalışmasını
+          sağlamak ve kullanıcı deneyimini geliştirmek amacıyla
+          tarayıcı depolama teknolojileri kullanabilir.
+        </p>
+
+        <h3>
+          🍪 Çerez Nedir?
+        </h3>
+
+        <p>
+          Çerezler, web sitelerinin kullanıcı deneyimini
+          geliştirmek amacıyla tarayıcıda küçük bilgiler
+          saklamasına olanak sağlayan teknolojilerdir.
+        </p>
+
+        <h3>
+          💾 Yerel Depolama
+        </h3>
+
+        <p>
+          DersTakip Pro'nun bazı özelliklerinde localStorage
+          kullanılmaktadır. Örneğin kullanıcı oturumu, görevler,
+          dersler, notlar ve tema tercihi gibi bilgiler cihazdaki
+          tarayıcı depolamasında tutulabilir.
+        </p>
+
+        <h3>
+          📊 Analitik
+        </h3>
+
+        <p>
+          Google Analytics kullanım istatistiklerini ölçmek
+          amacıyla kullanılmaktadır. Bu hizmet kendi teknolojileri
+          aracılığıyla belirli teknik kullanım verilerini
+          işleyebilir.
+        </p>
+
+        <h3>
+          ⚙️ Tercihleri Yönetme
+        </h3>
+
+        <p>
+          Tarayıcının ayarlarından çerezleri ve site depolamasını
+          silebilir veya engelleyebilirsin. Ancak bazı özellikler
+          bu durumda düzgün çalışmayabilir.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+    KULLANIM KOŞULLARI
+    ===================================================== -->
+
+    <section
+      id="page-terms"
+      class="page">
+
+      <div class="card legal-page">
+
+        <h2>
+          📜 Kullanım Koşulları
+        </h2>
+
+        <p>
+          DersTakip Pro'yu kullanarak aşağıdaki genel kullanım
+          koşullarını kabul etmiş olursun.
+        </p>
+
+        <h3>
+          1. Hizmetin Kullanımı
+        </h3>
+
+        <p>
+          DersTakip Pro eğitim ve çalışma organizasyonu amacıyla
+          sunulmaktadır. Kullanıcı, platformu hukuka ve genel
+          kullanım kurallarına uygun şekilde kullanmalıdır.
+        </p>
+
+        <h3>
+          2. Hesap Bilgileri
+        </h3>
+
+        <p>
+          Kullanıcı, hesap oluştururken verdiği bilgilerin doğru
+          olmasından ve hesabının güvenliğinden sorumludur.
+        </p>
+
+        <h3>
+          3. Yapay Zeka
+        </h3>
+
+        <p>
+          Yapay zeka tarafından verilen cevaplar eğitim amaçlı
+          yardımcı bilgiler niteliğindedir. Önemli sınav,
+          akademik veya resmi kararlar için verilen cevapların
+          ayrıca kontrol edilmesi önerilir.
+        </p>
+
+        <h3>
+          4. İçerik
+        </h3>
+
+        <p>
+          Kullanıcıların platforma girdiği içeriklerin hukuka,
+          üçüncü kişilerin haklarına ve platform kurallarına
+          uygun olması gerekir.
+        </p>
+
+        <h3>
+          5. Hizmet Değişiklikleri
+        </h3>
+
+        <p>
+          DersTakip Pro özellikleri zaman içerisinde geliştirilebilir,
+          değiştirilebilir veya bazı özellikler kaldırılabilir.
+        </p>
+
+        <h3>
+          6. Hesabın Sonlandırılması
+        </h3>
+
+        <p>
+          Kurallara aykırı veya kötüye kullanım durumlarında
+          hizmete erişim sınırlandırılabilir.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+    SORUMLULUK REDDİ
+    ===================================================== -->
+
+    <section
+      id="page-disclaimer"
+      class="page">
+
+      <div class="card legal-page">
+
+        <h2>
+          ⚠️ Sorumluluk Reddi
+        </h2>
+
+        <p>
+          DersTakip Pro öğrencilerin çalışma süreçlerini
+          desteklemek amacıyla hazırlanmıştır.
+        </p>
+
+        <h3>
+          🤖 Yapay Zeka Cevapları
+        </h3>
+
+        <p>
+          Yapay zeka tarafından oluşturulan cevaplarda hata,
+          eksiklik veya yanlış yorum bulunabilir. Bu nedenle
+          önemli bilgiler bağımsız kaynaklardan doğrulanmalıdır.
+        </p>
+
+        <h3>
+          📚 Eğitim İçeriği
+        </h3>
+
+        <p>
+          Platformdaki içerikler öğrencilerin çalışma sürecine
+          yardımcı olmak içindir ve herhangi bir eğitim
+          kurumunun resmi müfredatının yerine geçmez.
+        </p>
+
+        <h3>
+          🌐 Hizmet Sürekliliği
+        </h3>
+
+        <p>
+          Teknik bakım, internet bağlantısı, sunucu sorunları
+          veya üçüncü taraf hizmetlerde meydana gelebilecek
+          problemler nedeniyle bazı özellikler geçici olarak
+          kullanılamayabilir.
+        </p>
+
+        <h3>
+          🔗 Üçüncü Taraf Hizmetler
+        </h3>
+
+        <p>
+          Google Analytics ve yapay zeka servisleri gibi
+          üçüncü taraf hizmetlerin kendi kullanım koşulları
+          ve gizlilik politikaları olabilir.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+    İLETİŞİM
+    ===================================================== -->
+
+    <section
+      id="page-contact"
+      class="page">
+
+      <div class="card legal-page">
+
+        <h2>
+          📩 İletişim
+        </h2>
+
+        <p>
+          DersTakip Pro hakkında öneri, geri bildirim veya teknik
+          sorun bildirmek için bizimle iletişime geçebilirsin.
+        </p>
+
+        <div class="contact-box">
+
+          <div class="contact-item">
+
+            <strong>
+              💬 Genel Destek
+            </strong>
+
+            <span>
+              Uygulama hakkında görüş ve önerilerini
+              iletebilirsin.
+            </span>
+
+          </div>
+
+          <div class="contact-item">
+
+            <strong>
+              🐛 Teknik Sorun
+            </strong>
+
+            <span>
+              Karşılaştığın hataları ve sorunları
+              bildirebilirsin.
+            </span>
+
+          </div>
+
+          <div class="contact-item">
+
+            <strong>
+              💡 Öneriler
+            </strong>
+
+            <span>
+              DersTakip Pro'ya eklenmesini istediğin
+              özellikleri paylaşabilirsin.
+            </span>
+
+          </div>
+
+          <div class="contact-item">
+
+            <strong>
+              📧 E-posta
+            </strong>
+
+            <span>
+              İletişim e-posta adresini burada
+              yayınlayabilirsin.
+            </span>
+
+          </div>
+
+        </div>
+
+        <div class="info-highlight" style="margin-top:25px">
+
+          <strong>
+            Not:
+          </strong>
+
+          <p style="margin-top:7px;margin-bottom:0">
+            Siteyi yayınlamadan önce gerçek iletişim
+            e-posta adresini bu alana eklemen önerilir.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+    FOOTER
+    ===================================================== -->
+
+    <footer class="site-footer">
+
+      <div class="footer-links">
+
+        <button onclick="navigate('about')">
+          Hakkımızda
+        </button>
+
+        <button onclick="navigate('privacy')">
+          Gizlilik Politikası
+        </button>
+
+        <button onclick="navigate('cookies')">
+          Çerez Politikası
+        </button>
+
+        <button onclick="navigate('terms')">
+          Kullanım Koşulları
+        </button>
+
+        <button onclick="navigate('disclaimer')">
+          Sorumluluk Reddi
+        </button>
+
+        <button onclick="navigate('contact')">
+          İletişim
+        </button>
+
+      </div>
+
+      <div class="footer-copy">
+        © 2026 DersTakip Pro. Tüm hakları saklıdır.
+      </div>
+
+    </footer>
+
+  </main>
 
 </div>
 
@@ -2892,28 +3192,28 @@ MODAL
 ===================================================== -->
 
 <div
-class="modal"
-id="modal">
+  class="modal"
+  id="modal">
 
-<div class="modal-box">
+  <div class="modal-box">
 
-<div class="modal-head">
+    <div class="modal-head">
 
-<h2 id="modalTitle">
-Yeni
-</h2>
+      <h2 id="modalTitle">
+        Yeni
+      </h2>
 
-<button
-class="close"
-onclick="closeModal()">
-✕
-</button>
+      <button
+        class="close"
+        onclick="closeModal()">
+        ✕
+      </button>
 
-</div>
+    </div>
 
-<div id="modalBody"></div>
+    <div id="modalBody"></div>
 
-</div>
+  </div>
 
 </div>
 
@@ -2934,23 +3234,17 @@ let user = JSON.parse(
 let data = JSON.parse(
   localStorage.getItem("dt_data") || "null"
 ) || {
-
   tasks:[],
   subjects:[],
   exams:[],
   notes:[],
-
   xp:0,
   streak:0,
   completed:0,
-
   lastDay:""
-
 };
 
-
 const subjectsDefault = [
-
   ["Matematik","📐"],
   ["Türkçe","📖"],
   ["Fen Bilimleri","🔬"],
@@ -2961,26 +3255,16 @@ const subjectsDefault = [
   ["Müzik","🎵"],
   ["Görsel Sanatlar","🎨"],
   ["Bilişim Teknolojileri","💻"]
-
 ];
 
-
 const advices = [
-
   "Bugün önce en zor dersinden başla.",
-
   "25 dakika boyunca sadece tek bir derse odaklan.",
-
   "Sınavın varsa bugün kısa tekrar yap.",
-
   "Öğrendiğin konuyu kendi cümlelerinle anlat.",
-
   "Telefonunu çalışma sırasında uzağa koy.",
-
   "Küçük hedefler belirle.",
-
   "Bugün 20 dakika çalışmak bile iyi bir başlangıç."
-
 ];
 
 
@@ -2999,9 +3283,7 @@ function showLogin(){
   registerTab.classList.remove("active");
 
   authMsg.textContent="";
-
 }
-
 
 function showRegister(){
 
@@ -3014,9 +3296,7 @@ function showRegister(){
   registerTab.classList.add("active");
 
   authMsg.textContent="";
-
 }
-
 
 function register(e){
 
@@ -3060,9 +3340,7 @@ function register(e){
   showLogin();
 
   loginEmail.value=email;
-
 }
-
 
 function login(e){
 
@@ -3070,9 +3348,7 @@ function login(e){
 
   const saved =
     JSON.parse(
-      localStorage.getItem(
-        "dt_user"
-      ) || "null"
+      localStorage.getItem("dt_user") || "null"
     );
 
   if(!saved){
@@ -3086,11 +3362,9 @@ function login(e){
   }
 
   if(
-    saved.email !==
-      loginEmail.value.trim()
+    saved.email !== loginEmail.value.trim()
     ||
-    saved.password !==
-      loginPassword.value
+    saved.password !== loginPassword.value
   ){
 
     authMsg.style.color="red";
@@ -3109,9 +3383,7 @@ function login(e){
   );
 
   openApp();
-
 }
-
 
 function logout(){
 
@@ -3120,9 +3392,7 @@ function logout(){
   );
 
   location.reload();
-
 }
-
 
 function openApp(){
 
@@ -3131,7 +3401,6 @@ function openApp(){
   app.style.display="block";
 
   renderAll();
-
 }
 
 
@@ -3152,9 +3421,9 @@ function navigate(page){
       "page-"+page
     );
 
-  if(target)
+  if(target){
     target.classList.add("active");
-
+  }
 
   document
     .querySelectorAll(".menu button")
@@ -3166,7 +3435,6 @@ function navigate(page){
       );
 
     });
-
 
   const titles={
 
@@ -3190,46 +3458,48 @@ function navigate(page){
 
     stats:"İstatistikler",
 
-    profile:"Profil"
+    profile:"Profil",
+
+    about:"Hakkımızda",
+
+    privacy:"Gizlilik Politikası",
+
+    cookies:"Çerez Politikası",
+
+    terms:"Kullanım Koşulları",
+
+    disclaimer:"Sorumluluk Reddi",
+
+    contact:"İletişim"
 
   };
-
 
   subtitle.textContent =
     titles[page] || "DersTakip";
 
-
   closeMobile();
 
-
-  if(page==="achievements")
+  if(page==="achievements"){
     renderBadges();
-
+  }
 }
-
 
 function navigateMobile(page){
-
   navigate(page);
-
 }
-
 
 function toggleMobile(){
 
   mobileMenu.classList.toggle(
     "open"
   );
-
 }
-
 
 function closeMobile(){
 
   mobileMenu.classList.remove(
     "open"
   );
-
 }
 
 
@@ -3244,12 +3514,12 @@ function addTask(){
       "taskInput"
     );
 
-  if(!input)return;
+  if(!input) return;
 
   const name =
     input.value.trim();
 
-  if(!name)return;
+  if(!name) return;
 
   data.tasks.push({
 
@@ -3272,9 +3542,7 @@ function addTask(){
   toast(
     "Görev eklendi ✅"
   );
-
 }
-
 
 function toggleTask(id){
 
@@ -3283,10 +3551,9 @@ function toggleTask(id){
       x=>x.id===id
     );
 
-  if(!task)return;
+  if(!task) return;
 
   task.done=!task.done;
-
 
   if(task.done){
 
@@ -3321,9 +3588,7 @@ function toggleTask(id){
   save();
 
   renderAll();
-
 }
-
 
 function deleteTask(id){
 
@@ -3339,17 +3604,13 @@ function deleteTask(id){
   toast(
     "Görev silindi."
   );
-
 }
-
 
 function renderTasks(){
 
   const html =
     data.tasks.length
-
     ?
-
     data.tasks.map(task => `
 
       <div class="task ${task.done ? "done" : ""}">
@@ -3363,15 +3624,11 @@ function renderTasks(){
         </button>
 
         <span class="task-name">
-
           ${escapeHTML(task.name)}
-
         </span>
 
         <span class="task-xp">
-
           +${task.xp} XP
-
         </span>
 
         <button
@@ -3385,31 +3642,22 @@ function renderTasks(){
       </div>
 
     `).join("")
-
     :
-
     `
       <p style="color:var(--muted);padding:20px 0">
-
         Henüz görev yok.
         İlk görevini ekle!
-
       </p>
     `;
 
-
   allTasks.innerHTML=html;
-
 
   const home =
     data.tasks.slice(0,5);
 
-
   homeTasks.innerHTML =
     home.length
-
     ?
-
     home.map(task => `
 
       <div class="task ${task.done ? "done" : ""}">
@@ -3423,25 +3671,18 @@ function renderTasks(){
         </button>
 
         <span class="task-name">
-
           ${escapeHTML(task.name)}
-
         </span>
 
       </div>
 
     `).join("")
-
     :
-
     `
       <p style="color:var(--muted)">
-
         Henüz görev eklemedin.
-
       </p>
     `;
-
 
   const total =
     data.tasks.length;
@@ -3451,49 +3692,34 @@ function renderTasks(){
       x=>x.done
     ).length;
 
-
   taskCounter.textContent =
     `${done} / ${total}`;
 
-
   const percent =
     total
-      ? Math.round(
-          done/total*100
-        )
+      ? Math.round(done/total*100)
       : 0;
-
 
   progress.style.width =
     percent+"%";
 
-
   homeSummary.textContent =
     total
-
       ?
-
       `${done} görevden ${done} tanesini tamamladın.`
-
       :
-
       "Bugün için henüz görev eklemedin.";
-
 
   homeXP.textContent =
     `${data.xp} XP`;
-
 }
-
 
 function openTaskModal(){
 
   openModal(
-
     "Yeni Görev",
 
     `
-
       <div class="field">
 
         <label>
@@ -3513,11 +3739,8 @@ function openTaskModal(){
         Görevi Ekle
 
       </button>
-
     `
-
   );
-
 
   setTimeout(() => {
 
@@ -3526,7 +3749,6 @@ function openTaskModal(){
       ?.focus();
 
   },100);
-
 }
 
 
@@ -3552,18 +3774,15 @@ function renderSubjects(){
       );
 
     save();
-
   }
 
-
   subjectsGrid.innerHTML =
-
     data.subjects.map(s => `
 
       <div class="subject">
 
         <div class="subject-icon">
-          ${s.icon}
+          ${escapeHTML(s.icon)}
         </div>
 
         <h3>
@@ -3585,9 +3804,7 @@ function renderSubjects(){
       </div>
 
     `).join("");
-
 }
-
 
 function subjectTask(name){
 
@@ -3595,23 +3812,17 @@ function subjectTask(name){
 
   setTimeout(() => {
 
-    openTaskModalWithSubject(
-      name
-    );
+    openTaskModalWithSubject(name);
 
   },150);
-
 }
-
 
 function openTaskModalWithSubject(name){
 
   openModal(
-
     "Yeni "+name+" Görevi",
 
     `
-
       <div class="field">
 
         <label>
@@ -3632,22 +3843,16 @@ function openTaskModalWithSubject(name){
         Görevi Ekle
 
       </button>
-
     `
-
   );
-
 }
-
 
 function openSubjectModal(){
 
   openModal(
-
     "Ders Ekle",
 
     `
-
       <div class="field">
 
         <label>
@@ -3680,33 +3885,23 @@ function openSubjectModal(){
         Dersi Ekle
 
       </button>
-
     `
-
   );
-
 }
-
 
 function addSubject(){
 
   const name =
     document
-      .getElementById(
-        "subjectName"
-      )
+      .getElementById("subjectName")
       .value.trim();
 
   const icon =
     document
-      .getElementById(
-        "subjectIcon"
-      )
+      .getElementById("subjectIcon")
       .value || "📘";
 
-
-  if(!name)return;
-
+  if(!name) return;
 
   data.subjects.push({
 
@@ -3718,7 +3913,6 @@ function addSubject(){
 
   });
 
-
   save();
 
   closeModal();
@@ -3727,10 +3921,13 @@ function addSubject(){
 
   renderHomeStats();
 
+  renderProfile();
+
+  renderBadges();
+
   toast(
     "Ders eklendi 📚"
   );
-
 }
 
 
@@ -3741,11 +3938,9 @@ EXAMS
 function openExamModal(){
 
   openModal(
-
     "Sınav Ekle",
 
     `
-
       <div class="field">
 
         <label>
@@ -3754,13 +3949,15 @@ function openExamModal(){
 
         <select id="examSubject">
 
-          ${data.subjects.map(s => `
+          ${
+            data.subjects.map(s => `
 
-            <option>
-              ${escapeHTML(s.name)}
-            </option>
+              <option>
+                ${escapeHTML(s.name)}
+              </option>
 
-          `).join("")}
+            `).join("")
+          }
 
         </select>
 
@@ -3809,13 +4006,9 @@ function openExamModal(){
         Sınavı Kaydet
 
       </button>
-
     `
-
   );
-
 }
-
 
 function addExam(){
 
@@ -3831,10 +4024,8 @@ function addExam(){
   const target =
     examTarget.value;
 
-
   if(!name || !date)
     return;
-
 
   data.exams.push({
 
@@ -3850,7 +4041,6 @@ function addExam(){
 
   });
 
-
   save();
 
   closeModal();
@@ -3859,12 +4049,12 @@ function addExam(){
 
   renderHomeStats();
 
+  renderBadges();
+
   toast(
     "Sınav takvime eklendi 📅"
   );
-
 }
-
 
 function deleteExam(id){
 
@@ -3879,12 +4069,12 @@ function deleteExam(id){
 
   renderHomeStats();
 
+  renderBadges();
+
   toast(
     "Sınav silindi."
   );
-
 }
-
 
 function renderExams(){
 
@@ -3901,9 +4091,7 @@ function renderExams(){
     `;
 
     return;
-
   }
-
 
   const sorted =
     [...data.exams].sort(
@@ -3911,7 +4099,6 @@ function renderExams(){
         new Date(a.date) -
         new Date(b.date)
     );
-
 
   examList.innerHTML =
     sorted.map(e => {
@@ -3925,9 +4112,7 @@ function renderExams(){
           86400000
         );
 
-
       let remaining;
-
 
       if(days<0)
         remaining="Geçmiş";
@@ -3937,9 +4122,7 @@ function renderExams(){
 
       else
         remaining=
-          days+
-          " gün kaldı";
-
+          days+" gün kaldı";
 
       return `
 
@@ -3970,9 +4153,7 @@ function renderExams(){
           <div style="text-align:right">
 
             <div class="exam-date">
-
               ${formatDate(e.date)}
-
             </div>
 
             <small
@@ -4001,7 +4182,6 @@ function renderExams(){
       `;
 
     }).join("");
-
 }
 
 
@@ -4012,11 +4192,9 @@ NOTES
 function openNoteModal(){
 
   openModal(
-
     "Yeni Not",
 
     `
-
       <div class="field">
 
         <label>
@@ -4041,13 +4219,15 @@ function openNoteModal(){
             Genel
           </option>
 
-          ${data.subjects.map(s => `
+          ${
+            data.subjects.map(s => `
 
-            <option>
-              ${escapeHTML(s.name)}
-            </option>
+              <option>
+                ${escapeHTML(s.name)}
+              </option>
 
-          `).join("")}
+            `).join("")
+          }
 
         </select>
 
@@ -4073,13 +4253,9 @@ function openNoteModal(){
         Notu Kaydet
 
       </button>
-
     `
-
   );
-
 }
-
 
 function addNote(){
 
@@ -4092,10 +4268,8 @@ function addNote(){
   const text =
     noteText.value.trim();
 
-
   if(!title || !text)
     return;
-
 
   data.notes.unshift({
 
@@ -4112,7 +4286,6 @@ function addNote(){
 
   });
 
-
   save();
 
   closeModal();
@@ -4124,9 +4297,7 @@ function addNote(){
   toast(
     "Not kaydedildi 📝"
   );
-
 }
-
 
 function deleteNote(id){
 
@@ -4144,9 +4315,7 @@ function deleteNote(id){
   toast(
     "Not silindi."
   );
-
 }
-
 
 function renderNotes(){
 
@@ -4163,9 +4332,7 @@ function renderNotes(){
     `;
 
     return;
-
   }
-
 
   notesGrid.innerHTML =
     data.notes.map(n => `
@@ -4208,7 +4375,6 @@ function renderNotes(){
       </div>
 
     `).join("");
-
 }
 
 
@@ -4221,7 +4387,6 @@ let timerSeconds =
 
 let timerInterval=null;
 
-
 function updateTimer(){
 
   const min =
@@ -4231,24 +4396,19 @@ function updateTimer(){
     .toString()
     .padStart(2,"0");
 
-
   const sec =
     (timerSeconds%60)
     .toString()
     .padStart(2,"0");
 
-
   timer.textContent =
     `${min}:${sec}`;
-
 }
-
 
 function startTimer(){
 
   if(timerInterval)
     return;
-
 
   timerInterval =
     setInterval(() => {
@@ -4277,18 +4437,14 @@ function startTimer(){
         updateTimer();
 
         return;
-
       }
-
 
       timerSeconds--;
 
       updateTimer();
 
     },1000);
-
 }
-
 
 function pauseTimer(){
 
@@ -4297,9 +4453,7 @@ function pauseTimer(){
   );
 
   timerInterval=null;
-
 }
-
 
 function resetTimer(){
 
@@ -4309,7 +4463,6 @@ function resetTimer(){
     25*60;
 
   updateTimer();
-
 }
 
 
@@ -4324,19 +4477,12 @@ let coachMessages =
     ) || "[]"
   );
 
-
 function renderCoachMessages(){
 
   const box =
     document.getElementById(
       "chatBox"
     );
-
-  const empty =
-    document.getElementById(
-      "chatEmpty"
-    );
-
 
   if(!coachMessages.length){
 
@@ -4375,9 +4521,7 @@ function renderCoachMessages(){
     `;
 
     return;
-
   }
-
 
   box.innerHTML =
     coachMessages.map(
@@ -4411,12 +4555,9 @@ function renderCoachMessages(){
       `
     ).join("");
 
-
   box.scrollTop =
     box.scrollHeight;
-
 }
-
 
 function saveCoachMessages(){
 
@@ -4426,9 +4567,7 @@ function saveCoachMessages(){
       coachMessages
     )
   );
-
 }
-
 
 function addCoachMessage(
   role,
@@ -4446,22 +4585,17 @@ function addCoachMessage(
 
   });
 
-
   saveCoachMessages();
 
   renderCoachMessages();
-
 }
-
 
 function quickCoach(text){
 
   coachInput.value=text;
 
   sendCoachMessage();
-
 }
-
 
 function coachKeyDown(event){
 
@@ -4473,11 +4607,8 @@ function coachKeyDown(event){
     event.preventDefault();
 
     sendCoachMessage();
-
   }
-
 }
-
 
 async function sendCoachMessage(){
 
@@ -4491,41 +4622,33 @@ async function sendCoachMessage(){
       "coachSend"
     );
 
-
   const message =
     input.value.trim();
 
-
   if(!message)
     return;
-
 
   addCoachMessage(
     "user",
     message
   );
 
-
   input.value="";
 
   button.disabled=true;
-
 
   const box =
     document.getElementById(
       "chatBox"
     );
 
-
   const typing =
     document.createElement(
       "div"
     );
 
-
   typing.className =
     "chat-message ai";
-
 
   typing.innerHTML = `
 
@@ -4551,7 +4674,6 @@ async function sendCoachMessage(){
 
   `;
 
-
   box.appendChild(
     typing
   );
@@ -4559,14 +4681,12 @@ async function sendCoachMessage(){
   box.scrollTop =
     box.scrollHeight;
 
-
   try{
 
     const response =
       await fetch(
         "/api/coach",
         {
-
           method:"POST",
 
           headers:{
@@ -4583,9 +4703,7 @@ async function sendCoachMessage(){
               message,
 
               history:
-                coachMessages.slice(
-                  -12
-                ),
+                coachMessages.slice(-12),
 
               student:{
 
@@ -4626,18 +4744,13 @@ async function sendCoachMessage(){
               }
 
             })
-
         }
-
       );
-
 
     const raw =
       await response.text();
 
-
     let result;
-
 
     try{
 
@@ -4651,9 +4764,7 @@ async function sendCoachMessage(){
       throw new Error(
         "Sunucu JSON yerine farklı bir yanıt döndürdü."
       );
-
     }
-
 
     if(!response.ok){
 
@@ -4661,9 +4772,7 @@ async function sendCoachMessage(){
         result?.error ||
         `Sunucu hatası: ${response.status}`
       );
-
     }
-
 
     if(!result?.success){
 
@@ -4671,18 +4780,14 @@ async function sendCoachMessage(){
         result?.error ||
         "Ders Koçu cevap veremedi."
       );
-
     }
 
-
     typing.remove();
-
 
     addCoachMessage(
       "ai",
       result.answer
     );
-
 
     if(result.answer){
 
@@ -4692,9 +4797,7 @@ async function sendCoachMessage(){
         result.answer.length > 150
           ? result.answer.slice(0,150)+"..."
           : result.answer;
-
     }
-
 
   }catch(error){
 
@@ -4703,9 +4806,7 @@ async function sendCoachMessage(){
       error
     );
 
-
     typing.remove();
-
 
     addCoachMessage(
       "ai",
@@ -4718,11 +4819,8 @@ async function sendCoachMessage(){
     button.disabled=false;
 
     input.focus();
-
   }
-
 }
-
 
 function newCoachChat(){
 
@@ -4733,7 +4831,6 @@ function newCoachChat(){
   )
     return;
 
-
   coachMessages=[];
 
   saveCoachMessages();
@@ -4743,7 +4840,6 @@ function newCoachChat(){
   toast(
     "Yeni sohbet başlatıldı 💬"
   );
-
 }
 
 
@@ -4753,7 +4849,7 @@ BADGES
 
 function renderBadges(){
 
-  const badges=[
+  const badgeData=[
 
     [
       "🌱",
@@ -4813,9 +4909,16 @@ function renderBadges(){
 
   ];
 
+  const badgeContainer =
+    document.getElementById(
+      "badges"
+    );
 
-  badges.innerHTML =
-    badges.map(b => `
+  if(!badgeContainer)
+    return;
+
+  badgeContainer.innerHTML =
+    badgeData.map(b => `
 
       <div
         class="badge ${b[3] ? "" : "locked"}">
@@ -4825,19 +4928,18 @@ function renderBadges(){
         </div>
 
         <strong>
-          ${b[1]}
+          ${escapeHTML(b[1])}
         </strong>
 
         <br>
 
         <small>
-          ${b[2]}
+          ${escapeHTML(b[2])}
         </small>
 
       </div>
 
     `).join("");
-
 }
 
 
@@ -4856,7 +4958,6 @@ function renderStats(){
   statsCompleted.textContent =
     data.completed;
 
-
   const total =
     data.tasks.length;
 
@@ -4865,7 +4966,6 @@ function renderStats(){
       x=>x.done
     ).length;
 
-
   const percent =
     total
       ? Math.round(
@@ -4873,14 +4973,11 @@ function renderStats(){
         )
       : 0;
 
-
   statsPercent.textContent =
     percent+"%";
 
-
   statsProgress.style.width =
     percent+"%";
-
 }
 
 
@@ -4896,52 +4993,41 @@ function getLevel(){
       data.xp/100
     )+1
   );
-
 }
-
 
 function renderProfile(){
 
   const level =
     getLevel();
 
-
   profileName.textContent =
     user?.name ||
     "Öğrenci";
-
 
   profileEmail.textContent =
     user?.email ||
     "-";
 
-
   profileLevel.textContent =
     level;
-
 
   profileXP.textContent =
     data.xp;
 
-
   profileTasks.textContent =
     data.tasks.length;
-
 
   profileSubjects.textContent =
     data.subjects.length;
 
-
   topLevel.textContent =
     "Seviye "+level;
-
 
   welcome.textContent =
     `Merhaba, ${
       user?.name?.split(" ")[0] ||
       "Öğrenci"
     }! 👋`;
-
 }
 
 
@@ -4963,7 +5049,6 @@ function renderHomeStats(){
 
   homeStatExams.textContent =
     data.exams.length;
-
 }
 
 
@@ -4978,27 +5063,22 @@ function updateStreak(){
       .toISOString()
       .slice(0,10);
 
-
   if(
     data.lastDay===today
   )
     return;
 
-
   const yesterday =
     new Date();
-
 
   yesterday.setDate(
     yesterday.getDate()-1
   );
 
-
   const yesterdayString =
     yesterday
       .toISOString()
       .slice(0,10);
-
 
   if(
     data.lastDay===
@@ -5013,10 +5093,8 @@ function updateStreak(){
 
   }
 
-
   data.lastDay=
     today;
-
 }
 
 
@@ -5038,16 +5116,13 @@ function openModal(
   modal.classList.add(
     "show"
   );
-
 }
-
 
 function closeModal(){
 
   modal.classList.remove(
     "show"
   );
-
 }
 
 
@@ -5070,12 +5145,10 @@ function toast(message){
   toastContainer
     .appendChild(box);
 
-
   setTimeout(
     () => box.remove(),
     3000
   );
-
 }
 
 
@@ -5089,17 +5162,14 @@ function toggleDark(){
     "dark"
   );
 
-
   localStorage.setItem(
     "dt_dark",
-
     document.body.classList.contains(
       "dark"
     )
       ? "1"
       : "0"
   );
-
 }
 
 
@@ -5115,7 +5185,6 @@ function clearData(){
     )
   )
     return;
-
 
   data={
 
@@ -5137,7 +5206,6 @@ function clearData(){
 
   };
 
-
   save();
 
   renderAll();
@@ -5145,7 +5213,6 @@ function clearData(){
   toast(
     "Veriler temizlendi."
   );
-
 }
 
 
@@ -5159,7 +5226,6 @@ function save(){
     "dt_data",
     JSON.stringify(data)
   );
-
 }
 
 
@@ -5169,12 +5235,10 @@ AI QUESTION
 
 let aiImageData="";
 
-
 function previewAIImage(event){
 
   const file =
     event.target.files[0];
-
 
   if(!file){
 
@@ -5184,9 +5248,7 @@ function previewAIImage(event){
       "none";
 
     return;
-
   }
-
 
   if(
     !file.type.startsWith(
@@ -5201,13 +5263,10 @@ function previewAIImage(event){
     event.target.value="";
 
     return;
-
   }
-
 
   const reader =
     new FileReader();
-
 
   reader.onload =
     function(e){
@@ -5223,13 +5282,10 @@ function previewAIImage(event){
 
     };
 
-
   reader.readAsDataURL(
     file
   );
-
 }
-
 
 async function solveAIQuestion(){
 
@@ -5246,7 +5302,6 @@ async function solveAIQuestion(){
       "aiMode"
     ).value;
 
-
   if(
     !question &&
     !aiImageData
@@ -5257,9 +5312,7 @@ async function solveAIQuestion(){
     );
 
     return;
-
   }
-
 
   aiResult.style.display=
     "none";
@@ -5269,7 +5322,6 @@ async function solveAIQuestion(){
 
   aiSolveButton.disabled=
     true;
-
 
   try{
 
@@ -5281,11 +5333,13 @@ async function solveAIQuestion(){
           method:"POST",
 
           headers:{
+
             "Content-Type":
               "application/json",
 
             "Accept":
               "application/json"
+
           },
 
           body:
@@ -5306,16 +5360,12 @@ async function solveAIQuestion(){
             })
 
         }
-
       );
-
 
     const raw =
       await response.text();
 
-
     let result;
-
 
     try{
 
@@ -5327,9 +5377,7 @@ async function solveAIQuestion(){
       throw new Error(
         "Sunucu JSON yerine farklı bir yanıt döndürdü."
       );
-
     }
-
 
     if(!response.ok){
 
@@ -5337,9 +5385,7 @@ async function solveAIQuestion(){
         result?.error ||
         `Sunucu hatası (${response.status})`
       );
-
     }
-
 
     if(!result.success){
 
@@ -5347,9 +5393,7 @@ async function solveAIQuestion(){
         result.error ||
         "Soru çözülemedi."
       );
-
     }
-
 
     aiResult.textContent =
       result.answer ||
@@ -5358,11 +5402,9 @@ async function solveAIQuestion(){
     aiResult.style.display=
       "block";
 
-
     toast(
       "Soru başarıyla çözüldü 🧠"
     );
-
 
   }catch(error){
 
@@ -5370,15 +5412,12 @@ async function solveAIQuestion(){
       error
     );
 
-
     aiResult.textContent =
       "❌ Hata oluştu.\n\n"+
       error.message;
 
-
     aiResult.style.display=
       "block";
-
 
   }finally{
 
@@ -5387,9 +5426,7 @@ async function solveAIQuestion(){
 
     aiSolveButton.disabled=
       false;
-
   }
-
 }
 
 
@@ -5402,7 +5439,6 @@ function formatDate(date){
   if(!date)
     return "-";
 
-
   return new Date(date)
     .toLocaleDateString(
       "tr-TR",
@@ -5412,9 +5448,7 @@ function formatDate(date){
         year:"numeric"
       }
     );
-
 }
-
 
 function formatDateTime(date){
 
@@ -5427,9 +5461,7 @@ function formatDateTime(date){
         year:"numeric"
       }
     );
-
 }
-
 
 function escapeHTML(str){
 
@@ -5459,14 +5491,11 @@ function escapeHTML(str){
       "'",
       "&#039;"
     );
-
 }
-
 
 function escapeAttr(str){
 
   return escapeHTML(str);
-
 }
 
 
@@ -5495,7 +5524,6 @@ function renderAll(){
   renderCoachMessages();
 
   updateTimer();
-
 }
 
 
@@ -5508,7 +5536,6 @@ const toastContainer =
     "toast"
   );
 
-
 if(
   localStorage.getItem(
     "dt_dark"
@@ -5518,9 +5545,7 @@ if(
   document.body.classList.add(
     "dark"
   );
-
 }
-
 
 document
   .getElementById("modal")
@@ -5539,7 +5564,6 @@ document
 
     }
   );
-
 
 if(
   localStorage.getItem(
