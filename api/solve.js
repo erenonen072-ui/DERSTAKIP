@@ -1,5 +1,4 @@
 export default async function handler(req, res) {
-  // Sadece POST kabul et
   if (req.method !== "POST") {
     return res.status(405).json({
       success: false,
@@ -8,64 +7,56 @@ export default async function handler(req, res) {
   }
 
   try {
-    const {
-      question,
-      subject,
-      mode,
-      image
-    } = req.body || {};
-
-    if (!question && !image) {
-      return res.status(400).json({
-        success: false,
-        error: "Soru veya fotoğraf gerekli."
-      });
-    }
-
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
       return res.status(500).json({
         success: false,
-        error: "GEMINI_API_KEY Vercel Environment Variables bölümünde bulunamadı."
+        error: "GEMINI_API_KEY bulunamadı."
       });
     }
 
-    let prompt = `
-Sen DersTakip uygulamasının yapay zeka soru çözme asistanısın.
+    const body = req.body || {};
 
-Ders: ${subject || "Belirtilmedi"}
-Anlatım şekli: ${mode || "Adım adım"}
+    const question = body.question || "";
+    const subject = body.subject || "Genel";
+    const mode = body.mode || "Adım adım";
+    const image = body.image || null;
 
-Öğrencinin sorusunu çöz.
+    if (!question && !image) {
+      return res.status(400).json({
+        success: false,
+        error: "Soru veya fotoğraf gönderilmedi."
+      });
+    }
+
+    const parts = [];
+
+    parts.push({
+      text: `
+Sen DersTakip uygulamasının yapay zeka ders asistanısın.
+
+Ders: ${subject}
+Anlatım şekli: ${mode}
+
+Öğrencinin sorusunu Türkçe çöz.
 
 Kurallar:
-- Türkçe cevap ver.
-- Öğrencinin seviyesine uygun anlat.
-- Gereksiz uzunluk kullanma.
-- Matematik sorularında işlemleri tek tek göster.
-- Sonucu açıkça belirt.
-- Fotoğraf varsa fotoğraftaki soruyu dikkatlice oku.
-- Emin olmadığın bilgiyi uydurma.
+- Soruyu dikkatlice analiz et.
+- Matematik sorularında işlemleri göster.
+- Cevabı anlaşılır şekilde açıkla.
+- Öğrenci seviyesine uygun konuş.
+- En sonunda "Cevap:" şeklinde sonucu belirt.
+- Bilmediğin bilgiyi uydurma.
 
-Öğrenci sorusu:
-${question || "Soru fotoğrafta bulunmaktadır."}
-`;
+Öğrencinin sorusu:
+${question || "Fotoğraftaki soruyu çöz."}
+`
+    });
 
-    const contents = [
-      {
-        parts: [
-          {
-            text: prompt
-          }
-        ]
-      }
-    ];
-
-    // Fotoğraf gönderildiyse Gemini'ye görüntüyü de gönder
     if (image) {
       const match = image.match(
-        /^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/
+        /^data:(image\/[^;]+);base64,(.+)$/
       );
 
       if (!match) {
@@ -75,52 +66,54 @@ ${question || "Soru fotoğrafta bulunmaktadır."}
         });
       }
 
-      const mimeType = match[1];
-      const base64Data = match[2];
-
-      contents[0].parts.push({
-        inlineData: {
-          mimeType,
-          data: base64Data
+      parts.push({
+        inline_data: {
+          mime_type: match[1],
+          data: match[2]
         }
       });
     }
 
     const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" +
-        encodeURIComponent(apiKey),
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "x-goog-api-key": apiKey
         },
         body: JSON.stringify({
-          contents
+          contents: [
+            {
+              parts: parts
+            }
+          ]
         })
       }
     );
 
-    const raw = await response.text();
+    const text = await response.text();
+
+    console.log("Gemini status:", response.status);
+    console.log("Gemini response:", text);
 
     let result;
 
     try {
-      result = JSON.parse(raw);
+      result = JSON.parse(text);
     } catch {
       return res.status(502).json({
         success: false,
-        error: "Yapay zeka servisinden geçersiz yanıt geldi."
+        error: "Gemini geçerli JSON yanıtı vermedi."
       });
     }
 
     if (!response.ok) {
-      console.error("Gemini API Error:", result);
-
       return res.status(response.status).json({
         success: false,
         error:
           result?.error?.message ||
-          "Yapay zeka servisi hata verdi."
+          "Gemini API isteği başarısız oldu."
       });
     }
 
@@ -133,13 +126,13 @@ ${question || "Soru fotoğrafta bulunmaktadır."}
     if (!answer) {
       return res.status(500).json({
         success: false,
-        error: "Yapay zekadan cevap alınamadı."
+        error: "Gemini cevap oluşturamadı."
       });
     }
 
     return res.status(200).json({
       success: true,
-      answer
+      answer: answer
     });
 
   } catch (error) {
@@ -147,9 +140,7 @@ ${question || "Soru fotoğrafta bulunmaktadır."}
 
     return res.status(500).json({
       success: false,
-      error:
-        error?.message ||
-        "Soru çözülürken sunucu hatası oluştu."
+      error: error.message || "Sunucu hatası oluştu."
     });
   }
 }
