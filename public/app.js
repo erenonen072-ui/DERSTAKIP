@@ -1,127 +1,208 @@
+/* =========================================================
+   DERS TAKİP V3
+   Tek dosyalık uygulama motoru
+========================================================= */
+
 "use strict";
 
 /* =========================================================
-   DERS TAKİP - APP.JS
-   HTML ile birebir uyumlu
+   STATE
 ========================================================= */
 
-const API_BASE = "/api";
+const STORAGE_KEY = "derstakip_v3";
 
-let state = {
-  user: null,
-  tasks: [],
-  subjects: [],
-  exams: [],
+const defaultState = {
+  loggedIn: false,
+
+  user: {
+    name: "Eren Önen",
+    email: "",
+    avatar: "🎓"
+  },
+
   xp: 0,
   coins: 0,
   streak: 0,
-  completedTasks: 0,
-  focusMinutes: 0,
+  minutes: 0,
+
+  tasks: [
+    {
+      id: 1,
+      name: "20 soru Matematik çöz",
+      xp: 30,
+      completed: false
+    },
+    {
+      id: 2,
+      name: "Türkçe tekrar yap",
+      xp: 25,
+      completed: false
+    }
+  ],
+
+  subjects: [
+    {
+      id: 1,
+      name: "Matematik",
+      icon: "📐",
+      progress: 65
+    },
+    {
+      id: 2,
+      name: "Türkçe",
+      icon: "📖",
+      progress: 50
+    },
+    {
+      id: 3,
+      name: "Fen Bilimleri",
+      icon: "🔬",
+      progress: 35
+    },
+    {
+      id: 4,
+      name: "İngilizce",
+      icon: "🌎",
+      progress: 40
+    }
+  ],
+
+  exams: [
+    {
+      id: 1,
+      name: "Matematik Sınavı",
+      subject: "Matematik",
+      date: "2026-09-10"
+    },
+    {
+      id: 2,
+      name: "Türkçe Sınavı",
+      subject: "Türkçe",
+      date: "2026-09-15"
+    }
+  ],
+
+  activities: [],
+
   pet: {
     name: "Panda",
-    level: 1,
-    icon: "🐼"
+    icon: "🐼",
+    xp: 0,
+    level: 1
   },
-  claimedReward: false,
-  darkMode: false
+
+  focusMinutes: 25,
+
+  theme: "light",
+
+  dailyRewardClaimed: false
 };
 
-let timerSeconds = 25 * 60;
+let state = loadState();
+
 let timerInterval = null;
+
+let timerSeconds = 25 * 60;
+
+let timerRunning = false;
 
 
 /* =========================================================
-   SAFE API
+   STORAGE
 ========================================================= */
 
-async function apiRequest(url, options = {}) {
+function loadState(){
 
-  try {
+  try{
 
-    const response = await fetch(url, {
-      ...options,
-      headers: {
-        "Content-Type": "application/json",
-        ...(options.headers || {})
-      }
-    });
+    const saved = localStorage.getItem(STORAGE_KEY);
 
-    const text = await response.text();
-
-    let data;
-
-    try {
-      data = text ? JSON.parse(text) : {};
-    } catch (error) {
-
-      console.error("API JSON hatası:", text);
-
-      throw new Error(
-        "Sunucu JSON yerine farklı bir cevap gönderdi. API adresini kontrol et."
-      );
+    if(!saved){
+      return structuredClone(defaultState);
     }
 
-    if (!response.ok) {
-      throw new Error(
-        data.message ||
-        data.error ||
-        "Sunucu hatası oluştu."
-      );
-    }
+    const parsed = JSON.parse(saved);
 
-    return data;
+    return mergeState(
+      structuredClone(defaultState),
+      parsed
+    );
 
-  } catch (error) {
+  }catch(error){
 
-    console.error(error);
+    console.error("State yüklenemedi:", error);
 
-    throw error;
+    return structuredClone(defaultState);
   }
 }
 
 
-/* =========================================================
-   LOCAL STORAGE
-========================================================= */
+function mergeState(base, saved){
 
-function saveState() {
+  return {
+    ...base,
+    ...saved,
+
+    user:{
+      ...base.user,
+      ...(saved.user || {})
+    },
+
+    pet:{
+      ...base.pet,
+      ...(saved.pet || {})
+    },
+
+    tasks:Array.isArray(saved.tasks)
+      ? saved.tasks
+      : base.tasks,
+
+    subjects:Array.isArray(saved.subjects)
+      ? saved.subjects
+      : base.subjects,
+
+    exams:Array.isArray(saved.exams)
+      ? saved.exams
+      : base.exams,
+
+    activities:Array.isArray(saved.activities)
+      ? saved.activities
+      : base.activities
+  };
+}
+
+
+function saveState(){
 
   localStorage.setItem(
-    "dersTakipState",
+    STORAGE_KEY,
     JSON.stringify(state)
   );
 }
 
 
-function loadState() {
+/* =========================================================
+   INIT
+========================================================= */
 
-  try {
+document.addEventListener("DOMContentLoaded", init);
 
-    const saved =
-      localStorage.getItem("dersTakipState");
 
-    if (!saved) return;
+function init(){
 
-    const parsed = JSON.parse(saved);
+  applyTheme();
 
-    state = {
-      ...state,
-      ...parsed,
-      pet: {
-        ...state.pet,
-        ...(parsed.pet || {})
-      }
-    };
+  if(state.loggedIn){
 
-  } catch (error) {
+    showApp();
 
-    console.error(
-      "LocalStorage okunamadı:",
-      error
-    );
+  }else{
+
+    showAuth();
 
   }
 
+  renderAll();
 }
 
 
@@ -129,148 +210,73 @@ function loadState() {
    AUTH
 ========================================================= */
 
-function showLogin() {
+function showAuth(){
+
+  const auth = document.getElementById("authScreen");
+  const app = document.getElementById("app");
+
+  if(auth) auth.style.display = "flex";
+
+  if(app) app.style.display = "none";
+}
+
+
+function showApp(){
+
+  const auth = document.getElementById("authScreen");
+  const app = document.getElementById("app");
+
+  if(auth) auth.style.display = "none";
+
+  if(app) app.style.display = "block";
+
+  updateUserUI();
+}
+
+
+function showLogin(){
 
   document.getElementById("loginForm").style.display = "block";
+
   document.getElementById("registerForm").style.display = "none";
 
-  document
-    .getElementById("loginTab")
-    .classList.add("active");
+  document.getElementById("loginTab").classList.add("active");
 
-  document
-    .getElementById("registerTab")
-    .classList.remove("active");
+  document.getElementById("registerTab").classList.remove("active");
 
   setAuthMessage("");
-
 }
 
 
-function showRegister() {
+function showRegister(){
 
   document.getElementById("loginForm").style.display = "none";
+
   document.getElementById("registerForm").style.display = "block";
 
-  document
-    .getElementById("loginTab")
-    .classList.remove("active");
+  document.getElementById("loginTab").classList.remove("active");
 
-  document
-    .getElementById("registerTab")
-    .classList.add("active");
+  document.getElementById("registerTab").classList.add("active");
 
   setAuthMessage("");
-
 }
 
 
-function setAuthMessage(message, success = false) {
+function setAuthMessage(message, error=false){
 
-  const el =
-    document.getElementById("authMessage");
+  const element = document.getElementById("authMessage");
 
-  if (!el) return;
+  if(!element) return;
 
-  el.textContent = message;
+  element.textContent = message;
 
-  el.style.color =
-    success ? "#20a67a" : "#e05263";
+  element.style.color = error
+    ? "#e5485d"
+    : "#20a77a";
 }
 
 
-function togglePassword(id, button) {
-
-  const input =
-    document.getElementById(id);
-
-  if (!input) return;
-
-  if (input.type === "password") {
-
-    input.type = "text";
-
-    button.textContent = "🙈";
-
-  } else {
-
-    input.type = "password";
-
-    button.textContent = "👁️";
-
-  }
-
-}
-
-
-async function login(event) {
-
-  event.preventDefault();
-
-  const email =
-    document.getElementById("loginEmail").value.trim();
-
-  const password =
-    document.getElementById("loginPassword").value;
-
-  if (!email || !password) return;
-
-  setAuthMessage("Giriş yapılıyor...", true);
-
-  /*
-   * API mevcutsa kullan.
-   * API yoksa demo/local girişine devam eder.
-   */
-
-  try {
-
-    const result = await apiRequest(
-      `${API_BASE}/login`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          email,
-          password
-        })
-      }
-    );
-
-    if (result.user) {
-
-      state.user = result.user;
-
-    } else {
-
-      state.user = {
-        name: result.name || email.split("@")[0],
-        email
-      };
-
-    }
-
-  } catch (error) {
-
-    /*
-     * Eğer API route bulunmuyorsa
-     * uygulamanın tamamının çalışmasını engellemiyoruz.
-     */
-
-    state.user = {
-      name:
-        email.split("@")[0] || "Öğrenci",
-      email
-    };
-
-  }
-
-  saveState();
-
-  openApp();
-
-}
-
-
-async function register(event) {
+function register(event){
 
   event.preventDefault();
 
@@ -283,91 +289,98 @@ async function register(event) {
   const password =
     document.getElementById("registerPassword").value;
 
-  if (!name || !email || password.length < 6) {
+  if(password.length < 6){
 
     setAuthMessage(
-      "Bilgileri doğru doldur."
+      "Şifre en az 6 karakter olmalı.",
+      true
     );
 
     return;
   }
 
-  setAuthMessage(
-    "Hesap oluşturuluyor...",
-    true
-  );
+  state.user.name = name;
 
-  try {
+  state.user.email = email;
 
-    const result = await apiRequest(
-      `${API_BASE}/register`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          name,
-          email,
-          password
-        })
-      }
-    );
+  state.loggedIn = true;
 
-    state.user =
-      result.user || {
-        name,
-        email
-      };
+  state.xp = 0;
 
-  } catch (error) {
-
-    /*
-     * Backend hazır değilse
-     * local hesap oluştur.
-     */
-
-    state.user = {
-      name,
-      email
-    };
-
-  }
+  state.coins = 0;
 
   saveState();
 
-  openApp();
+  showApp();
 
+  renderAll();
+
+  toast("Hesabın oluşturuldu 🎉");
 }
 
 
-function logout() {
+function login(event){
 
-  state.user = null;
+  event.preventDefault();
 
-  localStorage.removeItem(
-    "dersTakipLoggedIn"
-  );
+  const email =
+    document.getElementById("loginEmail").value.trim();
 
-  document.getElementById("app").style.display = "none";
-  document.getElementById("authScreen").style.display = "flex";
+  if(!email){
+
+    setAuthMessage(
+      "E-posta adresini gir.",
+      true
+    );
+
+    return;
+  }
+
+  state.user.email = email;
+
+  state.loggedIn = true;
+
+  saveState();
+
+  showApp();
+
+  renderAll();
+
+  toast("Tekrar hoş geldin! 👋");
+}
+
+
+function logout(){
+
+  state.loggedIn = false;
+
+  saveState();
+
+  showAuth();
 
   showLogin();
-
 }
 
 
-function openApp() {
+function togglePassword(id, button){
 
-  localStorage.setItem(
-    "dersTakipLoggedIn",
-    "1"
-  );
+  const input = document.getElementById(id);
 
-  document.getElementById("authScreen").style.display = "none";
-  document.getElementById("app").style.display = "block";
+  if(!input) return;
 
-  updateAll();
+  if(input.type === "password"){
 
-  navigate("home");
+    input.type = "text";
 
+    button.textContent = "🙈";
+
+  }else{
+
+    input.type = "password";
+
+    button.textContent = "👁️";
+
+  }
 }
 
 
@@ -377,179 +390,170 @@ function openApp() {
 
 const pageNames = {
 
-  home: {
-    title: "Merhaba! 👋",
-    subtitle: "Bugün küçük bir adım, yarın büyük bir başarı."
+  home:{
+    title:"Merhaba! 👋",
+    subtitle:"Bugün küçük bir adım, yarın büyük bir başarı."
   },
 
-  tasks: {
-    title: "Görevler ✅",
-    subtitle: "Bugünkü çalışmalarını yönet."
+  tasks:{
+    title:"Görevler ✅",
+    subtitle:"Bugün yapman gerekenleri yönet."
   },
 
-  subjects: {
-    title: "Dersler 📚",
-    subtitle: "Derslerini düzenle ve takip et."
+  subjects:{
+    title:"Dersler 📚",
+    subtitle:"Ders bazında ilerlemeni takip et."
   },
 
-  exams: {
-    title: "Sınavlar 📅",
-    subtitle: "Yaklaşan sınavlarını takip et."
+  exams:{
+    title:"Sınavlar 📅",
+    subtitle:"Yaklaşan sınavlarını takip et."
   },
 
-  focus: {
-    title: "Odaklan ⏱️",
-    subtitle: "Dikkatini topla ve çalışmaya başla."
+  focus:{
+    title:"Odaklan ⏱️",
+    subtitle:"Dikkatini topla ve çalışmaya başla."
   },
 
-  coach: {
-    title: "Ders Koçu 🤖",
-    subtitle: "Bugünkü çalışma önerini al."
+  coach:{
+    title:"Ders Koçu 🤖",
+    subtitle:"Sana özel çalışma önerileri."
   },
 
-  pet: {
-    title: "Evcil Hayvan 🐣",
-    subtitle: "Çalıştıkça Panda'nı geliştir."
+  pet:{
+    title:"Evcil Hayvanım 🐼",
+    subtitle:"Çalıştıkça evcil hayvanın gelişir."
   },
 
-  market: {
-    title: "Market 🛒",
-    subtitle: "Coinlerini ödüller için kullan."
+  market:{
+    title:"Ödül Marketi 🛒",
+    subtitle:"Coinlerini ödüller için kullan."
   },
 
-  achievements: {
-    title: "Rozetler 🏆",
-    subtitle: "Başarılarını ve kilitlerini takip et."
+  achievements:{
+    title:"Rozetler 🏆",
+    subtitle:"Başarılarını ve koleksiyonunu gör."
   },
 
-  stats: {
-    title: "İstatistikler 📊",
-    subtitle: "Çalışma performansını incele."
+  stats:{
+    title:"İstatistikler 📊",
+    subtitle:"Çalışma performansını incele."
   },
 
-  profile: {
-    title: "Profil 👤",
-    subtitle: "Hesabını ve ayarlarını yönet."
+  profile:{
+    title:"Profil 👤",
+    subtitle:"Hesabını ve ayarlarını yönet."
   }
 
 };
 
 
-function navigate(page, clickedButton = null) {
+function navigate(page, button){
 
-  document
-    .querySelectorAll(".page")
-    .forEach(el => {
-      el.classList.remove("active");
-    });
+  document.querySelectorAll(".page")
+    .forEach(p => p.classList.remove("active"));
 
   const target =
-    document.getElementById(
-      `page-${page}`
-    );
+    document.getElementById(`page-${page}`);
 
-  if (target) {
+  if(target){
     target.classList.add("active");
   }
 
-  document
-    .querySelectorAll(".menu button")
-    .forEach(btn => {
-      btn.classList.remove("active");
-    });
+  document.querySelectorAll(".menu button")
+    .forEach(b => b.classList.remove("active"));
 
-  if (clickedButton) {
+  if(button){
+    button.classList.add("active");
+  }else{
 
-    clickedButton.classList.add("active");
+    const sidebarButton =
+      [...document.querySelectorAll(".menu button")]
+      .find(btn =>
+        btn.getAttribute("onclick")?.includes(`'${page}'`)
+      );
 
-  } else {
-
-    const buttons =
-      document.querySelectorAll(".menu button");
-
-    buttons.forEach(btn => {
-
-      if (
-        btn.getAttribute("onclick") &&
-        btn.getAttribute("onclick").includes(
-          `'${page}'`
-        )
-      ) {
-
-        btn.classList.add("active");
-
-      }
-
-    });
-
+    if(sidebarButton){
+      sidebarButton.classList.add("active");
+    }
   }
 
-  const info =
-    pageNames[page] ||
-    pageNames.home;
+  const info = pageNames[page];
 
-  const welcome =
-    document.getElementById("welcomeText");
+  if(info){
 
-  const subtitle =
-    document.getElementById("sectionSubtitle");
+    document.getElementById("welcomeText").textContent =
+      info.title;
 
-  if (welcome) {
-    welcome.textContent = info.title;
-  }
-
-  if (subtitle) {
-    subtitle.textContent = info.subtitle;
+    document.getElementById("sectionSubtitle").textContent =
+      info.subtitle;
   }
 
   renderPage(page);
 
   window.scrollTo({
-    top: 0,
-    behavior: "smooth"
+    top:0,
+    behavior:"smooth"
   });
 
+  closeMobileMenu();
 }
 
 
-function navigateMobile(page) {
+function navigateMobile(page){
 
   navigate(page);
 
-  document
-    .getElementById("mobileDrawer")
-    .classList.remove("open");
+  document.querySelectorAll(".mobile-menu-item")
+    .forEach(item =>
+      item.classList.remove("active")
+    );
 
-  document
-    .querySelectorAll(".mobile-menu-item")
-    .forEach(btn => {
+  const matching =
+    [...document.querySelectorAll(".mobile-menu-item")]
+      .find(item =>
+        item.getAttribute("onclick")?.includes(`'${page}'`)
+      );
 
-      btn.classList.remove("active");
-
-      const onclick =
-        btn.getAttribute("onclick") || "";
-
-      if (onclick.includes(`'${page}'`)) {
-        btn.classList.add("active");
-      }
-
-    });
-
+  if(matching){
+    matching.classList.add("active");
+  }
 }
 
 
-function toggleMobileMenu() {
+/* =========================================================
+   RENDER
+========================================================= */
 
-  document
-    .getElementById("mobileDrawer")
-    .classList.toggle("open");
+function renderAll(){
 
+  updateUserUI();
+
+  renderHome();
+
+  renderTasks();
+
+  renderSubjects();
+
+  renderExams();
+
+  renderPet();
+
+  renderMarket();
+
+  renderBadges();
+
+  renderStats();
+
+  renderProfile();
+
+  renderCoach();
 }
 
 
-function renderPage(page) {
+function renderPage(page){
 
-  switch (page) {
+  switch(page){
 
     case "home":
       renderHome();
@@ -567,8 +571,12 @@ function renderPage(page) {
       renderExams();
       break;
 
+    case "focus":
+      updateTimerDisplay();
+      break;
+
     case "coach":
-      newCoachAdvice(false);
+      renderCoach();
       break;
 
     case "pet":
@@ -580,7 +588,7 @@ function renderPage(page) {
       break;
 
     case "achievements":
-      renderAchievements();
+      renderBadges();
       break;
 
     case "stats":
@@ -592,7 +600,48 @@ function renderPage(page) {
       break;
 
   }
+}
 
+
+/* =========================================================
+   USER
+========================================================= */
+
+function getLevel(){
+
+  return Math.floor(state.xp / 100) + 1;
+}
+
+
+function updateUserUI(){
+
+  const level = getLevel();
+
+  const welcome =
+    document.getElementById("welcomeText");
+
+  if(
+    welcome &&
+    document.getElementById("page-home")?.classList.contains("active")
+  ){
+
+    welcome.textContent =
+      `Merhaba, ${state.user.name}! 👋`;
+  }
+
+  const avatar =
+    document.getElementById("topAvatar");
+
+  if(avatar){
+    avatar.textContent = state.user.avatar;
+  }
+
+  const levelText =
+    document.getElementById("levelText");
+
+  if(levelText){
+    levelText.textContent = `Seviye ${level}`;
+  }
 }
 
 
@@ -600,99 +649,73 @@ function renderPage(page) {
    HOME
 ========================================================= */
 
-function renderHome() {
+function renderHome(){
 
-  const total =
-    state.tasks.length;
+  const total = state.tasks.length;
 
   const completed =
-    state.tasks.filter(
-      task => task.completed
-    ).length;
+    state.tasks.filter(t => t.completed).length;
 
   const percent =
     total === 0
       ? 0
-      : Math.round(
-          completed / total * 100
-        );
-
-  const summary =
-    document.getElementById("homeSummary");
-
-  if (summary) {
-
-    summary.textContent =
-      total === 0
-        ? "Bugün için henüz görev eklemedin. Görevler bölümünden başlayabilirsin."
-        : `${completed} / ${total} görev tamamlandı.`;
-
-  }
+      : Math.round((completed / total) * 100);
 
   const progress =
-    document.getElementById(
-      "homeProgress"
-    );
+    document.getElementById("progressBar");
 
-  if (progress) {
-    progress.style.width =
-      `${percent}%`;
+  if(progress){
+    progress.style.width = `${percent}%`;
   }
 
-  const info =
-    document.getElementById(
-      "homeTaskInfo"
-    );
+  const progressText =
+    document.getElementById("progressText");
 
-  if (info) {
-
-    info.textContent =
-      total === 0
-        ? "Henüz görev yok."
-        : `${completed} tamamlandı, ${total - completed} kaldı.`;
-
+  if(progressText){
+    progressText.textContent =
+      `${completed} / ${total} görev`;
   }
 
-}
+  const xp =
+    document.getElementById("xpText");
 
+  if(xp){
+    xp.textContent = `${state.xp} XP`;
+  }
 
-/* =========================================================
-   TASKS
-========================================================= */
+  const summary =
+    document.getElementById("taskSummary");
 
-function renderTasks() {
+  if(summary){
+
+    if(total === 0){
+
+      summary.textContent =
+        "Bugün için henüz görev eklemedin.";
+
+    }else if(completed === total){
+
+      summary.textContent =
+        "Harika! Bugünkü görevlerinin hepsini tamamladın 🎉";
+
+    }else{
+
+      summary.textContent =
+        `${total - completed} görev seni bekliyor.`;
+    }
+  }
 
   const list =
-    document.getElementById(
-      "taskList"
-    );
+    document.getElementById("homeTaskList");
 
-  const counter =
-    document.getElementById(
-      "taskCounter"
-    );
+  if(!list) return;
 
-  if (!list) return;
-
-  const completed =
-    state.tasks.filter(
-      task => task.completed
-    ).length;
-
-  if (counter) {
-
-    counter.textContent =
-      `${completed} / ${state.tasks.length}`;
-
-  }
-
-  if (!state.tasks.length) {
+  if(total === 0){
 
     list.innerHTML = `
       <div class="empty">
         <div class="empty-icon">📝</div>
-        <strong>Henüz görev yok</strong>
-        <p>İlk görevini aşağıdan ekle.</p>
+        <p>Henüz görev yok.</p>
       </div>
     `;
 
@@ -701,148 +724,198 @@ function renderTasks() {
 
   list.innerHTML =
     state.tasks
-      .map((task,index) => `
-
-        <div class="task ${task.completed ? "completed" : ""}">
-
-          <button
-            class="checkbox"
-            onclick="toggleTask(${index})"
-          >
-            ${task.completed ? "✓" : ""}
-          </button>
-
-          <div class="task-content">
-
-            <div class="task-name">
-              ${escapeHTML(task.name)}
-            </div>
-
-          </div>
-
-          <span class="task-xp">
-            +${task.xp} XP
-          </span>
-
-          <button
-            class="delete-task"
-            onclick="deleteTask(${index})"
-          >
-            🗑️
-          </button>
-
-        </div>
-
-      `)
+      .slice(0,5)
+      .map(taskHTML)
       .join("");
-
 }
 
 
-function addTask() {
+/* =========================================================
+   TASKS
+========================================================= */
 
-  const input =
-    document.getElementById(
-      "newTask"
-    );
+function renderTasks(){
 
-  if (!input) return;
+  const list =
+    document.getElementById("taskList");
 
-  const name =
-    input.value.trim();
+  if(!list) return;
 
-  if (!name) {
+  const counter =
+    document.getElementById("taskCounter");
 
-    toast("Önce görev adını yaz.");
+  const completed =
+    state.tasks.filter(t => t.completed).length;
+
+  if(counter){
+
+    counter.textContent =
+      `${completed} / ${state.tasks.length}`;
+  }
+
+  if(state.tasks.length === 0){
+
+    list.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">🎯</div>
+        <p>Henüz görev eklenmemiş.</p>
+      </div>
+    `;
 
     return;
   }
 
-  state.tasks.push({
-    id: Date.now(),
+  list.innerHTML =
+    state.tasks
+      .map(taskHTML)
+      .join("");
+}
+
+
+function taskHTML(task){
+
+  return `
+    <div class="task ${task.completed ? "completed" : ""}">
+
+      <button
+        class="checkbox"
+        onclick="toggleTask(${task.id})"
+        aria-label="Görevi tamamla"
+      >
+        ${task.completed ? "✓" : ""}
+      </button>
+
+      <div class="task-content">
+
+        <div class="task-name">
+          ${escapeHTML(task.name)}
+        </div>
+
+      </div>
+
+      <span class="task-xp">
+        +${task.xp} XP
+      </span>
+
+      <button
+        class="delete-task"
+        onclick="deleteTask(${task.id})"
+        title="Sil"
+      >
+        🗑️
+      </button>
+
+    </div>
+  `;
+}
+
+
+function addTask(){
+
+  const input =
+    document.getElementById("newTask");
+
+  if(!input) return;
+
+  const name = input.value.trim();
+
+  if(!name){
+
+    toast("Önce görev adını yaz ✏️");
+
+    return;
+  }
+
+  const task = {
+
+    id:Date.now(),
+
     name,
-    completed: false,
-    xp: 50
-  });
+
+    xp:25,
+
+    completed:false
+  };
+
+  state.tasks.push(task);
+
+  addActivity(
+    `Yeni görev eklendi: ${name}`,
+    "📝"
+  );
 
   input.value = "";
 
   saveState();
 
-  renderTasks();
-  renderHome();
+  renderAll();
 
-  toast("Görev eklendi ✅");
-
+  toast("Görev eklendi 🎯");
 }
 
 
-function toggleTask(index) {
+function toggleTask(id){
 
   const task =
-    state.tasks[index];
+    state.tasks.find(t => t.id === id);
 
-  if (!task) return;
+  if(!task) return;
 
-  task.completed =
-    !task.completed;
+  if(task.completed){
 
-  if (task.completed) {
-
-    state.xp += task.xp;
-    state.coins += 10;
-    state.completedTasks++;
-
-    showCelebration(
-      `⭐ +${task.xp} XP<br>🪙 +10 Coin`
-    );
-
-  } else {
+    task.completed = false;
 
     state.xp =
-      Math.max(
-        0,
-        state.xp - task.xp
-      );
+      Math.max(0,state.xp - task.xp);
 
     state.coins =
-      Math.max(
-        0,
-        state.coins - 10
-      );
+      Math.max(0,state.coins - 5);
 
-    state.completedTasks =
-      Math.max(
-        0,
-        state.completedTasks - 1
-      );
+    toast("Görev tekrar açıldı.");
+
+  }else{
+
+    task.completed = true;
+
+    state.xp += task.xp;
+
+    state.coins += 5;
+
+    state.minutes += 5;
+
+    state.streak = Math.max(1,state.streak);
+
+    state.pet.xp += task.xp;
+
+    levelUpPet();
+
+    addActivity(
+      `${task.name} tamamlandı`,
+      "✅"
+    );
+
+    celebrate(
+      `⭐ +${task.xp} XP<br>🪙 +5 Coin`
+    );
 
   }
 
-  updateLevel();
-
   saveState();
 
-  renderTasks();
-  renderHome();
-  renderStats();
-
+  renderAll();
 }
 
 
-function deleteTask(index) {
+function deleteTask(id){
 
-  if (!state.tasks[index]) return;
-
-  state.tasks.splice(index,1);
+  state.tasks =
+    state.tasks.filter(t => t.id !== id);
 
   saveState();
 
-  renderTasks();
-  renderHome();
+  renderAll();
 
   toast("Görev silindi.");
-
 }
 
 
@@ -850,105 +923,98 @@ function deleteTask(index) {
    SUBJECTS
 ========================================================= */
 
-function renderSubjects() {
+function renderSubjects(){
 
-  const container =
-    document.getElementById(
-      "subjectList"
-    );
+  const grid =
+    document.getElementById("subjectGrid");
 
-  if (!container) return;
+  if(!grid) return;
 
-  if (!state.subjects.length) {
+  if(state.subjects.length === 0){
 
-    container.innerHTML = `
-      <div class="card empty">
-        <div class="empty-icon">📚</div>
-        <strong>Henüz ders eklenmedi.</strong>
-        <p>Yukarıdan ilk dersini ekle.</p>
+    grid.innerHTML = `
+      <div class="empty">
+        Henüz ders eklenmemiş.
       </div>
     `;
 
     return;
   }
 
-  container.innerHTML =
-    state.subjects
-      .map((subject,index) => `
+  grid.innerHTML =
+    state.subjects.map(subject => `
 
-        <div class="subject">
+      <div class="subject-card">
 
-          <div class="subject-icon">
-            ${subject.icon || "📚"}
-          </div>
+        <div class="subject-icon">
+          ${subject.icon}
+        </div>
 
-          <h3>
-            ${escapeHTML(subject.name)}
-          </h3>
+        <h3>
+          ${escapeHTML(subject.name)}
+        </h3>
 
-          <p class="muted">
-            Çalışmaya hazır.
-          </p>
+        <p>
+          Ders ilerlemesi
+        </p>
 
-          <button
-            class="danger-btn"
-            style="margin-top:15px"
-            onclick="deleteSubject(${index})"
-          >
-            Sil
-          </button>
+        <div class="mini-progress">
+
+          <span style="width:${subject.progress}%"></span>
 
         </div>
 
-      `)
-      .join("");
+        <small
+          style="
+            display:block;
+            margin-top:8px;
+            color:var(--muted)
+          "
+        >
+          ${subject.progress}%
+        </small>
 
+      </div>
+
+    `).join("");
 }
 
 
-function addSubject() {
-
-  const input =
-    document.getElementById(
-      "subjectInput"
-    );
+function addSubject(){
 
   const name =
-    input.value.trim();
+    prompt("Ders adı:");
 
-  if (!name) {
+  if(!name?.trim()) return;
 
-    toast("Ders adı yaz.");
-
-    return;
-  }
+  const icons = [
+    "📚",
+    "📐",
+    "🔬",
+    "🌎",
+    "📖",
+    "💻",
+    "🎨"
+  ];
 
   state.subjects.push({
-    name,
-    icon: getSubjectIcon(name)
+
+    id:Date.now(),
+
+    name:name.trim(),
+
+    icon:icons[
+      Math.floor(Math.random()*icons.length)
+    ],
+
+    progress:0
   });
 
-  input.value = "";
-
   saveState();
 
   renderSubjects();
-  renderStats();
 
   toast("Ders eklendi 📚");
-
-}
-
-
-function deleteSubject(index) {
-
-  state.subjects.splice(index,1);
-
-  saveState();
-
-  renderSubjects();
-  renderStats();
-
 }
 
 
@@ -956,95 +1022,66 @@ function deleteSubject(index) {
    EXAMS
 ========================================================= */
 
-function renderExams() {
+function renderExams(){
 
-  const container =
-    document.getElementById(
-      "examList"
-    );
+  const grid =
+    document.getElementById("examGrid");
 
-  if (!container) return;
+  if(!grid) return;
 
-  if (!state.exams.length) {
+  if(state.exams.length === 0){
 
-    container.innerHTML = `
-      <div class="card empty">
+    grid.innerHTML = `
+      <div class="empty">
         <div class="empty-icon">📅</div>
-        <strong>Henüz sınav eklenmedi.</strong>
-        <p>Yukarıdan sınav ekleyebilirsin.</p>
+        <p>Henüz sınav eklenmemiş.</p>
       </div>
     `;
 
     return;
   }
 
-  const sorted =
-    [...state.exams].sort(
-      (a,b) =>
-        new Date(a.date) -
-        new Date(b.date)
-    );
+  grid.innerHTML =
+    state.exams
+      .sort((a,b) =>
+        new Date(a.date) - new Date(b.date)
+      )
+      .map(exam => {
 
-  container.innerHTML =
-    sorted
-      .map((exam) => {
-
-        const date =
-          new Date(exam.date);
-
-        const diff =
-          Math.ceil(
-            (
-              date -
-              new Date()
-            ) /
-            86400000
-          );
-
-        let text =
-          "Bugün";
-
-        if (diff > 0) {
-          text = `${diff} gün kaldı`;
-        }
-
-        if (diff < 0) {
-          text = "Geçti";
-        }
+        const days =
+          daysUntil(exam.date);
 
         return `
 
-          <div class="exam">
+          <div class="exam-card">
 
-            <div class="exam-icon">
-              📅
-            </div>
+            <span class="exam-date">
+              ${formatDate(exam.date)}
+            </span>
 
             <h3>
               ${escapeHTML(exam.name)}
             </h3>
 
-            <p class="muted">
-              ${formatDate(exam.date)}
+            <p>
+              ${escapeHTML(exam.subject)}
             </p>
 
             <strong
               style="
                 display:block;
-                margin-top:12px;
-                color:var(--primary)
+                margin-top:15px;
+                color:${days <= 3 ? "var(--red)" : "var(--primary)"}
               "
             >
-              ${text}
+              ${
+                days < 0
+                  ? "Sınav geçti"
+                  : days === 0
+                    ? "Bugün!"
+                    : `${days} gün kaldı`
+              }
             </strong>
-
-            <button
-              class="danger-btn"
-              style="margin-top:15px"
-              onclick="deleteExam('${exam.id}')"
-            >
-              Sil
-            </button>
 
           </div>
 
@@ -1052,153 +1089,184 @@ function renderExams() {
 
       })
       .join("");
-
 }
 
 
-function addExam() {
+function addExam(){
 
   const name =
-    document.getElementById(
-      "examName"
-    ).value.trim();
+    prompt("Sınav adı:");
+
+  if(!name?.trim()) return;
+
+  const subject =
+    prompt("Ders:");
+
+  if(!subject?.trim()) return;
 
   const date =
-    document.getElementById(
-      "examDate"
-    ).value;
+    prompt(
+      "Tarih (YYYY-MM-DD):",
+      "2026-09-20"
+    );
 
-  if (!name || !date) {
-
-    toast("Sınav adı ve tarih gerekli.");
-
-    return;
-  }
+  if(!date) return;
 
   state.exams.push({
-    id: String(Date.now()),
-    name,
+
+    id:Date.now(),
+
+    name:name.trim(),
+
+    subject:subject.trim(),
+
     date
   });
-
-  document.getElementById(
-    "examName"
-  ).value = "";
-
-  document.getElementById(
-    "examDate"
-  ).value = "";
 
   saveState();
 
   renderExams();
 
   toast("Sınav eklendi 📅");
-
-}
-
-
-function deleteExam(id) {
-
-  state.exams =
-    state.exams.filter(
-      exam => String(exam.id) !== String(id)
-    );
-
-  saveState();
-
-  renderExams();
-
 }
 
 
 /* =========================================================
-   FOCUS TIMER
+   FOCUS
 ========================================================= */
 
-function updateTimerDisplay() {
+function setFocusMode(minutes, button){
+
+  state.focusMinutes = minutes;
+
+  timerSeconds = minutes * 60;
+
+  timerRunning = false;
+
+  clearInterval(timerInterval);
+
+  document
+    .querySelectorAll(".focus-mode button")
+    .forEach(b =>
+      b.classList.remove("active")
+    );
+
+  button.classList.add("active");
+
+  const timerButton =
+    document.getElementById("timerButton");
+
+  if(timerButton){
+    timerButton.textContent = "▶ Başlat";
+  }
+
+  updateTimerDisplay();
+}
+
+
+function toggleTimer(){
+
+  if(timerRunning){
+
+    clearInterval(timerInterval);
+
+    timerRunning = false;
+
+    document.getElementById("timerButton")
+      .textContent = "▶ Devam Et";
+
+    return;
+  }
+
+  timerRunning = true;
+
+  document.getElementById("timerButton")
+    .textContent = "⏸ Duraklat";
+
+  timerInterval =
+    setInterval(() => {
+
+      timerSeconds--;
+
+      updateTimerDisplay();
+
+      if(timerSeconds <= 0){
+
+        clearInterval(timerInterval);
+
+        timerRunning = false;
+
+        state.minutes += state.focusMinutes;
+
+        state.xp += state.focusMinutes;
+
+        state.coins += 10;
+
+        state.pet.xp += state.focusMinutes;
+
+        levelUpPet();
+
+        addActivity(
+          `${state.focusMinutes} dakika odaklanma tamamlandı`,
+          "⏱️"
+        );
+
+        saveState();
+
+        renderAll();
+
+        celebrate(
+          `⏱️ ${state.focusMinutes} dakika tamamlandı!<br>
+           ⭐ +${state.focusMinutes} XP<br>
+           🪙 +10 Coin`
+        );
+
+        timerSeconds =
+          state.focusMinutes * 60;
+
+        updateTimerDisplay();
+
+      }
+
+    },1000);
+}
+
+
+function resetTimer(){
+
+  clearInterval(timerInterval);
+
+  timerRunning = false;
+
+  timerSeconds =
+    state.focusMinutes * 60;
+
+  const button =
+    document.getElementById("timerButton");
+
+  if(button){
+    button.textContent = "▶ Başlat";
+  }
+
+  updateTimerDisplay();
+}
+
+
+function updateTimerDisplay(){
 
   const timer =
-    document.getElementById(
-      "timer"
-    );
+    document.getElementById("timer");
 
-  if (!timer) return;
+  if(!timer) return;
 
   const minutes =
-    Math.floor(
-      timerSeconds / 60
-    );
+    Math.floor(timerSeconds / 60);
 
   const seconds =
     timerSeconds % 60;
 
   timer.textContent =
     `${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
-
-}
-
-
-function startTimer() {
-
-  if (timerInterval) return;
-
-  timerInterval =
-    setInterval(() => {
-
-      if (timerSeconds <= 0) {
-
-        clearInterval(timerInterval);
-        timerInterval = null;
-
-        state.focusMinutes += 25;
-
-        state.xp += 25;
-        state.coins += 5;
-
-        saveState();
-
-        updateAll();
-
-        showCelebration(
-          "⏱️ Odaklanma tamamlandı!<br>⭐ +25 XP<br>🪙 +5 Coin"
-        );
-
-        timerSeconds =
-          25 * 60;
-
-        updateTimerDisplay();
-
-        return;
-      }
-
-      timerSeconds--;
-
-      updateTimerDisplay();
-
-    },1000);
-
-}
-
-
-function pauseTimer() {
-
-  clearInterval(timerInterval);
-
-  timerInterval = null;
-
-}
-
-
-function resetTimer() {
-
-  pauseTimer();
-
-  timerSeconds =
-    25 * 60;
-
-  updateTimerDisplay();
-
 }
 
 
@@ -1208,46 +1276,57 @@ function resetTimer() {
 
 const coachAdvice = [
 
-  "25 dakika boyunca sadece bir derse odaklan. Sonra 5 dakika mola ver.",
+  "Önce en zor dersinden 25 dakika çalış. Sonra kısa bir mola ver.",
 
-  "Bugün en zor dersinden başlamak motivasyonunu artırabilir.",
+  "Bugün 20 soru çözmeyi hedefle. Bitirdiğinde kendine küçük bir ödül ver.",
 
-  "Telefonunu çalışma sırasında uzağa koy ve bildirimlerini kapat.",
+  "Telefonunu sessize al ve sadece tek bir derse odaklan.",
 
-  "Küçük hedefler belirle. Bir görevi tamamlamak bile ilerlemedir.",
+  "Çalışmaya başlamak için mükemmel zamanı bekleme. Şimdi 10 dakika başla.",
 
-  "Çalışırken anlamadığın konuları not al ve daha sonra tekrar et.",
+  "Yanlış yaptığın soruları tekrar çözmek, yeni soru çözmek kadar değerlidir.",
 
-  "Bugün 30 dakika bile çalışsan dünkü halinden daha ileridesin.",
+  "Bugün küçük bir hedef seç ve mutlaka tamamla. Küçük adımlar büyük sonuçlar oluşturur.",
 
-  "Sınavın yaklaşıyorsa konuları küçük parçalara bölerek çalış."
+  "50 dakika çalışıp 10 dakika mola vermeyi deneyebilirsin."
 
 ];
 
 
-function newCoachAdvice(showToast = true) {
+function renderCoach(){
 
-  const el =
-    document.getElementById(
-      "coachMessage"
-    );
+  const element =
+    document.getElementById("coachMessage");
 
-  if (!el) return;
+  if(!element) return;
+
+  if(!element.textContent.trim()){
+
+    newCoachAdvice();
+
+  }
+}
+
+
+function newCoachAdvice(){
 
   const advice =
     coachAdvice[
       Math.floor(
-        Math.random() *
-        coachAdvice.length
+        Math.random()*coachAdvice.length
       )
     ];
 
-  el.textContent = advice;
+  const element =
+    document.getElementById("coachMessage");
 
-  if (showToast) {
-    toast("Yeni öneri geldi 🤖");
+  if(element){
+
+    element.textContent = advice;
+
   }
 
+  toast("Yeni çalışma önerisi 🤖");
 }
 
 
@@ -1255,68 +1334,90 @@ function newCoachAdvice(showToast = true) {
    PET
 ========================================================= */
 
-function renderPet() {
-
-  const name =
-    document.getElementById(
-      "petName"
-    );
+function renderPet(){
 
   const level =
-    document.getElementById(
-      "petLevel"
-    );
+    state.pet.level;
 
-  if (name) {
-    name.textContent =
-      state.pet.name;
+  const petBig =
+    document.getElementById("petBig");
+
+  if(petBig){
+    petBig.textContent = state.pet.icon;
   }
 
-  if (level) {
-    level.textContent =
-      `Seviye ${state.pet.level}`;
+  const name =
+    document.getElementById("petName");
+
+  if(name){
+    name.textContent = state.pet.name;
   }
 
+  const levelElement =
+    document.getElementById("petLevel");
+
+  if(levelElement){
+    levelElement.textContent =
+      `Seviye ${level}`;
+  }
+
+  const current =
+    state.pet.xp % 100;
+
+  const bar =
+    document.getElementById("petXPBar");
+
+  if(bar){
+    bar.style.width = `${current}%`;
+  }
+
+  const text =
+    document.getElementById("petXPText");
+
+  if(text){
+    text.textContent =
+      `${current} / 100 XP`;
+  }
 }
 
 
-function feedPet() {
+function levelUpPet(){
 
-  if (state.coins < 5) {
+  const newLevel =
+    Math.floor(state.pet.xp / 100) + 1;
+
+  if(newLevel > state.pet.level){
+
+    state.pet.level = newLevel;
 
     toast(
-      "Panda'yı beslemek için 5 coin gerekiyor."
+      `🐼 Panda Seviye ${newLevel} oldu! 🎉`
     );
+
+  }
+}
+
+
+function feedPet(){
+
+  if(state.coins < 10){
+
+    toast("Panda'yı beslemek için 10 coin gerekiyor.");
 
     return;
   }
 
-  state.coins -= 5;
+  state.coins -= 10;
 
-  if (
-    Math.random() > .5
-  ) {
+  state.pet.xp += 15;
 
-    state.pet.level++;
-
-    toast(
-      "🐼 Panda seviye atladı!"
-    );
-
-  } else {
-
-    toast(
-      "🍎 Panda mutlu oldu!"
-    );
-
-  }
+  levelUpPet();
 
   saveState();
 
-  renderPet();
-  renderStats();
-  updateLevel();
+  renderAll();
 
+  toast("Panda çok mutlu oldu! 🐼❤️");
 }
 
 
@@ -1327,105 +1428,96 @@ function feedPet() {
 const marketItems = [
 
   {
-    icon:"🍕",
-    name:"Pizza",
-    description:"Panda için lezzetli ödül.",
-    price:20
-  },
-
-  {
-    icon:"🎮",
-    name:"Oyun Saati",
-    description:"Kendine küçük bir mola.",
+    id:"hat",
+    icon:"🎩",
+    name:"Şapka",
+    description:"Panda için havalı bir şapka.",
     price:50
   },
 
   {
-    icon:"⭐",
-    name:"Yıldız Rozeti",
-    description:"Profilini süsle.",
-    price:75
+    id:"glasses",
+    icon:"🕶️",
+    name:"Gözlük",
+    description:"Panda artık çok havalı.",
+    price:80
   },
 
   {
-    icon:"🎁",
-    name:"Sürpriz Kutu",
-    description:"İçinden ne çıkacak?",
+    id:"star",
+    icon:"⭐",
+    name:"Yıldız",
+    description:"Profiline özel yıldız.",
     price:100
   },
 
   {
+    id:"crown",
     icon:"👑",
-    name:"Altın Taç",
-    description:"Başarının sembolü.",
+    name:"Taç",
+    description:"Seviye atlayanların ödülü.",
     price:150
   }
 
 ];
 
 
-function renderMarket() {
+function renderMarket(){
 
-  const container =
-    document.getElementById(
-      "marketList"
-    );
+  const grid =
+    document.getElementById("marketGrid");
 
-  if (!container) return;
+  const coins =
+    document.getElementById("marketCoins");
 
-  container.innerHTML =
-    marketItems
-      .map(
-        (item,index) => `
+  if(coins){
+    coins.textContent = state.coins;
+  }
 
-          <div class="shop-item">
+  if(!grid) return;
 
-            <div class="shop-icon">
-              ${item.icon}
-            </div>
+  grid.innerHTML =
+    marketItems.map(item => `
 
-            <h3>
-              ${item.name}
-            </h3>
+      <div class="shop-item">
 
-            <p class="muted">
-              ${item.description}
-            </p>
+        <div class="shop-icon">
+          ${item.icon}
+        </div>
 
-            <div
-              style="
-                font-weight:900;
-                color:#d79a00;
-                margin:10px 0
-              "
-            >
-              🪙 ${item.price}
-            </div>
+        <h3>
+          ${item.name}
+        </h3>
 
-            <button
-              class="primary-btn"
-              onclick="buyItem(${index})"
-            >
-              Satın Al
-            </button>
+        <p>
+          ${item.description}
+        </p>
 
-          </div>
+        <div class="price">
+          🪙 ${item.price}
+        </div>
 
-        `
-      )
-      .join("");
+        <button
+          class="primary-btn"
+          onclick="buyItem('${item.id}')"
+        >
+          Satın Al
+        </button>
 
+      </div>
+
+    `).join("");
 }
 
 
-function buyItem(index) {
+function buyItem(id){
 
   const item =
-    marketItems[index];
+    marketItems.find(i => i.id === id);
 
-  if (!item) return;
+  if(!item) return;
 
-  if (state.coins < item.price) {
+  if(state.coins < item.price){
 
     toast("Yeterli coin yok 🪙");
 
@@ -1434,127 +1526,117 @@ function buyItem(index) {
 
   state.coins -= item.price;
 
-  saveState();
-
-  renderMarket();
-  renderStats();
-
-  toast(
-    `${item.name} satın alındı! 🎉`
+  addActivity(
+    `${item.name} satın alındı`,
+    item.icon
   );
 
+  saveState();
+
+  renderAll();
+
+  toast(
+    `${item.icon} ${item.name} satın alındı!`
+  );
 }
 
 
 /* =========================================================
-   ACHIEVEMENTS
+   BADGES
 ========================================================= */
 
-function renderAchievements() {
+function renderBadges(){
 
   const container =
-    document.getElementById(
-      "badgeList"
-    );
+    document.getElementById("badges");
 
-  if (!container) return;
+  if(!container) return;
+
+  const completed =
+    state.tasks.filter(t => t.completed).length;
 
   const badges = [
 
     {
       icon:"🌱",
-      title:"İlk Adım",
+      name:"İlk Adım",
       description:"İlk görevini tamamla.",
-      unlocked:
-        state.completedTasks >= 1
+      unlocked:completed >= 1
     },
 
     {
       icon:"🔥",
-      title:"Ateş Başladı",
-      description:"5 görev tamamla.",
-      unlocked:
-        state.completedTasks >= 5
+      name:"Seri Başlangıcı",
+      description:"1 günlük seri yap.",
+      unlocked:state.streak >= 1
     },
 
     {
       icon:"⭐",
-      title:"Yıldız Öğrenci",
-      description:"500 XP kazan.",
-      unlocked:
-        state.xp >= 500
+      name:"XP Avcısı",
+      description:"100 XP kazan.",
+      unlocked:state.xp >= 100
     },
 
     {
-      icon:"📚",
-      title:"Kitap Kurdu",
-      description:"3 ders ekle.",
-      unlocked:
-        state.subjects.length >= 3
+      icon:"🎯",
+      name:"Görev Ustası",
+      description:"5 görev tamamla.",
+      unlocked:completed >= 5
     },
 
     {
       icon:"⏱️",
-      title:"Odak Ustası",
-      description:"60 dakika odaklan.",
-      unlocked:
-        state.focusMinutes >= 60
+      name:"Odak Şampiyonu",
+      description:"60 dakika çalış.",
+      unlocked:state.minutes >= 60
     },
 
     {
-      icon:"👑",
-      title:"Usta Öğrenci",
-      description:"1000 XP kazan.",
-      unlocked:
-        state.xp >= 1000
+      icon:"🪙",
+      name:"Coin Toplayıcı",
+      description:"100 coin kazan.",
+      unlocked:state.coins >= 100
+    },
+
+    {
+      icon:"🏆",
+      name:"Seviye 5",
+      description:"5. seviyeye ulaş.",
+      unlocked:getLevel() >= 5
+    },
+
+    {
+      icon:"🐼",
+      name:"Panda Dostu",
+      description:"Panda'yı seviye 3 yap.",
+      unlocked:state.pet.level >= 3
     }
 
   ];
 
   container.innerHTML =
-    badges
-      .map(
-        badge => `
+    badges.map(badge => `
 
-          <div
-            class="badge-item"
-            style="
-              opacity:${badge.unlocked ? 1 : .45};
-              filter:${badge.unlocked ? "none" : "grayscale(1)"}
-            "
-          >
+      <div class="badge ${badge.unlocked ? "" : "locked"}">
 
-            <div class="badge-icon">
-              ${badge.icon}
-            </div>
+        <div class="badge-icon">
+          ${badge.icon}
+        </div>
 
-            <h3>
-              ${badge.title}
-            </h3>
+        <strong>
+          ${badge.name}
+        </strong>
 
-            <p class="muted">
-              ${badge.description}
-            </p>
+        <br>
 
-            <strong
-              style="
-                display:block;
-                margin-top:10px
-              "
-            >
-              ${
-                badge.unlocked
-                  ? "🔓 Açıldı"
-                  : "🔒 Kilitli"
-              }
-            </strong>
+        <small>
+          ${badge.unlocked ? "Açıldı ✓" : badge.description}
+        </small>
 
-          </div>
+      </div>
 
-        `
-      )
-      .join("");
-
+    `).join("");
 }
 
 
@@ -1562,42 +1644,99 @@ function renderAchievements() {
    STATS
 ========================================================= */
 
-function renderStats() {
+function renderStats(){
 
-  const values = {
+  setText("statXP",state.xp);
 
-    statXP:
-      state.xp,
+  setText("statStreak",state.streak);
 
-    statStreak:
-      state.streak,
+  setText("statCoins",state.coins);
 
-    statCoins:
-      state.coins,
+  setText("statMinutes",state.minutes);
 
-    statCompleted:
-      state.completedTasks,
+  const activity =
+    document.getElementById("activityList");
 
-    statSubjects:
-      state.subjects.length,
+  if(!activity) return;
 
-    statFocus:
-      state.focusMinutes
+  if(state.activities.length === 0){
 
-  };
+    activity.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">📊</div>
+        <p>Henüz aktivite bulunmuyor.</p>
+      </div>
+    `;
 
-  Object.entries(values)
-    .forEach(([id,value]) => {
+    return;
+  }
 
-      const el =
-        document.getElementById(id);
+  activity.innerHTML =
+    state.activities
+      .slice(0,10)
+      .map(a => `
 
-      if (el) {
-        el.textContent = value;
+        <div
+          style="
+            display:flex;
+            align-items:center;
+            gap:12px;
+            padding:13px 0;
+            border-bottom:1px solid var(--border)
+          "
+        >
+
+          <div style="font-size:22px">
+            ${a.icon}
+          </div>
+
+          <div>
+
+            <strong>
+              ${escapeHTML(a.text)}
+            </strong>
+
+            <div
+              style="
+                color:var(--muted);
+                font-size:12px;
+                margin-top:3px
+              "
+            >
+              ${a.time}
+            </div>
+
+          </div>
+
+        </div>
+
+      `)
+      .join("");
+}
+
+
+function addActivity(text,icon){
+
+  state.activities.unshift({
+
+    text,
+
+    icon,
+
+    time:new Date().toLocaleString(
+      "tr-TR",
+      {
+        day:"2-digit",
+        month:"2-digit",
+        hour:"2-digit",
+        minute:"2-digit"
       }
+    )
 
-    });
+  });
 
+  state.activities =
+    state.activities.slice(0,30);
 }
 
 
@@ -1605,104 +1744,303 @@ function renderStats() {
    PROFILE
 ========================================================= */
 
-function renderProfile() {
+function renderProfile(){
 
-  const user =
-    state.user || {};
-
-  const name =
-    document.getElementById(
-      "profileName"
-    );
-
-  const email =
-    document.getElementById(
-      "profileEmail"
-    );
-
-  const level =
-    document.getElementById(
-      "profileLevel"
-    );
-
-  if (name) {
-    name.textContent =
-      user.name || "Öğrenci";
-  }
-
-  if (email) {
-    email.textContent =
-      user.email || "-";
-  }
-
-  if (level) {
-    level.textContent =
-      getLevel();
-  }
-
-}
-
-
-/* =========================================================
-   LEVEL
-========================================================= */
-
-function getLevel() {
-
-  return Math.max(
-    1,
-    Math.floor(
-      state.xp / 250
-    ) + 1
+  setText(
+    "profileName",
+    state.user.name
   );
 
+  setText(
+    "profileEmail",
+    state.user.email || "E-posta belirtilmedi."
+  );
+
+  setText(
+    "profileAvatar",
+    state.user.avatar
+  );
+
+  setText(
+    "topAvatar",
+    state.user.avatar
+  );
+
+  updateUserUI();
 }
 
 
-function updateLevel() {
+function changeAvatar(){
 
-  const level =
-    getLevel();
+  const avatars = [
+    "🎓",
+    "🐼",
+    "🐱",
+    "🐶",
+    "🦊",
+    "🐸",
+    "🦁",
+    "🐯",
+    "🐨",
+    "🚀"
+  ];
 
-  const levelText =
-    document.getElementById(
-      "levelText"
-    );
+  const current =
+    avatars.indexOf(state.user.avatar);
 
-  if (levelText) {
+  const next =
+    avatars[
+      (current + 1) % avatars.length
+    ];
 
-    levelText.textContent =
-      `Seviye ${level}`;
+  state.user.avatar = next;
 
-  }
+  saveState();
 
   renderProfile();
 
+  toast("Avatar değiştirildi ✨");
 }
 
 
 /* =========================================================
-   DARK MODE
+   THEME
 ========================================================= */
 
-function toggleDarkMode() {
-
-  state.darkMode =
-    !state.darkMode;
+function applyTheme(){
 
   document.body.classList.toggle(
     "dark",
-    state.darkMode
+    state.theme === "dark"
   );
+}
+
+
+function toggleDarkMode(){
+
+  state.theme =
+    state.theme === "dark"
+      ? "light"
+      : "dark";
+
+  applyTheme();
 
   saveState();
 
   toast(
-    state.darkMode
+    state.theme === "dark"
       ? "Karanlık mod açıldı 🌙"
-      : "Karanlık mod kapatıldı ☀️"
+      : "Aydınlık mod açıldı ☀️"
   );
+}
 
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+function toggleMobileMenu(){
+
+  const drawer =
+    document.getElementById("mobileDrawer");
+
+  if(drawer){
+    drawer.classList.toggle("open");
+  }
+}
+
+
+function closeMobileMenu(){
+
+  const drawer =
+    document.getElementById("mobileDrawer");
+
+  if(drawer){
+    drawer.classList.remove("open");
+  }
+}
+
+
+/* =========================================================
+   UTILITIES
+========================================================= */
+
+function setText(id,value){
+
+  const element =
+    document.getElementById(id);
+
+  if(element){
+    element.textContent = value;
+  }
+}
+
+
+function escapeHTML(value){
+
+  return String(value)
+
+    .replaceAll("&","&amp;")
+
+    .replaceAll("<","&lt;")
+
+    .replaceAll(">","&gt;")
+
+    .replaceAll('"',"&quot;")
+
+    .replaceAll("'","&#039;");
+}
+
+
+function formatDate(date){
+
+  try{
+
+    return new Date(date)
+      .toLocaleDateString(
+        "tr-TR",
+        {
+          day:"2-digit",
+          month:"long",
+          year:"numeric"
+        }
+      );
+
+  }catch{
+
+    return date;
+  }
+}
+
+
+function daysUntil(date){
+
+  const today =
+    new Date();
+
+  today.setHours(0,0,0,0);
+
+  const target =
+    new Date(date);
+
+  target.setHours(0,0,0,0);
+
+  return Math.ceil(
+    (target - today) /
+    (1000 * 60 * 60 * 24)
+  );
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function toast(message){
+
+  const container =
+    document.getElementById("toastContainer");
+
+  if(!container) return;
+
+  const element =
+    document.createElement("div");
+
+  element.className = "toast";
+
+  element.textContent = message;
+
+  container.appendChild(element);
+
+  setTimeout(() => {
+
+    element.style.opacity = "0";
+
+    element.style.transform =
+      "translateY(10px)";
+
+    setTimeout(
+      () => element.remove(),
+      250
+    );
+
+  },3000);
+}
+
+
+/* =========================================================
+   CELEBRATION
+========================================================= */
+
+function celebrate(message){
+
+  const box =
+    document.createElement("div");
+
+  box.style.position = "fixed";
+
+  box.style.left = "50%";
+
+  box.style.top = "50%";
+
+  box.style.transform =
+    "translate(-50%,-50%) scale(.8)";
+
+  box.style.zIndex = "30000";
+
+  box.style.padding = "30px";
+
+  box.style.borderRadius = "25px";
+
+  box.style.background =
+    "white";
+
+  box.style.color =
+    "#171a2b";
+
+  box.style.textAlign =
+    "center";
+
+  box.style.boxShadow =
+    "0 30px 100px #0005";
+
+  box.style.fontWeight =
+    "900";
+
+  box.innerHTML = `
+    <div style="font-size:40px;margin-bottom:10px">
+      🎉
+    </div>
+
+    <div style="font-size:20px">
+      ${message}
+    </div>
+  `;
+
+  document.body.appendChild(box);
+
+  requestAnimationFrame(() => {
+
+    box.style.transition = ".3s";
+
+    box.style.transform =
+      "translate(-50%,-50%) scale(1)";
+
+  });
+
+  setTimeout(() => {
+
+    box.style.opacity = "0";
+
+    box.style.transform =
+      "translate(-50%,-50%) scale(.8)";
+
+    setTimeout(
+      () => box.remove(),
+      300
+    );
+
+  },2200);
 }
 
 
@@ -1710,291 +2048,66 @@ function toggleDarkMode() {
    RESET
 ========================================================= */
 
-function resetData() {
+function resetData(){
 
-  const yes =
+  const ok =
     confirm(
-      "Tüm yerel DersTakip verilerini silmek istediğine emin misin?"
+      "Tüm DersTakip verilerin silinecek. Emin misin?"
     );
 
-  if (!yes) return;
+  if(!ok) return;
 
-  const currentUser =
+  const loggedIn =
+    state.loggedIn;
+
+  const user =
     state.user;
 
-  state = {
+  state =
+    structuredClone(defaultState);
 
-    user: currentUser,
+  state.loggedIn = loggedIn;
 
-    tasks: [],
-    subjects: [],
-    exams: [],
-
-    xp: 0,
-    coins: 0,
-    streak: 0,
-    completedTasks: 0,
-    focusMinutes: 0,
-
-    pet: {
-      name:"Panda",
-      level:1,
-      icon:"🐼"
-    },
-
-    claimedReward:false,
-    darkMode:false
-
-  };
+  state.user = user;
 
   saveState();
 
-  updateAll();
+  renderAll();
 
-  toast(
-    "Veriler sıfırlandı."
-  );
-
+  toast("Veriler sıfırlandı.");
 }
 
 
 /* =========================================================
-   HELPERS
-========================================================= */
-
-function updateAll() {
-
-  loadState();
-
-  document.body.classList.toggle(
-    "dark",
-    !!state.darkMode
-  );
-
-  const welcome =
-    document.getElementById(
-      "welcomeText"
-    );
-
-  if (welcome) {
-
-    welcome.textContent =
-      `Merhaba, ${
-        state.user?.name ||
-        "Öğrenci"
-      }! 👋`;
-
-  }
-
-  updateLevel();
-
-  renderHome();
-  renderTasks();
-  renderSubjects();
-  renderExams();
-  renderPet();
-  renderMarket();
-  renderAchievements();
-  renderStats();
-  renderProfile();
-
-  updateTimerDisplay();
-
-}
-
-
-function formatDate(date) {
-
-  if (!date) return "-";
-
-  const d =
-    new Date(date);
-
-  return d.toLocaleDateString(
-    "tr-TR",
-    {
-      day:"2-digit",
-      month:"long",
-      year:"numeric"
-    }
-  );
-
-}
-
-
-function getSubjectIcon(name) {
-
-  const value =
-    name.toLocaleLowerCase(
-      "tr-TR"
-    );
-
-  if (value.includes("mat")) return "📐";
-  if (value.includes("fen")) return "🔬";
-  if (value.includes("fiz")) return "⚡";
-  if (value.includes("kim")) return "🧪";
-  if (value.includes("biy")) return "🧬";
-  if (value.includes("türk")) return "📖";
-  if (value.includes("ing")) return "🇬🇧";
-  if (value.includes("tar")) return "🏛️";
-  if (value.includes("coğ")) return "🌍";
-  if (value.includes("din")) return "📚";
-
-  return "📚";
-
-}
-
-
-function escapeHTML(value) {
-
-  return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-
-}
-
-
-function toast(message) {
-
-  const container =
-    document.getElementById(
-      "toastContainer"
-    );
-
-  if (!container) return;
-
-  const item =
-    document.createElement("div");
-
-  item.className = "toast";
-
-  item.innerHTML =
-    message;
-
-  item.style.cssText = `
-    position:fixed;
-    right:20px;
-    bottom:20px;
-    z-index:20000;
-    background:#15182b;
-    color:white;
-    padding:15px 18px;
-    border-radius:15px;
-    box-shadow:0 15px 35px #0003;
-    max-width:350px;
-  `;
-
-  container.appendChild(item);
-
-  setTimeout(() => {
-
-    item.remove();
-
-  },3000);
-
-}
-
-
-function showCelebration(message) {
-
-  const box =
-    document.createElement("div");
-
-  box.style.cssText = `
-    position:fixed;
-    inset:0;
-    z-index:30000;
-    display:grid;
-    place-items:center;
-    pointer-events:none;
-    background:rgba(0,0,0,.08);
-  `;
-
-  box.innerHTML = `
-
-    <div
-      style="
-        background:white;
-        color:#171a2b;
-        padding:35px;
-        border-radius:28px;
-        text-align:center;
-        box-shadow:0 30px 100px #0004;
-        font-size:18px;
-        font-weight:800
-      "
-    >
-
-      <div
-        style="
-          font-size:32px;
-          color:#6658f5;
-          margin-bottom:12px
-        "
-      >
-        ✨ Harika! ✨
-      </div>
-
-      ${message}
-
-    </div>
-
-  `;
-
-  document.body.appendChild(box);
-
-  setTimeout(() => {
-
-    box.remove();
-
-  },1800);
-
-}
-
-
-/* =========================================================
-   START
+   KEYBOARD
 ========================================================= */
 
 document.addEventListener(
-  "DOMContentLoaded",
-  () => {
+  "keydown",
+  event => {
 
-    loadState();
+    if(event.key === "Escape"){
 
-    const loggedIn =
-      localStorage.getItem(
-        "dersTakipLoggedIn"
-      );
-
-    if (loggedIn && state.user) {
-
-      document.getElementById(
-        "authScreen"
-      ).style.display = "none";
-
-      document.getElementById(
-        "app"
-      ).style.display = "block";
-
-      updateAll();
-
-      navigate("home");
-
-    } else {
-
-      document.getElementById(
-        "authScreen"
-      ).style.display = "flex";
-
-      document.getElementById(
-        "app"
-      ).style.display = "none";
+      closeMobileMenu();
 
     }
+
+  }
+);
+
+
+/* =========================================================
+   GLOBAL ERROR PROTECTION
+========================================================= */
+
+window.addEventListener(
+  "error",
+  event => {
+
+    console.error(
+      "DersTakip hatası:",
+      event.error || event.message
+    );
 
   }
 );
