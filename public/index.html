@@ -1,1225 +1,5598 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#635bff">
+<meta name="description" content="DersTakip Pro - Derslerini, görevlerini, sınavlarını ve notlarını tek yerden yönet.">
+<title>DersTakip Pro</title>
 
-    <title>DersTakip | Öğrenci Takip Platformu</title>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZC2X3K9CHX"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){
+  dataLayer.push(arguments);
+}
+gtag('js', new Date());
+gtag('config', 'G-ZC2X3K9CHX');
+</script>
 
-    <meta
-        name="description"
-        content="DersTakip ile derslerini, görevlerini, sınavlarını, notlarını ve soru çözümlerini tek yerden takip et."
-    >
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
-    <meta
-        name="keywords"
-        content="ders takip, öğrenci, ders programı, ödev takip, sınav takip, soru çöz, not takip"
-    >
+:root{
+  --primary:#635bff;
+  --primary2:#8b7cff;
+  --bg:#f5f6fa;
+  --card:#ffffff;
+  --text:#171923;
+  --muted:#7c8191;
+  --border:#e8eaf1;
+  --dark:#171a2b;
+  --dark2:#22263c;
+  --green:#16b979;
+  --red:#ef5364;
+  --yellow:#f5ad24;
+  --blue:#3b82f6;
+  --shadow:0 12px 35px rgba(31,35,60,.07);
+}
 
-    <meta name="theme-color" content="#635bff">
+body.dark{
+  --bg:#10131f;
+  --card:#181c2b;
+  --text:#f5f7ff;
+  --muted:#9ba2b8;
+  --border:#2a3043;
+  --shadow:0 12px 35px rgba(0,0,0,.25);
+}
 
-    <link rel="icon" href="data:image/svg+xml,
-    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
-    <text y='.9em' font-size='90'>📚</text>
-    </svg>">
+body{
+  font-family:Inter,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+
+button,
+input,
+textarea,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.hidden{
+  display:none!important;
+}
+
+/* =========================
+AUTH
+========================= */
+
+#auth{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:
+    radial-gradient(circle at 10% 20%,#b9b0ff,transparent 30%),
+    radial-gradient(circle at 90% 80%,#ffc8df,transparent 30%),
+    linear-gradient(135deg,#5b52ec,#907dff);
+}
+
+.auth-box{
+  width:100%;
+  max-width:950px;
+  min-height:580px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  background:white;
+  border-radius:30px;
+  overflow:hidden;
+  box-shadow:0 30px 90px #0004;
+}
+
+.auth-left{
+  padding:50px;
+  color:white;
+  background:
+    linear-gradient(
+      145deg,
+      #5e55ed,
+      #917dff
+    );
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.auth-left h1{
+  font-size:43px;
+  margin-bottom:15px;
+}
+
+.auth-left h1 span{
+  color:#ffe66d;
+}
+
+.auth-left p{
+  line-height:1.7;
+  opacity:.9;
+}
+
+.auth-icon{
+  font-size:130px;
+  text-align:center;
+  margin:30px 0;
+}
+
+.auth-right{
+  padding:45px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.auth-logo{
+  text-align:center;
+  font-size:32px;
+  font-weight:900;
+  margin-bottom:5px;
+}
+
+.auth-logo span{
+  color:var(--primary);
+}
+
+.auth-subtitle{
+  text-align:center;
+  color:#777;
+  margin-bottom:25px;
+}
+
+.auth-tabs{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  background:#f0f1f5;
+  padding:5px;
+  border-radius:12px;
+  margin-bottom:20px;
+}
+
+.auth-tabs button{
+  border:0;
+  background:transparent;
+  padding:12px;
+  border-radius:9px;
+  font-weight:800;
+}
+
+.auth-tabs button.active{
+  background:white;
+  box-shadow:0 4px 15px #0001;
+}
+
+.field{
+  margin-bottom:15px;
+}
+
+.field label{
+  display:block;
+  font-size:13px;
+  font-weight:800;
+  margin-bottom:7px;
+}
+
+.field input,
+.field textarea,
+.field select{
+  width:100%;
+  border:1px solid #dfe2eb;
+  border-radius:11px;
+  padding:13px;
+  outline:none;
+  background:white;
+  color:#171923;
+}
+
+.auth-btn{
+  width:100%;
+  border:0;
+  background:
+    linear-gradient(
+      135deg,
+      #635bff,
+      #8b7cff
+    );
+  color:white;
+  padding:14px;
+  border-radius:12px;
+  font-weight:900;
+}
+
+#authMsg{
+  text-align:center;
+  margin-top:12px;
+  min-height:20px;
+  font-size:13px;
+}
+
+/* =========================
+APP
+========================= */
+
+#app{
+  display:none;
+}
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:245px;
+  background:var(--dark);
+  color:white;
+  padding:25px 17px;
+  z-index:100;
+  overflow-y:auto;
+}
+
+.logo{
+  font-size:25px;
+  font-weight:950;
+  padding-left:10px;
+  margin-bottom:35px;
+}
+
+.logo span{
+  color:#8b7cff;
+}
+
+.menu button{
+  width:100%;
+  border:0;
+  background:transparent;
+  color:#aeb4c8;
+  padding:12px;
+  border-radius:11px;
+  margin-bottom:5px;
+  text-align:left;
+  font-weight:800;
+  transition:.2s;
+}
+
+.menu button:hover,
+.menu button.active{
+  background:#292e48;
+  color:white;
+}
+
+.logout{
+  margin-top:30px;
+}
+
+.logout button{
+  width:100%;
+  border:0;
+  background:#292e48;
+  color:white;
+  padding:12px;
+  border-radius:11px;
+  font-weight:800;
+}
+
+.main{
+  margin-left:245px;
+  padding:30px;
+  max-width:1650px;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:25px;
+}
+
+.welcome h1{
+  font-size:32px;
+  margin-bottom:5px;
+}
+
+.welcome p{
+  color:var(--muted);
+}
+
+.profile{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:var(--card);
+  padding:8px 13px;
+  border-radius:13px;
+  box-shadow:var(--shadow);
+}
+
+.avatar{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:#e8e5ff;
+  display:grid;
+  place-items:center;
+}
+
+/* =========================
+HERO
+========================= */
+
+.hero{
+  background:
+    radial-gradient(circle at 90% 15%,#ffffff30,transparent 30%),
+    linear-gradient(135deg,#635bff,#8c78ff);
+  color:white;
+  padding:28px;
+  border-radius:22px;
+  margin-bottom:20px;
+  box-shadow:0 15px 40px #635bff30;
+}
+
+.hero h2{
+  margin-bottom:8px;
+}
+
+.hero p{
+  opacity:.9;
+  margin-bottom:18px;
+}
+
+.progress{
+  height:10px;
+  background:#ffffff30;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.progress span{
+  display:block;
+  height:100%;
+  width:0%;
+  background:white;
+  transition:.4s;
+}
+
+.xp{
+  margin-top:8px;
+  font-size:13px;
+}
+
+/* =========================
+CONTENT
+========================= */
+
+.grid{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:20px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:21px;
+  box-shadow:var(--shadow);
+  margin-bottom:20px;
+}
+
+.card-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:16px;
+}
+
+.card-title h2{
+  font-size:19px;
+}
+
+.primary{
+  border:0;
+  background:var(--primary);
+  color:white;
+  padding:10px 15px;
+  border-radius:10px;
+  font-weight:800;
+}
+
+.secondary{
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  padding:10px 15px;
+  border-radius:10px;
+  font-weight:800;
+}
+
+/* =========================
+PAGES
+========================= */
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+/* =========================
+TASKS
+========================= */
+
+.task{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.check{
+  width:27px;
+  height:27px;
+  border:2px solid #d7dbe5;
+  border-radius:8px;
+  display:grid;
+  place-items:center;
+  flex-shrink:0;
+  background:transparent;
+}
+
+.task.done .check{
+  background:var(--green);
+  border-color:var(--green);
+  color:white;
+}
+
+.task.done .task-name{
+  text-decoration:line-through;
+  color:var(--muted);
+}
+
+.task-name{
+  font-weight:800;
+}
+
+.task-xp{
+  margin-left:auto;
+  font-size:11px;
+  background:#efeeff;
+  color:#635bff;
+  padding:6px 9px;
+  border-radius:20px;
+}
+
+.delete{
+  border:0;
+  background:transparent;
+  padding:5px;
+}
+
+/* =========================
+STATS
+========================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+}
+
+.stat{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:18px;
+}
+
+.stat strong{
+  display:block;
+  font-size:25px;
+  margin:8px 0;
+}
+
+.stat small{
+  color:var(--muted);
+}
+
+/* =========================
+COACH CARD
+========================= */
+
+.coach{
+  background:
+    linear-gradient(
+      135deg,
+      #f0efff,
+      #faf9ff
+    );
+}
+
+body.dark .coach{
+  background:#20253a;
+}
+
+.coach-icon{
+  font-size:30px;
+  margin-bottom:10px;
+}
+
+.coach-message{
+  color:var(--muted);
+  line-height:1.7;
+}
+
+/* =========================
+AI SOLVE
+========================= */
+
+#page-ai-solve .card{
+  max-width:900px;
+}
+
+#page-ai-solve textarea{
+  resize:vertical;
+  min-height:120px;
+}
+
+#aiResult{
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+
+/* =========================
+SUBJECTS
+========================= */
+
+.subject-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
+  gap:15px;
+}
+
+.subject{
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:18px;
+  background:var(--card);
+  transition:.2s;
+}
+
+.subject:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--shadow);
+}
+
+.subject-icon{
+  font-size:34px;
+  margin-bottom:10px;
+}
+
+.subject h3{
+  margin-bottom:5px;
+}
+
+.subject p{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.subject button{
+  margin-top:12px;
+  width:100%;
+}
+
+/* =========================
+EXAMS
+========================= */
+
+.exam{
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:17px;
+  margin-bottom:12px;
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  align-items:center;
+}
+
+.exam-date{
+  color:var(--primary);
+  font-weight:900;
+}
+
+.exam-actions{
+  display:flex;
+  gap:6px;
+}
+
+/* =========================
+NOTES
+========================= */
+
+.notes-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:15px;
+}
+
+.note{
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:17px;
+  background:var(--card);
+}
+
+.note h3{
+  margin-bottom:8px;
+}
+
+.note p{
+  color:var(--muted);
+  line-height:1.6;
+  white-space:pre-wrap;
+}
+
+.note-footer{
+  margin-top:15px;
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* =========================
+FOCUS
+========================= */
+
+.focus-box{
+  text-align:center;
+}
+
+.timer{
+  font-size:80px;
+  font-weight:950;
+  margin:30px 0;
+}
+
+.focus-buttons{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+/* =========================
+BADGES
+========================= */
+
+.badges{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:14px;
+}
+
+.badge{
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:18px;
+  text-align:center;
+}
+
+.badge-icon{
+  font-size:40px;
+  margin-bottom:8px;
+}
+
+.badge small{
+  color:var(--muted);
+}
+
+.badge.locked{
+  opacity:.35;
+  filter:grayscale(1);
+}
+
+/* =========================
+PROFILE
+========================= */
+
+.profile-card{
+  max-width:700px;
+}
+
+.profile-avatar{
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  background:#e9e6ff;
+  display:grid;
+  place-items:center;
+  font-size:45px;
+  margin-bottom:15px;
+}
+
+.profile-info{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+}
+
+.profile-item{
+  background:var(--bg);
+  padding:15px;
+  border-radius:12px;
+}
+
+.profile-item span{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:5px;
+}
+
+/* =========================
+DERS KOÇU
+========================= */
+
+.coach-page{
+  max-width:950px;
+}
+
+.coach-header{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:20px;
+}
+
+.coach-avatar{
+  width:55px;
+  height:55px;
+  border-radius:16px;
+  background:
+    linear-gradient(
+      135deg,
+      #635bff,
+      #9b8cff
+    );
+  color:white;
+  display:grid;
+  place-items:center;
+  font-size:28px;
+}
+
+.coach-title h2{
+  margin-bottom:4px;
+}
+
+.coach-title p{
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* CHAT */
+
+.chat-box{
+  height:500px;
+  overflow-y:auto;
+  padding:20px;
+  background:var(--bg);
+  border-radius:18px;
+  border:1px solid var(--border);
+  margin-bottom:15px;
+  scroll-behavior:smooth;
+}
+
+.chat-empty{
+  min-height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:var(--muted);
+  padding:30px;
+}
+
+.chat-message{
+  display:flex;
+  margin-bottom:16px;
+}
+
+.chat-message.user{
+  justify-content:flex-end;
+}
+
+.chat-message.ai{
+  justify-content:flex-start;
+}
+
+.message-bubble{
+  max-width:78%;
+  padding:13px 16px;
+  border-radius:17px;
+  line-height:1.6;
+  white-space:pre-wrap;
+  word-break:break-word;
+  font-size:14px;
+}
+
+.chat-message.user .message-bubble{
+  background:var(--primary);
+  color:white;
+  border-bottom-right-radius:5px;
+}
+
+.chat-message.ai .message-bubble{
+  background:var(--card);
+  color:var(--text);
+  border:1px solid var(--border);
+  border-bottom-left-radius:5px;
+  box-shadow:0 5px 18px rgba(0,0,0,.04);
+}
+
+.message-label{
+  font-size:10px;
+  color:var(--muted);
+  margin-bottom:4px;
+  font-weight:700;
+}
+
+.chat-message.user .message-label{
+  text-align:right;
+}
+
+.typing{
+  display:inline-flex;
+  gap:4px;
+  align-items:center;
+}
+
+.typing span{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--muted);
+  animation:typing 1s infinite;
+}
+
+.typing span:nth-child(2){
+  animation-delay:.15s;
+}
+
+.typing span:nth-child(3){
+  animation-delay:.3s;
+}
+
+@keyframes typing{
+  0%,60%,100%{
+    transform:translateY(0);
+    opacity:.5;
+  }
+
+  30%{
+    transform:translateY(-4px);
+    opacity:1;
+  }
+}
+
+.chat-options{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+
+.chat-option{
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  padding:8px 12px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:700;
+}
+
+.chat-option:hover{
+  border-color:var(--primary);
+  color:var(--primary);
+}
+
+.chat-input-area{
+  display:flex;
+  gap:10px;
+  align-items:flex-end;
+}
+
+#coachInput{
+  flex:1;
+  min-height:52px;
+  max-height:150px;
+  resize:none;
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:14px;
+  outline:none;
+  background:var(--card);
+  color:var(--text);
+}
+
+#coachInput:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(99,91,255,.12);
+}
+
+.send-button{
+  width:54px;
+  height:52px;
+  border:0;
+  border-radius:15px;
+  background:var(--primary);
+  color:white;
+  font-size:21px;
+  flex-shrink:0;
+}
+
+.send-button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.coach-tools{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:12px;
+}
+
+.coach-tools small{
+  color:var(--muted);
+}
+
+.new-chat{
+  border:0;
+  background:transparent;
+  color:var(--primary);
+  font-weight:800;
+}
+
+/* =========================
+LEGAL / INFORMATION PAGES
+========================= */
+
+.legal-page{
+  max-width:950px;
+}
+
+.legal-page h2{
+  margin-bottom:20px;
+}
+
+.legal-page h3{
+  margin-top:25px;
+  margin-bottom:9px;
+  font-size:17px;
+}
+
+.legal-page p{
+  color:var(--muted);
+  line-height:1.8;
+  margin-bottom:12px;
+}
+
+.legal-page ul{
+  margin:10px 0 15px 22px;
+  color:var(--muted);
+  line-height:1.9;
+}
+
+.info-highlight{
+  padding:16px;
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:14px;
+  margin:15px 0;
+}
+
+.contact-box{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+  margin-top:20px;
+}
+
+.contact-item{
+  background:var(--bg);
+  padding:18px;
+  border-radius:15px;
+  border:1px solid var(--border);
+}
+
+.contact-item strong{
+  display:block;
+  margin-bottom:7px;
+}
+
+.contact-item span{
+  color:var(--muted);
+  line-height:1.6;
+}
+
+/* =========================
+FOOTER
+========================= */
+
+.site-footer{
+  margin-top:40px;
+  padding:25px 10px 10px;
+  border-top:1px solid var(--border);
+  color:var(--muted);
+  text-align:center;
+}
+
+.footer-links{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px 18px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+
+.footer-links button{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+  padding:5px;
+}
+
+.footer-links button:hover{
+  color:var(--primary);
+}
+
+.footer-copy{
+  font-size:12px;
+}
+
+/* =========================
+MODAL
+========================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:#0008;
+  backdrop-filter:blur(6px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  padding:20px;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:100%;
+  max-width:520px;
+  background:var(--card);
+  color:var(--text);
+  border-radius:22px;
+  padding:23px;
+  max-height:90vh;
+  overflow:auto;
+}
+
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.close{
+  border:0;
+  background:transparent;
+  font-size:24px;
+  color:var(--text);
+}
+
+/* =========================
+TOAST
+========================= */
+
+#toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:20000;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.toast{
+  background:var(--dark);
+  color:white;
+  padding:13px 17px;
+  border-radius:13px;
+  box-shadow:0 15px 35px #0004;
+  animation:toast .3s;
+}
+
+@keyframes toast{
+  from{
+    opacity:0;
+    transform:translateY(15px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* =========================
+MOBILE
+========================= */
+
+.mobile-btn{
+  display:none;
+  position:fixed;
+  right:15px;
+  top:15px;
+  z-index:500;
+  width:46px;
+  height:46px;
+  border:0;
+  border-radius:13px;
+  background:var(--dark);
+  color:white;
+  font-size:22px;
+}
+
+.mobile-menu{
+  position:fixed;
+  top:0;
+  right:-290px;
+  width:280px;
+  height:100vh;
+  background:var(--dark);
+  color:white;
+  z-index:1000;
+  padding:25px 18px;
+  transition:.25s;
+  overflow-y:auto;
+  box-shadow:-15px 0 40px rgba(0,0,0,.2);
+}
+
+.mobile-menu.open{
+  right:0;
+}
+
+.mobile-menu button{
+  width:100%;
+  border:0;
+  background:transparent;
+  color:#adb4c8;
+  padding:13px;
+  border-radius:10px;
+  text-align:left;
+  margin-bottom:5px;
+  font-weight:800;
+}
+
+.mobile-menu button:hover{
+  background:#292e48;
+  color:white;
+}
+
+.mobile-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.mobile-head button{
+  width:auto;
+  color:white;
+  font-size:22px;
+}
+
+/* =========================
+RESPONSIVE
+========================= */
+
+@media(max-width:1000px){
+
+  .sidebar{
+    width:80px;
+  }
+
+  .logo{
+    font-size:0;
+    text-align:center;
+    padding:0;
+  }
+
+  .logo:after{
+    content:"DT";
+    font-size:22px;
+  }
+
+  .menu button{
+    font-size:0;
+    text-align:center;
+  }
+
+  .menu button::first-letter{
+    font-size:20px;
+  }
+
+  .logout button{
+    font-size:0;
+  }
+
+  .logout button:after{
+    content:"🚪";
+    font-size:20px;
+  }
+
+  .main{
+    margin-left:80px;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:700px){
+
+  .sidebar{
+    display:none;
+  }
+
+  .mobile-btn{
+    display:block;
+  }
+
+  .main{
+    margin-left:0;
+    padding:15px;
+  }
+
+  .topbar{
+    padding-right:60px;
+  }
+
+  .profile{
+    display:none;
+  }
+
+  .welcome h1{
+    font-size:25px;
+  }
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .auth-box{
+    grid-template-columns:1fr;
+  }
+
+  .auth-left{
+    display:none;
+  }
+
+  .auth-right{
+    padding:30px 22px;
+  }
+
+  .subject-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .profile-info{
+    grid-template-columns:1fr;
+  }
+
+  .exam{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .timer{
+    font-size:58px;
+  }
+
+  .chat-box{
+    height:55vh;
+    padding:12px;
+  }
+
+  .message-bubble{
+    max-width:88%;
+  }
+
+  .chat-input-area{
+    align-items:stretch;
+  }
+
+  #coachInput{
+    min-height:50px;
+  }
+
+  .coach-tools{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:8px;
+  }
+
+  .contact-box{
+    grid-template-columns:1fr;
+  }
+
+  .footer-links{
+    gap:5px 12px;
+  }
+
+  .legal-page{
+    padding:5px;
+  }
+}
+
+@media(max-width:400px){
+
+  .subject-grid{
+    grid-template-columns:1fr;
+  }
+
+  .hero{
+    padding:20px;
+  }
+
+  .card{
+    padding:17px;
+  }
+
+  .auth-right{
+    padding:25px 17px;
+  }
+}
+</style>
 </head>
 
 <body>
 
 <!-- =====================================================
-     HEADER
+AUTH
 ===================================================== -->
 
-<header>
+<section id="auth">
 
-    <nav aria-label="Ana menü">
+  <div class="auth-box">
 
-        <div>
-            <a href="/" aria-label="DersTakip ana sayfa">
-                📚 <strong>DersTakip</strong>
-            </a>
+    <div class="auth-left">
+
+      <h1>
+        Ders çalışmak<br>
+        <span>artık daha kolay.</span>
+      </h1>
+
+      <p>
+        Derslerini, görevlerini, sınavlarını ve notlarını
+        tek bir yerden yönet.
+      </p>
+
+      <div class="auth-icon">
+        📚
+      </div>
+
+    </div>
+
+    <div class="auth-right">
+
+      <div class="auth-logo">
+        Ders<span>Takip</span>
+      </div>
+
+      <p class="auth-subtitle">
+        Kendi çalışma sistemini oluştur.
+      </p>
+
+      <div class="auth-tabs">
+
+        <button
+          id="loginTab"
+          class="active"
+          onclick="showLogin()">
+          Giriş Yap
+        </button>
+
+        <button
+          id="registerTab"
+          onclick="showRegister()">
+          Kayıt Ol
+        </button>
+
+      </div>
+
+      <form
+        id="loginForm"
+        onsubmit="login(event)">
+
+        <div class="field">
+
+          <label>
+            E-posta
+          </label>
+
+          <input
+            id="loginEmail"
+            type="email"
+            autocomplete="email"
+            required>
+
         </div>
 
-        <div>
-            <a href="#ozellikler">Özellikler</a>
-            <a href="#soru-coz">Soru Çöz</a>
-            <a href="#nasil-calisir">Nasıl Çalışır?</a>
-            <a href="#sss">SSS</a>
+        <div class="field">
+
+          <label>
+            Şifre
+          </label>
+
+          <input
+            id="loginPassword"
+            type="password"
+            autocomplete="current-password"
+            required>
+
         </div>
 
-        <div>
-            <a href="/giris">Giriş Yap</a>
-            <a href="/kayit">Ücretsiz Başla</a>
+        <button class="auth-btn">
+          Giriş Yap 🚀
+        </button>
+
+      </form>
+
+      <form
+        id="registerForm"
+        class="hidden"
+        onsubmit="register(event)">
+
+        <div class="field">
+
+          <label>
+            Ad Soyad
+          </label>
+
+          <input
+            id="registerName"
+            autocomplete="name"
+            required>
+
         </div>
 
-    </nav>
+        <div class="field">
 
-</header>
+          <label>
+            E-posta
+          </label>
+
+          <input
+            id="registerEmail"
+            type="email"
+            autocomplete="email"
+            required>
+
+        </div>
+
+        <div class="field">
+
+          <label>
+            Şifre
+          </label>
+
+          <input
+            id="registerPassword"
+            type="password"
+            minlength="6"
+            autocomplete="new-password"
+            required>
+
+        </div>
+
+        <button class="auth-btn">
+          Hesap Oluştur ✨
+        </button>
+
+      </form>
+
+      <div id="authMsg"></div>
+
+    </div>
+
+  </div>
+
+</section>
 
 
 <!-- =====================================================
-     ANA İÇERİK
+APP
 ===================================================== -->
 
-<main>
+<div id="app">
+
+  <aside class="sidebar">
+
+    <div class="logo">
+      Ders<span>Takip</span>
+    </div>
+
+    <div class="menu">
+
+      <button
+        data-page="home"
+        class="active"
+        onclick="navigate('home')">
+        🏠 Ana Sayfa
+      </button>
+
+      <button
+        data-page="ai-solve"
+        onclick="navigate('ai-solve')">
+        🧠 Soru Çöz
+      </button>
+
+      <button
+        data-page="tasks"
+        onclick="navigate('tasks')">
+        ✅ Görevler
+      </button>
+
+      <button
+        data-page="subjects"
+        onclick="navigate('subjects')">
+        📚 Dersler
+      </button>
+
+      <button
+        data-page="exams"
+        onclick="navigate('exams')">
+        📅 Sınavlar
+      </button>
+
+      <button
+        data-page="notes"
+        onclick="navigate('notes')">
+        📝 Notlar
+      </button>
+
+      <button
+        data-page="focus"
+        onclick="navigate('focus')">
+        ⏱️ Odaklan
+      </button>
+
+      <button
+        data-page="coach"
+        onclick="navigate('coach')">
+        🤖 Ders Koçu
+      </button>
+
+      <button
+        data-page="achievements"
+        onclick="navigate('achievements')">
+        🏆 Rozetler
+      </button>
+
+      <button
+        data-page="stats"
+        onclick="navigate('stats')">
+        📊 İstatistikler
+      </button>
+
+      <button
+        data-page="profile"
+        onclick="navigate('profile')">
+        👤 Profil
+      </button>
+
+    </div>
+
+    <div class="logout">
+
+      <button onclick="logout()">
+        🚪 Çıkış Yap
+      </button>
+
+    </div>
+
+  </aside>
 
 
-<!-- =====================================================
-     HERO
-===================================================== -->
+  <!-- MOBILE MENU BUTTON -->
 
-<section id="hero">
+  <button
+    class="mobile-btn"
+    onclick="toggleMobile()"
+    aria-label="Menüyü aç">
+    ☰
+  </button>
 
-    <div>
 
-        <p>
-            🎓 Öğrenciler için ücretsiz
-        </p>
+  <!-- MOBILE MENU -->
 
-        <h1>
-            Derslerini takip et,
-            <br>
-            <strong>başarını artır!</strong>
+  <div
+    class="mobile-menu"
+    id="mobileMenu">
+
+    <div class="mobile-head">
+
+      <strong>
+        DersTakip
+      </strong>
+
+      <button
+        onclick="toggleMobile()"
+        aria-label="Menüyü kapat">
+        ✕
+      </button>
+
+    </div>
+
+    <button onclick="navigateMobile('home')">
+      🏠 Ana Sayfa
+    </button>
+
+    <button onclick="navigateMobile('ai-solve')">
+      🧠 Soru Çöz
+    </button>
+
+    <button onclick="navigateMobile('tasks')">
+      ✅ Görevler
+    </button>
+
+    <button onclick="navigateMobile('subjects')">
+      📚 Dersler
+    </button>
+
+    <button onclick="navigateMobile('exams')">
+      📅 Sınavlar
+    </button>
+
+    <button onclick="navigateMobile('notes')">
+      📝 Notlar
+    </button>
+
+    <button onclick="navigateMobile('focus')">
+      ⏱️ Odaklan
+    </button>
+
+    <button onclick="navigateMobile('coach')">
+      🤖 Ders Koçu
+    </button>
+
+    <button onclick="navigateMobile('achievements')">
+      🏆 Rozetler
+    </button>
+
+    <button onclick="navigateMobile('stats')">
+      📊 İstatistikler
+    </button>
+
+    <button onclick="navigateMobile('profile')">
+      👤 Profil
+    </button>
+
+    <hr style="border:0;border-top:1px solid #292e48;margin:15px 0;">
+
+    <button onclick="navigateMobile('about')">
+      ℹ️ Hakkımızda
+    </button>
+
+    <button onclick="navigateMobile('privacy')">
+      🔒 Gizlilik Politikası
+    </button>
+
+    <button onclick="navigateMobile('cookies')">
+      🍪 Çerez Politikası
+    </button>
+
+    <button onclick="navigateMobile('terms')">
+      📜 Kullanım Koşulları
+    </button>
+
+    <button onclick="navigateMobile('disclaimer')">
+      ⚠️ Sorumluluk Reddi
+    </button>
+
+    <button onclick="navigateMobile('contact')">
+      📩 İletişim
+    </button>
+
+    <hr style="border:0;border-top:1px solid #292e48;margin:15px 0;">
+
+    <button onclick="logout()">
+      🚪 Çıkış Yap
+    </button>
+
+  </div>
+
+
+  <main class="main">
+
+    <div class="topbar">
+
+      <div class="welcome">
+
+        <h1 id="welcome">
+          Merhaba! 👋
         </h1>
 
-        <p>
-            Derslerini, görevlerini, sınavlarını ve notlarını
-            tek bir yerden kolayca yönet.
-            DersTakip ile çalışma düzenini oluştur.
+        <p id="subtitle">
+          Bugün küçük bir adım, yarın büyük bir başarı.
         </p>
 
-        <div>
+      </div>
 
-            <a href="/kayit">
-                🚀 Ücretsiz Başla
-            </a>
+      <div class="profile">
 
-            <a href="#ozellikler">
-                Özellikleri Keşfet →
-            </a>
-
+        <div class="avatar">
+          🎓
         </div>
 
-        <div>
+        <strong id="topLevel">
+          Seviye 1
+        </strong>
 
-            <span>✓ Tamamen ücretsiz</span>
-
-            <span>✓ Kolay kullanım</span>
-
-            <span>✓ Öğrenciler için</span>
-
-        </div>
+      </div>
 
     </div>
 
 
-    <!-- DASHBOARD ÖNİZLEME -->
+    <!-- =====================================================
+    HOME
+    ===================================================== -->
 
-    <div>
+    <section
+      id="page-home"
+      class="page active">
 
-        <article>
+      <div class="hero">
 
-            <header>
+        <h2>
+          Bugünkü çalışma durumun 🎯
+        </h2>
 
-                <span>📊 Genel Bakış</span>
+        <p id="homeSummary">
+          Bugün için henüz görev eklemedin.
+        </p>
 
-                <span>🔔</span>
+        <div class="progress">
+          <span id="progress"></span>
+        </div>
 
-            </header>
+        <div
+          class="xp"
+          id="homeXP">
+          0 XP
+        </div>
 
-            <p>Merhaba! 👋</p>
+      </div>
+
+
+      <div class="grid">
+
+        <div>
+
+          <div class="card coach">
+
+            <div class="coach-icon">
+              🤖
+            </div>
 
             <h2>
-                Bugün neler yapacağını kontrol et.
+              Ders Koçu
             </h2>
 
+            <p
+              class="coach-message"
+              id="homeCoach">
+              Ders Koçu'na giderek benimle konuşabilirsin.
+            </p>
 
-            <div>
+            <br>
 
-                <article>
+            <button
+              class="primary"
+              onclick="navigate('coach')">
+              Ders Koçuyla Konuş
+            </button>
 
-                    <strong>12</strong>
-
-                    <span>
-                        📚
-                        <br>
-                        Toplam Ders
-                    </span>
-
-                </article>
-
-
-                <article>
-
-                    <strong>8</strong>
-
-                    <span>
-                        ✅
-                        <br>
-                        Tamamlanan Görev
-                    </span>
-
-                </article>
+          </div>
 
 
-                <article>
+          <div class="card">
 
-                    <strong>92</strong>
+            <div class="card-title">
 
-                    <span>
-                        📈
-                        <br>
-                        Ortalama Not
-                    </span>
+              <h2>
+                Bugünkü Görevler
+              </h2>
 
-                </article>
+              <span id="taskCounter">
+                0 / 0
+              </span>
 
             </div>
 
-
-            <section>
-
-                <h3>
-                    📅 Bugünün Görevleri
-                </h3>
-
-                <ul>
-
-                    <li>
-                        <label>
-                            <input type="checkbox">
-                            Matematik ödevini tamamla
-                        </label>
-                    </li>
-
-                    <li>
-                        <label>
-                            <input type="checkbox" checked>
-                            İngilizce kelimeleri tekrar et
-                        </label>
-                    </li>
-
-                    <li>
-                        <label>
-                            <input type="checkbox">
-                            Fen sınavına hazırlan
-                        </label>
-                    </li>
-
-                </ul>
-
-            </section>
-
-        </article>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     ÖZELLİKLER
-===================================================== -->
-
-<section id="ozellikler">
-
-    <header>
-
-        <p>
-            ✨ ÖZELLİKLER
-        </p>
-
-        <h2>
-            Okul hayatını
-            <strong>tek yerde yönet</strong>
-        </h2>
-
-        <p>
-            DersTakip, öğrencilerin günlük okul hayatını
-            daha düzenli ve kolay hale getirmek için tasarlandı.
-        </p>
-
-    </header>
-
-
-    <div>
-
-
-        <!-- DERSLER -->
-
-        <article>
-
-            <div>
-                📚
-            </div>
-
-            <h3>
-                Derslerini Takip Et
-            </h3>
-
-            <p>
-                Tüm derslerini ekle, ders programını oluştur
-                ve derslerini düzenli şekilde takip et.
-            </p>
-
-            <a href="/dersler">
-                Derslerim →
-            </a>
-
-        </article>
-
-
-        <!-- GÖREVLER -->
-
-        <article>
-
-            <div>
-                ✅
-            </div>
-
-            <h3>
-                Görevlerini Yönet
-            </h3>
-
-            <p>
-                Ödevlerini ve yapman gereken görevleri ekle.
-                Tamamladıklarını işaretleyerek ilerlemeni gör.
-            </p>
-
-            <a href="/gorevler">
-                Görevlerim →
-            </a>
-
-        </article>
-
-
-        <!-- SINAVLAR -->
-
-        <article>
-
-            <div>
-                📝
-            </div>
-
-            <h3>
-                Sınavlarını Unutma
-            </h3>
-
-            <p>
-                Yaklaşan sınavlarını kaydet ve sınav tarihlerini
-                kolayca takip et.
-            </p>
-
-            <a href="/sinavlar">
-                Sınavlarım →
-            </a>
-
-        </article>
-
-
-        <!-- NOTLAR -->
-
-        <article>
-
-            <div>
-                📈
-            </div>
-
-            <h3>
-                Notlarını Takip Et
-            </h3>
-
-            <p>
-                Aldığın notları kaydet ve ders bazında
-                başarını kolayca takip et.
-            </p>
-
-            <a href="/notlar">
-                Notlarım →
-            </a>
-
-        </article>
-
-
-        <!-- SORULAR -->
-
-        <article>
-
-            <div>
-                🧠
-            </div>
-
-            <h3>
-                Soru Çöz
-            </h3>
-
-            <p>
-                Derslerini pekiştirmek için soru çöz.
-                Kendini test et ve eksiklerini fark et.
-            </p>
-
-            <a href="/sorular">
-                Soru Çöz →
-            </a>
-
-        </article>
-
-
-        <!-- HEDEFLER -->
-
-        <article>
-
-            <div>
-                🎯
-            </div>
-
-            <h3>
-                Hedeflerini Belirle
-            </h3>
-
-            <p>
-                Çalışma hedeflerini belirle ve hedeflerine
-                adım adım ilerle.
-            </p>
-
-            <a href="/hedefler">
-                Hedeflerim →
-            </a>
-
-        </article>
-
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     SORU ÇÖZ
-===================================================== -->
-
-<section id="soru-coz">
-
-    <div>
-
-        <p>
-            🧠 SORU ÇÖZ
-        </p>
-
-        <h2>
-            Bilgini test et,
-            <strong>kendini geliştir.</strong>
-        </h2>
-
-        <p>
-            DersTakip'in soru çözme özelliği ile öğrendiğin
-            konuları tekrar et ve bilgilerini test et.
-        </p>
-
-
-        <ul>
-
-            <li>
-                ✓ Farklı derslerden sorular çöz
-            </li>
-
-            <li>
-                ✓ Kendini test et
-            </li>
-
-            <li>
-                ✓ Eksiklerini fark et
-            </li>
-
-            <li>
-                ✓ Daha düzenli çalış
-            </li>
-
-        </ul>
-
-
-        <a href="/sorular">
-            🧠 Soru Çözmeye Başla
-        </a>
-
-    </div>
-
-
-    <div>
-
-        <article>
-
-            <header>
-
-                <span>
-                    🧠 Soru Çöz
-                </span>
-
-                <span>
-                    1 / 10
-                </span>
-
-            </header>
-
-
-            <h3>
-                Matematik
-            </h3>
-
-            <p>
-                Bir sayının 3 katının 6 fazlası 21 ise
-                bu sayı kaçtır?
-            </p>
-
-
-            <form>
-
-                <label>
-                    <input type="radio" name="cevap">
-                    A) 3
-                </label>
-
-                <label>
-                    <input type="radio" name="cevap">
-                    B) 5
-                </label>
-
-                <label>
-                    <input type="radio" name="cevap">
-                    C) 7
-                </label>
-
-                <label>
-                    <input type="radio" name="cevap">
-                    D) 9
-                </label>
-
-                <button type="button">
-                    Cevabı Kontrol Et
-                </button>
-
-            </form>
-
-        </article>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     NASIL ÇALIŞIR
-===================================================== -->
-
-<section id="nasil-calisir">
-
-    <header>
-
-        <p>
-            🚀 NASIL ÇALIŞIR?
-        </p>
-
-        <h2>
-            Başlamak sadece
-            <strong>birkaç saniye</strong>
-        </h2>
-
-        <p>
-            DersTakip'i kullanmaya başlamak çok kolay.
-        </p>
-
-    </header>
-
-
-    <ol>
-
-
-        <li>
-
-            <strong>
-                01
-            </strong>
-
-            <h3>
-                Hesabını oluştur
-            </h3>
-
-            <p>
-                Ücretsiz hesabını oluştur ve
-                DersTakip'e katıl.
-            </p>
-
-        </li>
-
-
-        <li>
-
-            <strong>
-                02
-            </strong>
-
-            <h3>
-                Derslerini ekle
-            </h3>
-
-            <p>
-                Derslerini, görevlerini ve sınavlarını
-                sisteme ekle.
-            </p>
-
-        </li>
-
-
-        <li>
-
-            <strong>
-                03
-            </strong>
-
-            <h3>
-                Takip etmeye başla
-            </h3>
-
-            <p>
-                Çalışmalarını düzenle ve
-                hedeflerine ulaş.
-            </p>
-
-        </li>
-
-
-    </ol>
-
-</section>
-
-
-<!-- =====================================================
-     ÜCRETSİZLİK
-===================================================== -->
-
-<section id="ucretsiz">
-
-    <div>
-
-        <p>
-            💙 ÖĞRENCİLER İÇİN
-        </p>
-
-        <h2>
-            DersTakip
-            <strong>tamamen ücretsiz.</strong>
-        </h2>
-
-        <p>
-            Öğrencilerin derslerini daha kolay takip edebilmesi
-            için DersTakip'i ücretsiz kullanabilirsin.
-        </p>
-
-        <a href="/kayit">
-            🚀 Hemen Ücretsiz Başla
-        </a>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     İSTATİSTİKLER
-===================================================== -->
-
-<section id="istatistikler">
-
-    <article>
-
-        <strong>
-            100%
-        </strong>
-
-        <p>
-            Ücretsiz
-        </p>
-
-    </article>
-
-
-    <article>
-
-        <strong>
-            6+
-        </strong>
-
-        <p>
-            Faydalı Özellik
-        </p>
-
-    </article>
-
-
-    <article>
-
-        <strong>
-            24/7
-        </strong>
-
-        <p>
-            Her Zaman Erişim
-        </p>
-
-    </article>
-
-
-    <article>
-
-        <strong>
-            ∞
-        </strong>
-
-        <p>
-            Çalışma İmkanı
-        </p>
-
-    </article>
-
-</section>
-
-
-<!-- =====================================================
-     ÖĞRENCİ PANELİ
-===================================================== -->
-
-<section id="panel">
-
-    <header>
-
-        <p>
-            📊 DERS TAKİBİNİ KOLAYLAŞTIR
-        </p>
-
-        <h2>
-            Her şey
-            <strong>kontrolün altında.</strong>
-        </h2>
-
-        <p>
-            DersTakip ile okul hayatındaki önemli bilgileri
-            tek bir yerde görebilirsin.
-        </p>
-
-    </header>
-
-
-    <div>
-
-
-        <article>
-
-            <h3>
-                📚 Dersler
-            </h3>
-
-            <p>
-                Matematik
-            </p>
-
-            <progress value="80" max="100">
-                80%
-            </progress>
-
-            <p>
-                Türkçe
-            </p>
-
-            <progress value="65" max="100">
-                65%
-            </progress>
-
-            <p>
-                Fen Bilimleri
-            </p>
-
-            <progress value="90" max="100">
-                90%
-            </progress>
-
-        </article>
-
-
-        <article>
-
-            <h3>
-                📝 Yaklaşan Sınavlar
-            </h3>
-
-            <ul>
-
-                <li>
-                    Matematik
-                    <time>
-                        24 Ağustos
-                    </time>
-                </li>
-
-                <li>
-                    Fen Bilimleri
-                    <time>
-                        27 Ağustos
-                    </time>
-                </li>
-
-                <li>
-                    İngilizce
-                    <time>
-                        30 Ağustos
-                    </time>
-                </li>
-
-            </ul>
-
-        </article>
-
-
-        <article>
-
-            <h3>
-                🎯 Haftalık Hedef
-            </h3>
-
-            <p>
-                10 saat çalışma
-            </p>
-
-            <progress value="70" max="100">
-                70%
-            </progress>
-
-            <p>
-                7 / 10 saat tamamlandı.
-            </p>
-
-        </article>
-
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     ÖĞRENCİLER İÇİN FAYDALAR
-===================================================== -->
-
-<section id="faydalar">
-
-    <header>
-
-        <p>
-            ⭐ NEDEN DERS TAKİP?
-        </p>
-
-        <h2>
-            Daha düzenli,
-            <strong>daha verimli çalış.</strong>
-        </h2>
-
-    </header>
-
-
-    <div>
-
-
-        <article>
-
-            <div>
-                🗓️
-            </div>
-
-            <h3>
-                Zamanını Planla
-            </h3>
-
-            <p>
-                Yapman gereken işleri ve sınavlarını
-                önceden planlayarak zamanı daha iyi kullan.
-            </p>
-
-        </article>
-
-
-        <article>
-
-            <div>
-                🧠
-            </div>
-
-            <h3>
-                Eksiklerini Gör
-            </h3>
-
-            <p>
-                Notlarını ve soru sonuçlarını takip ederek
-                hangi konularda daha fazla çalışman gerektiğini gör.
-            </p>
-
-        </article>
-
-
-        <article>
-
-            <div>
-                🏆
-            </div>
-
-            <h3>
-                Hedeflerine Ulaş
-            </h3>
-
-            <p>
-                Küçük hedefler belirle ve her gün
-                biraz daha ilerle.
-            </p>
-
-        </article>
-
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     SSS
-===================================================== -->
-
-<section id="sss">
-
-    <header>
-
-        <p>
-            ❓ SSS
-        </p>
-
-        <h2>
-            Merak edilen
-            <strong>sorular</strong>
-        </h2>
-
-    </header>
-
-
-    <div>
-
-
-        <details>
-
-            <summary>
-                DersTakip ücretsiz mi?
-            </summary>
-
-            <p>
-                Evet. DersTakip öğrenciler için ücretsiz
-                olarak kullanılabilir.
-            </p>
-
-        </details>
-
-
-        <details>
-
-            <summary>
-                DersTakip'te neleri takip edebilirim?
-            </summary>
-
-            <p>
-                Derslerini, görevlerini, sınavlarını,
-                notlarını ve hedeflerini takip edebilirsin.
-            </p>
-
-        </details>
-
-
-        <details>
-
-            <summary>
-                Soru çözme özelliği var mı?
-            </summary>
-
-            <p>
-                Evet. DersTakip üzerinden soru çözebilir,
-                kendini test edebilir ve bilgilerini geliştirebilirsin.
-            </p>
-
-        </details>
-
-
-        <details>
-
-            <summary>
-                Telefonumdan kullanabilir miyim?
-            </summary>
-
-            <p>
-                Evet. DersTakip mobil cihazlardan da
-                kullanılabilecek şekilde tasarlanmıştır.
-            </p>
-
-        </details>
-
-
-        <details>
-
-            <summary>
-                Üye olmak zor mu?
-            </summary>
-
-            <p>
-                Hayır. Kısa bir kayıt işleminden sonra
-                DersTakip'i kullanmaya başlayabilirsin.
-            </p>
-
-        </details>
-
-
-        <details>
-
-            <summary>
-                Derslerimi nasıl ekleyebilirim?
-            </summary>
-
-            <p>
-                Hesabına giriş yaptıktan sonra dersler
-                bölümünden yeni ders ekleyebilirsin.
-            </p>
-
-        </details>
-
-
-        <details>
-
-            <summary>
-                Sınavlarımı takip edebilir miyim?
-            </summary>
-
-            <p>
-                Evet. Sınav tarihlerini ekleyerek yaklaşan
-                sınavlarını kolayca takip edebilirsin.
-            </p>
-
-        </details>
-
-
-        <details>
-
-            <summary>
-                Notlarımı kaydedebilir miyim?
-            </summary>
-
-            <p>
-                Evet. Aldığın notları derslerine göre
-                kaydedebilir ve takip edebilirsin.
-            </p>
-
-        </details>
-
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     SON CTA
-===================================================== -->
-
-<section id="cta">
-
-    <div>
-
-        <p>
-            🚀 HAZIR MISIN?
-        </p>
-
-        <h2>
-            Derslerini düzene sokmaya
-            <strong>bugün başla.</strong>
-        </h2>
-
-        <p>
-            DersTakip ile okul hayatını daha kolay,
-            düzenli ve eğlenceli hale getir.
-        </p>
-
-
-        <div>
-
-            <a href="/kayit">
-                🚀 Ücretsiz Başla
-            </a>
-
-            <a href="/giris">
-                Hesabım Var
-            </a>
+            <div id="homeTasks"></div>
+
+            <button
+              class="secondary"
+              onclick="navigate('tasks')">
+              Tüm Görevleri Gör
+            </button>
+
+          </div>
 
         </div>
 
 
-        <p>
-            ✓ Ücretsiz &nbsp;
-            ✓ Kolay &nbsp;
-            ✓ Öğrenci dostu
+        <div>
+
+          <div class="card">
+
+            <h2>
+              Bugünün Özeti
+            </h2>
+
+            <div
+              class="profile-info"
+              style="margin-top:15px">
+
+              <div class="profile-item">
+
+                <span>
+                  ⭐ XP
+                </span>
+
+                <strong id="homeStatXP">
+                  0
+                </strong>
+
+              </div>
+
+              <div class="profile-item">
+
+                <span>
+                  🔥 Seri
+                </span>
+
+                <strong id="homeStatStreak">
+                  0 gün
+                </strong>
+
+              </div>
+
+              <div class="profile-item">
+
+                <span>
+                  📚 Ders
+                </span>
+
+                <strong id="homeStatSubjects">
+                  0
+                </strong>
+
+              </div>
+
+              <div class="profile-item">
+
+                <span>
+                  📅 Sınav
+                </span>
+
+                <strong id="homeStatExams">
+                  0
+                </strong>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+    AI SOLVE
+    ===================================================== -->
+
+    <section
+      id="page-ai-solve"
+      class="page">
+
+      <div class="card">
+
+        <div class="card-title">
+
+          <div>
+
+            <h2>
+              🧠 Yapay Zeka ile Soru Çöz
+            </h2>
+
+            <p style="color:var(--muted);margin-top:5px">
+              Sorunu yaz veya fotoğrafını yükle.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Ders
+          </label>
+
+          <select id="aiSubject">
+
+            <option>Matematik</option>
+            <option>Türkçe</option>
+            <option>Fen Bilimleri</option>
+            <option>Sosyal Bilgiler</option>
+            <option>İngilizce</option>
+            <option>Din Kültürü</option>
+            <option>Bilişim Teknolojileri</option>
+            <option>Diğer</option>
+
+          </select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Anlatım Şekli
+          </label>
+
+          <select id="aiMode">
+
+            <option value="Adım adım">
+              Adım adım
+            </option>
+
+            <option value="Kısa ve kolay">
+              Kısa ve kolay
+            </option>
+
+            <option value="Detaylı">
+              Detaylı
+            </option>
+
+            <option value="Sınav için hızlı çözüm">
+              Sınav için hızlı çözüm
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Soruyu Yaz
+          </label>
+
+          <textarea
+            id="aiQuestion"
+            rows="6"
+            placeholder="Örneğin: 2x + 5 = 17 ise x kaçtır?"></textarea>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Veya Soru Fotoğrafı Yükle
+          </label>
+
+          <input
+            id="aiImage"
+            type="file"
+            accept="image/*"
+            onchange="previewAIImage(event)">
+
+        </div>
+
+
+        <div
+          id="aiImagePreview"
+          style="display:none;margin-bottom:15px">
+
+          <img
+            id="aiPreview"
+            alt="Soru önizleme"
+            style="max-width:100%;max-height:300px;border-radius:15px;border:1px solid var(--border)">
+
+        </div>
+
+
+        <button
+          class="primary"
+          id="aiSolveButton"
+          onclick="solveAIQuestion()"
+          style="width:100%;padding:14px;font-size:16px">
+
+          🧠 Soruyu Çöz
+
+        </button>
+
+
+        <div
+          id="aiLoading"
+          style="display:none;text-align:center;padding:25px;color:var(--muted)">
+
+          <div style="font-size:35px">
+            🤖
+          </div>
+
+          <strong>
+            Yapay zeka soruyu çözüyor...
+          </strong>
+
+        </div>
+
+
+        <div
+          id="aiResult"
+          style="
+          display:none;
+          margin-top:20px;
+          padding:20px;
+          border-radius:16px;
+          background:var(--bg);
+          border:1px solid var(--border);
+          line-height:1.8;
+          white-space:pre-wrap;
+          ">
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+    TASKS
+    ===================================================== -->
+
+    <section
+      id="page-tasks"
+      class="page">
+
+      <div class="card">
+
+        <div class="card-title">
+
+          <div>
+
+            <h2>
+              Görevler
+            </h2>
+
+            <p style="color:var(--muted);margin-top:5px">
+              Çalışma hedeflerini buradan yönet.
+            </p>
+
+          </div>
+
+          <button
+            class="primary"
+            onclick="openTaskModal()">
+            + Görev
+          </button>
+
+        </div>
+
+        <div id="allTasks"></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+    SUBJECTS
+    ===================================================== -->
+
+    <section
+      id="page-subjects"
+      class="page">
+
+      <div class="card">
+
+        <div class="card-title">
+
+          <div>
+
+            <h2>
+              Derslerim 📚
+            </h2>
+
+            <p style="color:var(--muted);margin-top:5px">
+              Çalıştığın dersleri yönet.
+            </p>
+
+          </div>
+
+          <button
+            class="primary"
+            onclick="openSubjectModal()">
+            + Ders Ekle
+          </button>
+
+        </div>
+
+        <div
+          class="subject-grid"
+          id="subjectsGrid">
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+    EXAMS
+    ===================================================== -->
+
+    <section
+      id="page-exams"
+      class="page">
+
+      <div class="card">
+
+        <div class="card-title">
+
+          <div>
+
+            <h2>
+              Sınav Takvimi 📅
+            </h2>
+
+            <p style="color:var(--muted);margin-top:5px">
+              Sınavlarını takip et.
+            </p>
+
+          </div>
+
+          <button
+            class="primary"
+            onclick="openExamModal()">
+            + Sınav Ekle
+          </button>
+
+        </div>
+
+        <div id="examList"></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+    NOTES
+    ===================================================== -->
+
+    <section
+      id="page-notes"
+      class="page">
+
+      <div class="card">
+
+        <div class="card-title">
+
+          <div>
+
+            <h2>
+              Notlarım 📝
+            </h2>
+
+          </div>
+
+          <button
+            class="primary"
+            onclick="openNoteModal()">
+            + Yeni Not
+          </button>
+
+        </div>
+
+        <div
+          class="notes-grid"
+          id="notesGrid">
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+    FOCUS
+    ===================================================== -->
+
+    <section
+      id="page-focus"
+      class="page">
+
+      <div class="card focus-box">
+
+        <h2>
+          Odaklanma Modu ⏱️
+        </h2>
+
+        <p style="color:var(--muted);margin-top:7px">
+          Telefonunu bırak ve sadece çalışmaya odaklan.
         </p>
 
-    </div>
+        <div
+          class="timer"
+          id="timer">
+          25:00
+        </div>
 
-</section>
+        <div class="focus-buttons">
+
+          <button
+            class="primary"
+            onclick="startTimer()">
+            Başlat
+          </button>
+
+          <button
+            class="secondary"
+            onclick="pauseTimer()">
+            Duraklat
+          </button>
+
+          <button
+            class="secondary"
+            onclick="resetTimer()">
+            Sıfırla
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
 
 
-</main>
+    <!-- =====================================================
+    DERS KOÇU
+    ===================================================== -->
+
+    <section
+      id="page-coach"
+      class="page">
+
+      <div class="card coach-page">
+
+        <div class="coach-header">
+
+          <div class="coach-avatar">
+            🤖
+          </div>
+
+          <div class="coach-title">
+
+            <h2>
+              Ders Koçu
+            </h2>
+
+            <p>
+              Sorularını sor, birlikte çalışalım.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="chat-box"
+          id="chatBox">
+
+          <div
+            class="chat-empty"
+            id="chatEmpty">
+
+            <div>
+
+              <div style="font-size:50px;margin-bottom:15px">
+                🤖
+              </div>
+
+              <h3>
+                Merhaba!
+              </h3>
+
+              <p style="margin-top:8px">
+
+                Ben DersTakip Ders Koçu'yum.
+                <br>
+
+                Derslerin, sınavların veya çalışma planın
+                hakkında bana soru sorabilirsin.
+
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="chat-options">
+
+          <button
+            class="chat-option"
+            onclick="quickCoach('Bugün nasıl ders çalışmalıyım?')">
+            🎯 Bugün ne çalışmalıyım?
+          </button>
+
+          <button
+            class="chat-option"
+            onclick="quickCoach('Matematikte nasıl daha iyi olabilirim?')">
+            📐 Matematik
+          </button>
+
+          <button
+            class="chat-option"
+            onclick="quickCoach('Sınava nasıl hazırlanmalıyım?')">
+            📅 Sınav planı
+          </button>
+
+          <button
+            class="chat-option"
+            onclick="quickCoach('Ders çalışmak için motivasyon verir misin?')">
+            🔥 Motivasyon
+          </button>
+
+        </div>
+
+
+        <div class="chat-input-area">
+
+          <textarea
+            id="coachInput"
+            placeholder="Ders Koçu'na bir şey sor..."
+            rows="1"
+            onkeydown="coachKeyDown(event)"></textarea>
+
+          <button
+            class="send-button"
+            id="coachSend"
+            onclick="sendCoachMessage()">
+            ➤
+          </button>
+
+        </div>
+
+
+        <div class="coach-tools">
+
+          <small>
+            🧠 DersTakip AI
+          </small>
+
+          <button
+            class="new-chat"
+            onclick="newCoachChat()">
+            Yeni sohbet
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+    ACHIEVEMENTS
+    ===================================================== -->
+
+    <section
+      id="page-achievements"
+      class="page">
+
+      <div class="card">
+
+        <h2 style="margin-bottom:18px">
+          🏆 Başarı Rozetleri
+        </h2>
+
+        <div
+          class="badges"
+          id="badges">
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+    STATS
+    ===================================================== -->
+
+    <section
+      id="page-stats"
+      class="page">
+
+      <div class="card">
+
+        <h2>
+          📊 İstatistikler
+        </h2>
+
+        <div
+          class="stats"
+          style="margin-top:20px">
+
+          <div class="stat">
+
+            <span>⭐</span>
+
+            <strong id="statsXP">
+              0
+            </strong>
+
+            <small>
+              Toplam XP
+            </small>
+
+          </div>
+
+          <div class="stat">
+
+            <span>🔥</span>
+
+            <strong id="statsStreak">
+              0
+            </strong>
+
+            <small>
+              Çalışma serisi
+            </small>
+
+          </div>
+
+          <div class="stat">
+
+            <span>✅</span>
+
+            <strong id="statsCompleted">
+              0
+            </strong>
+
+            <small>
+              Tamamlanan görev
+            </small>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <h2>
+          Çalışma Durumu
+        </h2>
+
+        <div style="margin-top:20px">
+
+          <div
+            style="display:flex;justify-content:space-between;margin-bottom:8px">
+
+            <span>
+              Görev tamamlama
+            </span>
+
+            <strong id="statsPercent">
+              0%
+            </strong>
+
+          </div>
+
+          <div
+            class="progress"
+            style="background:var(--border)">
+
+            <span
+              id="statsProgress"
+              style="background:var(--primary)">
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+    PROFILE
+    ===================================================== -->
+
+    <section
+      id="page-profile"
+      class="page">
+
+      <div class="card profile-card">
+
+        <div class="profile-avatar">
+          🎓
+        </div>
+
+        <h2 id="profileName">
+          Öğrenci
+        </h2>
+
+        <p
+          id="profileEmail"
+          style="color:var(--muted);margin-top:5px">
+          -
+        </p>
+
+        <div
+          class="profile-info"
+          style="margin-top:25px">
+
+          <div class="profile-item">
+
+            <span>
+              Seviye
+            </span>
+
+            <strong id="profileLevel">
+              1
+            </strong>
+
+          </div>
+
+          <div class="profile-item">
+
+            <span>
+              Toplam XP
+            </span>
+
+            <strong id="profileXP">
+              0
+            </strong>
+
+          </div>
+
+          <div class="profile-item">
+
+            <span>
+              Görev
+            </span>
+
+            <strong id="profileTasks">
+              0
+            </strong>
+
+          </div>
+
+          <div class="profile-item">
+
+            <span>
+              Ders
+            </span>
+
+            <strong id="profileSubjects">
+              0
+            </strong>
+
+          </div>
+
+        </div>
+
+        <div
+          style="margin-top:25px;display:flex;gap:10px;flex-wrap:wrap">
+
+          <button
+            class="secondary"
+            onclick="toggleDark()">
+            🌙 Tema Değiştir
+          </button>
+
+          <button
+            class="secondary"
+            onclick="clearData()">
+            Verileri Sıfırla
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+    HAKKIMIZDA
+    ===================================================== -->
+
+    <section
+      id="page-about"
+      class="page">
+
+      <div class="card legal-page">
+
+        <h2>
+          ℹ️ Hakkımızda
+        </h2>
+
+        <p>
+          DersTakip Pro, öğrencilerin ders çalışma süreçlerini
+          daha düzenli ve verimli hale getirmek amacıyla
+          geliştirilmiş bir öğrenci platformudur.
+        </p>
+
+        <h3>
+          🎯 Amacımız
+        </h3>
+
+        <p>
+          Dersleri, görevleri, sınavları ve çalışma notlarını
+          tek bir yerde yönetmeyi kolaylaştırmak ve öğrencilerin
+          kendi çalışma düzenlerini oluşturmasına yardımcı olmaktır.
+        </p>
+
+        <h3>
+          📚 Neler Sunuyoruz?
+        </h3>
+
+        <ul>
+          <li>Görev ve çalışma hedefleri oluşturma</li>
+          <li>Dersleri düzenleme</li>
+          <li>Sınav takibi</li>
+          <li>Ders notları oluşturma</li>
+          <li>Odaklanma zamanlayıcısı</li>
+          <li>Başarı ve XP sistemi</li>
+          <li>Ders Koçu</li>
+          <li>Yapay zeka ile soru çözme</li>
+        </ul>
+
+        <h3>
+          🚀 Gelecek
+        </h3>
+
+        <p>
+          DersTakip Pro'yu sürekli geliştirmeyi ve öğrencilerin
+          ihtiyaçlarına göre yeni özellikler eklemeyi hedefliyoruz.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+    GİZLİLİK POLİTİKASI
+    ===================================================== -->
+
+    <section
+      id="page-privacy"
+      class="page">
+
+      <div class="card legal-page">
+
+        <h2>
+          🔒 Gizlilik Politikası
+        </h2>
+
+        <p>
+          DersTakip Pro kullanıcı gizliliğine önem verir.
+          Bu sayfa, platform içerisinde hangi tür bilgilerin
+          kullanılabileceği ve bu bilgilerin hangi amaçlarla
+          işlenebileceği hakkında genel bilgi vermektedir.
+        </p>
+
+        <div class="info-highlight">
+
+          <strong>
+            Son güncelleme: 19 Ağustos 2026
+          </strong>
+
+          <p style="margin-top:7px;margin-bottom:0">
+            Bu metin genel bilgilendirme amacıyla hazırlanmıştır.
+          </p>
+
+        </div>
+
+        <h3>
+          📌 Toplanan Bilgiler
+        </h3>
+
+        <p>
+          Hesap oluştururken ad-soyad ve e-posta adresi gibi
+          bilgiler girilebilir. Uygulama içerisinde oluşturulan
+          görevler, dersler, sınavlar ve notlar da uygulamanın
+          sunduğu özelliklerin çalışması için kullanılabilir.
+        </p>
+
+        <h3>
+          💾 Verilerin Saklanması
+        </h3>
+
+        <p>
+          Uygulamanın mevcut istemci tarafı özelliklerinde bazı
+          kullanıcı verileri tarayıcının yerel depolama alanında
+          (localStorage) saklanmaktadır.
+        </p>
+
+        <h3>
+          🤖 Yapay Zeka Özellikleri
+        </h3>
+
+        <p>
+          Ders Koçu ve yapay zeka ile soru çözme özelliklerinde
+          gönderdiğin içerikler, ilgili özelliğin çalışması için
+          uygulamanın sunucu tarafına gönderilebilir.
+        </p>
+
+        <h3>
+          📊 Google Analytics
+        </h3>
+
+        <p>
+          DersTakip Pro kullanım istatistiklerini anlamak amacıyla
+          Google Analytics kullanmaktadır. Google Analytics,
+          ziyaret ve kullanım hakkında teknik bilgiler
+          toplayabilir.
+        </p>
+
+        <h3>
+          🔐 Güvenlik
+        </h3>
+
+        <p>
+          Verilerin korunması için makul teknik ve idari önlemler
+          alınması hedeflenmektedir. Bununla birlikte internet
+          üzerinden yapılan hiçbir veri aktarımının tamamen
+          risksiz olduğu garanti edilemez.
+        </p>
+
+        <h3>
+          👤 Kullanıcı Hakları
+        </h3>
+
+        <p>
+          Kullanıcılar kendileriyle ilgili bilgilerin nasıl
+          kullanıldığı hakkında bilgi talep edebilir ve uygun
+          durumlarda verilerinin düzeltilmesini veya silinmesini
+          isteyebilir.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+    ÇEREZ POLİTİKASI
+    ===================================================== -->
+
+    <section
+      id="page-cookies"
+      class="page">
+
+      <div class="card legal-page">
+
+        <h2>
+          🍪 Çerez Politikası
+        </h2>
+
+        <p>
+          DersTakip Pro, sitenin ve uygulamanın düzgün çalışmasını
+          sağlamak ve kullanıcı deneyimini geliştirmek amacıyla
+          tarayıcı depolama teknolojileri kullanabilir.
+        </p>
+
+        <h3>
+          🍪 Çerez Nedir?
+        </h3>
+
+        <p>
+          Çerezler, web sitelerinin kullanıcı deneyimini
+          geliştirmek amacıyla tarayıcıda küçük bilgiler
+          saklamasına olanak sağlayan teknolojilerdir.
+        </p>
+
+        <h3>
+          💾 Yerel Depolama
+        </h3>
+
+        <p>
+          DersTakip Pro'nun bazı özelliklerinde localStorage
+          kullanılmaktadır. Örneğin kullanıcı oturumu, görevler,
+          dersler, notlar ve tema tercihi gibi bilgiler cihazdaki
+          tarayıcı depolamasında tutulabilir.
+        </p>
+
+        <h3>
+          📊 Analitik
+        </h3>
+
+        <p>
+          Google Analytics kullanım istatistiklerini ölçmek
+          amacıyla kullanılmaktadır. Bu hizmet kendi teknolojileri
+          aracılığıyla belirli teknik kullanım verilerini
+          işleyebilir.
+        </p>
+
+        <h3>
+          ⚙️ Tercihleri Yönetme
+        </h3>
+
+        <p>
+          Tarayıcının ayarlarından çerezleri ve site depolamasını
+          silebilir veya engelleyebilirsin. Ancak bazı özellikler
+          bu durumda düzgün çalışmayabilir.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+    KULLANIM KOŞULLARI
+    ===================================================== -->
+
+    <section
+      id="page-terms"
+      class="page">
+
+      <div class="card legal-page">
+
+        <h2>
+          📜 Kullanım Koşulları
+        </h2>
+
+        <p>
+          DersTakip Pro'yu kullanarak aşağıdaki genel kullanım
+          koşullarını kabul etmiş olursun.
+        </p>
+
+        <h3>
+          1. Hizmetin Kullanımı
+        </h3>
+
+        <p>
+          DersTakip Pro eğitim ve çalışma organizasyonu amacıyla
+          sunulmaktadır. Kullanıcı, platformu hukuka ve genel
+          kullanım kurallarına uygun şekilde kullanmalıdır.
+        </p>
+
+        <h3>
+          2. Hesap Bilgileri
+        </h3>
+
+        <p>
+          Kullanıcı, hesap oluştururken verdiği bilgilerin doğru
+          olmasından ve hesabının güvenliğinden sorumludur.
+        </p>
+
+        <h3>
+          3. Yapay Zeka
+        </h3>
+
+        <p>
+          Yapay zeka tarafından verilen cevaplar eğitim amaçlı
+          yardımcı bilgiler niteliğindedir. Önemli sınav,
+          akademik veya resmi kararlar için verilen cevapların
+          ayrıca kontrol edilmesi önerilir.
+        </p>
+
+        <h3>
+          4. İçerik
+        </h3>
+
+        <p>
+          Kullanıcıların platforma girdiği içeriklerin hukuka,
+          üçüncü kişilerin haklarına ve platform kurallarına
+          uygun olması gerekir.
+        </p>
+
+        <h3>
+          5. Hizmet Değişiklikleri
+        </h3>
+
+        <p>
+          DersTakip Pro özellikleri zaman içerisinde geliştirilebilir,
+          değiştirilebilir veya bazı özellikler kaldırılabilir.
+        </p>
+
+        <h3>
+          6. Hesabın Sonlandırılması
+        </h3>
+
+        <p>
+          Kurallara aykırı veya kötüye kullanım durumlarında
+          hizmete erişim sınırlandırılabilir.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+    SORUMLULUK REDDİ
+    ===================================================== -->
+
+    <section
+      id="page-disclaimer"
+      class="page">
+
+      <div class="card legal-page">
+
+        <h2>
+          ⚠️ Sorumluluk Reddi
+        </h2>
+
+        <p>
+          DersTakip Pro öğrencilerin çalışma süreçlerini
+          desteklemek amacıyla hazırlanmıştır.
+        </p>
+
+        <h3>
+          🤖 Yapay Zeka Cevapları
+        </h3>
+
+        <p>
+          Yapay zeka tarafından oluşturulan cevaplarda hata,
+          eksiklik veya yanlış yorum bulunabilir. Bu nedenle
+          önemli bilgiler bağımsız kaynaklardan doğrulanmalıdır.
+        </p>
+
+        <h3>
+          📚 Eğitim İçeriği
+        </h3>
+
+        <p>
+          Platformdaki içerikler öğrencilerin çalışma sürecine
+          yardımcı olmak içindir ve herhangi bir eğitim
+          kurumunun resmi müfredatının yerine geçmez.
+        </p>
+
+        <h3>
+          🌐 Hizmet Sürekliliği
+        </h3>
+
+        <p>
+          Teknik bakım, internet bağlantısı, sunucu sorunları
+          veya üçüncü taraf hizmetlerde meydana gelebilecek
+          problemler nedeniyle bazı özellikler geçici olarak
+          kullanılamayabilir.
+        </p>
+
+        <h3>
+          🔗 Üçüncü Taraf Hizmetler
+        </h3>
+
+        <p>
+          Google Analytics ve yapay zeka servisleri gibi
+          üçüncü taraf hizmetlerin kendi kullanım koşulları
+          ve gizlilik politikaları olabilir.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+    İLETİŞİM
+    ===================================================== -->
+
+    <section
+      id="page-contact"
+      class="page">
+
+      <div class="card legal-page">
+
+        <h2>
+          📩 İletişim
+        </h2>
+
+        <p>
+          DersTakip Pro hakkında öneri, geri bildirim veya teknik
+          sorun bildirmek için bizimle iletişime geçebilirsin.
+        </p>
+
+        <div class="contact-box">
+
+          <div class="contact-item">
+
+            <strong>
+              💬 Genel Destek
+            </strong>
+
+            <span>
+              Uygulama hakkında görüş ve önerilerini
+              iletebilirsin.
+            </span>
+
+          </div>
+
+          <div class="contact-item">
+
+            <strong>
+              🐛 Teknik Sorun
+            </strong>
+
+            <span>
+              Karşılaştığın hataları ve sorunları
+              bildirebilirsin.
+            </span>
+
+          </div>
+
+          <div class="contact-item">
+
+            <strong>
+              💡 Öneriler
+            </strong>
+
+            <span>
+              DersTakip Pro'ya eklenmesini istediğin
+              özellikleri paylaşabilirsin.
+            </span>
+
+          </div>
+
+          <div class="contact-item">
+
+            <strong>
+              📧 E-posta
+            </strong>
+
+            <span>
+              İletişim e-posta adresini burada
+              yayınlayabilirsin.
+            </span>
+
+          </div>
+
+        </div>
+
+        <div class="info-highlight" style="margin-top:25px">
+
+          <strong>
+            Not:
+          </strong>
+
+          <p style="margin-top:7px;margin-bottom:0">
+            Siteyi yayınlamadan önce gerçek iletişim
+            e-posta adresini bu alana eklemen önerilir.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+    FOOTER
+    ===================================================== -->
+
+    <footer class="site-footer">
+
+      <div class="footer-links">
+
+        <button onclick="navigate('about')">
+          Hakkımızda
+        </button>
+
+        <button onclick="navigate('privacy')">
+          Gizlilik Politikası
+        </button>
+
+        <button onclick="navigate('cookies')">
+          Çerez Politikası
+        </button>
+
+        <button onclick="navigate('terms')">
+          Kullanım Koşulları
+        </button>
+
+        <button onclick="navigate('disclaimer')">
+          Sorumluluk Reddi
+        </button>
+
+        <button onclick="navigate('contact')">
+          İletişim
+        </button>
+
+      </div>
+
+      <div class="footer-copy">
+        © 2026 DersTakip Pro. Tüm hakları saklıdır.
+      </div>
+
+    </footer>
+
+  </main>
+
+</div>
 
 
 <!-- =====================================================
-     FOOTER
+MODAL
 ===================================================== -->
 
-<footer>
+<div
+  class="modal"
+  id="modal">
 
-    <div>
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <h2 id="modalTitle">
+        Yeni
+      </h2>
+
+      <button
+        class="close"
+        onclick="closeModal()">
+        ✕
+      </button>
+
+    </div>
+
+    <div id="modalBody"></div>
+
+  </div>
+
+</div>
 
 
-        <section>
+<div id="toast"></div>
 
-            <a href="/" aria-label="DersTakip">
-                📚 <strong>DersTakip</strong>
-            </a>
 
-            <p>
-                Öğrencilerin derslerini daha kolay takip
-                etmesi için geliştirilmiş ücretsiz öğrenci platformu.
+<script>
+
+/* =====================================================
+DATA
+===================================================== */
+
+let user = JSON.parse(
+  localStorage.getItem("dt_user") || "null"
+);
+
+let data = JSON.parse(
+  localStorage.getItem("dt_data") || "null"
+) || {
+  tasks:[],
+  subjects:[],
+  exams:[],
+  notes:[],
+  xp:0,
+  streak:0,
+  completed:0,
+  lastDay:""
+};
+
+const subjectsDefault = [
+  ["Matematik","📐"],
+  ["Türkçe","📖"],
+  ["Fen Bilimleri","🔬"],
+  ["Sosyal Bilgiler","🌍"],
+  ["İngilizce","🇬🇧"],
+  ["Din Kültürü","📚"],
+  ["Beden Eğitimi","⚽"],
+  ["Müzik","🎵"],
+  ["Görsel Sanatlar","🎨"],
+  ["Bilişim Teknolojileri","💻"]
+];
+
+const advices = [
+  "Bugün önce en zor dersinden başla.",
+  "25 dakika boyunca sadece tek bir derse odaklan.",
+  "Sınavın varsa bugün kısa tekrar yap.",
+  "Öğrendiğin konuyu kendi cümlelerinle anlat.",
+  "Telefonunu çalışma sırasında uzağa koy.",
+  "Küçük hedefler belirle.",
+  "Bugün 20 dakika çalışmak bile iyi bir başlangıç."
+];
+
+
+/* =====================================================
+AUTH
+===================================================== */
+
+function showLogin(){
+
+  loginForm.classList.remove("hidden");
+
+  registerForm.classList.add("hidden");
+
+  loginTab.classList.add("active");
+
+  registerTab.classList.remove("active");
+
+  authMsg.textContent="";
+}
+
+function showRegister(){
+
+  loginForm.classList.add("hidden");
+
+  registerForm.classList.remove("hidden");
+
+  loginTab.classList.remove("active");
+
+  registerTab.classList.add("active");
+
+  authMsg.textContent="";
+}
+
+function register(e){
+
+  e.preventDefault();
+
+  const name =
+    registerName.value.trim();
+
+  const email =
+    registerEmail.value.trim();
+
+  const password =
+    registerPassword.value;
+
+  if(password.length < 6){
+
+    authMsg.style.color="red";
+
+    authMsg.textContent =
+      "Şifre en az 6 karakter olmalı.";
+
+    return;
+  }
+
+  user={
+    name,
+    email,
+    password
+  };
+
+  localStorage.setItem(
+    "dt_user",
+    JSON.stringify(user)
+  );
+
+  authMsg.style.color="green";
+
+  authMsg.textContent =
+    "Hesap oluşturuldu.";
+
+  showLogin();
+
+  loginEmail.value=email;
+}
+
+function login(e){
+
+  e.preventDefault();
+
+  const saved =
+    JSON.parse(
+      localStorage.getItem("dt_user") || "null"
+    );
+
+  if(!saved){
+
+    authMsg.style.color="red";
+
+    authMsg.textContent =
+      "Önce kayıt olmalısın.";
+
+    return;
+  }
+
+  if(
+    saved.email !== loginEmail.value.trim()
+    ||
+    saved.password !== loginPassword.value
+  ){
+
+    authMsg.style.color="red";
+
+    authMsg.textContent =
+      "E-posta veya şifre yanlış.";
+
+    return;
+  }
+
+  user=saved;
+
+  localStorage.setItem(
+    "dt_logged",
+    "1"
+  );
+
+  openApp();
+}
+
+function logout(){
+
+  localStorage.removeItem(
+    "dt_logged"
+  );
+
+  location.reload();
+}
+
+function openApp(){
+
+  auth.style.display="none";
+
+  app.style.display="block";
+
+  renderAll();
+}
+
+
+/* =====================================================
+NAVIGATION
+===================================================== */
+
+function navigate(page){
+
+  document
+    .querySelectorAll(".page")
+    .forEach(x =>
+      x.classList.remove("active")
+    );
+
+  const target =
+    document.getElementById(
+      "page-"+page
+    );
+
+  if(target){
+    target.classList.add("active");
+  }
+
+  document
+    .querySelectorAll(".menu button")
+    .forEach(btn => {
+
+      btn.classList.toggle(
+        "active",
+        btn.dataset.page === page
+      );
+
+    });
+
+  const titles={
+
+    home:"Ana Sayfa",
+
+    "ai-solve":"Soru Çöz",
+
+    tasks:"Görevler",
+
+    subjects:"Dersler",
+
+    exams:"Sınavlar",
+
+    notes:"Notlar",
+
+    focus:"Odaklan",
+
+    coach:"Ders Koçu",
+
+    achievements:"Rozetler",
+
+    stats:"İstatistikler",
+
+    profile:"Profil",
+
+    about:"Hakkımızda",
+
+    privacy:"Gizlilik Politikası",
+
+    cookies:"Çerez Politikası",
+
+    terms:"Kullanım Koşulları",
+
+    disclaimer:"Sorumluluk Reddi",
+
+    contact:"İletişim"
+
+  };
+
+  subtitle.textContent =
+    titles[page] || "DersTakip";
+
+  closeMobile();
+
+  if(page==="achievements"){
+    renderBadges();
+  }
+}
+
+function navigateMobile(page){
+  navigate(page);
+}
+
+function toggleMobile(){
+
+  mobileMenu.classList.toggle(
+    "open"
+  );
+}
+
+function closeMobile(){
+
+  mobileMenu.classList.remove(
+    "open"
+  );
+}
+
+
+/* =====================================================
+TASKS
+===================================================== */
+
+function addTask(){
+
+  const input =
+    document.getElementById(
+      "taskInput"
+    );
+
+  if(!input) return;
+
+  const name =
+    input.value.trim();
+
+  if(!name) return;
+
+  data.tasks.push({
+
+    id:Date.now(),
+
+    name:name,
+
+    done:false,
+
+    xp:20
+
+  });
+
+  save();
+
+  closeModal();
+
+  renderAll();
+
+  toast(
+    "Görev eklendi ✅"
+  );
+}
+
+function toggleTask(id){
+
+  const task =
+    data.tasks.find(
+      x=>x.id===id
+    );
+
+  if(!task) return;
+
+  task.done=!task.done;
+
+  if(task.done){
+
+    data.xp += task.xp;
+
+    data.completed++;
+
+    updateStreak();
+
+    toast(
+      "Görev tamamlandı! +"+
+      task.xp+
+      " XP ⭐"
+    );
+
+  }else{
+
+    data.xp =
+      Math.max(
+        0,
+        data.xp-task.xp
+      );
+
+    data.completed =
+      Math.max(
+        0,
+        data.completed-1
+      );
+
+  }
+
+  save();
+
+  renderAll();
+}
+
+function deleteTask(id){
+
+  data.tasks =
+    data.tasks.filter(
+      x=>x.id!==id
+    );
+
+  save();
+
+  renderAll();
+
+  toast(
+    "Görev silindi."
+  );
+}
+
+function renderTasks(){
+
+  const html =
+    data.tasks.length
+    ?
+    data.tasks.map(task => `
+
+      <div class="task ${task.done ? "done" : ""}">
+
+        <button
+          class="check"
+          onclick="toggleTask(${task.id})">
+
+          ${task.done ? "✓" : ""}
+
+        </button>
+
+        <span class="task-name">
+          ${escapeHTML(task.name)}
+        </span>
+
+        <span class="task-xp">
+          +${task.xp} XP
+        </span>
+
+        <button
+          class="delete"
+          onclick="deleteTask(${task.id})">
+
+          🗑️
+
+        </button>
+
+      </div>
+
+    `).join("")
+    :
+    `
+      <p style="color:var(--muted);padding:20px 0">
+        Henüz görev yok.
+        İlk görevini ekle!
+      </p>
+    `;
+
+  allTasks.innerHTML=html;
+
+  const home =
+    data.tasks.slice(0,5);
+
+  homeTasks.innerHTML =
+    home.length
+    ?
+    home.map(task => `
+
+      <div class="task ${task.done ? "done" : ""}">
+
+        <button
+          class="check"
+          onclick="toggleTask(${task.id})">
+
+          ${task.done ? "✓" : ""}
+
+        </button>
+
+        <span class="task-name">
+          ${escapeHTML(task.name)}
+        </span>
+
+      </div>
+
+    `).join("")
+    :
+    `
+      <p style="color:var(--muted)">
+        Henüz görev eklemedin.
+      </p>
+    `;
+
+  const total =
+    data.tasks.length;
+
+  const done =
+    data.tasks.filter(
+      x=>x.done
+    ).length;
+
+  taskCounter.textContent =
+    `${done} / ${total}`;
+
+  const percent =
+    total
+      ? Math.round(done/total*100)
+      : 0;
+
+  progress.style.width =
+    percent+"%";
+
+  homeSummary.textContent =
+    total
+      ?
+      `${done} görevden ${done} tanesini tamamladın.`
+      :
+      "Bugün için henüz görev eklemedin.";
+
+  homeXP.textContent =
+    `${data.xp} XP`;
+}
+
+function openTaskModal(){
+
+  openModal(
+    "Yeni Görev",
+
+    `
+      <div class="field">
+
+        <label>
+          Görev
+        </label>
+
+        <input
+          id="taskInput"
+          placeholder="Örn. Matematik 20 soru çöz">
+
+      </div>
+
+      <button
+        class="primary"
+        onclick="addTask()">
+
+        Görevi Ekle
+
+      </button>
+    `
+  );
+
+  setTimeout(() => {
+
+    document
+      .getElementById("taskInput")
+      ?.focus();
+
+  },100);
+}
+
+
+/* =====================================================
+SUBJECTS
+===================================================== */
+
+function renderSubjects(){
+
+  if(!data.subjects.length){
+
+    data.subjects =
+      subjectsDefault.map(
+        (x,i)=>({
+
+          id:"default-"+i,
+
+          name:x[0],
+
+          icon:x[1]
+
+        })
+      );
+
+    save();
+  }
+
+  subjectsGrid.innerHTML =
+    data.subjects.map(s => `
+
+      <div class="subject">
+
+        <div class="subject-icon">
+          ${escapeHTML(s.icon)}
+        </div>
+
+        <h3>
+          ${escapeHTML(s.name)}
+        </h3>
+
+        <p>
+          Ders çalışma alanı
+        </p>
+
+        <button
+          class="secondary"
+          onclick="subjectTask('${escapeAttr(s.name)}')">
+
+          Görev Oluştur
+
+        </button>
+
+      </div>
+
+    `).join("");
+}
+
+function subjectTask(name){
+
+  navigate("tasks");
+
+  setTimeout(() => {
+
+    openTaskModalWithSubject(name);
+
+  },150);
+}
+
+function openTaskModalWithSubject(name){
+
+  openModal(
+    "Yeni "+name+" Görevi",
+
+    `
+      <div class="field">
+
+        <label>
+          Görev
+        </label>
+
+        <input
+          id="taskInput"
+          value="${escapeAttr(name)} - "
+          autofocus>
+
+      </div>
+
+      <button
+        class="primary"
+        onclick="addTask()">
+
+        Görevi Ekle
+
+      </button>
+    `
+  );
+}
+
+function openSubjectModal(){
+
+  openModal(
+    "Ders Ekle",
+
+    `
+      <div class="field">
+
+        <label>
+          Ders adı
+        </label>
+
+        <input
+          id="subjectName"
+          placeholder="Örn. Almanca">
+
+      </div>
+
+      <div class="field">
+
+        <label>
+          Simge
+        </label>
+
+        <input
+          id="subjectIcon"
+          value="📘"
+          maxlength="2">
+
+      </div>
+
+      <button
+        class="primary"
+        onclick="addSubject()">
+
+        Dersi Ekle
+
+      </button>
+    `
+  );
+}
+
+function addSubject(){
+
+  const name =
+    document
+      .getElementById("subjectName")
+      .value.trim();
+
+  const icon =
+    document
+      .getElementById("subjectIcon")
+      .value || "📘";
+
+  if(!name) return;
+
+  data.subjects.push({
+
+    id:Date.now(),
+
+    name,
+
+    icon
+
+  });
+
+  save();
+
+  closeModal();
+
+  renderSubjects();
+
+  renderHomeStats();
+
+  renderProfile();
+
+  renderBadges();
+
+  toast(
+    "Ders eklendi 📚"
+  );
+}
+
+
+/* =====================================================
+EXAMS
+===================================================== */
+
+function openExamModal(){
+
+  openModal(
+    "Sınav Ekle",
+
+    `
+      <div class="field">
+
+        <label>
+          Ders
+        </label>
+
+        <select id="examSubject">
+
+          ${
+            data.subjects.map(s => `
+
+              <option>
+                ${escapeHTML(s.name)}
+              </option>
+
+            `).join("")
+          }
+
+        </select>
+
+      </div>
+
+      <div class="field">
+
+        <label>
+          Sınav adı
+        </label>
+
+        <input
+          id="examName"
+          placeholder="1. Yazılı">
+
+      </div>
+
+      <div class="field">
+
+        <label>
+          Tarih
+        </label>
+
+        <input
+          id="examDate"
+          type="date">
+
+      </div>
+
+      <div class="field">
+
+        <label>
+          Not / Hedef
+        </label>
+
+        <input
+          id="examTarget"
+          placeholder="Örn. 90">
+
+      </div>
+
+      <button
+        class="primary"
+        onclick="addExam()">
+
+        Sınavı Kaydet
+
+      </button>
+    `
+  );
+}
+
+function addExam(){
+
+  const subject =
+    examSubject.value;
+
+  const name =
+    examName.value.trim();
+
+  const date =
+    examDate.value;
+
+  const target =
+    examTarget.value;
+
+  if(!name || !date)
+    return;
+
+  data.exams.push({
+
+    id:Date.now(),
+
+    subject,
+
+    name,
+
+    date,
+
+    target
+
+  });
+
+  save();
+
+  closeModal();
+
+  renderExams();
+
+  renderHomeStats();
+
+  renderBadges();
+
+  toast(
+    "Sınav takvime eklendi 📅"
+  );
+}
+
+function deleteExam(id){
+
+  data.exams =
+    data.exams.filter(
+      x=>x.id!==id
+    );
+
+  save();
+
+  renderExams();
+
+  renderHomeStats();
+
+  renderBadges();
+
+  toast(
+    "Sınav silindi."
+  );
+}
+
+function renderExams(){
+
+  if(!data.exams.length){
+
+    examList.innerHTML = `
+
+      <p style="color:var(--muted);padding:20px 0">
+
+        Henüz sınav eklemedin.
+
+      </p>
+
+    `;
+
+    return;
+  }
+
+  const sorted =
+    [...data.exams].sort(
+      (a,b)=>
+        new Date(a.date) -
+        new Date(b.date)
+    );
+
+  examList.innerHTML =
+    sorted.map(e => {
+
+      const days =
+        Math.ceil(
+          (
+            new Date(e.date) -
+            new Date()
+          ) /
+          86400000
+        );
+
+      let remaining;
+
+      if(days<0)
+        remaining="Geçmiş";
+
+      else if(days===0)
+        remaining="Bugün";
+
+      else
+        remaining=
+          days+" gün kaldı";
+
+      return `
+
+        <div class="exam">
+
+          <div>
+
+            <strong>
+              ${escapeHTML(e.name)}
+            </strong>
+
+            <p
+              style="color:var(--muted);margin-top:5px">
+
+              ${escapeHTML(e.subject)}
+
+              ${
+                e.target
+                  ? " • Hedef: "+
+                    escapeHTML(e.target)
+                  : ""
+              }
+
             </p>
 
-        </section>
+          </div>
+
+          <div style="text-align:right">
+
+            <div class="exam-date">
+              ${formatDate(e.date)}
+            </div>
+
+            <small
+              style="color:var(--muted)">
+
+              ${remaining}
+
+            </small>
+
+            <div class="exam-actions">
+
+              <button
+                class="delete"
+                onclick="deleteExam(${e.id})">
+
+                🗑️
+
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+}
 
 
-        <section>
+/* =====================================================
+NOTES
+===================================================== */
 
-            <h3>
-                DersTakip
-            </h3>
+function openNoteModal(){
 
-            <nav>
+  openModal(
+    "Yeni Not",
 
-                <a href="/dersler">
-                    Dersler
-                </a>
+    `
+      <div class="field">
 
-                <a href="/gorevler">
-                    Görevler
-                </a>
+        <label>
+          Başlık
+        </label>
 
-                <a href="/sinavlar">
-                    Sınavlar
-                </a>
+        <input
+          id="noteTitle"
+          placeholder="Örn. Matematik - Kesirler">
 
-                <a href="/notlar">
-                    Notlar
-                </a>
+      </div>
 
-                <a href="/sorular">
-                    Soru Çöz
-                </a>
+      <div class="field">
 
-            </nav>
+        <label>
+          Ders
+        </label>
 
-        </section>
+        <select id="noteSubject">
+
+          <option>
+            Genel
+          </option>
+
+          ${
+            data.subjects.map(s => `
+
+              <option>
+                ${escapeHTML(s.name)}
+              </option>
+
+            `).join("")
+          }
+
+        </select>
+
+      </div>
+
+      <div class="field">
+
+        <label>
+          Not
+        </label>
+
+        <textarea
+          id="noteText"
+          rows="8"
+          placeholder="Notlarını buraya yaz..."></textarea>
+
+      </div>
+
+      <button
+        class="primary"
+        onclick="addNote()">
+
+        Notu Kaydet
+
+      </button>
+    `
+  );
+}
+
+function addNote(){
+
+  const title =
+    noteTitle.value.trim();
+
+  const subject =
+    noteSubject.value;
+
+  const text =
+    noteText.value.trim();
+
+  if(!title || !text)
+    return;
+
+  data.notes.unshift({
+
+    id:Date.now(),
+
+    title,
+
+    subject,
+
+    text,
+
+    date:
+      new Date().toISOString()
+
+  });
+
+  save();
+
+  closeModal();
+
+  renderNotes();
+
+  renderBadges();
+
+  toast(
+    "Not kaydedildi 📝"
+  );
+}
+
+function deleteNote(id){
+
+  data.notes =
+    data.notes.filter(
+      x=>x.id!==id
+    );
+
+  save();
+
+  renderNotes();
+
+  renderBadges();
+
+  toast(
+    "Not silindi."
+  );
+}
+
+function renderNotes(){
+
+  if(!data.notes.length){
+
+    notesGrid.innerHTML = `
+
+      <p style="color:var(--muted)">
+
+        Henüz notun yok.
+
+      </p>
+
+    `;
+
+    return;
+  }
+
+  notesGrid.innerHTML =
+    data.notes.map(n => `
+
+      <div class="note">
+
+        <h3>
+          ${escapeHTML(n.title)}
+        </h3>
+
+        <small
+          style="color:var(--primary)">
+
+          ${escapeHTML(n.subject)}
+
+        </small>
+
+        <p style="margin-top:10px">
+
+          ${escapeHTML(n.text)}
+
+        </p>
+
+        <div class="note-footer">
+
+          <span>
+            ${formatDateTime(n.date)}
+          </span>
+
+          <button
+            class="delete"
+            onclick="deleteNote(${n.id})">
+
+            🗑️
+
+          </button>
+
+        </div>
+
+      </div>
+
+    `).join("");
+}
 
 
-        <section>
+/* =====================================================
+FOCUS
+===================================================== */
 
-            <h3>
-                Hesap
-            </h3>
+let timerSeconds =
+  25*60;
 
-            <nav>
+let timerInterval=null;
 
-                <a href="/giris">
-                    Giriş Yap
-                </a>
+function updateTimer(){
 
-                <a href="/kayit">
-                    Kayıt Ol
-                </a>
+  const min =
+    Math.floor(
+      timerSeconds/60
+    )
+    .toString()
+    .padStart(2,"0");
 
-            </nav>
+  const sec =
+    (timerSeconds%60)
+    .toString()
+    .padStart(2,"0");
 
-        </section>
+  timer.textContent =
+    `${min}:${sec}`;
+}
+
+function startTimer(){
+
+  if(timerInterval)
+    return;
+
+  timerInterval =
+    setInterval(() => {
+
+      if(timerSeconds<=0){
+
+        clearInterval(
+          timerInterval
+        );
+
+        timerInterval=null;
+
+        data.xp+=50;
+
+        save();
+
+        renderAll();
+
+        toast(
+          "Odaklanma tamamlandı! +50 XP ⭐"
+        );
+
+        timerSeconds=
+          25*60;
+
+        updateTimer();
+
+        return;
+      }
+
+      timerSeconds--;
+
+      updateTimer();
+
+    },1000);
+}
+
+function pauseTimer(){
+
+  clearInterval(
+    timerInterval
+  );
+
+  timerInterval=null;
+}
+
+function resetTimer(){
+
+  pauseTimer();
+
+  timerSeconds=
+    25*60;
+
+  updateTimer();
+}
 
 
-        <section>
+/* =====================================================
+COACH CHAT
+===================================================== */
 
-            <h3>
-                Bilgi
-            </h3>
+let coachMessages =
+  JSON.parse(
+    localStorage.getItem(
+      "dt_coach_messages"
+    ) || "[]"
+  );
 
-            <nav>
+function renderCoachMessages(){
 
-                <a href="/gizlilik">
-                    Gizlilik Politikası
-                </a>
+  const box =
+    document.getElementById(
+      "chatBox"
+    );
 
-                <a href="/kullanim-sartlari">
-                    Kullanım Şartları
-                </a>
+  if(!coachMessages.length){
 
-                <a href="#sss">
-                    SSS
-                </a>
+    box.innerHTML = `
 
-            </nav>
+      <div
+        class="chat-empty"
+        id="chatEmpty">
 
-        </section>
+        <div>
 
+          <div style="font-size:50px;margin-bottom:15px">
+            🤖
+          </div>
 
-        <section>
+          <h3>
+            Merhaba!
+          </h3>
 
-            <h3>
-                Bizi Takip Et
-            </h3>
+          <p style="margin-top:8px">
 
-            <nav>
+            Ben DersTakip Ders Koçu'yum.
 
-                <a href="#" aria-label="Instagram">
-                    📷 Instagram
-                </a>
+            <br><br>
 
-                <a href="#" aria-label="YouTube">
-                    ▶️ YouTube
-                </a>
+            Derslerin, sınavların,
+            ödevlerin veya çalışma planın
+            hakkında bana soru sorabilirsin.
 
-            </nav>
+          </p>
 
-        </section>
+        </div>
 
+      </div>
 
-    </div>
+    `;
 
+    return;
+  }
 
-    <hr>
+  box.innerHTML =
+    coachMessages.map(
+      message => `
 
+        <div
+          class="chat-message ${message.role}">
+
+          <div>
+
+            <div class="message-label">
+
+              ${
+                message.role==="user"
+                  ? "Sen"
+                  : "🤖 Ders Koçu"
+              }
+
+            </div>
+
+            <div class="message-bubble">
+
+              ${escapeHTML(message.content)}
+
+            </div>
+
+          </div>
+
+        </div>
+
+      `
+    ).join("");
+
+  box.scrollTop =
+    box.scrollHeight;
+}
+
+function saveCoachMessages(){
+
+  localStorage.setItem(
+    "dt_coach_messages",
+    JSON.stringify(
+      coachMessages
+    )
+  );
+}
+
+function addCoachMessage(
+  role,
+  content
+){
+
+  coachMessages.push({
+
+    role,
+
+    content,
+
+    time:
+      new Date().toISOString()
+
+  });
+
+  saveCoachMessages();
+
+  renderCoachMessages();
+}
+
+function quickCoach(text){
+
+  coachInput.value=text;
+
+  sendCoachMessage();
+}
+
+function coachKeyDown(event){
+
+  if(
+    event.key==="Enter" &&
+    !event.shiftKey
+  ){
+
+    event.preventDefault();
+
+    sendCoachMessage();
+  }
+}
+
+async function sendCoachMessage(){
+
+  const input =
+    document.getElementById(
+      "coachInput"
+    );
+
+  const button =
+    document.getElementById(
+      "coachSend"
+    );
+
+  const message =
+    input.value.trim();
+
+  if(!message)
+    return;
+
+  addCoachMessage(
+    "user",
+    message
+  );
+
+  input.value="";
+
+  button.disabled=true;
+
+  const box =
+    document.getElementById(
+      "chatBox"
+    );
+
+  const typing =
+    document.createElement(
+      "div"
+    );
+
+  typing.className =
+    "chat-message ai";
+
+  typing.innerHTML = `
 
     <div>
 
-        <p>
-            © 2026 DersTakip. Tüm hakları saklıdır.
-        </p>
+      <div class="message-label">
+        🤖 Ders Koçu
+      </div>
 
-        <p>
-            Öğrenciler için sevgiyle geliştirildi. 💙
-        </p>
+      <div class="message-bubble">
+
+        <span class="typing">
+
+          <span></span>
+          <span></span>
+          <span></span>
+
+        </span>
+
+      </div>
 
     </div>
 
-</footer>
+  `;
 
+  box.appendChild(
+    typing
+  );
+
+  box.scrollTop =
+    box.scrollHeight;
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/coach",
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json",
+
+            "Accept":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+
+              message,
+
+              history:
+                coachMessages.slice(-12),
+
+              student:{
+
+                name:
+                  user?.name ||
+                  "Öğrenci",
+
+                xp:
+                  data.xp,
+
+                level:
+                  getLevel(),
+
+                tasks:
+                  data.tasks.length,
+
+                completed:
+                  data.completed,
+
+                subjects:
+                  data.subjects.map(
+                    x=>x.name
+                  ),
+
+                exams:
+                  data.exams.map(
+                    x=>({
+
+                      subject:x.subject,
+
+                      name:x.name,
+
+                      date:x.date
+
+                    })
+                  )
+
+              }
+
+            })
+        }
+      );
+
+    const raw =
+      await response.text();
+
+    let result;
+
+    try{
+
+      result =
+        raw
+          ? JSON.parse(raw)
+          : null;
+
+    }catch{
+
+      throw new Error(
+        "Sunucu JSON yerine farklı bir yanıt döndürdü."
+      );
+    }
+
+    if(!response.ok){
+
+      throw new Error(
+        result?.error ||
+        `Sunucu hatası: ${response.status}`
+      );
+    }
+
+    if(!result?.success){
+
+      throw new Error(
+        result?.error ||
+        "Ders Koçu cevap veremedi."
+      );
+    }
+
+    typing.remove();
+
+    addCoachMessage(
+      "ai",
+      result.answer
+    );
+
+    if(result.answer){
+
+      document.getElementById(
+        "homeCoach"
+      ).textContent =
+        result.answer.length > 150
+          ? result.answer.slice(0,150)+"..."
+          : result.answer;
+    }
+
+  }catch(error){
+
+    console.error(
+      "COACH ERROR:",
+      error
+    );
+
+    typing.remove();
+
+    addCoachMessage(
+      "ai",
+      "❌ Ders Koçu'na bağlanamadım.\n\n"+
+      error.message
+    );
+
+  }finally{
+
+    button.disabled=false;
+
+    input.focus();
+  }
+}
+
+function newCoachChat(){
+
+  if(
+    !confirm(
+      "Mevcut sohbet silinsin mi?"
+    )
+  )
+    return;
+
+  coachMessages=[];
+
+  saveCoachMessages();
+
+  renderCoachMessages();
+
+  toast(
+    "Yeni sohbet başlatıldı 💬"
+  );
+}
+
+
+/* =====================================================
+BADGES
+===================================================== */
+
+function renderBadges(){
+
+  const badgeData=[
+
+    [
+      "🌱",
+      "İlk Adım",
+      "İlk görevini tamamla",
+      data.completed>=1
+    ],
+
+    [
+      "⭐",
+      "10 XP",
+      "10 XP kazan",
+      data.xp>=10
+    ],
+
+    [
+      "🔥",
+      "Kararlı",
+      "3 görev tamamla",
+      data.completed>=3
+    ],
+
+    [
+      "🏆",
+      "Çalışkan",
+      "10 görev tamamla",
+      data.completed>=10
+    ],
+
+    [
+      "📚",
+      "Ders Sever",
+      "3 ders ekle",
+      data.subjects.length>=3
+    ],
+
+    [
+      "📝",
+      "Not Tutucu",
+      "İlk notunu oluştur",
+      data.notes.length>=1
+    ],
+
+    [
+      "📅",
+      "Planlı",
+      "İlk sınavını ekle",
+      data.exams.length>=1
+    ],
+
+    [
+      "🚀",
+      "Seviye 2",
+      "100 XP kazan",
+      data.xp>=100
+    ]
+
+  ];
+
+  const badgeContainer =
+    document.getElementById(
+      "badges"
+    );
+
+  if(!badgeContainer)
+    return;
+
+  badgeContainer.innerHTML =
+    badgeData.map(b => `
+
+      <div
+        class="badge ${b[3] ? "" : "locked"}">
+
+        <div class="badge-icon">
+          ${b[0]}
+        </div>
+
+        <strong>
+          ${escapeHTML(b[1])}
+        </strong>
+
+        <br>
+
+        <small>
+          ${escapeHTML(b[2])}
+        </small>
+
+      </div>
+
+    `).join("");
+}
+
+
+/* =====================================================
+STATS
+===================================================== */
+
+function renderStats(){
+
+  statsXP.textContent =
+    data.xp;
+
+  statsStreak.textContent =
+    data.streak;
+
+  statsCompleted.textContent =
+    data.completed;
+
+  const total =
+    data.tasks.length;
+
+  const done =
+    data.tasks.filter(
+      x=>x.done
+    ).length;
+
+  const percent =
+    total
+      ? Math.round(
+          done/total*100
+        )
+      : 0;
+
+  statsPercent.textContent =
+    percent+"%";
+
+  statsProgress.style.width =
+    percent+"%";
+}
+
+
+/* =====================================================
+PROFILE
+===================================================== */
+
+function getLevel(){
+
+  return Math.max(
+    1,
+    Math.floor(
+      data.xp/100
+    )+1
+  );
+}
+
+function renderProfile(){
+
+  const level =
+    getLevel();
+
+  profileName.textContent =
+    user?.name ||
+    "Öğrenci";
+
+  profileEmail.textContent =
+    user?.email ||
+    "-";
+
+  profileLevel.textContent =
+    level;
+
+  profileXP.textContent =
+    data.xp;
+
+  profileTasks.textContent =
+    data.tasks.length;
+
+  profileSubjects.textContent =
+    data.subjects.length;
+
+  topLevel.textContent =
+    "Seviye "+level;
+
+  welcome.textContent =
+    `Merhaba, ${
+      user?.name?.split(" ")[0] ||
+      "Öğrenci"
+    }! 👋`;
+}
+
+
+/* =====================================================
+HOME STATS
+===================================================== */
+
+function renderHomeStats(){
+
+  homeStatXP.textContent =
+    data.xp;
+
+  homeStatStreak.textContent =
+    data.streak+
+    " gün";
+
+  homeStatSubjects.textContent =
+    data.subjects.length;
+
+  homeStatExams.textContent =
+    data.exams.length;
+}
+
+
+/* =====================================================
+STREAK
+===================================================== */
+
+function updateStreak(){
+
+  const today =
+    new Date()
+      .toISOString()
+      .slice(0,10);
+
+  if(
+    data.lastDay===today
+  )
+    return;
+
+  const yesterday =
+    new Date();
+
+  yesterday.setDate(
+    yesterday.getDate()-1
+  );
+
+  const yesterdayString =
+    yesterday
+      .toISOString()
+      .slice(0,10);
+
+  if(
+    data.lastDay===
+    yesterdayString
+  ){
+
+    data.streak++;
+
+  }else{
+
+    data.streak=1;
+
+  }
+
+  data.lastDay=
+    today;
+}
+
+
+/* =====================================================
+MODAL
+===================================================== */
+
+function openModal(
+  title,
+  body
+){
+
+  modalTitle.textContent =
+    title;
+
+  modalBody.innerHTML =
+    body;
+
+  modal.classList.add(
+    "show"
+  );
+}
+
+function closeModal(){
+
+  modal.classList.remove(
+    "show"
+  );
+}
+
+
+/* =====================================================
+TOAST
+===================================================== */
+
+function toast(message){
+
+  const box =
+    document.createElement(
+      "div"
+    );
+
+  box.className="toast";
+
+  box.textContent=
+    message;
+
+  toastContainer
+    .appendChild(box);
+
+  setTimeout(
+    () => box.remove(),
+    3000
+  );
+}
+
+
+/* =====================================================
+DARK
+===================================================== */
+
+function toggleDark(){
+
+  document.body.classList.toggle(
+    "dark"
+  );
+
+  localStorage.setItem(
+    "dt_dark",
+    document.body.classList.contains(
+      "dark"
+    )
+      ? "1"
+      : "0"
+  );
+}
+
+
+/* =====================================================
+RESET
+===================================================== */
+
+function clearData(){
+
+  if(
+    !confirm(
+      "Tüm görev, ders, sınav ve not verilerin silinecek. Emin misin?"
+    )
+  )
+    return;
+
+  data={
+
+    tasks:[],
+
+    subjects:[],
+
+    exams:[],
+
+    notes:[],
+
+    xp:0,
+
+    streak:0,
+
+    completed:0,
+
+    lastDay:""
+
+  };
+
+  save();
+
+  renderAll();
+
+  toast(
+    "Veriler temizlendi."
+  );
+}
+
+
+/* =====================================================
+STORAGE
+===================================================== */
+
+function save(){
+
+  localStorage.setItem(
+    "dt_data",
+    JSON.stringify(data)
+  );
+}
+
+
+/* =====================================================
+AI QUESTION
+===================================================== */
+
+let aiImageData="";
+
+function previewAIImage(event){
+
+  const file =
+    event.target.files[0];
+
+  if(!file){
+
+    aiImageData="";
+
+    aiImagePreview.style.display=
+      "none";
+
+    return;
+  }
+
+  if(
+    !file.type.startsWith(
+      "image/"
+    )
+  ){
+
+    toast(
+      "Lütfen bir görsel seç."
+    );
+
+    event.target.value="";
+
+    return;
+  }
+
+  const reader =
+    new FileReader();
+
+  reader.onload =
+    function(e){
+
+      aiImageData =
+        e.target.result;
+
+      aiPreview.src =
+        aiImageData;
+
+      aiImagePreview.style.display =
+        "block";
+
+    };
+
+  reader.readAsDataURL(
+    file
+  );
+}
+
+async function solveAIQuestion(){
+
+  const question =
+    aiQuestion.value.trim();
+
+  const subject =
+    document.getElementById(
+      "aiSubject"
+    ).value;
+
+  const mode =
+    document.getElementById(
+      "aiMode"
+    ).value;
+
+  if(
+    !question &&
+    !aiImageData
+  ){
+
+    toast(
+      "Lütfen soru yaz veya fotoğraf yükle."
+    );
+
+    return;
+  }
+
+  aiResult.style.display=
+    "none";
+
+  aiLoading.style.display=
+    "block";
+
+  aiSolveButton.disabled=
+    true;
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/solve",
+        {
+
+          method:"POST",
+
+          headers:{
+
+            "Content-Type":
+              "application/json",
+
+            "Accept":
+              "application/json"
+
+          },
+
+          body:
+            JSON.stringify({
+
+              image:
+                aiImageData ||
+                null,
+
+              question:
+                question ||
+                null,
+
+              subject,
+
+              mode
+
+            })
+
+        }
+      );
+
+    const raw =
+      await response.text();
+
+    let result;
+
+    try{
+
+      result =
+        JSON.parse(raw);
+
+    }catch{
+
+      throw new Error(
+        "Sunucu JSON yerine farklı bir yanıt döndürdü."
+      );
+    }
+
+    if(!response.ok){
+
+      throw new Error(
+        result?.error ||
+        `Sunucu hatası (${response.status})`
+      );
+    }
+
+    if(!result.success){
+
+      throw new Error(
+        result.error ||
+        "Soru çözülemedi."
+      );
+    }
+
+    aiResult.textContent =
+      result.answer ||
+      "Yanıt alınamadı.";
+
+    aiResult.style.display=
+      "block";
+
+    toast(
+      "Soru başarıyla çözüldü 🧠"
+    );
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+    aiResult.textContent =
+      "❌ Hata oluştu.\n\n"+
+      error.message;
+
+    aiResult.style.display=
+      "block";
+
+  }finally{
+
+    aiLoading.style.display=
+      "none";
+
+    aiSolveButton.disabled=
+      false;
+  }
+}
+
+
+/* =====================================================
+HELPERS
+===================================================== */
+
+function formatDate(date){
+
+  if(!date)
+    return "-";
+
+  return new Date(date)
+    .toLocaleDateString(
+      "tr-TR",
+      {
+        day:"2-digit",
+        month:"long",
+        year:"numeric"
+      }
+    );
+}
+
+function formatDateTime(date){
+
+  return new Date(date)
+    .toLocaleDateString(
+      "tr-TR",
+      {
+        day:"2-digit",
+        month:"2-digit",
+        year:"numeric"
+      }
+    );
+}
+
+function escapeHTML(str){
+
+  return String(str)
+
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+}
+
+function escapeAttr(str){
+
+  return escapeHTML(str);
+}
+
+
+/* =====================================================
+RENDER ALL
+===================================================== */
+
+function renderAll(){
+
+  renderTasks();
+
+  renderSubjects();
+
+  renderExams();
+
+  renderNotes();
+
+  renderBadges();
+
+  renderStats();
+
+  renderProfile();
+
+  renderHomeStats();
+
+  renderCoachMessages();
+
+  updateTimer();
+}
+
+
+/* =====================================================
+START
+===================================================== */
+
+const toastContainer =
+  document.getElementById(
+    "toast"
+  );
+
+if(
+  localStorage.getItem(
+    "dt_dark"
+  ) === "1"
+){
+
+  document.body.classList.add(
+    "dark"
+  );
+}
+
+document
+  .getElementById("modal")
+  .addEventListener(
+    "click",
+    e => {
+
+      if(
+        e.target.id ===
+        "modal"
+      ){
+
+        closeModal();
+
+      }
+
+    }
+  );
+
+if(
+  localStorage.getItem(
+    "dt_logged"
+  ) === "1"
+  &&
+  localStorage.getItem(
+    "dt_user"
+  )
+){
+
+  user =
+    JSON.parse(
+      localStorage.getItem(
+        "dt_user"
+      )
+    );
+
+  openApp();
+
+}else{
+
+  auth.style.display="flex";
+
+  app.style.display="none";
+
+}
+
+</script>
 
 </body>
 </html>
