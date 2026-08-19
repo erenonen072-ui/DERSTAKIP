@@ -1,764 +1,682 @@
 /* =========================================================
-   DERS TAKİP V3
-   Tek dosyalık uygulama motoru
-========================================================= */
+   DERS TAKİP — APP.JS
+   Evcil Hayvan + Market + Envanter sistemi
+   ========================================================= */
 
-"use strict";
+const API_BASE = "/api";
 
-/* =========================================================
-   STATE
-========================================================= */
-
-const STORAGE_KEY = "derstakip_v3";
-
-const defaultState = {
-  loggedIn: false,
-
-  user: {
-    name: "Eren Önen",
-    email: "",
-    avatar: "🎓"
-  },
-
+let currentUser = null;
+let appData = {
+  tasks: [],
   xp: 0,
-  coins: 0,
+  coins: 500,
   streak: 0,
-  minutes: 0,
-
-  tasks: [
-    {
-      id: 1,
-      name: "20 soru Matematik çöz",
-      xp: 30,
-      completed: false
-    },
-    {
-      id: 2,
-      name: "Türkçe tekrar yap",
-      xp: 25,
-      completed: false
-    }
-  ],
-
-  subjects: [
-    {
-      id: 1,
-      name: "Matematik",
-      icon: "📐",
-      progress: 65
-    },
-    {
-      id: 2,
-      name: "Türkçe",
-      icon: "📖",
-      progress: 50
-    },
-    {
-      id: 3,
-      name: "Fen Bilimleri",
-      icon: "🔬",
-      progress: 35
-    },
-    {
-      id: 4,
-      name: "İngilizce",
-      icon: "🌎",
-      progress: 40
-    }
-  ],
-
-  exams: [
-    {
-      id: 1,
-      name: "Matematik Sınavı",
-      subject: "Matematik",
-      date: "2026-09-10"
-    },
-    {
-      id: 2,
-      name: "Türkçe Sınavı",
-      subject: "Türkçe",
-      date: "2026-09-15"
-    }
-  ],
-
-  activities: [],
 
   pet: {
     name: "Panda",
-    icon: "🐼",
+    emoji: "🐼",
+    level: 1,
     xp: 0,
-    level: 1
+    happiness: 80,
+    energy: 80,
+    accessories: {
+      hat: "",
+      glasses: "",
+      bag: "",
+      scarf: "",
+      crown: ""
+    },
+    room: []
   },
 
-  focusMinutes: 25,
+  inventory: {
+    hats: [],
+    glasses: [],
+    bags: [],
+    scarves: [],
+    crowns: [],
+    food: [],
+    room: []
+  },
 
-  theme: "light",
+  owned: [],
+  equipped: {},
 
-  dailyRewardClaimed: false
+  dailyRewardClaimed: false,
+  lastRewardDate: ""
 };
 
-let state = loadState();
-
-let timerInterval = null;
-
-let timerSeconds = 25 * 60;
-
-let timerRunning = false;
-
+let focusInterval = null;
+let focusSeconds = 25 * 60;
+let currentPage = "home";
 
 /* =========================================================
-   STORAGE
-========================================================= */
+   MARKET ÜRÜNLERİ
+   ========================================================= */
 
-function loadState(){
+const MARKET_ITEMS = [
+  {
+    id: "hat_basic",
+    name: "Klasik Şapka",
+    icon: "🎩",
+    price: 100,
+    category: "hat",
+    description: "Panda için şık bir şapka."
+  },
+  {
+    id: "hat_crown",
+    name: "Kraliyet Tacı",
+    icon: "👑",
+    price: 500,
+    category: "crown",
+    description: "Panda artık kraliyet üyesi."
+  },
+  {
+    id: "glasses",
+    name: "Havalı Gözlük",
+    icon: "🕶️",
+    price: 150,
+    category: "glasses",
+    description: "Panda'nın tarzını değiştir."
+  },
+  {
+    id: "bag",
+    name: "Mini Çanta",
+    icon: "🎒",
+    price: 200,
+    category: "bag",
+    description: "Panda'nın yeni çantası."
+  },
+  {
+    id: "scarf",
+    name: "Renkli Atkı",
+    icon: "🧣",
+    price: 175,
+    category: "scarf",
+    description: "Soğuk günler için sıcak bir aksesuar."
+  },
+  {
+    id: "apple",
+    name: "Elma",
+    icon: "🍎",
+    price: 30,
+    category: "food",
+    description: "Panda'nın enerjisini artırır."
+  },
+  {
+    id: "cookie",
+    name: "Kurabiye",
+    icon: "🍪",
+    price: 50,
+    category: "food",
+    description: "Panda'nın mutluluğunu artırır."
+  },
+  {
+    id: "cake",
+    name: "Pasta",
+    icon: "🍰",
+    price: 100,
+    category: "food",
+    description: "Panda için özel bir ödül."
+  },
+  {
+    id: "bed",
+    name: "Panda Yatağı",
+    icon: "🛏️",
+    price: 350,
+    category: "room",
+    description: "Panda'nın odasına yeni eşya."
+  },
+  {
+    id: "plant",
+    name: "Oda Bitkisi",
+    icon: "🪴",
+    price: 250,
+    category: "room",
+    description: "Panda'nın odasını güzelleştirir."
+  }
+];
 
-  try{
+/* =========================================================
+   BAŞLANGIÇ
+   ========================================================= */
 
-    const saved = localStorage.getItem(STORAGE_KEY);
+document.addEventListener("DOMContentLoaded", () => {
+  loadLocalData();
+  updateUI();
+  setupEscapeKey();
+});
 
-    if(!saved){
-      return structuredClone(defaultState);
+function setupEscapeKey() {
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") {
+      closeModal();
+    }
+  });
+}
+
+/* =========================================================
+   LOCAL STORAGE
+   ========================================================= */
+
+function saveLocalData() {
+  try {
+    localStorage.setItem(
+      "dersTakipData",
+      JSON.stringify(appData)
+    );
+  } catch (error) {
+    console.error("Kayıt hatası:", error);
+  }
+}
+
+function loadLocalData() {
+  try {
+    const saved = localStorage.getItem("dersTakipData");
+
+    if (saved) {
+      const parsed = JSON.parse(saved);
+
+      appData = {
+        ...appData,
+        ...parsed,
+        pet: {
+          ...appData.pet,
+          ...(parsed.pet || {}),
+          accessories: {
+            ...appData.pet.accessories,
+            ...(parsed.pet?.accessories || {})
+          }
+        },
+        inventory: {
+          ...appData.inventory,
+          ...(parsed.inventory || {})
+        }
+      };
     }
 
-    const parsed = JSON.parse(saved);
+    const savedUser = localStorage.getItem("dersTakipUser");
 
-    return mergeState(
-      structuredClone(defaultState),
-      parsed
-    );
+    if (savedUser) {
+      currentUser = JSON.parse(savedUser);
+    }
 
-  }catch(error){
+    updateAuthVisibility();
 
-    console.error("State yüklenemedi:", error);
-
-    return structuredClone(defaultState);
+  } catch (error) {
+    console.error("Veri okunamadı:", error);
   }
 }
-
-
-function mergeState(base, saved){
-
-  return {
-    ...base,
-    ...saved,
-
-    user:{
-      ...base.user,
-      ...(saved.user || {})
-    },
-
-    pet:{
-      ...base.pet,
-      ...(saved.pet || {})
-    },
-
-    tasks:Array.isArray(saved.tasks)
-      ? saved.tasks
-      : base.tasks,
-
-    subjects:Array.isArray(saved.subjects)
-      ? saved.subjects
-      : base.subjects,
-
-    exams:Array.isArray(saved.exams)
-      ? saved.exams
-      : base.exams,
-
-    activities:Array.isArray(saved.activities)
-      ? saved.activities
-      : base.activities
-  };
-}
-
-
-function saveState(){
-
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(state)
-  );
-}
-
-
-/* =========================================================
-   INIT
-========================================================= */
-
-document.addEventListener("DOMContentLoaded", init);
-
-
-function init(){
-
-  applyTheme();
-
-  if(state.loggedIn){
-
-    showApp();
-
-  }else{
-
-    showAuth();
-
-  }
-
-  renderAll();
-}
-
 
 /* =========================================================
    AUTH
-========================================================= */
+   ========================================================= */
 
-function showAuth(){
-
+function updateAuthVisibility() {
   const auth = document.getElementById("authScreen");
   const app = document.getElementById("app");
 
-  if(auth) auth.style.display = "flex";
+  if (!auth || !app) return;
 
-  if(app) app.style.display = "none";
+  if (currentUser) {
+    auth.style.display = "none";
+    app.style.display = "block";
+  } else {
+    auth.style.display = "flex";
+    app.style.display = "none";
+  }
 }
 
-
-function showApp(){
-
-  const auth = document.getElementById("authScreen");
-  const app = document.getElementById("app");
-
-  if(auth) auth.style.display = "none";
-
-  if(app) app.style.display = "block";
-
-  updateUserUI();
-}
-
-
-function showLogin(){
-
+function showLogin() {
   document.getElementById("loginForm").style.display = "block";
-
   document.getElementById("registerForm").style.display = "none";
 
   document.getElementById("loginTab").classList.add("active");
-
   document.getElementById("registerTab").classList.remove("active");
 
   setAuthMessage("");
 }
 
-
-function showRegister(){
-
+function showRegister() {
   document.getElementById("loginForm").style.display = "none";
-
   document.getElementById("registerForm").style.display = "block";
 
   document.getElementById("loginTab").classList.remove("active");
-
   document.getElementById("registerTab").classList.add("active");
 
   setAuthMessage("");
 }
 
+function setAuthMessage(message, success = false) {
+  const el = document.getElementById("authMessage");
+  if (!el) return;
 
-function setAuthMessage(message, error=false){
-
-  const element = document.getElementById("authMessage");
-
-  if(!element) return;
-
-  element.textContent = message;
-
-  element.style.color = error
-    ? "#e5485d"
-    : "#20a77a";
+  el.textContent = message;
+  el.style.color = success ? "#20c997" : "#ff5b6e";
 }
 
-
-function register(event){
-
+function register(event) {
   event.preventDefault();
 
-  const name =
-    document.getElementById("registerName").value.trim();
+  const name = document.getElementById("registerName").value.trim();
+  const email = document.getElementById("registerEmail").value.trim();
+  const password = document.getElementById("registerPassword").value;
 
-  const email =
-    document.getElementById("registerEmail").value.trim();
+  if (!name || !email || !password) return;
 
-  const password =
-    document.getElementById("registerPassword").value;
+  const users = JSON.parse(
+    localStorage.getItem("dersTakipUsers") || "[]"
+  );
 
-  if(password.length < 6){
-
-    setAuthMessage(
-      "Şifre en az 6 karakter olmalı.",
-      true
-    );
-
+  if (users.some(u => u.email === email)) {
+    setAuthMessage("Bu e-posta zaten kayıtlı.");
     return;
   }
 
-  state.user.name = name;
+  users.push({
+    name,
+    email,
+    password
+  });
 
-  state.user.email = email;
+  localStorage.setItem(
+    "dersTakipUsers",
+    JSON.stringify(users)
+  );
 
-  state.loggedIn = true;
+  setAuthMessage(
+    "Hesabın oluşturuldu. Şimdi giriş yapabilirsin.",
+    true
+  );
 
-  state.xp = 0;
+  showLogin();
 
-  state.coins = 0;
-
-  saveState();
-
-  showApp();
-
-  renderAll();
-
-  toast("Hesabın oluşturuldu 🎉");
+  document.getElementById("loginEmail").value = email;
 }
 
-
-function login(event){
-
+function login(event) {
   event.preventDefault();
 
-  const email =
-    document.getElementById("loginEmail").value.trim();
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value;
 
-  if(!email){
+  const users = JSON.parse(
+    localStorage.getItem("dersTakipUsers") || "[]"
+  );
 
-    setAuthMessage(
-      "E-posta adresini gir.",
-      true
-    );
+  const user = users.find(
+    u => u.email === email && u.password === password
+  );
 
+  if (!user) {
+    setAuthMessage("E-posta veya şifre yanlış.");
     return;
   }
 
-  state.user.email = email;
+  currentUser = user;
 
-  state.loggedIn = true;
+  localStorage.setItem(
+    "dersTakipUser",
+    JSON.stringify(user)
+  );
 
-  saveState();
+  updateAuthVisibility();
+  updateUI();
 
-  showApp();
-
-  renderAll();
-
-  toast("Tekrar hoş geldin! 👋");
+  showToast(`Hoş geldin ${user.name}! 👋`);
 }
 
+function logout() {
+  currentUser = null;
 
-function logout(){
+  localStorage.removeItem("dersTakipUser");
 
-  state.loggedIn = false;
-
-  saveState();
-
-  showAuth();
+  updateAuthVisibility();
 
   showLogin();
 }
 
+/* =========================================================
+   ŞİFRE
+   ========================================================= */
 
-function togglePassword(id, button){
-
+function togglePassword(id, button) {
   const input = document.getElementById(id);
 
-  if(!input) return;
+  if (!input) return;
 
-  if(input.type === "password"){
-
+  if (input.type === "password") {
     input.type = "text";
-
     button.textContent = "🙈";
-
-  }else{
-
+  } else {
     input.type = "password";
-
     button.textContent = "👁️";
-
   }
 }
-
 
 /* =========================================================
    NAVIGATION
-========================================================= */
+   ========================================================= */
 
-const pageNames = {
+function navigate(page, button) {
+  currentPage = page;
 
-  home:{
-    title:"Merhaba! 👋",
-    subtitle:"Bugün küçük bir adım, yarın büyük bir başarı."
-  },
+  document.querySelectorAll(".menu button").forEach(btn => {
+    btn.classList.remove("active");
+  });
 
-  tasks:{
-    title:"Görevler ✅",
-    subtitle:"Bugün yapman gerekenleri yönet."
-  },
-
-  subjects:{
-    title:"Dersler 📚",
-    subtitle:"Ders bazında ilerlemeni takip et."
-  },
-
-  exams:{
-    title:"Sınavlar 📅",
-    subtitle:"Yaklaşan sınavlarını takip et."
-  },
-
-  focus:{
-    title:"Odaklan ⏱️",
-    subtitle:"Dikkatini topla ve çalışmaya başla."
-  },
-
-  coach:{
-    title:"Ders Koçu 🤖",
-    subtitle:"Sana özel çalışma önerileri."
-  },
-
-  pet:{
-    title:"Evcil Hayvanım 🐼",
-    subtitle:"Çalıştıkça evcil hayvanın gelişir."
-  },
-
-  market:{
-    title:"Ödül Marketi 🛒",
-    subtitle:"Coinlerini ödüller için kullan."
-  },
-
-  achievements:{
-    title:"Rozetler 🏆",
-    subtitle:"Başarılarını ve koleksiyonunu gör."
-  },
-
-  stats:{
-    title:"İstatistikler 📊",
-    subtitle:"Çalışma performansını incele."
-  },
-
-  profile:{
-    title:"Profil 👤",
-    subtitle:"Hesabını ve ayarlarını yönet."
-  }
-
-};
-
-
-function navigate(page, button){
-
-  document.querySelectorAll(".page")
-    .forEach(p => p.classList.remove("active"));
-
-  const target =
-    document.getElementById(`page-${page}`);
-
-  if(target){
-    target.classList.add("active");
-  }
-
-  document.querySelectorAll(".menu button")
-    .forEach(b => b.classList.remove("active"));
-
-  if(button){
+  if (button) {
     button.classList.add("active");
-  }else{
+  }
 
-    const sidebarButton =
-      [...document.querySelectorAll(".menu button")]
-      .find(btn =>
-        btn.getAttribute("onclick")?.includes(`'${page}'`)
-      );
+  document.querySelectorAll(".mobile-menu-item").forEach(btn => {
+    btn.classList.remove("active");
+  });
 
-    if(sidebarButton){
-      sidebarButton.classList.add("active");
+  const mobileButtons = document.querySelectorAll(
+    ".mobile-menu-item"
+  );
+
+  mobileButtons.forEach(btn => {
+    if (btn.getAttribute("onclick")?.includes(`'${page}'`)) {
+      btn.classList.add("active");
     }
-  }
+  });
 
-  const info = pageNames[page];
+  renderPage(page);
+}
 
-  if(info){
-
-    document.getElementById("welcomeText").textContent =
-      info.title;
-
-    document.getElementById("sectionSubtitle").textContent =
-      info.subtitle;
-  }
+function navigateMobile(page) {
+  currentPage = page;
 
   renderPage(page);
 
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
+  const drawer = document.getElementById("mobileDrawer");
 
-  closeMobileMenu();
-}
-
-
-function navigateMobile(page){
-
-  navigate(page);
-
-  document.querySelectorAll(".mobile-menu-item")
-    .forEach(item =>
-      item.classList.remove("active")
-    );
-
-  const matching =
-    [...document.querySelectorAll(".mobile-menu-item")]
-      .find(item =>
-        item.getAttribute("onclick")?.includes(`'${page}'`)
-      );
-
-  if(matching){
-    matching.classList.add("active");
+  if (drawer) {
+    drawer.classList.remove("open");
   }
 }
 
+function renderPage(page) {
+  const dynamic = document.getElementById("dynamicSection");
+  const tasks = document.getElementById("tasksSection");
+  const coach = document.querySelector(".coach");
+  const stats = document.querySelector(".stats");
+  const hero = document.getElementById("homeHero");
 
-/* =========================================================
-   RENDER
-========================================================= */
+  if (!dynamic) return;
 
-function renderAll(){
+  dynamic.style.display = "none";
+  dynamic.innerHTML = "";
 
-  updateUserUI();
+  if (tasks) tasks.style.display = "none";
+  if (coach) coach.style.display = "none";
+  if (stats) stats.style.display = "none";
+  if (hero) hero.style.display = "none";
 
-  renderHome();
+  setSectionText(page);
 
-  renderTasks();
-
-  renderSubjects();
-
-  renderExams();
-
-  renderPet();
-
-  renderMarket();
-
-  renderBadges();
-
-  renderStats();
-
-  renderProfile();
-
-  renderCoach();
-}
-
-
-function renderPage(page){
-
-  switch(page){
+  switch (page) {
 
     case "home":
-      renderHome();
+      if (tasks) tasks.style.display = "block";
+      if (coach) coach.style.display = "block";
+      if (stats) stats.style.display = "grid";
+      if (hero) hero.style.display = "block";
       break;
 
     case "tasks":
-      renderTasks();
-      break;
-
-    case "subjects":
-      renderSubjects();
-      break;
-
-    case "exams":
-      renderExams();
-      break;
-
-    case "focus":
-      updateTimerDisplay();
-      break;
-
-    case "coach":
-      renderCoach();
+      if (tasks) tasks.style.display = "block";
       break;
 
     case "pet":
-      renderPet();
+      renderPetPage(dynamic);
       break;
 
     case "market":
-      renderMarket();
+      renderMarketPage(dynamic);
       break;
 
     case "achievements":
-      renderBadges();
+      renderAchievements(dynamic);
       break;
 
     case "stats":
-      renderStats();
+      renderStats(dynamic);
+      break;
+
+    case "focus":
+      renderFocus(dynamic);
+      break;
+
+    case "coach":
+      renderCoachPage(dynamic);
+      break;
+
+    case "subjects":
+      renderSubjects(dynamic);
+      break;
+
+    case "exams":
+      renderExams(dynamic);
       break;
 
     case "profile":
-      renderProfile();
+      renderProfile(dynamic);
       break;
 
+    default:
+      if (tasks) tasks.style.display = "block";
   }
 }
-
 
 /* =========================================================
-   USER
-========================================================= */
+   SAYFA BAŞLIKLARI
+   ========================================================= */
 
-function getLevel(){
+function setSectionText(page) {
+  const subtitle = document.getElementById("sectionSubtitle");
 
-  return Math.floor(state.xp / 100) + 1;
+  if (!subtitle) return;
+
+  const texts = {
+    home: "Bugün küçük bir adım, yarın büyük bir başarı.",
+    tasks: "Bugünkü çalışmalarını düzenle.",
+    subjects: "Derslerini ve çalışma planını yönet.",
+    exams: "Sınavlarını takip et.",
+    focus: "Dikkatini topla ve çalışmaya başla.",
+    coach: "Ders çalışma yolculuğunda yanında.",
+    pet: "Evcil hayvanını geliştir ve mutlu et.",
+    market: "Kazandığın coinleri harca.",
+    achievements: "Başarılarını ve rozetlerini keşfet.",
+    stats: "Çalışma performansını incele.",
+    profile: "Hesabını ve tercihlerini yönet."
+  };
+
+  subtitle.textContent =
+    texts[page] || texts.home;
 }
 
+/* =========================================================
+   GENEL UI
+   ========================================================= */
 
-function updateUserUI(){
+function updateUI() {
+  updateAuthVisibility();
 
-  const level = getLevel();
+  if (!currentUser) return;
 
-  const welcome =
-    document.getElementById("welcomeText");
+  const welcome = document.getElementById("welcomeText");
 
-  if(
-    welcome &&
-    document.getElementById("page-home")?.classList.contains("active")
-  ){
-
+  if (welcome) {
     welcome.textContent =
-      `Merhaba, ${state.user.name}! 👋`;
+      `Merhaba, ${currentUser.name || "Öğrenci"}! 👋`;
   }
 
-  const avatar =
-    document.getElementById("topAvatar");
+  updateStats();
+  updatePetDisplay();
+  updateTaskUI();
 
-  if(avatar){
-    avatar.textContent = state.user.avatar;
+  if (currentPage !== "home") {
+    renderPage(currentPage);
   }
+}
+
+function updateStats() {
+  const statXP = document.getElementById("statXP");
+  const statCoins = document.getElementById("statCoins");
+  const statStreak = document.getElementById("statStreak");
+
+  if (statXP) statXP.textContent = appData.xp;
+  if (statCoins) statCoins.textContent = appData.coins;
+  if (statStreak) statStreak.textContent = appData.streak;
+
+  const level =
+    Math.floor(appData.xp / 500) + 1;
 
   const levelText =
     document.getElementById("levelText");
 
-  if(levelText){
-    levelText.textContent = `Seviye ${level}`;
-  }
-}
-
-
-/* =========================================================
-   HOME
-========================================================= */
-
-function renderHome(){
-
-  const total = state.tasks.length;
-
-  const completed =
-    state.tasks.filter(t => t.completed).length;
-
-  const percent =
-    total === 0
-      ? 0
-      : Math.round((completed / total) * 100);
-
-  const progress =
-    document.getElementById("progressBar");
-
-  if(progress){
-    progress.style.width = `${percent}%`;
+  if (levelText) {
+    levelText.textContent =
+      `Seviye ${level}`;
   }
 
-  const progressText =
-    document.getElementById("progressText");
-
-  if(progressText){
-    progressText.textContent =
-      `${completed} / ${total} görev`;
-  }
-
-  const xp =
+  const xpText =
     document.getElementById("xpText");
 
-  if(xp){
-    xp.textContent = `${state.xp} XP`;
+  if (xpText) {
+    xpText.textContent =
+      `${appData.xp} XP`;
   }
 
-  const summary =
-    document.getElementById("taskSummary");
+  const streak =
+    document.getElementById("streakNumber");
 
-  if(summary){
-
-    if(total === 0){
-
-      summary.textContent =
-        "Bugün için henüz görev eklemedin.";
-
-    }else if(completed === total){
-
-      summary.textContent =
-        "Harika! Bugünkü görevlerinin hepsini tamamladın 🎉";
-
-    }else{
-
-      summary.textContent =
-        `${total - completed} görev seni bekliyor.`;
-    }
+  if (streak) {
+    streak.textContent = appData.streak;
   }
-
-  const list =
-    document.getElementById("homeTaskList");
-
-  if(!list) return;
-
-  if(total === 0){
-
-    list.innerHTML = `
-      <div class="empty">
-        <div class="empty-icon">📝</div>
-        <p>Henüz görev yok.</p>
-      </div>
-    `;
-
-    return;
-  }
-
-  list.innerHTML =
-    state.tasks
-      .slice(0,5)
-      .map(taskHTML)
-      .join("");
 }
 
-
 /* =========================================================
-   TASKS
-========================================================= */
+   GÖREVLER
+   ========================================================= */
 
-function renderTasks(){
+function addTask() {
+  const input = document.getElementById("newTask");
 
+  if (!input) return;
+
+  const name = input.value.trim();
+
+  if (!name) return;
+
+  appData.tasks.push({
+    id: Date.now(),
+    name,
+    completed: false,
+    xp: 50
+  });
+
+  input.value = "";
+
+  saveLocalData();
+  updateTaskUI();
+  updateStats();
+
+  showToast("Yeni görev eklendi! ✅");
+}
+
+function toggleTask(id) {
+  const task = appData.tasks.find(
+    t => t.id === id
+  );
+
+  if (!task) return;
+
+  task.completed = !task.completed;
+
+  if (task.completed) {
+    appData.xp += task.xp;
+    appData.coins += 25;
+
+    appData.pet.xp += 20;
+    appData.pet.happiness =
+      Math.min(100, appData.pet.happiness + 5);
+
+    checkPetLevel();
+
+    celebrate(`⭐ +${task.xp} XP • 🪙 +25 Coin`);
+  } else {
+    appData.xp =
+      Math.max(0, appData.xp - task.xp);
+
+    appData.coins =
+      Math.max(0, appData.coins - 25);
+  }
+
+  saveLocalData();
+  updateTaskUI();
+  updateStats();
+  updatePetDisplay();
+}
+
+function deleteTask(id) {
+  appData.tasks =
+    appData.tasks.filter(t => t.id !== id);
+
+  saveLocalData();
+  updateTaskUI();
+}
+
+function updateTaskUI() {
   const list =
     document.getElementById("taskList");
-
-  if(!list) return;
 
   const counter =
     document.getElementById("taskCounter");
 
+  const summary =
+    document.getElementById("taskSummary");
+
+  const progress =
+    document.getElementById("progressBar");
+
+  if (!list) return;
+
+  const total = appData.tasks.length;
+
   const completed =
-    state.tasks.filter(t => t.completed).length;
+    appData.tasks.filter(t => t.completed).length;
 
-  if(counter){
-
+  if (counter) {
     counter.textContent =
-      `${completed} / ${state.tasks.length}`;
+      `${completed} / ${total}`;
   }
 
-  if(state.tasks.length === 0){
+  if (summary) {
+    summary.textContent =
+      total === 0
+        ? "Bugün için henüz görev eklemedin."
+        : `${completed}/${total} görev tamamlandı.`;
+  }
 
+  if (progress) {
+    progress.style.width =
+      total === 0
+        ? "0%"
+        : `${(completed / total) * 100}%`;
+  }
+
+  if (total === 0) {
     list.innerHTML = `
-      <div class="empty">
-        <div class="empty-icon">🎯</div>
-        <p>Henüz görev eklenmemiş.</p>
+      <div style="
+        padding:30px 10px;
+        text-align:center;
+        color:var(--muted);
+      ">
+        Henüz görev yok. İlk görevini ekle! 🚀
       </div>
     `;
 
@@ -766,1348 +684,1616 @@ function renderTasks(){
   }
 
   list.innerHTML =
-    state.tasks
-      .map(taskHTML)
-      .join("");
-}
-
-
-function taskHTML(task){
-
-  return `
-    <div class="task ${task.completed ? "completed" : ""}">
-
-      <button
-        class="checkbox"
-        onclick="toggleTask(${task.id})"
-        aria-label="Görevi tamamla"
-      >
-        ${task.completed ? "✓" : ""}
-      </button>
-
-      <div class="task-content">
-
-        <div class="task-name">
-          ${escapeHTML(task.name)}
-        </div>
-
-      </div>
-
-      <span class="task-xp">
-        +${task.xp} XP
-      </span>
-
-      <button
-        class="delete-task"
-        onclick="deleteTask(${task.id})"
-        title="Sil"
-      >
-        🗑️
-      </button>
-
-    </div>
-  `;
-}
-
-
-function addTask(){
-
-  const input =
-    document.getElementById("newTask");
-
-  if(!input) return;
-
-  const name = input.value.trim();
-
-  if(!name){
-
-    toast("Önce görev adını yaz ✏️");
-
-    return;
-  }
-
-  const task = {
-
-    id:Date.now(),
-
-    name,
-
-    xp:25,
-
-    completed:false
-  };
-
-  state.tasks.push(task);
-
-  addActivity(
-    `Yeni görev eklendi: ${name}`,
-    "📝"
-  );
-
-  input.value = "";
-
-  saveState();
-
-  renderAll();
-
-  toast("Görev eklendi 🎯");
-}
-
-
-function toggleTask(id){
-
-  const task =
-    state.tasks.find(t => t.id === id);
-
-  if(!task) return;
-
-  if(task.completed){
-
-    task.completed = false;
-
-    state.xp =
-      Math.max(0,state.xp - task.xp);
-
-    state.coins =
-      Math.max(0,state.coins - 5);
-
-    toast("Görev tekrar açıldı.");
-
-  }else{
-
-    task.completed = true;
-
-    state.xp += task.xp;
-
-    state.coins += 5;
-
-    state.minutes += 5;
-
-    state.streak = Math.max(1,state.streak);
-
-    state.pet.xp += task.xp;
-
-    levelUpPet();
-
-    addActivity(
-      `${task.name} tamamlandı`,
-      "✅"
-    );
-
-    celebrate(
-      `⭐ +${task.xp} XP<br>🪙 +5 Coin`
-    );
-
-  }
-
-  saveState();
-
-  renderAll();
-}
-
-
-function deleteTask(id){
-
-  state.tasks =
-    state.tasks.filter(t => t.id !== id);
-
-  saveState();
-
-  renderAll();
-
-  toast("Görev silindi.");
-}
-
-
-/* =========================================================
-   SUBJECTS
-========================================================= */
-
-function renderSubjects(){
-
-  const grid =
-    document.getElementById("subjectGrid");
-
-  if(!grid) return;
-
-  if(state.subjects.length === 0){
-
-    grid.innerHTML = `
-      <div class="empty">
-        Henüz ders eklenmemiş.
-      </div>
-    `;
-
-    return;
-  }
-
-  grid.innerHTML =
-    state.subjects.map(subject => `
-
-      <div class="subject-card">
-
-        <div class="subject-icon">
-          ${subject.icon}
-        </div>
-
-        <h3>
-          ${escapeHTML(subject.name)}
-        </h3>
-
-        <p>
-          Ders ilerlemesi
-        </p>
-
-        <div class="mini-progress">
-
-          <span style="width:${subject.progress}%"></span>
-
-        </div>
-
-        <small
-          style="
-            display:block;
-            margin-top:8px;
-            color:var(--muted)
-          "
+    appData.tasks.map(task => `
+      <div class="task ${task.completed ? "completed" : ""}">
+        <button
+          class="checkbox"
+          onclick="toggleTask(${task.id})"
         >
-          ${subject.progress}%
-        </small>
+          ${task.completed ? "✓" : ""}
+        </button>
 
-      </div>
-
-    `).join("");
-}
-
-
-function addSubject(){
-
-  const name =
-    prompt("Ders adı:");
-
-  if(!name?.trim()) return;
-
-  const icons = [
-    "📚",
-    "📐",
-    "🔬",
-    "🌎",
-    "📖",
-    "💻",
-    "🎨"
-  ];
-
-  state.subjects.push({
-
-    id:Date.now(),
-
-    name:name.trim(),
-
-    icon:icons[
-      Math.floor(Math.random()*icons.length)
-    ],
-
-    progress:0
-  });
-
-  saveState();
-
-  renderSubjects();
-
-  toast("Ders eklendi 📚");
-}
-
-
-/* =========================================================
-   EXAMS
-========================================================= */
-
-function renderExams(){
-
-  const grid =
-    document.getElementById("examGrid");
-
-  if(!grid) return;
-
-  if(state.exams.length === 0){
-
-    grid.innerHTML = `
-      <div class="empty">
-        <div class="empty-icon">📅</div>
-        <p>Henüz sınav eklenmemiş.</p>
-      </div>
-    `;
-
-    return;
-  }
-
-  grid.innerHTML =
-    state.exams
-      .sort((a,b) =>
-        new Date(a.date) - new Date(b.date)
-      )
-      .map(exam => {
-
-        const days =
-          daysUntil(exam.date);
-
-        return `
-
-          <div class="exam-card">
-
-            <span class="exam-date">
-              ${formatDate(exam.date)}
-            </span>
-
-            <h3>
-              ${escapeHTML(exam.name)}
-            </h3>
-
-            <p>
-              ${escapeHTML(exam.subject)}
-            </p>
-
-            <strong
-              style="
-                display:block;
-                margin-top:15px;
-                color:${days <= 3 ? "var(--red)" : "var(--primary)"}
-              "
-            >
-              ${
-                days < 0
-                  ? "Sınav geçti"
-                  : days === 0
-                    ? "Bugün!"
-                    : `${days} gün kaldı`
-              }
-            </strong>
-
+        <div class="task-content">
+          <div class="task-name">
+            ${escapeHTML(task.name)}
           </div>
-
-        `;
-
-      })
-      .join("");
-}
-
-
-function addExam(){
-
-  const name =
-    prompt("Sınav adı:");
-
-  if(!name?.trim()) return;
-
-  const subject =
-    prompt("Ders:");
-
-  if(!subject?.trim()) return;
-
-  const date =
-    prompt(
-      "Tarih (YYYY-MM-DD):",
-      "2026-09-20"
-    );
-
-  if(!date) return;
-
-  state.exams.push({
-
-    id:Date.now(),
-
-    name:name.trim(),
-
-    subject:subject.trim(),
-
-    date
-  });
-
-  saveState();
-
-  renderExams();
-
-  toast("Sınav eklendi 📅");
-}
-
-
-/* =========================================================
-   FOCUS
-========================================================= */
-
-function setFocusMode(minutes, button){
-
-  state.focusMinutes = minutes;
-
-  timerSeconds = minutes * 60;
-
-  timerRunning = false;
-
-  clearInterval(timerInterval);
-
-  document
-    .querySelectorAll(".focus-mode button")
-    .forEach(b =>
-      b.classList.remove("active")
-    );
-
-  button.classList.add("active");
-
-  const timerButton =
-    document.getElementById("timerButton");
-
-  if(timerButton){
-    timerButton.textContent = "▶ Başlat";
-  }
-
-  updateTimerDisplay();
-}
-
-
-function toggleTimer(){
-
-  if(timerRunning){
-
-    clearInterval(timerInterval);
-
-    timerRunning = false;
-
-    document.getElementById("timerButton")
-      .textContent = "▶ Devam Et";
-
-    return;
-  }
-
-  timerRunning = true;
-
-  document.getElementById("timerButton")
-    .textContent = "⏸ Duraklat";
-
-  timerInterval =
-    setInterval(() => {
-
-      timerSeconds--;
-
-      updateTimerDisplay();
-
-      if(timerSeconds <= 0){
-
-        clearInterval(timerInterval);
-
-        timerRunning = false;
-
-        state.minutes += state.focusMinutes;
-
-        state.xp += state.focusMinutes;
-
-        state.coins += 10;
-
-        state.pet.xp += state.focusMinutes;
-
-        levelUpPet();
-
-        addActivity(
-          `${state.focusMinutes} dakika odaklanma tamamlandı`,
-          "⏱️"
-        );
-
-        saveState();
-
-        renderAll();
-
-        celebrate(
-          `⏱️ ${state.focusMinutes} dakika tamamlandı!<br>
-           ⭐ +${state.focusMinutes} XP<br>
-           🪙 +10 Coin`
-        );
-
-        timerSeconds =
-          state.focusMinutes * 60;
-
-        updateTimerDisplay();
-
-      }
-
-    },1000);
-}
-
-
-function resetTimer(){
-
-  clearInterval(timerInterval);
-
-  timerRunning = false;
-
-  timerSeconds =
-    state.focusMinutes * 60;
-
-  const button =
-    document.getElementById("timerButton");
-
-  if(button){
-    button.textContent = "▶ Başlat";
-  }
-
-  updateTimerDisplay();
-}
-
-
-function updateTimerDisplay(){
-
-  const timer =
-    document.getElementById("timer");
-
-  if(!timer) return;
-
-  const minutes =
-    Math.floor(timerSeconds / 60);
-
-  const seconds =
-    timerSeconds % 60;
-
-  timer.textContent =
-    `${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
-}
-
-
-/* =========================================================
-   COACH
-========================================================= */
-
-const coachAdvice = [
-
-  "Önce en zor dersinden 25 dakika çalış. Sonra kısa bir mola ver.",
-
-  "Bugün 20 soru çözmeyi hedefle. Bitirdiğinde kendine küçük bir ödül ver.",
-
-  "Telefonunu sessize al ve sadece tek bir derse odaklan.",
-
-  "Çalışmaya başlamak için mükemmel zamanı bekleme. Şimdi 10 dakika başla.",
-
-  "Yanlış yaptığın soruları tekrar çözmek, yeni soru çözmek kadar değerlidir.",
-
-  "Bugün küçük bir hedef seç ve mutlaka tamamla. Küçük adımlar büyük sonuçlar oluşturur.",
-
-  "50 dakika çalışıp 10 dakika mola vermeyi deneyebilirsin."
-
-];
-
-
-function renderCoach(){
-
-  const element =
-    document.getElementById("coachMessage");
-
-  if(!element) return;
-
-  if(!element.textContent.trim()){
-
-    newCoachAdvice();
-
-  }
-}
-
-
-function newCoachAdvice(){
-
-  const advice =
-    coachAdvice[
-      Math.floor(
-        Math.random()*coachAdvice.length
-      )
-    ];
-
-  const element =
-    document.getElementById("coachMessage");
-
-  if(element){
-
-    element.textContent = advice;
-
-  }
-
-  toast("Yeni çalışma önerisi 🤖");
-}
-
-
-/* =========================================================
-   PET
-========================================================= */
-
-function renderPet(){
-
-  const level =
-    state.pet.level;
-
-  const petBig =
-    document.getElementById("petBig");
-
-  if(petBig){
-    petBig.textContent = state.pet.icon;
-  }
-
-  const name =
-    document.getElementById("petName");
-
-  if(name){
-    name.textContent = state.pet.name;
-  }
-
-  const levelElement =
-    document.getElementById("petLevel");
-
-  if(levelElement){
-    levelElement.textContent =
-      `Seviye ${level}`;
-  }
-
-  const current =
-    state.pet.xp % 100;
-
-  const bar =
-    document.getElementById("petXPBar");
-
-  if(bar){
-    bar.style.width = `${current}%`;
-  }
-
-  const text =
-    document.getElementById("petXPText");
-
-  if(text){
-    text.textContent =
-      `${current} / 100 XP`;
-  }
-}
-
-
-function levelUpPet(){
-
-  const newLevel =
-    Math.floor(state.pet.xp / 100) + 1;
-
-  if(newLevel > state.pet.level){
-
-    state.pet.level = newLevel;
-
-    toast(
-      `🐼 Panda Seviye ${newLevel} oldu! 🎉`
-    );
-
-  }
-}
-
-
-function feedPet(){
-
-  if(state.coins < 10){
-
-    toast("Panda'yı beslemek için 10 coin gerekiyor.");
-
-    return;
-  }
-
-  state.coins -= 10;
-
-  state.pet.xp += 15;
-
-  levelUpPet();
-
-  saveState();
-
-  renderAll();
-
-  toast("Panda çok mutlu oldu! 🐼❤️");
-}
-
-
-/* =========================================================
-   MARKET
-========================================================= */
-
-const marketItems = [
-
-  {
-    id:"hat",
-    icon:"🎩",
-    name:"Şapka",
-    description:"Panda için havalı bir şapka.",
-    price:50
-  },
-
-  {
-    id:"glasses",
-    icon:"🕶️",
-    name:"Gözlük",
-    description:"Panda artık çok havalı.",
-    price:80
-  },
-
-  {
-    id:"star",
-    icon:"⭐",
-    name:"Yıldız",
-    description:"Profiline özel yıldız.",
-    price:100
-  },
-
-  {
-    id:"crown",
-    icon:"👑",
-    name:"Taç",
-    description:"Seviye atlayanların ödülü.",
-    price:150
-  }
-
-];
-
-
-function renderMarket(){
-
-  const grid =
-    document.getElementById("marketGrid");
-
-  const coins =
-    document.getElementById("marketCoins");
-
-  if(coins){
-    coins.textContent = state.coins;
-  }
-
-  if(!grid) return;
-
-  grid.innerHTML =
-    marketItems.map(item => `
-
-      <div class="shop-item">
-
-        <div class="shop-icon">
-          ${item.icon}
         </div>
 
-        <h3>
-          ${item.name}
-        </h3>
-
-        <p>
-          ${item.description}
-        </p>
-
-        <div class="price">
-          🪙 ${item.price}
+        <div class="task-xp">
+          +${task.xp} XP
         </div>
 
         <button
-          class="primary-btn"
-          onclick="buyItem('${item.id}')"
+          class="delete-task"
+          onclick="deleteTask(${task.id})"
         >
-          Satın Al
+          🗑️
         </button>
-
       </div>
-
     `).join("");
 }
 
-
-function buyItem(id){
-
-  const item =
-    marketItems.find(i => i.id === id);
-
-  if(!item) return;
-
-  if(state.coins < item.price){
-
-    toast("Yeterli coin yok 🪙");
-
-    return;
-  }
-
-  state.coins -= item.price;
-
-  addActivity(
-    `${item.name} satın alındı`,
-    item.icon
-  );
-
-  saveState();
-
-  renderAll();
-
-  toast(
-    `${item.icon} ${item.name} satın alındı!`
-  );
-}
-
-
 /* =========================================================
-   BADGES
-========================================================= */
+   PET SAYFASI
+   ========================================================= */
 
-function renderBadges(){
+function renderPetPage(container) {
+  container.style.display = "block";
 
-  const container =
-    document.getElementById("badges");
+  container.innerHTML = `
+    <div class="card">
 
-  if(!container) return;
-
-  const completed =
-    state.tasks.filter(t => t.completed).length;
-
-  const badges = [
-
-    {
-      icon:"🌱",
-      name:"İlk Adım",
-      description:"İlk görevini tamamla.",
-      unlocked:completed >= 1
-    },
-
-    {
-      icon:"🔥",
-      name:"Seri Başlangıcı",
-      description:"1 günlük seri yap.",
-      unlocked:state.streak >= 1
-    },
-
-    {
-      icon:"⭐",
-      name:"XP Avcısı",
-      description:"100 XP kazan.",
-      unlocked:state.xp >= 100
-    },
-
-    {
-      icon:"🎯",
-      name:"Görev Ustası",
-      description:"5 görev tamamla.",
-      unlocked:completed >= 5
-    },
-
-    {
-      icon:"⏱️",
-      name:"Odak Şampiyonu",
-      description:"60 dakika çalış.",
-      unlocked:state.minutes >= 60
-    },
-
-    {
-      icon:"🪙",
-      name:"Coin Toplayıcı",
-      description:"100 coin kazan.",
-      unlocked:state.coins >= 100
-    },
-
-    {
-      icon:"🏆",
-      name:"Seviye 5",
-      description:"5. seviyeye ulaş.",
-      unlocked:getLevel() >= 5
-    },
-
-    {
-      icon:"🐼",
-      name:"Panda Dostu",
-      description:"Panda'yı seviye 3 yap.",
-      unlocked:state.pet.level >= 3
-    }
-
-  ];
-
-  container.innerHTML =
-    badges.map(badge => `
-
-      <div class="badge ${badge.unlocked ? "" : "locked"}">
-
-        <div class="badge-icon">
-          ${badge.icon}
+      <div class="card-title">
+        <div>
+          <h2>🐣 Evcil Hayvanım</h2>
+          <small style="color:var(--muted)">
+            Panda'nınla ilgilen
+          </small>
         </div>
 
         <strong>
-          ${badge.name}
+          Seviye ${appData.pet.level}
         </strong>
-
-        <br>
-
-        <small>
-          ${badge.unlocked ? "Açıldı ✓" : badge.description}
-        </small>
-
       </div>
 
-    `).join("");
-}
+      <div style="
+        display:grid;
+        grid-template-columns:minmax(250px,1fr) minmax(250px,1fr);
+        gap:25px;
+      ">
 
+        <div style="text-align:center">
 
-/* =========================================================
-   STATS
-========================================================= */
-
-function renderStats(){
-
-  setText("statXP",state.xp);
-
-  setText("statStreak",state.streak);
-
-  setText("statCoins",state.coins);
-
-  setText("statMinutes",state.minutes);
-
-  const activity =
-    document.getElementById("activityList");
-
-  if(!activity) return;
-
-  if(state.activities.length === 0){
-
-    activity.innerHTML = `
-      <div class="empty">
-        <div class="empty-icon">📊</div>
-        <p>Henüz aktivite bulunmuyor.</p>
-      </div>
-    `;
-
-    return;
-  }
-
-  activity.innerHTML =
-    state.activities
-      .slice(0,10)
-      .map(a => `
-
-        <div
-          style="
-            display:flex;
-            align-items:center;
-            gap:12px;
-            padding:13px 0;
-            border-bottom:1px solid var(--border)
-          "
-        >
-
-          <div style="font-size:22px">
-            ${a.icon}
+          <div
+            id="bigPetDisplay"
+            style="
+              min-height:300px;
+              border-radius:25px;
+              background:
+                radial-gradient(circle at 50% 20%,#ffffff80,transparent 30%),
+                linear-gradient(135deg,#fff0b8,#ffd7e9);
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              font-size:130px;
+              position:relative;
+              overflow:hidden;
+              box-shadow:inset 0 0 40px #ffffff70;
+            "
+          >
+            ${getPetVisual()}
           </div>
 
-          <div>
+          <h2 style="margin-top:15px">
+            ${escapeHTML(appData.pet.name)}
+          </h2>
 
-            <strong>
-              ${escapeHTML(a.text)}
-            </strong>
+          <p style="
+            color:var(--muted);
+            margin-top:5px;
+          ">
+            Seviye ${appData.pet.level}
+          </p>
+
+          <div style="
+            margin-top:15px;
+            height:10px;
+            background:var(--border);
+            border-radius:20px;
+            overflow:hidden;
+          ">
+            <div style="
+              height:100%;
+              width:${getPetXPPercent()}%;
+              background:var(--primary);
+            "></div>
+          </div>
+
+          <small style="
+            display:block;
+            margin-top:7px;
+            color:var(--muted);
+          ">
+            ${appData.pet.xp} / 100 Pet XP
+          </small>
+
+        </div>
+
+        <div>
+
+          ${petStatHTML(
+            "❤️",
+            "Mutluluk",
+            appData.pet.happiness
+          )}
+
+          ${petStatHTML(
+            "⚡",
+            "Enerji",
+            appData.pet.energy
+          )}
+
+          <div style="
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:15px;
+          ">
+
+            <button
+              class="primary-btn"
+              onclick="petAction('feed')"
+            >
+              🍎 Besle
+            </button>
+
+            <button
+              class="secondary-btn"
+              onclick="petAction('play')"
+            >
+              🎮 Oynat
+            </button>
+
+            <button
+              class="secondary-btn"
+              onclick="petAction('clean')"
+            >
+              🧼 Temizle
+            </button>
+
+            <button
+              class="secondary-btn"
+              onclick="petAction('sleep')"
+            >
+              💤 Uyut
+            </button>
+
+          </div>
+
+          <div style="
+            margin-top:25px;
+            padding-top:20px;
+            border-top:1px solid var(--border);
+          ">
+
+            <h3>🎒 Envanterim</h3>
 
             <div
-              style="
-                color:var(--muted);
-                font-size:12px;
-                margin-top:3px
-              "
+              id="petInventory"
+              style="margin-top:12px"
             >
-              ${a.time}
+              ${renderInventoryHTML()}
             </div>
 
           </div>
 
         </div>
 
-      `)
-      .join("");
+      </div>
+
+    </div>
+  `;
 }
 
+function petStatHTML(icon, title, value) {
+  return `
+    <div style="margin-bottom:15px">
 
-function addActivity(text,icon){
+      <div style="
+        display:flex;
+        justify-content:space-between;
+        margin-bottom:7px;
+        font-weight:800;
+      ">
+        <span>${icon} ${title}</span>
+        <span>${value}%</span>
+      </div>
 
-  state.activities.unshift({
+      <div style="
+        height:10px;
+        background:var(--border);
+        border-radius:20px;
+        overflow:hidden;
+      ">
+        <div style="
+          height:100%;
+          width:${value}%;
+          background:var(--primary);
+          transition:width .3s;
+        "></div>
+      </div>
 
-    text,
+    </div>
+  `;
+}
 
-    icon,
+function getPetXPPercent() {
+  return Math.min(
+    100,
+    appData.pet.xp
+  );
+}
 
-    time:new Date().toLocaleString(
-      "tr-TR",
-      {
-        day:"2-digit",
-        month:"2-digit",
-        hour:"2-digit",
-        minute:"2-digit"
+function checkPetLevel() {
+  while (appData.pet.xp >= 100) {
+
+    appData.pet.xp -= 100;
+    appData.pet.level++;
+
+    appData.pet.happiness = 100;
+    appData.pet.energy = 100;
+
+    showToast(
+      `🎉 Panda Seviye ${appData.pet.level} oldu!`
+    );
+  }
+}
+
+/* =========================================================
+   PET GÖRÜNÜMÜ
+   ========================================================= */
+
+function getPetVisual() {
+  const p = appData.pet;
+
+  return `
+    <div style="
+      position:relative;
+      width:180px;
+      height:210px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    ">
+
+      <div style="
+        font-size:125px;
+        position:absolute;
+        z-index:1;
+      ">
+        ${p.emoji}
+      </div>
+
+      ${
+        p.accessories.hat
+          ? `<div style="
+              position:absolute;
+              top:-5px;
+              z-index:3;
+              font-size:65px;
+            ">${p.accessories.hat}</div>`
+          : ""
       }
-    )
 
-  });
+      ${
+        p.accessories.glasses
+          ? `<div style="
+              position:absolute;
+              top:72px;
+              z-index:4;
+              font-size:40px;
+            ">${p.accessories.glasses}</div>`
+          : ""
+      }
 
-  state.activities =
-    state.activities.slice(0,30);
+      ${
+        p.accessories.bag
+          ? `<div style="
+              position:absolute;
+              right:-12px;
+              bottom:42px;
+              z-index:3;
+              font-size:45px;
+            ">${p.accessories.bag}</div>`
+          : ""
+      }
+
+      ${
+        p.accessories.scarf
+          ? `<div style="
+              position:absolute;
+              bottom:55px;
+              z-index:4;
+              font-size:45px;
+            ">${p.accessories.scarf}</div>`
+          : ""
+      }
+
+      ${
+        p.accessories.crown
+          ? `<div style="
+              position:absolute;
+              top:-10px;
+              z-index:5;
+              font-size:60px;
+            ">${p.accessories.crown}</div>`
+          : ""
+      }
+
+    </div>
+  `;
 }
 
+function updatePetDisplay() {
+  const display =
+    document.getElementById("petDisplay");
 
-/* =========================================================
-   PROFILE
-========================================================= */
+  const name =
+    document.getElementById("petName");
 
-function renderProfile(){
+  const level =
+    document.getElementById("petLevel");
 
-  setText(
-    "profileName",
-    state.user.name
-  );
+  if (display) {
+    display.innerHTML = getPetVisual();
+  }
 
-  setText(
-    "profileEmail",
-    state.user.email || "E-posta belirtilmedi."
-  );
+  if (name) {
+    name.textContent =
+      appData.pet.name;
+  }
 
-  setText(
-    "profileAvatar",
-    state.user.avatar
-  );
+  if (level) {
+    level.textContent =
+      `Seviye ${appData.pet.level}`;
+  }
 
-  setText(
-    "topAvatar",
-    state.user.avatar
-  );
+  const big =
+    document.getElementById("bigPetDisplay");
 
-  updateUserUI();
-}
-
-
-function changeAvatar(){
-
-  const avatars = [
-    "🎓",
-    "🐼",
-    "🐱",
-    "🐶",
-    "🦊",
-    "🐸",
-    "🦁",
-    "🐯",
-    "🐨",
-    "🚀"
-  ];
-
-  const current =
-    avatars.indexOf(state.user.avatar);
-
-  const next =
-    avatars[
-      (current + 1) % avatars.length
-    ];
-
-  state.user.avatar = next;
-
-  saveState();
-
-  renderProfile();
-
-  toast("Avatar değiştirildi ✨");
-}
-
-
-/* =========================================================
-   THEME
-========================================================= */
-
-function applyTheme(){
-
-  document.body.classList.toggle(
-    "dark",
-    state.theme === "dark"
-  );
-}
-
-
-function toggleDarkMode(){
-
-  state.theme =
-    state.theme === "dark"
-      ? "light"
-      : "dark";
-
-  applyTheme();
-
-  saveState();
-
-  toast(
-    state.theme === "dark"
-      ? "Karanlık mod açıldı 🌙"
-      : "Aydınlık mod açıldı ☀️"
-  );
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-function toggleMobileMenu(){
-
-  const drawer =
-    document.getElementById("mobileDrawer");
-
-  if(drawer){
-    drawer.classList.toggle("open");
+  if (big) {
+    big.innerHTML = getPetVisual();
   }
 }
 
+/* =========================================================
+   PET AKSİYONLARI
+   ========================================================= */
 
-function closeMobileMenu(){
+function petAction(action) {
 
-  const drawer =
-    document.getElementById("mobileDrawer");
+  if (action === "feed") {
 
-  if(drawer){
-    drawer.classList.remove("open");
+    const food =
+      appData.inventory.food || [];
+
+    if (food.length === 0) {
+      showToast(
+        "🍎 Envanterinde yiyecek yok. Marketten alabilirsin."
+      );
+      return;
+    }
+
+    const itemId = food[0];
+
+    useItem(itemId);
+
+    return;
+  }
+
+  if (action === "play") {
+
+    if (appData.pet.energy < 15) {
+      showToast("😴 Panda'nın enerjisi çok düşük.");
+      return;
+    }
+
+    appData.pet.energy =
+      Math.max(0, appData.pet.energy - 15);
+
+    appData.pet.happiness =
+      Math.min(100, appData.pet.happiness + 15);
+
+    appData.pet.xp += 10;
+
+    checkPetLevel();
+
+    showToast("🎮 Panda seninle oynadı!");
+
+  }
+
+  if (action === "clean") {
+
+    appData.pet.happiness =
+      Math.min(100, appData.pet.happiness + 10);
+
+    appData.pet.xp += 5;
+
+    checkPetLevel();
+
+    showToast("🧼 Panda tertemiz oldu!");
+
+  }
+
+  if (action === "sleep") {
+
+    appData.pet.energy = 100;
+
+    appData.pet.happiness =
+      Math.min(100, appData.pet.happiness + 5);
+
+    showToast("💤 Panda güzelce dinlendi.");
+
+  }
+
+  saveLocalData();
+  updatePetDisplay();
+
+  if (currentPage === "pet") {
+    const dynamic =
+      document.getElementById("dynamicSection");
+
+    if (dynamic) {
+      renderPetPage(dynamic);
+    }
   }
 }
-
 
 /* =========================================================
-   UTILITIES
-========================================================= */
+   MARKET
+   ========================================================= */
 
-function setText(id,value){
+function renderMarketPage(container) {
 
-  const element =
-    document.getElementById(id);
+  container.style.display = "block";
 
-  if(element){
-    element.textContent = value;
+  container.innerHTML = `
+    <div class="card">
+
+      <div class="card-title">
+
+        <div>
+          <h2>🛒 Market</h2>
+          <small style="color:var(--muted)">
+            Panda'n için yeni şeyler keşfet.
+          </small>
+        </div>
+
+        <div style="
+          background:#fff6d8;
+          color:#b27b00;
+          padding:10px 15px;
+          border-radius:12px;
+          font-weight:900;
+        ">
+          🪙 ${appData.coins}
+        </div>
+
+      </div>
+
+      <div class="market-grid">
+
+        ${MARKET_ITEMS.map(item => {
+
+          const owned =
+            isItemOwned(item.id);
+
+          return `
+            <div class="shop-item">
+
+              <div class="shop-icon">
+                ${item.icon}
+              </div>
+
+              <h3>
+                ${escapeHTML(item.name)}
+              </h3>
+
+              <p>
+                ${escapeHTML(item.description)}
+              </p>
+
+              <div class="price">
+                🪙 ${item.price}
+              </div>
+
+              ${
+                owned
+                  ? `
+                    <button
+                      class="secondary-btn"
+                      style="width:100%"
+                      onclick="handleOwnedItem('${item.id}')"
+                    >
+                      ${
+                        item.category === "food" ||
+                        item.category === "room"
+                          ? "Kullan"
+                          : "Uygula"
+                      }
+                    </button>
+                  `
+                  : `
+                    <button
+                      class="primary-btn"
+                      style="width:100%"
+                      onclick="buyItem('${item.id}')"
+                    >
+                      Satın Al
+                    </button>
+                  `
+              }
+
+            </div>
+          `;
+
+        }).join("")}
+
+      </div>
+
+    </div>
+  `;
+}
+
+function isItemOwned(id) {
+  return appData.owned.includes(id);
+}
+
+function buyItem(id) {
+
+  const item =
+    MARKET_ITEMS.find(i => i.id === id);
+
+  if (!item) return;
+
+  if (isItemOwned(id)) {
+    showToast("Bu ürün zaten sende.");
+    return;
+  }
+
+  if (appData.coins < item.price) {
+    showToast("🪙 Yeterli coin'in yok.");
+    return;
+  }
+
+  appData.coins -= item.price;
+
+  appData.owned.push(item.id);
+
+  if (!appData.inventory[item.category]) {
+    appData.inventory[item.category] = [];
+  }
+
+  appData.inventory[item.category].push(item.id);
+
+  saveLocalData();
+
+  showToast(
+    `${item.icon} ${item.name} satın alındı!`
+  );
+
+  updateStats();
+
+  renderMarketPage(
+    document.getElementById("dynamicSection")
+  );
+}
+
+function handleOwnedItem(id) {
+
+  const item =
+    MARKET_ITEMS.find(i => i.id === id);
+
+  if (!item) return;
+
+  if (
+    item.category === "food" ||
+    item.category === "room"
+  ) {
+    useItem(id);
+    return;
+  }
+
+  equipItem(id);
+}
+
+/* =========================================================
+   ENVANTER
+   ========================================================= */
+
+function renderInventoryHTML() {
+
+  const owned =
+    appData.owned
+      .map(id =>
+        MARKET_ITEMS.find(item => item.id === id)
+      )
+      .filter(Boolean);
+
+  if (owned.length === 0) {
+    return `
+      <div style="
+        padding:20px;
+        border:1px dashed var(--border);
+        border-radius:15px;
+        text-align:center;
+        color:var(--muted);
+      ">
+        Envanterin henüz boş.
+      </div>
+    `;
+  }
+
+  return `
+    <div style="
+      display:grid;
+      grid-template-columns:
+        repeat(auto-fill,minmax(120px,1fr));
+      gap:10px;
+    ">
+
+      ${owned.map(item => {
+
+        const equipped =
+          Object.values(
+            appData.pet.accessories
+          ).includes(item.icon);
+
+        return `
+          <div style="
+            border:1px solid var(--border);
+            border-radius:15px;
+            padding:12px;
+            text-align:center;
+          ">
+
+            <div style="
+              font-size:35px;
+              margin-bottom:7px;
+            ">
+              ${item.icon}
+            </div>
+
+            <strong style="
+              display:block;
+              font-size:12px;
+            ">
+              ${escapeHTML(item.name)}
+            </strong>
+
+            ${
+              item.category === "food"
+                ? `
+                  <button
+                    class="primary-btn"
+                    style="
+                      margin-top:8px;
+                      padding:7px 10px;
+                      font-size:11px;
+                    "
+                    onclick="useItem('${item.id}')"
+                  >
+                    Kullan
+                  </button>
+                `
+                : item.category === "room"
+                  ? `
+                    <button
+                      class="primary-btn"
+                      style="
+                        margin-top:8px;
+                        padding:7px 10px;
+                        font-size:11px;
+                      "
+                      onclick="useItem('${item.id}')"
+                    >
+                      Yerleştir
+                    </button>
+                  `
+                  : `
+                    <button
+                      class="${
+                        equipped
+                          ? "secondary-btn"
+                          : "primary-btn"
+                      }"
+                      style="
+                        margin-top:8px;
+                        padding:7px 10px;
+                        font-size:11px;
+                      "
+                      onclick="equipItem('${item.id}')"
+                    >
+                      ${
+                        equipped
+                          ? "Takılı ✓"
+                          : "Uygula"
+                      }
+                    </button>
+                  `
+            }
+
+          </div>
+        `;
+
+      }).join("")}
+
+    </div>
+  `;
+}
+
+/* =========================================================
+   EŞYA UYGULAMA
+   ========================================================= */
+
+function equipItem(id) {
+
+  const item =
+    MARKET_ITEMS.find(i => i.id === id);
+
+  if (!item) return;
+
+  if (!isItemOwned(id)) {
+    showToast("Önce bu ürünü satın almalısın.");
+    return;
+  }
+
+  if (
+    ![
+      "hat",
+      "glasses",
+      "bag",
+      "scarf",
+      "crown"
+    ].includes(item.category)
+  ) {
+    return;
+  }
+
+  appData.pet.accessories[item.category] =
+    item.icon;
+
+  saveLocalData();
+
+  updatePetDisplay();
+
+  showToast(
+    `${item.icon} ${item.name} Panda'ya uygulandı!`
+  );
+
+  if (currentPage === "pet") {
+
+    const dynamic =
+      document.getElementById("dynamicSection");
+
+    if (dynamic) {
+      renderPetPage(dynamic);
+    }
   }
 }
 
+/* =========================================================
+   YİYECEK / ODA
+   ========================================================= */
 
-function escapeHTML(value){
+function useItem(id) {
 
-  return String(value)
+  const item =
+    MARKET_ITEMS.find(i => i.id === id);
 
-    .replaceAll("&","&amp;")
+  if (!item) return;
 
-    .replaceAll("<","&lt;")
+  if (!isItemOwned(id)) {
+    showToast("Bu ürün sende yok.");
+    return;
+  }
 
-    .replaceAll(">","&gt;")
+  if (item.category === "food") {
 
-    .replaceAll('"',"&quot;")
+    const index =
+      appData.inventory.food.indexOf(id);
 
-    .replaceAll("'","&#039;");
-}
+    if (index !== -1) {
+      appData.inventory.food.splice(index, 1);
+    }
 
-
-function formatDate(date){
-
-  try{
-
-    return new Date(date)
-      .toLocaleDateString(
-        "tr-TR",
-        {
-          day:"2-digit",
-          month:"long",
-          year:"numeric"
-        }
+    appData.pet.energy =
+      Math.min(
+        100,
+        appData.pet.energy + 20
       );
 
-  }catch{
+    appData.pet.happiness =
+      Math.min(
+        100,
+        appData.pet.happiness + 15
+      );
 
-    return date;
+    appData.pet.xp += 10;
+
+    showToast(
+      `${item.icon} Panda ${item.name.toLowerCase()} yedi!`
+    );
+
+  } else if (item.category === "room") {
+
+    if (!appData.pet.room.includes(id)) {
+      appData.pet.room.push(id);
+    }
+
+    showToast(
+      `${item.icon} ${item.name} Panda'nın odasına yerleştirildi!`
+    );
+  }
+
+  checkPetLevel();
+
+  saveLocalData();
+  updatePetDisplay();
+  updateStats();
+
+  if (currentPage === "pet") {
+
+    const dynamic =
+      document.getElementById("dynamicSection");
+
+    if (dynamic) {
+      renderPetPage(dynamic);
+    }
   }
 }
 
+/* =========================================================
+   ROZETLER
+   ========================================================= */
 
-function daysUntil(date){
+function renderAchievements(container) {
 
-  const today =
-    new Date();
+  container.style.display = "block";
 
-  today.setHours(0,0,0,0);
+  const badges = [
+    {
+      icon: "🌱",
+      name: "İlk Adım",
+      desc: "İlk görevini tamamla.",
+      unlocked: appData.tasks.some(t => t.completed)
+    },
+    {
+      icon: "⭐",
+      name: "XP Avcısı",
+      desc: "500 XP kazan.",
+      unlocked: appData.xp >= 500
+    },
+    {
+      icon: "🪙",
+      name: "Coin Toplayıcı",
+      desc: "500 coin biriktir.",
+      unlocked: appData.coins >= 500
+    },
+    {
+      icon: "🐼",
+      name: "Panda Dostu",
+      desc: "Panda ile ilgilen.",
+      unlocked: appData.pet.xp > 0
+    },
+    {
+      icon: "🛒",
+      name: "İlk Alışveriş",
+      desc: "Marketten bir ürün al.",
+      unlocked: appData.owned.length > 0
+    },
+    {
+      icon: "👑",
+      name: "Kraliyet",
+      desc: "Panda'ya taç tak.",
+      unlocked:
+        appData.pet.accessories.crown !== ""
+    }
+  ];
 
-  const target =
-    new Date(date);
+  container.innerHTML = `
+    <div class="card">
 
-  target.setHours(0,0,0,0);
+      <div class="card-title">
+        <h2>🏆 Rozetler</h2>
+      </div>
 
-  return Math.ceil(
-    (target - today) /
-    (1000 * 60 * 60 * 24)
+      <div class="badges">
+
+        ${badges.map(badge => `
+          <div class="
+            badge
+            ${badge.unlocked ? "" : "locked"}
+          ">
+
+            <div class="badge-icon">
+              ${badge.icon}
+            </div>
+
+            <strong>
+              ${badge.name}
+            </strong>
+
+            <small>
+              ${badge.desc}
+            </small>
+
+          </div>
+        `).join("")}
+
+      </div>
+
+    </div>
+  `;
+}
+
+/* =========================================================
+   İSTATİSTİK
+   ========================================================= */
+
+function renderStats(container) {
+
+  container.style.display = "block";
+
+  const completed =
+    appData.tasks.filter(
+      t => t.completed
+    ).length;
+
+  const total =
+    appData.tasks.length;
+
+  container.innerHTML = `
+    <div class="card">
+
+      <div class="card-title">
+        <h2>📊 İstatistikler</h2>
+      </div>
+
+      <div class="stats">
+
+        <div class="stat">
+          <span>⭐</span>
+          <strong>${appData.xp}</strong>
+          <small>Toplam XP</small>
+        </div>
+
+        <div class="stat">
+          <span>🪙</span>
+          <strong>${appData.coins}</strong>
+          <small>Coin</small>
+        </div>
+
+        <div class="stat">
+          <span>✅</span>
+          <strong>${completed}</strong>
+          <small>Tamamlanan görev</small>
+        </div>
+
+        <div class="stat">
+          <span>📝</span>
+          <strong>${total}</strong>
+          <small>Toplam görev</small>
+        </div>
+
+        <div class="stat">
+          <span>🐼</span>
+          <strong>${appData.pet.level}</strong>
+          <small>Panda seviyesi</small>
+        </div>
+
+        <div class="stat">
+          <span>🛒</span>
+          <strong>${appData.owned.length}</strong>
+          <small>Alınan ürün</small>
+        </div>
+
+      </div>
+
+    </div>
+  `;
+}
+
+/* =========================================================
+   ODAK
+   ========================================================= */
+
+function renderFocus(container) {
+
+  container.style.display = "block";
+
+  container.innerHTML = `
+    <div class="card focus">
+
+      <h2>⏱️ Odaklan</h2>
+
+      <p style="
+        color:var(--muted);
+        margin-top:8px;
+      ">
+        Telefonunu bırak, dersine odaklan.
+      </p>
+
+      <div
+        id="focusTimer"
+        class="timer"
+      >
+        25:00
+      </div>
+
+      <div class="focus-buttons">
+
+        <button
+          class="primary-btn"
+          onclick="startFocus()"
+        >
+          ▶ Başlat
+        </button>
+
+        <button
+          class="secondary-btn"
+          onclick="resetFocus()"
+        >
+          ↻ Sıfırla
+        </button>
+
+      </div>
+
+    </div>
+  `;
+}
+
+function startFocus() {
+
+  if (focusInterval) return;
+
+  focusInterval =
+    setInterval(() => {
+
+      if (focusSeconds <= 0) {
+
+        clearInterval(focusInterval);
+        focusInterval = null;
+
+        appData.xp += 100;
+        appData.coins += 50;
+
+        saveLocalData();
+        updateStats();
+
+        celebrate(
+          "🎯 Odaklanma tamamlandı! ⭐ +100 XP 🪙 +50 Coin"
+        );
+
+        resetFocus();
+        return;
+      }
+
+      focusSeconds--;
+
+      updateFocusTimer();
+
+    }, 1000);
+}
+
+function resetFocus() {
+
+  clearInterval(focusInterval);
+  focusInterval = null;
+
+  focusSeconds = 25 * 60;
+
+  updateFocusTimer();
+}
+
+function updateFocusTimer() {
+
+  const el =
+    document.getElementById("focusTimer");
+
+  if (!el) return;
+
+  const minutes =
+    Math.floor(focusSeconds / 60);
+
+  const seconds =
+    focusSeconds % 60;
+
+  el.textContent =
+    `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+}
+
+/* =========================================================
+   KOÇ
+   ========================================================= */
+
+function renderCoachPage(container) {
+
+  container.style.display = "block";
+
+  const messages = [
+    "Bugün 20 dakikalık küçük bir çalışma bile büyük fark yaratabilir. 💪",
+    "Zorlandığın dersten kaçma. Küçük parçalara böl ve başla. 🧠",
+    "Önce en kolay görevini tamamla, sonra zor olana geç. 🚀",
+    "Telefonunu biraz uzağa koy ve 25 dakika sadece dersine odaklan. 🎯",
+    "Bugünkü hedefin mükemmel olmak değil, dünden biraz daha iyi olmak. ⭐"
+  ];
+
+  const message =
+    messages[
+      Math.floor(Math.random() * messages.length)
+    ];
+
+  container.innerHTML = `
+    <div class="card coach">
+
+      <div class="coach-head">
+
+        <div class="coach-icon">
+          🤖
+        </div>
+
+        <div>
+          <h2>Ders Koçu</h2>
+          <small style="color:var(--muted)">
+            Sana özel öneri
+          </small>
+        </div>
+
+      </div>
+
+      <p class="coach-message">
+        ${message}
+      </p>
+
+      <button
+        class="primary-btn"
+        style="margin-top:15px"
+        onclick="renderCoachPage(document.getElementById('dynamicSection'))"
+      >
+        🔄 Yeni Öneri
+      </button>
+
+    </div>
+  `;
+}
+
+/* =========================================================
+   DERSLER
+   ========================================================= */
+
+function renderSubjects(container) {
+
+  container.style.display = "block";
+
+  const subjects = [
+    ["📐", "Matematik"],
+    ["📖", "Türkçe"],
+    ["🔬", "Fen Bilimleri"],
+    ["🌍", "Sosyal Bilgiler"],
+    ["🇬🇧", "İngilizce"],
+    ["💻", "Bilişim"]
+  ];
+
+  container.innerHTML = `
+    <div class="card">
+
+      <div class="card-title">
+        <h2>📚 Dersler</h2>
+      </div>
+
+      <div class="market-grid">
+
+        ${subjects.map(s => `
+          <div class="shop-item">
+
+            <div class="shop-icon">
+              ${s[0]}
+            </div>
+
+            <h3>
+              ${s[1]}
+            </h3>
+
+            <p>
+              Ders çalışmalarını takip et.
+            </p>
+
+            <button
+              class="secondary-btn"
+              onclick="showToast('📚 ${s[1]} seçildi')"
+            >
+              Aç
+            </button>
+
+          </div>
+        `).join("")}
+
+      </div>
+
+    </div>
+  `;
+}
+
+/* =========================================================
+   SINAVLAR
+   ========================================================= */
+
+function renderExams(container) {
+
+  container.style.display = "block";
+
+  container.innerHTML = `
+    <div class="card">
+
+      <div class="card-title">
+        <h2>📅 Sınavlar</h2>
+
+        <button
+          class="primary-btn"
+          onclick="addExam()"
+        >
+          + Sınav Ekle
+        </button>
+      </div>
+
+      <div id="examList">
+        Henüz sınav eklenmedi.
+      </div>
+
+    </div>
+  `;
+}
+
+function addExam() {
+
+  const name =
+    prompt("Sınav adı:");
+
+  if (!name) return;
+
+  const date =
+    prompt("Sınav tarihi:");
+
+  if (!date) return;
+
+  const exams =
+    JSON.parse(
+      localStorage.getItem("dersTakipExams") || "[]"
+    );
+
+  exams.push({
+    name,
+    date
+  });
+
+  localStorage.setItem(
+    "dersTakipExams",
+    JSON.stringify(exams)
+  );
+
+  showToast("📅 Sınav eklendi!");
+
+  renderExams(
+    document.getElementById("dynamicSection")
   );
 }
 
+/* =========================================================
+   PROFİL
+   ========================================================= */
+
+function renderProfile(container) {
+
+  container.style.display = "block";
+
+  container.innerHTML = `
+    <div class="card">
+
+      <div class="card-title">
+        <h2>👤 Profil</h2>
+      </div>
+
+      <div style="
+        display:flex;
+        align-items:center;
+        gap:15px;
+        margin-bottom:20px;
+      ">
+
+        <div style="
+          width:70px;
+          height:70px;
+          border-radius:50%;
+          background:#e7e4ff;
+          display:grid;
+          place-items:center;
+          font-size:35px;
+        ">
+          🎓
+        </div>
+
+        <div>
+          <h2>
+            ${escapeHTML(currentUser?.name || "Öğrenci")}
+          </h2>
+
+          <p style="color:var(--muted)">
+            ${escapeHTML(currentUser?.email || "")}
+          </p>
+        </div>
+
+      </div>
+
+      <button
+        class="danger-btn"
+        onclick="logout()"
+      >
+        🚪 Çıkış Yap
+      </button>
+
+    </div>
+  `;
+}
+
+/* =========================================================
+   GÜNLÜK ÖDÜL
+   ========================================================= */
+
+function claimDailyReward() {
+
+  const today =
+    new Date().toISOString().slice(0, 10);
+
+  if (appData.lastRewardDate === today) {
+
+    showToast(
+      "🎁 Bugünkü ödülü zaten aldın."
+    );
+
+    updateDailyRewardUI();
+
+    return;
+  }
+
+  const reward =
+    Math.floor(Math.random() * 51) + 50;
+
+  appData.coins += reward;
+
+  appData.lastRewardDate = today;
+  appData.dailyRewardClaimed = true;
+
+  saveLocalData();
+
+  updateStats();
+  updateDailyRewardUI();
+
+  celebrate(
+    `🎁 Günlük ödül! 🪙 +${reward} Coin`
+  );
+}
+
+function updateDailyRewardUI() {
+
+  const button =
+    document.getElementById(
+      "dailyRewardButton"
+    );
+
+  const text =
+    document.getElementById(
+      "dailyRewardText"
+    );
+
+  if (!button || !text) return;
+
+  const today =
+    new Date().toISOString().slice(0, 10);
+
+  if (appData.lastRewardDate === today) {
+
+    button.textContent =
+      "Bugünkü Ödül Alındı ✓";
+
+    button.disabled = true;
+
+    button.style.opacity = ".6";
+
+    text.textContent =
+      "Bugünkü ödülünü zaten aldın.";
+
+  } else {
+
+    button.textContent =
+      "Ödülü Al 🎁";
+
+    button.disabled = false;
+
+    button.style.opacity = "1";
+
+    text.textContent =
+      "Bugünün sürpriz ödülünü al!";
+  }
+}
+
+/* =========================================================
+   MOBİL MENÜ
+   ========================================================= */
+
+function toggleMobileMenu() {
+
+  const drawer =
+    document.getElementById("mobileDrawer");
+
+  if (!drawer) return;
+
+  drawer.classList.toggle("open");
+}
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+function openModal(title, content) {
+
+  const modal =
+    document.getElementById("modal");
+
+  const titleEl =
+    document.getElementById("modalTitle");
+
+  const contentEl =
+    document.getElementById("modalContent");
+
+  if (!modal || !titleEl || !contentEl) return;
+
+  titleEl.textContent = title;
+  contentEl.innerHTML = content;
+
+  modal.classList.add("show");
+}
+
+function closeModal() {
+
+  const modal =
+    document.getElementById("modal");
+
+  if (modal) {
+    modal.classList.remove("show");
+  }
+}
 
 /* =========================================================
    TOAST
-========================================================= */
+   ========================================================= */
 
-function toast(message){
+function showToast(message) {
 
   const container =
-    document.getElementById("toastContainer");
+    document.getElementById(
+      "toastContainer"
+    );
 
-  if(!container) return;
+  if (!container) return;
 
-  const element =
+  const toast =
     document.createElement("div");
 
-  element.className = "toast";
+  toast.className = "toast";
+  toast.textContent = message;
 
-  element.textContent = message;
-
-  container.appendChild(element);
+  container.appendChild(toast);
 
   setTimeout(() => {
 
-    element.style.opacity = "0";
-
-    element.style.transform =
+    toast.style.opacity = "0";
+    toast.style.transform =
       "translateY(10px)";
 
-    setTimeout(
-      () => element.remove(),
-      250
-    );
+    setTimeout(() => {
+      toast.remove();
+    }, 250);
 
-  },3000);
+  }, 2800);
 }
-
 
 /* =========================================================
    CELEBRATION
-========================================================= */
+   ========================================================= */
 
-function celebrate(message){
+function celebrate(message) {
 
-  const box =
-    document.createElement("div");
+  const celebration =
+    document.getElementById(
+      "celebration"
+    );
 
-  box.style.position = "fixed";
+  const text =
+    document.getElementById(
+      "celebrationText"
+    );
 
-  box.style.left = "50%";
+  if (!celebration) return;
 
-  box.style.top = "50%";
+  if (text) {
+    text.textContent = message;
+  }
 
-  box.style.transform =
-    "translate(-50%,-50%) scale(.8)";
+  celebration.style.display = "flex";
 
-  box.style.zIndex = "30000";
+  setTimeout(() => {
+    celebration.style.display = "none";
+  }, 2200);
+}
 
-  box.style.padding = "30px";
+/* =========================================================
+   HTML GÜVENLİĞİ
+   ========================================================= */
 
-  box.style.borderRadius = "25px";
+function escapeHTML(value) {
 
-  box.style.background =
-    "white";
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
-  box.style.color =
-    "#171a2b";
+/* =========================================================
+   BAŞLANGIÇ VERİLERİ
+   ========================================================= */
 
-  box.style.textAlign =
-    "center";
+function ensureDataIntegrity() {
 
-  box.style.boxShadow =
-    "0 30px 100px #0005";
+  if (!Array.isArray(appData.tasks)) {
+    appData.tasks = [];
+  }
 
-  box.style.fontWeight =
-    "900";
+  if (!Array.isArray(appData.owned)) {
+    appData.owned = [];
+  }
 
-  box.innerHTML = `
-    <div style="font-size:40px;margin-bottom:10px">
-      🎉
-    </div>
+  if (!appData.inventory) {
+    appData.inventory = {};
+  }
 
-    <div style="font-size:20px">
-      ${message}
-    </div>
-  `;
+  [
+    "hat",
+    "glasses",
+    "bag",
+    "scarf",
+    "crown",
+    "food",
+    "room"
+  ].forEach(category => {
 
-  document.body.appendChild(box);
-
-  requestAnimationFrame(() => {
-
-    box.style.transition = ".3s";
-
-    box.style.transform =
-      "translate(-50%,-50%) scale(1)";
+    if (!Array.isArray(
+      appData.inventory[category]
+    )) {
+      appData.inventory[category] = [];
+    }
 
   });
 
-  setTimeout(() => {
+  if (!appData.pet) {
+    appData.pet = {};
+  }
 
-    box.style.opacity = "0";
+  if (!appData.pet.accessories) {
+    appData.pet.accessories = {};
+  }
 
-    box.style.transform =
-      "translate(-50%,-50%) scale(.8)";
+  [
+    "hat",
+    "glasses",
+    "bag",
+    "scarf",
+    "crown"
+  ].forEach(key => {
 
-    setTimeout(
-      () => box.remove(),
-      300
-    );
-
-  },2200);
-}
-
-
-/* =========================================================
-   RESET
-========================================================= */
-
-function resetData(){
-
-  const ok =
-    confirm(
-      "Tüm DersTakip verilerin silinecek. Emin misin?"
-    );
-
-  if(!ok) return;
-
-  const loggedIn =
-    state.loggedIn;
-
-  const user =
-    state.user;
-
-  state =
-    structuredClone(defaultState);
-
-  state.loggedIn = loggedIn;
-
-  state.user = user;
-
-  saveState();
-
-  renderAll();
-
-  toast("Veriler sıfırlandı.");
-}
-
-
-/* =========================================================
-   KEYBOARD
-========================================================= */
-
-document.addEventListener(
-  "keydown",
-  event => {
-
-    if(event.key === "Escape"){
-
-      closeMobileMenu();
-
+    if (
+      typeof appData.pet.accessories[key] !==
+      "string"
+    ) {
+      appData.pet.accessories[key] = "";
     }
 
-  }
-);
+  });
+}
 
-
-/* =========================================================
-   GLOBAL ERROR PROTECTION
-========================================================= */
-
-window.addEventListener(
-  "error",
-  event => {
-
-    console.error(
-      "DersTakip hatası:",
-      event.error || event.message
-    );
-
-  }
-);
+ensureDataIntegrity();
+saveLocalData();
+updateUI();
+updateDailyRewardUI();
