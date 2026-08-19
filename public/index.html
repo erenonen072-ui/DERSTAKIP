@@ -7,770 +7,501 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-
 :root{
---primary:#6857f5;
---primary2:#917dff;
---dark:#15182b;
---dark2:#202540;
---bg:#f5f7fb;
---white:#fff;
+--primary:#6c5ce7;
+--primary2:#8e7cff;
+--bg:#f5f6fb;
+--card:#fff;
 --text:#171a2b;
---muted:#7d8498;
---border:#e7eaf2;
+--muted:#7c8397;
+--border:#e7e9f1;
+--dark:#171a2b;
 --green:#20c997;
---yellow:#ffbd3c;
---red:#ff5b6e;
---shadow:0 15px 45px rgba(25,30,60,.08)
+--orange:#ffb52e;
+--red:#ff5c70;
+--blue:#3b82f6;
+--shadow:0 12px 35px rgba(35,38,70,.07);
 }
-
 body{
 font-family:Inter,Arial,sans-serif;
 background:var(--bg);
 color:var(--text);
-min-height:100vh
+min-height:100vh;
 }
-
-button,input,select{font:inherit}
+button,input,textarea{font:inherit}
 button{cursor:pointer}
-
-#app{display:none;min-height:100vh}
+.app{display:flex;min-height:100vh}
 
 .sidebar{
-position:fixed;
-left:0;
-top:0;
-bottom:0;
-width:250px;
-background:var(--dark);
+width:245px;
+background:#171a2b;
 color:#fff;
-padding:25px 18px;
-z-index:100
+padding:24px 16px;
+position:fixed;
+left:0;top:0;bottom:0;
+z-index:20;
 }
-
 .logo{
 font-size:25px;
-font-weight:950;
-margin-bottom:35px;
-padding-left:10px
+font-weight:900;
+padding:8px 12px 30px;
 }
-
-.logo span{color:#8176ff}
+.logo span{color:#8f82ff}
 
 .menu button{
 width:100%;
 border:0;
 background:transparent;
-color:#aeb4ca;
-padding:13px;
+color:#aeb4c9;
+padding:13px 14px;
 border-radius:12px;
-margin-bottom:6px;
+margin:3px 0;
 text-align:left;
-font-weight:800;
-transition:.2s
+font-weight:700;
+transition:.2s;
 }
-
-.menu button:hover,
-.menu button.active{
+.menu button:hover,.menu button.active{
 background:#292d49;
 color:#fff;
-transform:translateX(2px)
 }
-
 .logout{
 position:absolute;
-bottom:25px;
-left:18px;
-right:18px
+left:16px;right:16px;bottom:20px;
 }
-
 .logout button{
 width:100%;
+padding:12px;
 border:0;
+border-radius:12px;
 background:#292d49;
 color:#fff;
-padding:12px;
-border-radius:12px;
-font-weight:700
 }
 
 .main{
-margin-left:250px;
-padding:30px;
-max-width:1700px
+margin-left:245px;
+width:calc(100% - 245px);
+padding:28px;
+max-width:1550px;
 }
 
-.topbar{
+.top{
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:25px
+margin-bottom:25px;
 }
-
-.welcome h1{
-font-size:clamp(25px,3vw,34px);
-margin-bottom:6px
-}
-
-.welcome p{color:var(--muted)}
+.top h1{font-size:30px}
+.top p{color:var(--muted);margin-top:5px}
 
 .profile{
-background:var(--white);
-padding:9px 14px;
-border-radius:14px;
 display:flex;
 align-items:center;
 gap:10px;
-box-shadow:var(--shadow)
+background:var(--card);
+padding:8px 13px;
+border-radius:14px;
+box-shadow:var(--shadow);
 }
-
 .avatar{
-width:40px;
-height:40px;
+width:40px;height:40px;
 border-radius:50%;
-background:#e7e4ff;
 display:grid;
-place-items:center
+place-items:center;
+background:#eeeaff;
+font-size:20px;
 }
 
-.hero{
-background:
-radial-gradient(circle at 90% 20%,#ffffff25,transparent 30%),
-linear-gradient(135deg,#6357ef,#9275ff);
-color:#fff;
-border-radius:25px;
-padding:30px;
-margin-bottom:20px;
-box-shadow:0 15px 40px #6658f525
-}
-
-.hero h2{margin-bottom:8px}
-.hero p{opacity:.9;margin-bottom:20px}
-
-.progress{
-height:11px;
-background:#ffffff30;
-border-radius:20px;
-overflow:hidden
-}
-
-.progress span{
-display:block;
-height:100%;
-background:#fff;
-width:0%;
-transition:.4s
-}
-
-.grid{
-display:grid;
-grid-template-columns:minmax(0,2fr) minmax(280px,1fr);
-gap:20px
-}
+.page{display:none}
+.page.active{display:block}
 
 .card{
-background:var(--white);
+background:var(--card);
+border:1px solid var(--border);
 border-radius:22px;
 padding:22px;
 box-shadow:var(--shadow);
-border:1px solid var(--border)
 }
 
-.card-title{
+.dashboard-grid{
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:20px;
+}
+
+.hero{
+background:linear-gradient(135deg,#6558ed,#927fff);
+color:#fff;
+border-radius:25px;
+padding:28px;
+margin-bottom:20px;
+}
+.hero h2{font-size:25px;margin-bottom:8px}
+.hero p{opacity:.9;margin-bottom:20px}
+.progress{
+height:10px;
+background:#ffffff35;
+border-radius:20px;
+overflow:hidden;
+}
+.progress span{
+display:block;height:100%;
+background:#fff;width:0;
+transition:.4s;
+}
+
+.section-title{
 display:flex;
 justify-content:space-between;
 align-items:center;
-gap:10px;
-margin-bottom:15px
+margin-bottom:18px;
 }
+.section-title h2{font-size:20px}
 
 .task{
 display:flex;
 align-items:center;
-gap:13px;
-padding:15px 0;
-border-bottom:1px solid var(--border)
+gap:12px;
+padding:14px 0;
+border-bottom:1px solid var(--border);
 }
-
-.checkbox{
-width:28px;
-height:28px;
-border:2px solid #d8dce8;
+.check{
+width:27px;height:27px;
+border:2px solid #d8dce7;
 border-radius:8px;
 display:grid;
 place-items:center;
-flex-shrink:0
+flex-shrink:0;
 }
-
-.task.completed .checkbox{
+.task.done .check{
 background:var(--green);
 border-color:var(--green);
-color:#fff
+color:#fff;
 }
-
-.task.completed .task-name{
+.task.done .task-name{
 text-decoration:line-through;
-color:#9aa1b2
+color:#9aa1b2;
 }
-
-.task-content{min-width:0}
-
-.task-name{
-font-weight:800;
-overflow-wrap:anywhere
-}
-
+.task-name{font-weight:750}
 .task-xp{
 margin-left:auto;
+font-size:12px;
+font-weight:800;
+color:#6558dc;
 background:#f0efff;
-color:#6257df;
-padding:6px 10px;
+padding:6px 9px;
 border-radius:20px;
-font-size:11px;
-font-weight:800
+}
+.delete{
+border:0;background:none;
+font-size:17px;
 }
 
-.delete-task{
-border:0;
-background:transparent;
-font-size:16px
-}
-
-.add-task{
+.add{
 display:flex;
 gap:8px;
-margin-top:15px
+margin-top:15px;
 }
-
-.add-task input{
+.add input{
 flex:1;
+padding:12px;
 border:1px solid var(--border);
-padding:13px;
 border-radius:11px;
 outline:none;
-background:var(--white);
-color:var(--text)
+background:var(--card);
+color:var(--text);
 }
-
-.add-task button,
-.primary-btn{
+.btn{
 border:0;
 background:var(--primary);
 color:#fff;
 padding:11px 16px;
 border-radius:11px;
-font-weight:800
+font-weight:800;
 }
+.btn.secondary{
+background:var(--card);
+color:var(--text);
+border:1px solid var(--border);
+}
+.btn.green{background:var(--green)}
 
 .stats{
 display:grid;
 grid-template-columns:repeat(3,1fr);
 gap:15px;
-margin-top:20px
+margin-top:20px;
 }
-
 .stat{
-background:var(--white);
-padding:20px;
-border-radius:18px;
+background:var(--card);
 border:1px solid var(--border);
-box-shadow:var(--shadow)
+border-radius:18px;
+padding:18px;
 }
-
 .stat strong{
 display:block;
 font-size:25px;
-margin:8px 0
+margin:6px 0;
 }
-
 .stat small{color:var(--muted)}
 
-.pet-card{text-align:center}
-
-.pet-display{
-height:230px;
-border-radius:20px;
-background:linear-gradient(135deg,#fff1b9,#ffd8ec);
-display:flex;
-align-items:center;
-justify-content:center;
+.pet{
+text-align:center;
+}
+.pet-stage{
+height:280px;
+border-radius:22px;
+background:linear-gradient(145deg,#fff2bd,#ffd8ec);
+display:grid;
+place-items:center;
 position:relative;
 overflow:hidden;
-margin:15px 0
+margin:15px 0;
 }
-
+.pet-bg{
+position:absolute;
+inset:0;
+font-size:80px;
+opacity:.18;
+display:grid;
+place-items:center;
+}
 .panda{
-font-size:105px;
 position:relative;
+font-size:125px;
 z-index:2;
-transition:.3s
+transition:.3s;
 }
-
+.panda.happy{animation:bounce .7s}
+@keyframes bounce{
+50%{transform:translateY(-15px) scale(1.05)}
+}
 .pet-name{
-font-size:20px;
-font-weight:950
+font-size:22px;
+font-weight:900;
 }
-
 .pet-level{
 color:var(--muted);
-margin-top:5px
+margin-top:5px;
 }
 
-.pet-accessory{
-position:absolute;
-z-index:4;
-font-size:48px;
-pointer-events:none
+.bars{
+display:grid;
+gap:10px;
+margin-top:18px;
 }
-
-.pet-accessory.hat{
-top:32px;
-left:50%;
-transform:translateX(-50%)
+.bar-row{
+display:grid;
+grid-template-columns:75px 1fr 35px;
+align-items:center;
+gap:8px;
+font-size:12px;
+font-weight:800;
 }
-
-.pet-accessory.glasses{
-top:105px;
-left:50%;
-transform:translateX(-50%);
-font-size:40px
+.bar{
+height:8px;
+background:#eeeef3;
+border-radius:20px;
+overflow:hidden;
 }
-
-.pet-accessory.clothes{
-bottom:22px;
-left:50%;
-transform:translateX(-50%);
-font-size:60px
+.bar span{
+display:block;height:100%;
+border-radius:20px;
 }
-
-.pet-accessory.item{
-right:38px;
-bottom:35px;
-font-size:40px
-}
+.happiness{background:#ff79a2}
+.energy{background:#4e8cff}
+.exp{background:#8c75ff}
 
 .pet-actions{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:8px;
-margin-top:15px
-}
-
-.secondary-btn{
-border:1px solid var(--border);
-background:var(--white);
-color:var(--text);
-padding:11px 16px;
-border-radius:11px;
-font-weight:800
-}
-
-.info-card{
-margin-top:20px
-}
-
-.info-number{
-font-size:42px;
-font-weight:950;
-margin:12px 0
-}
-
-/* MARKET */
-
-.page{
-display:none
-}
-
-.page.active{
-display:block
-}
-
-.page-header{
-margin-bottom:20px
-}
-
-.page-header h2{
-font-size:28px;
-margin-bottom:6px
-}
-
-.page-header p{
-color:var(--muted)
+gap:9px;
+margin-top:18px;
 }
 
 .market-grid{
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
-gap:18px
+gap:15px;
 }
-
-.shop-item{
+.shop{
 border:1px solid var(--border);
-border-radius:20px;
-padding:20px;
-background:var(--white);
+border-radius:18px;
+padding:18px;
 text-align:center;
+background:var(--card);
 transition:.2s;
-position:relative;
-overflow:hidden
 }
-
-.shop-item:hover{
-transform:translateY(-5px);
-box-shadow:var(--shadow)
+.shop:hover{
+transform:translateY(-4px);
+box-shadow:var(--shadow);
 }
-
-.shop-icon{
-height:100px;
-display:grid;
-place-items:center;
-font-size:65px
+.item-icon{
+font-size:55px;
+margin-bottom:10px;
 }
-
-.shop-item h3{
-margin:8px 0
-}
-
-.shop-item p{
+.shop h3{font-size:16px}
+.shop p{
 font-size:12px;
 color:var(--muted);
-min-height:35px
+margin:7px 0 13px;
 }
-
 .price{
-font-weight:950;
-color:#d79a00;
-margin:12px 0
+font-weight:900;
+color:#d99a00;
+margin-bottom:10px;
 }
-
-.shop-item button{
-width:100%;
-border:0;
-background:var(--primary);
-color:white;
-padding:11px;
-border-radius:11px;
-font-weight:900
+.owned{
+font-size:12px;
+color:var(--green);
+font-weight:800;
+margin-bottom:8px;
 }
-
-.shop-item button:disabled{
-background:#d9dce6;
-color:#7c8190;
-cursor:not-allowed
-}
-
-.category{
-display:inline-block;
-font-size:10px;
-padding:5px 8px;
-border-radius:20px;
-background:#f0efff;
-color:#6257df;
-font-weight:900
-}
-
-/* INVENTORY */
 
 .inventory{
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-gap:16px
+grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+gap:15px;
 }
-
 .inventory-item{
 border:1px solid var(--border);
 border-radius:18px;
-padding:18px;
+padding:17px;
 text-align:center;
-background:var(--white)
+}
+.inventory-item.equipped{
+border:2px solid var(--primary);
+background:#f5f3ff;
+}
+.equipped-label{
+font-size:11px;
+font-weight:900;
+color:var(--primary);
+margin-bottom:5px;
 }
 
-.inventory-icon{
-font-size:55px;
-margin-bottom:8px
-}
-
-.inventory-item h3{
-font-size:15px;
-margin-bottom:5px
-}
-
-.inventory-item p{
-font-size:12px;
-color:var(--muted);
-margin-bottom:12px
-}
-
-.inventory-item button{
-width:100%;
-border:0;
-padding:10px;
-border-radius:10px;
-background:var(--primary);
-color:#fff;
-font-weight:800
-}
-
-.inventory-item button.active{
-background:var(--green)
-}
-
-/* PET PAGE */
-
-.pet-page-box{
+.notes{
 display:grid;
-grid-template-columns:1fr 1fr;
-gap:20px
+grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+gap:15px;
 }
-
-.big-pet{
-min-height:430px;
-border-radius:28px;
-background:
-radial-gradient(circle at 50% 25%,#ffffffaa,transparent 25%),
-linear-gradient(135deg,#ffdff0,#dcd7ff);
-display:flex;
-align-items:center;
-justify-content:center;
-position:relative;
-overflow:hidden
-}
-
-.big-panda{
-font-size:180px;
-position:relative;
-z-index:2
-}
-
-.big-accessory{
-position:absolute;
-z-index:4;
-font-size:80px
-}
-
-.big-accessory.hat{
-top:65px;
-left:50%;
-transform:translateX(-50%)
-}
-
-.big-accessory.glasses{
-top:185px;
-left:50%;
-transform:translateX(-50%);
-font-size:60px
-}
-
-.big-accessory.clothes{
-bottom:55px;
-left:50%;
-transform:translateX(-50%);
-font-size:100px
-}
-
-.big-accessory.item{
-right:90px;
-bottom:70px;
-font-size:65px
-}
-
-.pet-stats{
-display:grid;
-gap:15px
-}
-
-.pet-stat{
-padding:18px;
-border-radius:18px;
-background:var(--bg);
-border:1px solid var(--border)
-}
-
-.pet-stat strong{
-display:block;
-font-size:24px;
-margin-top:5px
-}
-
-/* NOTES */
-
-.notes-grid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
-gap:16px
-}
-
 .note{
-border:1px solid var(--border);
-border-radius:18px;
 padding:18px;
-background:#fffdf3
+border-radius:18px;
+background:#fffbea;
+border:1px solid #f2e6b0;
+min-height:150px;
 }
-
-.note h3{
-margin-bottom:8px
-}
-
+.note h3{margin-bottom:8px}
 .note p{
-color:#5f6370;
+color:#65615a;
 line-height:1.6;
-white-space:pre-wrap
+font-size:14px;
+white-space:pre-wrap;
+}
+.note button{
+margin-top:12px;
+border:0;
+background:transparent;
 }
 
-/* TOAST */
+textarea{
+width:100%;
+min-height:150px;
+padding:15px;
+border:1px solid var(--border);
+border-radius:14px;
+resize:vertical;
+outline:none;
+background:var(--card);
+color:var(--text);
+margin-bottom:10px;
+}
 
-#toastContainer{
-position:fixed;
-right:20px;
-bottom:20px;
-z-index:20000;
+.focus{
+text-align:center;
+max-width:650px;
+margin:auto;
+}
+.timer{
+font-size:80px;
+font-weight:950;
+margin:35px 0;
+}
+.focus-controls{
 display:flex;
-flex-direction:column;
-gap:10px
+justify-content:center;
+gap:10px;
+}
+
+.achievements{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
+gap:15px;
+}
+.badge{
+padding:20px;
+border-radius:18px;
+text-align:center;
+border:1px solid var(--border);
+}
+.badge.locked{
+opacity:.35;
+filter:grayscale(1);
+}
+.badge-icon{font-size:45px;margin-bottom:8px}
+.badge small{color:var(--muted)}
+
+.empty{
+text-align:center;
+padding:45px 15px;
+color:var(--muted);
 }
 
 .toast{
-min-width:270px;
-background:var(--dark);
-color:#fff;
-padding:15px 18px;
-border-radius:15px;
-box-shadow:0 15px 35px #0003;
-animation:toast .3s ease
-}
-
-@keyframes toast{
-from{opacity:0;transform:translateY(20px)}
-to{opacity:1;transform:translateY(0)}
-}
-
-/* MODAL */
-
-.modal{
 position:fixed;
-inset:0;
-background:#0008;
-backdrop-filter:blur(8px);
+right:20px;
+bottom:20px;
+background:#171a2b;
+color:#fff;
+padding:14px 18px;
+border-radius:14px;
+z-index:100;
+box-shadow:0 15px 40px #0003;
+animation:toast .25s ease;
+}
+@keyframes toast{
+from{transform:translateY(20px);opacity:0}
+to{transform:none;opacity:1}
+}
+
+.mobile{
 display:none;
-align-items:center;
-justify-content:center;
-z-index:10000;
-padding:20px
 }
 
-.modal.show{display:flex}
-
-.modal-box{
-width:100%;
-max-width:500px;
-background:var(--white);
-border-radius:25px;
-padding:25px
-}
-
-.modal-head{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:20px
-}
-
-.close-modal{
-border:0;
-background:transparent;
-font-size:25px
-}
-
-.form-group{
-margin-bottom:15px
-}
-
-.form-group label{
-display:block;
-font-weight:800;
-font-size:13px;
-margin-bottom:7px
-}
-
-.form-group input,
-.form-group textarea{
-width:100%;
-border:1px solid var(--border);
-border-radius:12px;
-padding:12px;
-outline:none;
-resize:vertical
-}
-
-.mobile-menu-button{
-display:none
-}
-
-.mobile-drawer{
-display:none
-}
-
-@media(max-width:1100px){
-
-.sidebar{
-width:82px
-}
-
-.logo{
-font-size:0;
-text-align:center;
-padding:0
-}
-
-.logo::before{
-content:"DT";
-font-size:22px
-}
-
-.logo span{display:none}
-
-.menu button{
-font-size:0;
-text-align:center
-}
-
-.menu button::first-letter{
-font-size:20px
-}
-
-.logout button{
-font-size:0
-}
-
-.logout button::before{
-content:"🚪";
-font-size:20px
-}
-
+@media(max-width:1000px){
+.sidebar{width:80px}
+.logo{font-size:0;text-align:center}
+.logo:after{content:"DT";font-size:22px}
+.menu button{font-size:0;text-align:center}
+.menu button::first-letter{font-size:20px}
+.logout button{font-size:0}
+.logout button:before{content:"🚪";font-size:20px}
 .main{
-margin-left:82px
+margin-left:80px;
+width:calc(100% - 80px);
 }
-
-.grid{
-grid-template-columns:1fr
-}
-
-.pet-page-box{
-grid-template-columns:1fr
-}
-
+.dashboard-grid{grid-template-columns:1fr}
 }
 
 @media(max-width:700px){
-
 .sidebar{display:none}
-
 .main{
 margin-left:0;
-padding:15px
+width:100%;
+padding:15px;
+padding-top:70px;
 }
-
-.mobile-menu-button{
+.mobile{
 display:grid;
 place-items:center;
 position:fixed;
@@ -780,557 +511,199 @@ width:48px;
 height:48px;
 border:0;
 border-radius:15px;
-background:var(--dark);
-color:white;
-font-size:23px;
-z-index:9998
+background:#171a2b;
+color:#fff;
+font-size:22px;
+z-index:50;
 }
-
-.mobile-drawer{
-position:fixed;
-display:block;
-top:0;
-right:-290px;
-width:280px;
-height:100vh;
-background:var(--dark);
-color:white;
-z-index:9999;
-padding:25px 18px;
-transition:.25s;
-box-shadow:-15px 0 40px #0003
-}
-
-.mobile-drawer.open{right:0}
-
-.mobile-drawer button{
-width:100%;
-border:0;
-background:transparent;
-color:#aeb4ca;
-padding:14px;
-text-align:left;
-border-radius:12px;
-margin-bottom:5px;
-font-weight:800
-}
-
-.mobile-drawer button.active{
-background:#292d49;
-color:#fff
-}
-
-.topbar{
-padding-right:60px
-}
-
+.top h1{font-size:24px}
 .profile{display:none}
-
-.hero{padding:22px}
-
-.stats{
-grid-template-columns:1fr
-}
-
-.add-task{
-flex-direction:column
-}
-
-.add-task button{
-width:100%
-}
-
-.market-grid{
-grid-template-columns:repeat(2,1fr)
-}
-
-.pet-page-box{
-grid-template-columns:1fr
-}
-
-.big-pet{
-min-height:330px
-}
-
-.big-panda{
-font-size:130px
-}
-
-}
-
-@media(max-width:420px){
-
-.market-grid{
-grid-template-columns:1fr
-}
-
+.stats{grid-template-columns:1fr}
+.add{flex-direction:column}
+.market-grid{grid-template-columns:repeat(2,1fr)}
+.inventory{grid-template-columns:repeat(2,1fr)}
+.timer{font-size:60px}
 }
 </style>
 </head>
 
 <body>
 
-<!-- APP -->
-<div id="app">
+<div class="app">
 
-<!-- SIDEBAR -->
 <aside class="sidebar">
-
-<div class="logo">
-Ders<span>Takip</span>
-</div>
+<div class="logo">Ders<span>Takip</span></div>
 
 <div class="menu">
-
-<button class="active" onclick="navigate('home',this)">
-🏠 Ana Sayfa
-</button>
-
-<button onclick="navigate('tasks',this)">
-✅ Görevler
-</button>
-
-<button onclick="navigate('subjects',this)">
-📚 Dersler
-</button>
-
-<button onclick="navigate('exams',this)">
-📅 Sınavlar
-</button>
-
-<button onclick="navigate('notes',this)">
-📝 Notlar
-</button>
-
-<button onclick="navigate('focus',this)">
-⏱️ Odaklan
-</button>
-
-<button onclick="navigate('pet',this)">
-🐼 Evcil Hayvan
-</button>
-
-<button onclick="navigate('market',this)">
-🛒 Market
-</button>
-
-<button onclick="navigate('inventory',this)">
-🎒 Envanter
-</button>
-
-<button onclick="navigate('achievements',this)">
-🏆 Rozetler
-</button>
-
-<button onclick="navigate('stats',this)">
-📊 İstatistikler
-</button>
-
+<button class="active" onclick="page('home',this)">🏠 Ana Sayfa</button>
+<button onclick="page('tasks',this)">✅ Görevler</button>
+<button onclick="page('pet',this)">🐼 Evcil Hayvan</button>
+<button onclick="page('market',this)">🛒 Market</button>
+<button onclick="page('inventory',this)">🎒 Envanter</button>
+<button onclick="page('notes',this)">📝 Notlar</button>
+<button onclick="page('focus',this)">⏱️ Odaklan</button>
+<button onclick="page('achievements',this)">🏆 Başarımlar</button>
 </div>
 
 <div class="logout">
-<button onclick="logout()">🚪 Çıkış Yap</button>
+<button onclick="resetData()">⚙️ Verileri Sıfırla</button>
 </div>
-
 </aside>
 
-<!-- MOBILE -->
-<button class="mobile-menu-button" onclick="toggleMobileMenu()">☰</button>
-
-<aside id="mobileDrawer" class="mobile-drawer">
-
-<strong style="display:block;font-size:22px;margin-bottom:25px">
-DersTakip 🚀
-</strong>
-
-<button onclick="navigateMobile('home')">🏠 Ana Sayfa</button>
-<button onclick="navigateMobile('tasks')">✅ Görevler</button>
-<button onclick="navigateMobile('subjects')">📚 Dersler</button>
-<button onclick="navigateMobile('exams')">📅 Sınavlar</button>
-<button onclick="navigateMobile('notes')">📝 Notlar</button>
-<button onclick="navigateMobile('focus')">⏱️ Odaklan</button>
-<button onclick="navigateMobile('pet')">🐼 Evcil Hayvan</button>
-<button onclick="navigateMobile('market')">🛒 Market</button>
-<button onclick="navigateMobile('inventory')">🎒 Envanter</button>
-<button onclick="navigateMobile('achievements')">🏆 Rozetler</button>
-<button onclick="navigateMobile('stats')">📊 İstatistikler</button>
-
-<button onclick="logout()" style="margin-top:20px">
-🚪 Çıkış Yap
-</button>
-
-</aside>
-
+<button class="mobile">☰</button>
 
 <main class="main">
 
-<!-- TOPBAR -->
-<div class="topbar">
-
-<div class="welcome">
-
-<h1 id="welcomeText">
-Merhaba! 👋
-</h1>
-
-<p id="sectionSubtitle">
-Bugün küçük bir adım, yarın büyük bir başarı.
-</p>
-
+<div class="top">
+<div>
+<h1 id="title">Merhaba! 👋</h1>
+<p>DersTakip ile bugününü daha verimli geçir.</p>
 </div>
 
 <div class="profile">
-
-<div class="avatar">🐼</div>
-
-<strong>
-<span id="topCoins">500</span> 🪙
-</strong>
-
+<div class="avatar">🎓</div>
+<div>
+<strong id="topLevel">Seviye 1</strong>
 </div>
-
+</div>
 </div>
 
 
-<!-- HOME -->
-<section id="page-home" class="page active">
+<!-- ANA SAYFA -->
+<section id="home" class="page active">
 
 <div class="hero">
-
 <h2>Bugünkü hedefin 🎯</h2>
-
-<p id="taskSummary">
-Görevlerini tamamlamaya başla.
-</p>
-
-<div class="progress">
-<span id="progressBar"></span>
+<p id="summary">Çalışmaya başla ve ilk görevini tamamla.</p>
+<div class="progress"><span id="homeProgress"></span></div>
 </div>
 
-<p style="margin-top:8px" id="xpText">
-0 XP
-</p>
-
-</div>
-
-
-<div class="grid">
+<div class="dashboard-grid">
 
 <div>
-
 <div class="card">
-
-<div class="card-title">
-
+<div class="section-title">
 <h2>Bugünkü Görevler</h2>
-
-<span id="taskCounter">0 / 0</span>
-
+<span id="counter">0 / 0</span>
 </div>
-
-<div id="taskList"></div>
-
-<div class="add-task">
-
-<input
-id="newTask"
-placeholder="Yeni görev ekle..."
-onkeydown="if(event.key==='Enter')addTask()"
->
-
-<button onclick="addTask()">
-+ Ekle
-</button>
-
+<div id="homeTasks"></div>
 </div>
-
-</div>
-
 
 <div class="stats">
-
 <div class="stat">
 <span>⭐</span>
-<strong id="statXP">0</strong>
+<strong id="xp">0</strong>
 <small>Toplam XP</small>
 </div>
 
 <div class="stat">
-<span>🔥</span>
-<strong id="statStreak">0</strong>
-<small>Çalışma Serisi</small>
-</div>
-
-<div class="stat">
 <span>🪙</span>
-<strong id="statCoins">500</strong>
+<strong id="coins">100</strong>
 <small>Coin</small>
 </div>
 
+<div class="stat">
+<span>🔥</span>
+<strong id="streak">0</strong>
+<small>Çalışma serisi</small>
+</div>
+</div>
 </div>
 
-</div>
+<div class="card pet">
+<h2>🐼 Panda</h2>
 
-
-<div>
-
-<div class="card pet-card">
-
-<h2>🐼 Evcil Hayvanın</h2>
-
-<div class="pet-display">
-
-<div id="homePanda" class="panda">🐼</div>
-
-<div id="homeHat" class="pet-accessory hat"></div>
-<div id="homeGlasses" class="pet-accessory glasses"></div>
-<div id="homeClothes" class="pet-accessory clothes"></div>
-<div id="homeItem" class="pet-accessory item"></div>
-
+<div class="pet-stage">
+<div class="pet-bg" id="petBackground">🌿</div>
+<div class="panda" id="panda">🐼</div>
 </div>
 
 <div class="pet-name">Panda</div>
+<div class="pet-level" id="petLevel">Seviye 1</div>
 
-<div class="pet-level">
-Seviye <span id="petLevel">1</span>
+<div class="bars">
+
+<div class="bar-row">
+<span>Mutluluk</span>
+<div class="bar"><span id="happyBar" class="happiness"></span></div>
+<b id="happyText">80</b>
 </div>
 
-<div class="pet-actions">
+<div class="bar-row">
+<span>Enerji</span>
+<div class="bar"><span id="energyBar" class="energy"></span></div>
+<b id="energyText">80</b>
+</div>
 
-<button class="primary-btn" onclick="navigate('pet')">
-Panda
+</div>
+
+<button class="btn" style="width:100%;margin-top:18px"
+onclick="page('pet')">
+Panda'yı Gör
 </button>
-
-<button class="secondary-btn" onclick="navigate('inventory')">
-🎒 Envanter
-</button>
-
 </div>
 
 </div>
-
-
-<div class="card info-card">
-
-<h2>🔥 Çalışma Serisi</h2>
-
-<div class="info-number" id="streakNumber">
-0
-</div>
-
-<p style="color:var(--muted)">
-Günlük serin
-</p>
-
-</div>
-
-
-</div>
-
-</div>
-
 </section>
 
 
-<!-- TASKS -->
-<section id="page-tasks" class="page">
+<!-- GÖREVLER -->
+<section id="tasks" class="page">
 
-<div class="page-header">
+<div class="card">
+<div class="section-title">
 <h2>✅ Görevler</h2>
-<p>Ders çalışma görevlerini buradan yönet.</p>
+<span id="taskCounter2"></span>
 </div>
 
-<div class="card">
+<div id="taskList"></div>
 
-<div class="card-title">
-<h2>Görev Listesi</h2>
-<span id="taskCounter2">0 / 0</span>
+<div class="add">
+<input id="taskInput" placeholder="Yeni görev ekle...">
+<button class="btn" onclick="addTask()">+ Görev</button>
 </div>
-
-<div id="taskList2"></div>
-
-<div class="add-task">
-
-<input id="newTask2" placeholder="Yeni görev ekle...">
-
-<button onclick="addTaskFromPage()">+ Ekle</button>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- SUBJECTS -->
-<section id="page-subjects" class="page">
-
-<div class="page-header">
-<h2>📚 Dersler</h2>
-<p>Derslerini takip et.</p>
-</div>
-
-<div class="market-grid">
-
-<div class="card">
-<h2>📐 Matematik</h2>
-<p style="color:var(--muted);margin-top:8px">Çalışma planını oluştur.</p>
-</div>
-
-<div class="card">
-<h2>📖 Türkçe</h2>
-<p style="color:var(--muted);margin-top:8px">Okuma ve konu tekrarı.</p>
-</div>
-
-<div class="card">
-<h2>🔬 Fen Bilimleri</h2>
-<p style="color:var(--muted);margin-top:8px">Konularını takip et.</p>
-</div>
-
-<div class="card">
-<h2>🌍 İngilizce</h2>
-<p style="color:var(--muted);margin-top:8px">Kelime ve pratik.</p>
-</div>
-
-</div>
-
-</section>
-
-
-<!-- EXAMS -->
-<section id="page-exams" class="page">
-
-<div class="page-header">
-<h2>📅 Sınavlar</h2>
-<p>Sınavlarını takip et.</p>
-</div>
-
-<div class="card">
-
-<button class="primary-btn" onclick="addExam()">
-+ Sınav Ekle
-</button>
-
-<div id="examList" style="margin-top:20px"></div>
-
-</div>
-
-</section>
-
-
-<!-- NOTES -->
-<section id="page-notes" class="page">
-
-<div class="page-header">
-<h2>📝 Notlar</h2>
-<p>Ders notlarını tek yerde sakla.</p>
-</div>
-
-<div class="card">
-
-<button class="primary-btn" onclick="openNoteModal()">
-+ Yeni Not
-</button>
-
-</div>
-
-<div id="notesList" class="notes-grid" style="margin-top:20px"></div>
-
-</section>
-
-
-<!-- FOCUS -->
-<section id="page-focus" class="page">
-
-<div class="page-header">
-<h2>⏱️ Odaklan</h2>
-<p>Dikkatini topla ve çalışmaya başla.</p>
-</div>
-
-<div class="card" style="text-align:center">
-
-<div style="font-size:80px;margin:20px">⏱️</div>
-
-<div id="focusTimer" style="font-size:65px;font-weight:950">
-25:00
-</div>
-
-<div style="display:flex;justify-content:center;gap:10px;margin-top:25px">
-
-<button class="primary-btn" onclick="startFocus()">
-Başlat
-</button>
-
-<button class="secondary-btn" onclick="resetFocus()">
-Sıfırla
-</button>
-
-</div>
-
 </div>
 
 </section>
 
 
 <!-- PET -->
-<section id="page-pet" class="page">
+<section id="pet" class="page">
 
-<div class="page-header">
+<div class="card pet">
 
+<div class="section-title">
 <h2>🐼 Evcil Hayvanım</h2>
+<span id="petCoin">🪙 0</span>
+</div>
 
-<p>
-Panda'nı marketten aldığın eşyalarla kişiselleştir.
-</p>
+<div class="pet-stage" style="height:360px">
+<div class="pet-bg" id="petBackground2">🌿</div>
+<div class="panda" id="panda2">🐼</div>
+</div>
+
+<h2>Panda</h2>
+<p class="pet-level" id="petLevel2">Seviye 1</p>
+
+<div class="bars">
+
+<div class="bar-row">
+<span>Mutluluk</span>
+<div class="bar"><span id="happyBar2" class="happiness"></span></div>
+<b id="happyText2">80</b>
+</div>
+
+<div class="bar-row">
+<span>Enerji</span>
+<div class="bar"><span id="energyBar2" class="energy"></span></div>
+<b id="energyText2">80</b>
+</div>
 
 </div>
 
-
-<div class="pet-page-box">
-
-<div class="big-pet">
-
-<div class="big-panda">🐼</div>
-
-<div id="bigHat" class="big-accessory hat"></div>
-<div id="bigGlasses" class="big-accessory glasses"></div>
-<div id="bigClothes" class="big-accessory clothes"></div>
-<div id="bigItem" class="big-accessory item"></div>
-
-</div>
-
-
-<div class="pet-stats">
-
-<div class="card">
-
-<h2>🐼 Panda</h2>
-
-<p style="color:var(--muted);margin-top:8px">
-Sen çalıştıkça Panda da gelişiyor.
-</p>
-
-</div>
-
-<div class="pet-stat">
-Seviye
-<strong id="petLevel2">1</strong>
-</div>
-
-<div class="pet-stat">
-XP
-<strong id="petXP">0</strong>
-</div>
-
-<div class="pet-stat">
-Coin
-<strong id="petCoins">500 🪙</strong>
-</div>
-
-<button class="primary-btn" onclick="navigate('market')">
-🛒 Panda için eşya al
-</button>
-
+<div class="pet-actions">
+<button class="btn green" onclick="feed()">🍎 Besle</button>
+<button class="btn" onclick="play()">🎾 Oyna</button>
 </div>
 
 </div>
@@ -1339,72 +712,84 @@ Coin
 
 
 <!-- MARKET -->
-<section id="page-market" class="page">
+<section id="market" class="page">
 
-<div class="page-header">
+<div class="card">
 
+<div class="section-title">
+<div>
 <h2>🛒 Panda Marketi</h2>
+<small style="color:var(--muted)">Aldığın eşyalar Panda'ya uygulanabilir.</small>
+</div>
+<strong>🪙 <span id="marketCoins">0</span></strong>
+</div>
 
-<p>
-Panda'n için özel eşyalar satın al.
+<div class="market-grid" id="market"></div>
+
+</div>
+
+</section>
+
+
+<!-- ENVANTER -->
+<section id="inventory" class="page">
+
+<div class="card">
+
+<div class="section-title">
+<h2>🎒 Envanterim</h2>
+<span id="inventoryCount">0 eşya</span>
+</div>
+
+<div id="inventoryList" class="inventory"></div>
+
+</div>
+
+</section>
+
+
+<!-- NOTLAR -->
+<section id="notes" class="page">
+
+<div class="card">
+
+<div class="section-title">
+<h2>📝 Notlarım</h2>
+</div>
+
+<input id="noteTitle"
+placeholder="Not başlığı..."
+style="width:100%;padding:13px;border:1px solid var(--border);border-radius:12px;margin-bottom:10px;outline:none;background:var(--card);color:var(--text)">
+
+<textarea id="noteText" placeholder="Notunu buraya yaz..."></textarea>
+
+<button class="btn" onclick="saveNote()">Notu Kaydet</button>
+
+</div>
+
+<div style="height:20px"></div>
+
+<div id="notesList" class="notes"></div>
+
+</section>
+
+
+<!-- ODAK -->
+<section id="focus" class="page">
+
+<div class="card focus">
+
+<h2>⏱️ Odaklanma</h2>
+<p style="color:var(--muted);margin-top:8px">
+Telefonunu bırak, dersine odaklan.
 </p>
 
-<h3 style="margin-top:12px">
-Bakiyen:
-<span id="marketCoins">500</span> 🪙
-</h3>
+<div class="timer" id="timer">25:00</div>
 
-</div>
-
-<div id="marketGrid" class="market-grid"></div>
-
-</section>
-
-
-<!-- INVENTORY -->
-<section id="page-inventory" class="page">
-
-<div class="page-header">
-
-<h2>🎒 Envanter</h2>
-
-<p>
-Satın aldığın eşyaları Panda'ya uygula.
-</p>
-
-</div>
-
-<div id="inventoryGrid" class="inventory"></div>
-
-</section>
-
-
-<!-- ACHIEVEMENTS -->
-<section id="page-achievements" class="page">
-
-<div class="page-header">
-<h2>🏆 Rozetler</h2>
-<p>Çalıştıkça yeni rozetler kazan.</p>
-</div>
-
-<div class="market-grid">
-
-<div class="card" style="text-align:center">
-<div style="font-size:50px">🐣</div>
-<h3>İlk Adım</h3>
-<p style="color:var(--muted)">İlk görevini tamamla.</p>
-</div>
-
-<div class="card" style="text-align:center">
-<div style="font-size:50px">🔥</div>
-<h3>Seri Başlangıcı</h3>
-<p style="color:var(--muted)">Çalışmaya devam et.</p>
-</div>
-
-<div class="card" style="text-align:center">
-<div style="font-size:50px">⭐</div>
-<h3>XP Avcısı</h3>
-<p style="color:var(--muted)">XP toplamaya devam et.</p>
+<div class="focus-controls">
+<button class="btn" onclick="startTimer()">▶ Başlat</button>
+<button class="btn secondary" onclick="pauseTimer()">⏸ Duraklat</button>
+<button class="btn secondary" onclick="resetTimer()">↻ Sıfırla</button>
 </div>
 
 </div>
@@ -1412,33 +797,16 @@ Satın aldığın eşyaları Panda'ya uygula.
 </section>
 
 
-<!-- STATS -->
-<section id="page-stats" class="page">
+<!-- BAŞARILAR -->
+<section id="achievements" class="page">
 
-<div class="page-header">
-<h2>📊 İstatistikler</h2>
-<p>Çalışma ilerlemeni incele.</p>
+<div class="card">
+
+<div class="section-title">
+<h2>🏆 Başarımlar</h2>
 </div>
 
-<div class="stats">
-
-<div class="stat">
-⭐
-<strong id="statsXP">0</strong>
-<small>Toplam XP</small>
-</div>
-
-<div class="stat">
-🪙
-<strong id="statsCoins">500</strong>
-<small>Coin</small>
-</div>
-
-<div class="stat">
-🔥
-<strong id="statsStreak">0</strong>
-<small>Seri</small>
-</div>
+<div id="achievementsList" class="achievements"></div>
 
 </div>
 
@@ -1447,1186 +815,664 @@ Satın aldığın eşyaları Panda'ya uygula.
 </main>
 </div>
 
-
-<!-- MODAL -->
-<div id="modal" class="modal" onclick="if(event.target===this)closeModal()">
-
-<div class="modal-box">
-
-<div class="modal-head">
-
-<h2 id="modalTitle">DersTakip</h2>
-
-<button class="close-modal" onclick="closeModal()">✕</button>
-
-</div>
-
-<div id="modalContent"></div>
-
-</div>
-
-</div>
-
-
-<div id="toastContainer"></div>
+<div id="toastArea"></div>
 
 
 <script>
 
-/* =========================
-   DATA
-========================= */
-
-const ITEMS=[
-
-{
-id:"redhat",
-name:"Kırmızı Şapka",
-icon:"🧢",
-category:"hat",
-price:100,
-description:"Panda'nın havalı şapkası."
-},
-
-{
-id:"crown",
-name:"Altın Taç",
-icon:"👑",
-category:"hat",
-price:250,
-description:"Panda artık kraliyet üyesi."
-},
-
-{
-id:"glasses",
-name:"Güneş Gözlüğü",
-icon:"😎",
-category:"glasses",
-price:150,
-description:"Havalı Panda."
-},
-
-{
-id:"star",
-name:"Yıldız Gözlük",
-icon:"🤩",
-category:"glasses",
-price:200,
-description:"Panda'nın yıldız tarzı."
-},
-
-{
-id:"shirt",
-name:"Mavi Kıyafet",
-icon:"👕",
-category:"clothes",
-price:180,
-description:"Panda için mavi kıyafet."
-},
-
-{
-id:"hoodie",
-name:"Kapüşonlu",
-icon:"🥋",
-category:"clothes",
-price:300,
-description:"Panda'nın özel kıyafeti."
-},
-
-{
-id:"ball",
-name:"Top",
-icon:"⚽",
-category:"item",
-price:120,
-description:"Panda'nın oyun arkadaşı."
-},
-
-{
-id:"staritem",
-name:"Sihirli Yıldız",
-icon:"⭐",
-category:"item",
-price:350,
-description:"Panda'ya özel sihirli eşya."
-}
-
-];
-
-
-/* =========================
-   STATE
-========================= */
-
-let state=JSON.parse(localStorage.getItem("dersTakipState")) || {
-
-coins:500,
+const defaultState={
+coins:100,
 xp:0,
-level:1,
 streak:0,
-
-tasks:[],
-
+happiness:80,
+energy:80,
+level:1,
+tasks:[
+{id:1,name:"20 dakika matematik çalış",done:false,xp:30},
+{id:2,name:"10 soru çöz",done:false,xp:25}
+],
 inventory:[],
-
 equipped:{
 hat:null,
-glasses:null,
-clothes:null,
-item:null
+accessory:null,
+background:null
 },
-
-notes:[],
-
-exams:[]
+notes:[]
 };
 
+let state=JSON.parse(localStorage.getItem("dersTakipPro"))||defaultState;
 
-/* =========================
-   SAVE
-========================= */
+const items=[
+{
+id:"hat1",
+name:"Kırmızı Şapka",
+icon:"🧢",
+price:80,
+type:"hat",
+description:"Panda'nın yeni tarzı."
+},
+{
+id:"hat2",
+name:"Taç",
+icon:"👑",
+price:180,
+type:"hat",
+description:"Panda artık kral."
+},
+{
+id:"acc1",
+name:"Güneş Gözlüğü",
+icon:"😎",
+price:120,
+type:"accessory",
+description:"Havalı Panda."
+},
+{
+id:"acc2",
+name:"Kırmızı Kalp",
+icon:"❤️",
+price:70,
+type:"accessory",
+description:"Panda'nın mutluluk aksesuarı."
+},
+{
+id:"bg1",
+name:"Orman",
+icon:"🌳",
+price:100,
+type:"background",
+description:"Panda için güzel bir orman."
+},
+{
+id:"bg2",
+name:"Uzay",
+icon:"🌌",
+price:250,
+type:"background",
+description:"Panda uzaya gidiyor."
+},
+{
+id:"food1",
+name:"Elma",
+icon:"🍎",
+price:30,
+type:"food",
+description:"+20 mutluluk"
+},
+{
+id:"food2",
+name:"Karpuz",
+icon:"🍉",
+price:45,
+type:"food",
+description:"+30 enerji"
+}
+];
 
 function save(){
-
-localStorage.setItem(
-"dersTakipState",
-JSON.stringify(state)
-);
-
+localStorage.setItem("dersTakipPro",JSON.stringify(state));
+render();
 }
 
-
-/* =========================
-   START
-========================= */
-
-document.addEventListener("DOMContentLoaded",()=>{
-
-document.getElementById("app").style.display="block";
-
-renderAll();
-
-});
-
-
-/* =========================
-   NAVIGATION
-========================= */
-
-function navigate(page,button){
-
-document.querySelectorAll(".page").forEach(p=>{
-p.classList.remove("active");
-});
-
-const target=document.getElementById("page-"+page);
-
-if(target){
-target.classList.add("active");
+function toast(text){
+const el=document.createElement("div");
+el.className="toast";
+el.textContent=text;
+document.getElementById("toastArea").appendChild(el);
+setTimeout(()=>el.remove(),2500);
 }
 
-document.querySelectorAll(".menu button").forEach(b=>{
-b.classList.remove("active");
-});
+function page(id,button){
 
-if(button){
-button.classList.add("active");
-}
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 
-const titles={
+const target=document.getElementById(id);
+if(target)target.classList.add("active");
 
-home:["Merhaba! 👋","Bugün küçük bir adım, yarın büyük bir başarı."],
+document.querySelectorAll(".menu button").forEach(b=>b.classList.remove("active"));
 
-tasks:["Görevler","Bugünkü çalışma planını tamamla."],
+if(button)button.classList.add("active");
 
-subjects:["Dersler","Derslerini düzenli takip et."],
-
-exams:["Sınavlar","Sınav tarihlerini unutma."],
-
-notes:["Notlar","Önemli bilgilerini kaydet."],
-
-focus:["Odaklan","Şimdi çalışma zamanı."],
-
-pet:["Evcil Hayvanım","Panda'nı geliştir ve kişiselleştir."],
-
-market:["Market","Panda için yeni eşyalar al."],
-
-inventory:["Envanter","Aldığın eşyaları Panda'ya uygula."],
-
-achievements:["Rozetler","Başarılarını topla."],
-
-stats:["İstatistikler","Çalışma performansını incele."]
-
+const names={
+home:"Merhaba! 👋",
+tasks:"Görevler",
+pet:"Evcil Hayvanım",
+market:"Market",
+inventory:"Envanterim",
+notes:"Notlarım",
+focus:"Odaklan",
+achievements:"Başarımlar"
 };
 
-if(titles[page]){
-
-document.getElementById("welcomeText").textContent=titles[page][0];
-
-document.getElementById("sectionSubtitle").textContent=titles[page][1];
-
+document.getElementById("title").textContent=names[id]||"DersTakip";
 }
 
-window.scrollTo({
-top:0,
-behavior:"smooth"
-});
-
+function levelUpdate(){
+state.level=Math.floor(state.xp/200)+1;
 }
 
-
-function navigateMobile(page){
-
-navigate(page);
-
-document.getElementById("mobileDrawer").classList.remove("open");
-
-}
-
-
-function toggleMobileMenu(){
-
-document
-.getElementById("mobileDrawer")
-.classList.toggle("open");
-
-}
-
-
-/* =========================
-   TASKS
-========================= */
-
-function addTask(){
-
-const input=document.getElementById("newTask");
-
-if(!input.value.trim())return;
-
-state.tasks.push({
-
-id:Date.now(),
-name:input.value.trim(),
-completed:false
-
-});
-
-input.value="";
-
-save();
-renderTasks();
-
-toast("✅ Görev eklendi");
-
-}
-
-
-function addTaskFromPage(){
-
-const input=document.getElementById("newTask2");
-
-if(!input.value.trim())return;
-
-state.tasks.push({
-
-id:Date.now(),
-name:input.value.trim(),
-completed:false
-
-});
-
-input.value="";
-
-save();
-renderTasks();
-
-toast("✅ Görev eklendi");
-
-}
-
-
-function toggleTask(id){
+function completeTask(id){
 
 const task=state.tasks.find(t=>t.id===id);
 
-if(!task)return;
+if(!task||task.done)return;
 
-if(!task.completed){
+task.done=true;
 
-task.completed=true;
+state.xp+=task.xp;
+state.coins+=task.xp;
 
-state.xp+=50;
-state.coins+=30;
+state.happiness=Math.min(100,state.happiness+5);
+state.energy=Math.max(0,state.energy-3);
 
-checkLevel();
+levelUpdate();
 
-toast("🎉 Görev tamamlandı! +50 XP +30 Coin");
-
-}else{
-
-task.completed=false;
-
-}
+toast("🎉 Görev tamamlandı! +"+task.xp+" XP");
 
 save();
-
-renderAll();
-
 }
 
+function addTask(){
+
+const input=document.getElementById("taskInput");
+
+if(!input.value.trim())return;
+
+state.tasks.push({
+id:Date.now(),
+name:input.value.trim(),
+done:false,
+xp:25
+});
+
+input.value="";
+save();
+
+toast("✅ Yeni görev eklendi");
+}
 
 function deleteTask(id){
 
 state.tasks=state.tasks.filter(t=>t.id!==id);
-
 save();
-
-renderTasks();
-
 }
 
-
-/* =========================
-   TASK RENDER
-========================= */
-
-function taskHTML(){
-
-if(!state.tasks.length){
+function taskHTML(t){
 
 return `
-<div style="
-text-align:center;
-padding:35px 10px;
-color:var(--muted)
-">
-📚 Henüz görev yok.<br>
-Yeni bir görev ekleyerek başlayabilirsin.
+<div class="task ${t.done?"done":""}">
+<div class="check" onclick="completeTask(${t.id})">
+${t.done?"✓":""}
+</div>
+<div class="task-name">${escapeHTML(t.name)}</div>
+<div class="task-xp">+${t.xp} XP</div>
+<button class="delete" onclick="deleteTask(${t.id})">🗑️</button>
 </div>
 `;
-
 }
-
-return state.tasks.map(task=>`
-
-<div class="task ${task.completed?"completed":""}">
-
-<div
-class="checkbox"
-onclick="toggleTask(${task.id})"
->
-${task.completed?"✓":""}
-</div>
-
-<div class="task-content">
-
-<div class="task-name">
-${escapeHTML(task.name)}
-</div>
-
-</div>
-
-<span class="task-xp">
-+50 XP
-</span>
-
-<button
-class="delete-task"
-onclick="deleteTask(${task.id})"
->
-🗑️
-</button>
-
-</div>
-
-`).join("");
-
-}
-
 
 function renderTasks(){
 
-const html=taskHTML();
+const html=state.tasks.map(taskHTML).join("");
 
-document.getElementById("taskList").innerHTML=html;
+document.getElementById("taskList").innerHTML=
+html||`<div class="empty">Henüz görev yok.</div>`;
 
-document.getElementById("taskList2").innerHTML=html;
+document.getElementById("homeTasks").innerHTML=
+html||`<div class="empty">Bugün için görev ekle.</div>`;
 
+const done=state.tasks.filter(t=>t.done).length;
 const total=state.tasks.length;
 
-const done=state.tasks.filter(t=>t.completed).length;
+document.getElementById("counter").textContent=`${done} / ${total}`;
+document.getElementById("taskCounter2").textContent=`${done}/${total}`;
 
-document.getElementById("taskCounter").textContent=
-`${done} / ${total}`;
+const percent=total?done/total*100:0;
+document.getElementById("homeProgress").style.width=percent+"%";
 
-document.getElementById("taskCounter2").textContent=
-`${done} / ${total}`;
-
-document.getElementById("taskSummary").textContent=
-total
-? `${done} / ${total} görev tamamlandı.`
-: "Bugün için bir görev ekle.";
-
-const percent=total
-? Math.round(done/total*100)
-:0;
-
-document.getElementById("progressBar").style.width=
-percent+"%";
-
+document.getElementById("summary").textContent=
+total?
+`${done} görev tamamlandı. ${total-done} görev kaldı.`:
+"Bugün için ilk görevini ekle.";
 }
 
+function renderPet(){
 
-/* =========================
-   LEVEL
-========================= */
+document.getElementById("xp").textContent=state.xp;
+document.getElementById("coins").textContent=state.coins;
+document.getElementById("streak").textContent=state.streak;
 
-function checkLevel(){
+document.getElementById("topLevel").textContent=
+"Seviye "+state.level;
 
-const newLevel=
-Math.floor(state.xp/500)+1;
+document.getElementById("petLevel").textContent=
+"Seviye "+state.level;
 
-if(newLevel>state.level){
+document.getElementById("petLevel2").textContent=
+"Seviye "+state.level;
 
-state.level=newLevel;
+document.getElementById("petCoin").textContent=
+"🪙 "+state.coins;
 
-toast(
-`🎉 Seviye ${state.level} oldun!`
-);
+const happy=state.happiness;
+const energy=state.energy;
 
+["happyBar","happyBar2"].forEach(id=>{
+document.getElementById(id).style.width=happy+"%";
+});
+
+["energyBar","energyBar2"].forEach(id=>{
+document.getElementById(id).style.width=energy+"%";
+});
+
+["happyText","happyText2"].forEach(id=>{
+document.getElementById(id).textContent=happy;
+});
+
+["energyText","energyText2"].forEach(id=>{
+document.getElementById(id).textContent=energy;
+});
+
+let panda="🐼";
+
+if(state.equipped.hat){
+const item=items.find(x=>x.id===state.equipped.hat);
+if(item)panda+=item.icon;
 }
 
+if(state.equipped.accessory){
+const item=items.find(x=>x.id===state.equipped.accessory);
+if(item)panda+=item.icon;
 }
 
+document.getElementById("panda").textContent=panda;
+document.getElementById("panda2").textContent=panda;
 
-/* =========================
-   MARKET
-========================= */
+let bg="🌿";
+
+if(state.equipped.background){
+const item=items.find(x=>x.id===state.equipped.background);
+
+if(item){
+bg=item.icon;
+}
+}
+
+document.getElementById("petBackground").textContent=bg;
+document.getElementById("petBackground2").textContent=bg;
+}
+
+function feed(){
+
+if(state.energy>=100){
+toast("🐼 Panda zaten tok!");
+return;
+}
+
+state.energy=Math.min(100,state.energy+20);
+state.happiness=Math.min(100,state.happiness+10);
+
+animatePanda();
+
+toast("🍎 Panda beslendi!");
+
+save();
+}
+
+function play(){
+
+if(state.energy<15){
+toast("😴 Panda'nın enerjisi az!");
+return;
+}
+
+state.energy-=15;
+state.happiness=Math.min(100,state.happiness+20);
+
+animatePanda();
+
+toast("🎾 Panda seninle oynadı!");
+
+save();
+}
+
+function animatePanda(){
+
+document.querySelectorAll(".panda").forEach(p=>{
+p.classList.remove("happy");
+void p.offsetWidth;
+p.classList.add("happy");
+});
+}
 
 function renderMarket(){
 
-const grid=document.getElementById("marketGrid");
+document.getElementById("marketCoins").textContent=state.coins;
 
-grid.innerHTML=ITEMS.map(item=>{
+document.getElementById("market").innerHTML=items.map(item=>{
 
-const owned=state.inventory.includes(item.id);
+const count=state.inventory.filter(x=>x===item.id).length;
 
 return `
-
-<div class="shop-item">
-
-<div class="category">
-${item.category.toUpperCase()}
-</div>
-
-<div class="shop-icon">
-${item.icon}
-</div>
-
+<div class="shop">
+<div class="item-icon">${item.icon}</div>
 <h3>${item.name}</h3>
-
 <p>${item.description}</p>
-
-<div class="price">
-🪙 ${item.price}
-</div>
-
-<button
-onclick="buyItem('${item.id}')"
-${owned?"disabled":""}
->
-${owned?"✓ Satın Alındı":"Satın Al"}
+${count?`<div class="owned">Envanterde: ${count}</div>`:""}
+<div class="price">🪙 ${item.price}</div>
+<button class="btn" onclick="buyItem('${item.id}')">
+Satın Al
 </button>
-
 </div>
-
 `;
 
 }).join("");
-
-document.getElementById("marketCoins").textContent=
-state.coins;
-
 }
-
-
-/* =========================
-   BUY
-========================= */
 
 function buyItem(id){
 
-const item=ITEMS.find(i=>i.id===id);
+const item=items.find(x=>x.id===id);
 
 if(!item)return;
 
-if(state.inventory.includes(id)){
-
-toast("Bu eşya zaten envanterinde.");
-
-return;
-
-}
-
 if(state.coins<item.price){
-
-toast("❌ Yeterli Coin yok.");
-
+toast("🪙 Yeterli coin yok!");
 return;
-
 }
 
 state.coins-=item.price;
+state.inventory.push(item.id);
 
-state.inventory.push(id);
+toast("🛒 "+item.name+" satın alındı!");
 
 save();
-
-renderAll();
-
-toast(`🛒 ${item.name} satın alındı!`);
-
 }
-
-
-/* =========================
-   INVENTORY
-========================= */
 
 function renderInventory(){
 
-const grid=document.getElementById("inventoryGrid");
+const list=document.getElementById("inventoryList");
+
+document.getElementById("inventoryCount").textContent=
+state.inventory.length+" eşya";
 
 if(!state.inventory.length){
 
-grid.innerHTML=`
-
-<div class="card" style="grid-column:1/-1;text-align:center">
-
-<div style="font-size:65px">🎒</div>
-
-<h2>Envanter boş</h2>
-
-<p style="color:var(--muted);margin:10px 0 20px">
+list.innerHTML=`
+<div class="empty" style="grid-column:1/-1">
+🎒 Envanterin boş.<br>
 Marketten Panda için bir eşya satın al.
-</p>
-
-<button
-class="primary-btn"
-onclick="navigate('market')"
->
-🛒 Markete Git
-</button>
-
 </div>
-
 `;
 
 return;
-
 }
 
-grid.innerHTML=state.inventory.map(id=>{
+list.innerHTML=state.inventory.map((id,index)=>{
 
-const item=ITEMS.find(i=>i.id===id);
+const item=items.find(x=>x.id===id);
 
 if(!item)return "";
 
-const equipped=
-state.equipped[item.category]===item.id;
+let equipped=false;
+
+if(item.type==="hat")
+equipped=state.equipped.hat===item.id;
+
+if(item.type==="accessory")
+equipped=state.equipped.accessory===item.id;
+
+if(item.type==="background")
+equipped=state.equipped.background===item.id;
 
 return `
-
-<div class="inventory-item">
-
-<div class="inventory-icon">
-${item.icon}
-</div>
-
+<div class="inventory-item ${equipped?"equipped":""}">
+${equipped?'<div class="equipped-label">✓ TAKILI</div>':""}
+<div class="item-icon">${item.icon}</div>
 <h3>${item.name}</h3>
 
-<p>${item.category}</p>
-
-<button
-class="${equipped?"active":""}"
-onclick="toggleEquip('${item.id}')"
->
-${equipped?"✓ Panda'da":"Panda'ya Uygula"}
-</button>
+${
+item.type==="food"
+?
+`<button class="btn" onclick="useFood('${item.id}',${index})">
+Kullan
+</button>`
+:
+`<button class="btn" onclick="equip('${item.id}')">
+${equipped?"Çıkar":"Panda'ya Uygula"}
+</button>`
+}
 
 </div>
-
 `;
 
 }).join("");
-
 }
 
+function equip(id){
 
-/* =========================
-   EQUIP
-========================= */
-
-function toggleEquip(id){
-
-const item=ITEMS.find(i=>i.id===id);
+const item=items.find(x=>x.id===id);
 
 if(!item)return;
 
-if(state.equipped[item.category]===id){
-
-state.equipped[item.category]=null;
-
-toast(`${item.name} çıkarıldı.`);
-
-}else{
-
-state.equipped[item.category]=id;
-
-toast(`✨ ${item.name} Panda'ya uygulandı!`);
-
+if(item.type==="hat"){
+state.equipped.hat=
+state.equipped.hat===id?null:id;
 }
+
+if(item.type==="accessory"){
+state.equipped.accessory=
+state.equipped.accessory===id?null:id;
+}
+
+if(item.type==="background"){
+state.equipped.background=
+state.equipped.background===id?null:id;
+}
+
+toast("🐼 Panda'nın görünümü güncellendi!");
 
 save();
-
-renderAll();
-
 }
 
+function useFood(id,index){
 
-/* =========================
-   PANDA
-========================= */
+const item=items.find(x=>x.id===id);
 
-function getEquipped(category){
+if(!item)return;
 
-const id=state.equipped[category];
-
-return ITEMS.find(i=>i.id===id);
-
+if(item.id==="food1"){
+state.happiness=Math.min(100,state.happiness+20);
 }
 
-
-function renderPanda(){
-
-const hat=getEquipped("hat");
-const glasses=getEquipped("glasses");
-const clothes=getEquipped("clothes");
-const item=getEquipped("item");
-
-
-document.getElementById("homeHat").textContent=
-hat?hat.icon:"";
-
-document.getElementById("homeGlasses").textContent=
-glasses?glasses.icon:"";
-
-document.getElementById("homeClothes").textContent=
-clothes?clothes.icon:"";
-
-document.getElementById("homeItem").textContent=
-item?item.icon:"";
-
-
-document.getElementById("bigHat").textContent=
-hat?hat.icon:"";
-
-document.getElementById("bigGlasses").textContent=
-glasses?glasses.icon:"";
-
-document.getElementById("bigClothes").textContent=
-clothes?clothes.icon:"";
-
-document.getElementById("bigItem").textContent=
-item?item.icon:"";
-
-
-document.getElementById("petLevel").textContent=
-state.level;
-
-document.getElementById("petLevel2").textContent=
-state.level;
-
-document.getElementById("petXP").textContent=
-state.xp;
-
-document.getElementById("petCoins").textContent=
-state.coins+" 🪙";
-
+if(item.id==="food2"){
+state.energy=Math.min(100,state.energy+30);
 }
 
+state.inventory.splice(index,1);
 
-/* =========================
-   NOTES
-========================= */
+toast("🍉 Panda "+item.name+" yedi!");
 
-function openNoteModal(){
-
-document.getElementById("modalTitle").textContent=
-"📝 Yeni Not";
-
-document.getElementById("modalContent").innerHTML=`
-
-<div class="form-group">
-
-<label>Başlık</label>
-
-<input id="noteTitle" placeholder="Not başlığı">
-
-</div>
-
-<div class="form-group">
-
-<label>Not</label>
-
-<textarea
-id="noteText"
-rows="7"
-placeholder="Notunu buraya yaz..."
-></textarea>
-
-</div>
-
-<button
-class="primary-btn"
-onclick="saveNote()"
->
-Notu Kaydet
-</button>
-
-`;
-
-document.getElementById("modal").classList.add("show");
-
+save();
 }
-
 
 function saveNote(){
 
 const title=document.getElementById("noteTitle").value.trim();
-
 const text=document.getElementById("noteText").value.trim();
 
 if(!title||!text){
-
-toast("Başlık ve not yazmalısın.");
-
+toast("📝 Başlık ve not yazmalısın.");
 return;
-
 }
 
-state.notes.push({
-
+state.notes.unshift({
 id:Date.now(),
-
 title,
-
-text
-
+text,
+date:new Date().toLocaleDateString("tr-TR")
 });
+
+document.getElementById("noteTitle").value="";
+document.getElementById("noteText").value="";
 
 save();
 
-closeModal();
-
-renderNotes();
-
-toast("📝 Not kaydedildi.");
-
+toast("📝 Not kaydedildi!");
 }
-
-
-function renderNotes(){
-
-const box=document.getElementById("notesList");
-
-if(!state.notes.length){
-
-box.innerHTML=`
-
-<div class="card" style="grid-column:1/-1;text-align:center">
-
-<div style="font-size:50px">📝</div>
-
-<h2>Henüz not yok</h2>
-
-<p style="color:var(--muted);margin-top:8px">
-Ders çalışırken önemli bilgilerini kaydet.
-</p>
-
-</div>
-
-`;
-
-return;
-
-}
-
-box.innerHTML=state.notes.map(note=>`
-
-<div class="note">
-
-<h3>${escapeHTML(note.title)}</h3>
-
-<p>${escapeHTML(note.text)}</p>
-
-<button
-class="secondary-btn"
-style="margin-top:15px"
-onclick="deleteNote(${note.id})"
->
-🗑️ Sil
-</button>
-
-</div>
-
-`).join("");
-
-}
-
 
 function deleteNote(id){
 
 state.notes=state.notes.filter(n=>n.id!==id);
-
 save();
-
-renderNotes();
-
-toast("Not silindi.");
-
 }
 
+function renderNotes(){
 
-/* =========================
-   EXAMS
-========================= */
+const list=document.getElementById("notesList");
 
-function addExam(){
+if(!state.notes.length){
 
-document.getElementById("modalTitle").textContent=
-"📅 Sınav Ekle";
-
-document.getElementById("modalContent").innerHTML=`
-
-<div class="form-group">
-
-<label>Ders</label>
-
-<input id="examName" placeholder="Örn. Matematik">
-
+list.innerHTML=`
+<div class="empty" style="grid-column:1/-1">
+📝 Henüz notun yok.
 </div>
-
-<div class="form-group">
-
-<label>Tarih</label>
-
-<input id="examDate" type="date">
-
-</div>
-
-<button class="primary-btn" onclick="saveExam()">
-Sınavı Kaydet
-</button>
-
-`;
-
-document.getElementById("modal").classList.add("show");
-
-}
-
-
-function saveExam(){
-
-const name=document.getElementById("examName").value.trim();
-
-const date=document.getElementById("examDate").value;
-
-if(!name||!date){
-
-toast("Bilgileri doldur.");
-
-return;
-
-}
-
-state.exams.push({
-
-id:Date.now(),
-
-name,
-
-date
-
-});
-
-save();
-
-closeModal();
-
-renderExams();
-
-toast("📅 Sınav eklendi.");
-
-}
-
-
-function renderExams(){
-
-const box=document.getElementById("examList");
-
-if(!state.exams.length){
-
-box.innerHTML=`
-
-<div style="
-text-align:center;
-padding:30px;
-color:var(--muted)
-">
-📅 Henüz sınav eklenmedi.
-</div>
-
 `;
 
 return;
-
 }
 
-box.innerHTML=state.exams.map(exam=>`
-
-<div style="
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:15px 0;
-border-bottom:1px solid var(--border)
-">
-
-<div>
-
-<strong>${escapeHTML(exam.name)}</strong>
-
-<div style="
-color:var(--muted);
-font-size:13px;
-margin-top:5px
-">
-${exam.date}
+list.innerHTML=state.notes.map(n=>`
+<div class="note">
+<h3>${escapeHTML(n.title)}</h3>
+<small>${n.date}</small>
+<p style="margin-top:10px">${escapeHTML(n.text)}</p>
+<button onclick="deleteNote(${n.id})">🗑️ Sil</button>
 </div>
-
-</div>
-
-<button
-class="secondary-btn"
-onclick="deleteExam(${exam.id})"
->
-🗑️
-</button>
-
-</div>
-
 `).join("");
-
 }
 
+let seconds=1500;
+let timerInterval=null;
 
-function deleteExam(id){
+function updateTimer(){
 
-state.exams=state.exams.filter(e=>e.id!==id);
+const min=Math.floor(seconds/60).toString().padStart(2,"0");
+const sec=(seconds%60).toString().padStart(2,"0");
 
+document.getElementById("timer").textContent=
+min+":"+sec;
+}
+
+function startTimer(){
+
+if(timerInterval)return;
+
+timerInterval=setInterval(()=>{
+
+if(seconds<=0){
+
+clearInterval(timerInterval);
+timerInterval=null;
+
+state.xp+=50;
+state.coins+=30;
+levelUpdate();
+
+toast("🎉 Odaklanma tamamlandı! +50 XP");
+
+seconds=1500;
 save();
 
-renderExams();
-
+return;
 }
 
-
-/* =========================
-   FOCUS TIMER
-========================= */
-
-let focusSeconds=1500;
-let focusInterval=null;
-
-function startFocus(){
-
-if(focusInterval)return;
-
-focusInterval=setInterval(()=>{
-
-focusSeconds--;
-
-renderFocus();
-
-if(focusSeconds<=0){
-
-clearInterval(focusInterval);
-
-focusInterval=null;
-
-state.xp+=100;
-state.coins+=50;
-
-checkLevel();
-
-save();
-
-toast("🎉 Odaklanma tamamlandı! +100 XP");
-
-focusSeconds=1500;
-
-renderAll();
-
-}
+seconds--;
+updateTimer();
 
 },1000);
 
+toast("⏱️ Odaklanma başladı!");
 }
 
+function pauseTimer(){
 
-function resetFocus(){
+clearInterval(timerInterval);
+timerInterval=null;
 
-clearInterval(focusInterval);
-
-focusInterval=null;
-
-focusSeconds=1500;
-
-renderFocus();
-
+toast("⏸️ Sayaç duraklatıldı.");
 }
 
+function resetTimer(){
 
-function renderFocus(){
-
-const min=Math.floor(focusSeconds/60);
-
-const sec=focusSeconds%60;
-
-document.getElementById("focusTimer").textContent=
-`${String(min).padStart(2,"0")}:${String(sec).padStart(2,"0")}`;
-
+clearInterval(timerInterval);
+timerInterval=null;
+seconds=1500;
+updateTimer();
 }
 
+function renderAchievements(){
 
-/* =========================
-   GLOBAL RENDER
-========================= */
+const completed=state.tasks.filter(t=>t.done).length;
 
-function renderAll(){
+const achievements=[
+["🌱","İlk Adım",completed>=1,"İlk görevini tamamla"],
+["⭐","10 Görev",completed>=10,"10 görev tamamla"],
+["💰","Zengin Panda",state.coins>=500,"500 coin biriktir"],
+["🏆","Seviye 5",state.level>=5,"5. seviyeye ulaş"],
+["📝","Not Tutucu",state.notes.length>=1,"İlk notunu oluştur"],
+["🛒","İlk Alışveriş",state.inventory.length>=1,"Marketten eşya al"],
+["🐼","Panda Dostu",state.happiness>=100,"Panda'yı mutlu et"],
+["⏱️","Odak Ustası",state.xp>=50,"Odaklanmaya başla"]
+];
 
-renderTasks();
-
-renderMarket();
-
-renderInventory();
-
-renderPanda();
-
-renderNotes();
-
-renderExams();
-
-renderFocus();
-
-
-document.getElementById("statXP").textContent=
-state.xp;
-
-document.getElementById("statCoins").textContent=
-state.coins;
-
-document.getElementById("statStreak").textContent=
-state.streak;
-
-document.getElementById("streakNumber").textContent=
-state.streak;
-
-document.getElementById("statsXP").textContent=
-state.xp;
-
-document.getElementById("statsCoins").textContent=
-state.coins;
-
-document.getElementById("statsStreak").textContent=
-state.streak;
-
-document.getElementById("topCoins").textContent=
-state.coins;
-
-document.getElementById("xpText").textContent=
-state.xp+" XP";
-
+document.getElementById("achievementsList").innerHTML=
+achievements.map(a=>`
+<div class="badge ${a[2]?"":"locked"}">
+<div class="badge-icon">${a[0]}</div>
+<h3>${a[1]}</h3>
+<small>${a[3]}</small>
+</div>
+`).join("");
 }
 
+function escapeHTML(str){
 
-/* =========================
-   MODAL
-========================= */
-
-function closeModal(){
-
-document.getElementById("modal").classList.remove("show");
-
-}
-
-
-/* =========================
-   TOAST
-========================= */
-
-function toast(message){
-
-const container=
-document.getElementById("toastContainer");
-
-const div=document.createElement("div");
-
-div.className="toast";
-
-div.textContent=message;
-
-container.appendChild(div);
-
-setTimeout(()=>{
-
-div.remove();
-
-},3000);
-
-}
-
-
-/* =========================
-   LOGOUT
-========================= */
-
-function logout(){
-
-if(confirm("Çıkış yapmak istediğine emin misin?")){
-
-location.reload();
-
-}
-
-}
-
-
-/* =========================
-   ESCAPE
-========================= */
-
-function escapeHTML(text){
-
-return String(text)
+return str
 .replaceAll("&","&amp;")
 .replaceAll("<","&lt;")
 .replaceAll(">","&gt;")
 .replaceAll('"',"&quot;")
 .replaceAll("'","&#039;");
-
 }
+
+function resetData(){
+
+if(!confirm("Tüm DersTakip verileri silinsin mi?"))return;
+
+localStorage.removeItem("dersTakipPro");
+
+location.reload();
+}
+
+function render(){
+
+levelUpdate();
+
+renderTasks();
+renderPet();
+renderMarket();
+renderInventory();
+renderNotes();
+renderAchievements();
+
+updateTimer();
+}
+
+document.getElementById("taskInput").addEventListener("keydown",e=>{
+if(e.key==="Enter")addTask();
+});
+
+render();
 
 </script>
 
