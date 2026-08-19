@@ -1,406 +1,451 @@
 /* =========================================================
-   DERS TAKİP 2.0
-   Tek parça app.js
-   HTML + mevcut CSS ile uyumlu
+   DERS TAKİP 2.0 - TEK PARÇA APP.JS
+   HTML yapınla uyumludur.
+   JSON hatalarına karşı güvenli localStorage kullanır.
+========================================================= */
+
+"use strict";
+
+/* =========================================================
+   API
 ========================================================= */
 
 const API_BASE = "/api";
 
-let currentUser = null;
+async function apiRequest(url, options = {}) {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        ...(options.headers || {})
+      },
+      ...options
+    });
 
-let state = {
-  tasks: [],
-  subjects: [],
-  exams: [],
+    const text = await response.text();
+
+    let data = null;
+
+    try {
+      data = text ? JSON.parse(text) : null;
+    } catch {
+      console.warn("API JSON değil:", text);
+      data = {
+        success: false,
+        message: text || "Sunucudan geçersiz cevap geldi."
+      };
+    }
+
+    if (!response.ok) {
+      throw new Error(
+        data?.message ||
+        `Sunucu hatası: ${response.status}`
+      );
+    }
+
+    return data;
+  } catch (error) {
+    console.warn("API isteği başarısız:", error);
+    throw error;
+  }
+}
+
+/* =========================================================
+   SAFE STORAGE
+========================================================= */
+
+function safeGet(key, fallback = null) {
+  try {
+    const value = localStorage.getItem(key);
+
+    if (value === null) {
+      return fallback;
+    }
+
+    try {
+      return JSON.parse(value);
+    } catch {
+      return value;
+    }
+  } catch {
+    return fallback;
+  }
+}
+
+function safeSet(key, value) {
+  try {
+    localStorage.setItem(
+      key,
+      typeof value === "string"
+        ? value
+        : JSON.stringify(value)
+    );
+    return true;
+  } catch (error) {
+    console.warn("Storage yazılamadı:", error);
+    return false;
+  }
+}
+
+function safeRemove(key) {
+  try {
+    localStorage.removeItem(key);
+  } catch {}
+}
+
+/* =========================================================
+   STATE
+========================================================= */
+
+const DEFAULT_STATE = {
+  user: null,
+
   xp: 0,
   coins: 0,
   streak: 0,
+
   level: 1,
+
   pet: {
     name: "Panda",
     emoji: "🐼",
-    level: 1
+    level: 1,
+    happiness: 70,
+    energy: 80
   },
-  focusSeconds: 25 * 60,
-  focusRunning: false,
-  focusInterval: null,
-  dailyRewardClaimed: false,
-  darkMode: false
+
+  tasks: [],
+
+  subjects: [
+    {
+      id: "mat",
+      name: "Matematik",
+      icon: "📐",
+      color: "#6857f5"
+    },
+    {
+      id: "tur",
+      name: "Türkçe",
+      icon: "📖",
+      color: "#20c997"
+    },
+    {
+      id: "fen",
+      name: "Fen Bilimleri",
+      icon: "🔬",
+      color: "#3b82f6"
+    }
+  ],
+
+  exams: [],
+
+  completedDates: [],
+
+  lastReward: null,
+
+  settings: {
+    dark: false
+  },
+
+  focus: {
+    minutes: 25,
+    seconds: 0,
+    running: false,
+    mode: "Pomodoro"
+  },
+
+  stats: {
+    totalFocusMinutes: 0,
+    completedTasks: 0,
+    studyDays: 0
+  }
 };
 
+let state = loadState();
+
 let currentPage = "home";
+let focusInterval = null;
 
 /* =========================================================
-   YARDIMCI FONKSİYONLAR
+   LOAD STATE
 ========================================================= */
 
-function $(id) {
-  return document.getElementById(id);
-}
+function loadState() {
+  const saved = safeGet("dersTakip_state", null);
 
-function escapeHTML(text) {
-  return String(text ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function showToast(message, type = "normal") {
-  const container = $("toastContainer");
-
-  if (!container) return;
-
-  const toast = document.createElement("div");
-
-  toast.className = "toast";
-
-  if (type === "success") {
-    toast.style.background = "#20c997";
+  if (!saved || typeof saved !== "object") {
+    return structuredClone(DEFAULT_STATE);
   }
 
-  if (type === "error") {
-    toast.style.background = "#ff5b6e";
-  }
-
-  toast.textContent = message;
-
-  container.appendChild(toast);
-
-  setTimeout(() => {
-    toast.remove();
-  }, 3000);
+  return mergeState(
+    structuredClone(DEFAULT_STATE),
+    saved
+  );
 }
 
-function showCelebration(message) {
-  const celebration = $("celebration");
-  const text = $("celebrationText");
+function mergeState(base, saved) {
+  Object.keys(saved || {}).forEach(key => {
+    if (
+      saved[key] &&
+      typeof saved[key] === "object" &&
+      !Array.isArray(saved[key]) &&
+      base[key] &&
+      typeof base[key] === "object" &&
+      !Array.isArray(base[key])
+    ) {
+      base[key] = mergeState(base[key], saved[key]);
+    } else {
+      base[key] = saved[key];
+    }
+  });
 
-  if (!celebration) return;
-
-  if (text) {
-    text.textContent = message;
-  }
-
-  celebration.style.display = "flex";
-
-  setTimeout(() => {
-    celebration.style.display = "none";
-  }, 1800);
+  return base;
 }
 
-function openModal(title, content) {
-  $("modalTitle").textContent = title;
-  $("modalContent").innerHTML = content;
-  $("modal").classList.add("show");
+function saveState() {
+  safeSet("dersTakip_state", state);
 }
 
-function closeModal() {
-  $("modal").classList.remove("show");
-}
+/* =========================================================
+   INIT
+========================================================= */
 
-window.closeModal = closeModal;
+document.addEventListener("DOMContentLoaded", () => {
+  applyTheme();
+  bindGlobalEvents();
+  checkLogin();
+});
+
+function bindGlobalEvents() {
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+      closeModal();
+      closeMobileMenu();
+    }
+  });
+}
 
 /* =========================================================
    AUTH
 ========================================================= */
 
+function checkLogin() {
+  const loggedIn = safeGet("dersTakip_loggedIn", false);
+
+  if (loggedIn && state.user) {
+    showApp();
+  } else {
+    showAuth();
+  }
+}
+
+function showAuth() {
+  const auth = document.getElementById("authScreen");
+  const app = document.getElementById("app");
+
+  if (auth) auth.style.display = "flex";
+  if (app) app.style.display = "none";
+}
+
+function showApp() {
+  const auth = document.getElementById("authScreen");
+  const app = document.getElementById("app");
+
+  if (auth) auth.style.display = "none";
+  if (app) app.style.display = "block";
+
+  updateUI();
+  navigate("home");
+}
+
 function showLogin() {
-  $("loginForm").style.display = "block";
-  $("registerForm").style.display = "none";
+  const loginForm = document.getElementById("loginForm");
+  const registerForm = document.getElementById("registerForm");
 
-  $("loginTab").classList.add("active");
-  $("registerTab").classList.remove("active");
+  const loginTab = document.getElementById("loginTab");
+  const registerTab = document.getElementById("registerTab");
 
-  $("authMessage").textContent = "";
+  if (loginForm) loginForm.style.display = "block";
+  if (registerForm) registerForm.style.display = "none";
+
+  loginTab?.classList.add("active");
+  registerTab?.classList.remove("active");
+
+  clearAuthMessage();
 }
 
 function showRegister() {
-  $("loginForm").style.display = "none";
-  $("registerForm").style.display = "block";
+  const loginForm = document.getElementById("loginForm");
+  const registerForm = document.getElementById("registerForm");
 
-  $("loginTab").classList.remove("active");
-  $("registerTab").classList.add("active");
+  const loginTab = document.getElementById("loginTab");
+  const registerTab = document.getElementById("registerTab");
 
-  $("authMessage").textContent = "";
-}
+  if (loginForm) loginForm.style.display = "none";
+  if (registerForm) registerForm.style.display = "block";
 
-function togglePassword(id, button) {
-  const input = $(id);
+  loginTab?.classList.remove("active");
+  registerTab?.classList.add("active");
 
-  if (!input) return;
-
-  if (input.type === "password") {
-    input.type = "text";
-    button.textContent = "🙈";
-  } else {
-    input.type = "password";
-    button.textContent = "👁️";
-  }
-}
-
-window.showLogin = showLogin;
-window.showRegister = showRegister;
-window.togglePassword = togglePassword;
-
-async function login(event) {
-  event.preventDefault();
-
-  const email = $("loginEmail").value.trim();
-  const password = $("loginPassword").value;
-
-  if (!email || !password) {
-    showAuthMessage("Lütfen tüm alanları doldur.", true);
-    return;
-  }
-
-  showAuthMessage("Giriş yapılıyor...");
-
-  try {
-    const response = await fetch(`${API_BASE}/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email,
-        password
-      })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || "Giriş başarısız.");
-    }
-
-    currentUser = data.user || data;
-
-    localStorage.setItem(
-      "dersTakipUser",
-      JSON.stringify(currentUser)
-    );
-
-    await initializeApp();
-
-  } catch (error) {
-    /*
-      Eğer API henüz hazır değilse kullanıcıya
-      anlaşılır hata gösteriyoruz.
-    */
-    showAuthMessage(
-      error.message || "Giriş yapılamadı.",
-      true
-    );
-  }
+  clearAuthMessage();
 }
 
 async function register(event) {
   event.preventDefault();
 
-  const name = $("registerName").value.trim();
-  const email = $("registerEmail").value.trim();
-  const password = $("registerPassword").value;
+  const name =
+    document.getElementById("registerName")?.value.trim();
+
+  const email =
+    document.getElementById("registerEmail")?.value.trim();
+
+  const password =
+    document.getElementById("registerPassword")?.value;
 
   if (!name || !email || !password) {
-    showAuthMessage("Lütfen tüm alanları doldur.", true);
+    setAuthMessage(
+      "Lütfen tüm alanları doldur.",
+      "error"
+    );
     return;
   }
 
-  showAuthMessage("Hesap oluşturuluyor...");
-
-  try {
-    const response = await fetch(`${API_BASE}/auth/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        password
-      })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || "Kayıt başarısız.");
-    }
-
-    showAuthMessage(
-      "Hesabın oluşturuldu! Giriş yapabilirsin."
+  if (password.length < 6) {
+    setAuthMessage(
+      "Şifre en az 6 karakter olmalı.",
+      "error"
     );
-
-    showLogin();
-
-    $("loginEmail").value = email;
-
-  } catch (error) {
-    showAuthMessage(
-      error.message || "Kayıt yapılamadı.",
-      true
-    );
+    return;
   }
+
+  /* Önce yerel kullanıcı oluştur */
+  state.user = {
+    name,
+    email
+  };
+
+  state.xp = 0;
+  state.coins = 0;
+  state.streak = 0;
+
+  saveState();
+
+  safeSet("dersTakip_account", {
+    name,
+    email,
+    password
+  });
+
+  safeSet("dersTakip_loggedIn", true);
+
+  setAuthMessage(
+    "Hesabın oluşturuldu! 🎉",
+    "success"
+  );
+
+  setTimeout(showApp, 400);
 }
 
-function showAuthMessage(message, error = false) {
-  const el = $("authMessage");
+async function login(event) {
+  event.preventDefault();
 
-  if (!el) return;
+  const email =
+    document.getElementById("loginEmail")?.value.trim();
 
-  el.textContent = message;
+  const password =
+    document.getElementById("loginPassword")?.value;
 
-  el.style.color = error
-    ? "#e53950"
-    : "#20a87a";
+  const account =
+    safeGet("dersTakip_account", null);
+
+  if (!account) {
+    setAuthMessage(
+      "Henüz hesap yok. Önce kayıt ol.",
+      "error"
+    );
+    return;
+  }
+
+  if (
+    email !== account.email ||
+    password !== account.password
+  ) {
+    setAuthMessage(
+      "E-posta veya şifre yanlış.",
+      "error"
+    );
+    return;
+  }
+
+  state.user = {
+    name: account.name,
+    email: account.email
+  };
+
+  saveState();
+  safeSet("dersTakip_loggedIn", true);
+
+  setAuthMessage(
+    "Giriş başarılı! 🚀",
+    "success"
+  );
+
+  setTimeout(showApp, 300);
 }
 
-async function logout() {
-  currentUser = null;
-
-  localStorage.removeItem("dersTakipUser");
-
+function logout() {
+  safeSet("dersTakip_loggedIn", false);
   stopFocusTimer();
 
-  $("app").style.display = "none";
-  $("authScreen").style.display = "flex";
+  closeMobileMenu();
 
-  showLogin();
+  showAuth();
 
-  showToast("Çıkış yapıldı.");
+  showToast("Çıkış yapıldı 👋");
 }
 
-window.login = login;
-window.register = register;
-window.logout = logout;
+function togglePassword(id, button) {
+  const input = document.getElementById(id);
 
-/* =========================================================
-   UYGULAMA BAŞLAT
-========================================================= */
+  if (!input) return;
 
-async function initializeApp() {
-  $("authScreen").style.display = "none";
-  $("app").style.display = "block";
+  if (input.type === "password") {
+    input.type = "text";
 
-  loadLocalState();
-
-  updateUserUI();
-
-  await loadData();
-
-  /*
-    ÖNEMLİ:
-    Uygulama açıldığında sadece ANA SAYFA gösteriliyor.
-    Ana sayfada artık diğer bölümlerin kartları yok.
-  */
-  navigate("home");
-}
-
-async function loadData() {
-  /*
-    API endpoint'in farklıysa burada değiştirebilirsin.
-    API başarısız olursa localStorage verileri kullanılmaya devam eder.
-  */
-
-  try {
-    const response = await fetch(`${API_BASE}/dashboard`, {
-      credentials: "include"
-    });
-
-    if (!response.ok) return;
-
-    const data = await response.json();
-
-    if (data.tasks) state.tasks = data.tasks;
-    if (data.subjects) state.subjects = data.subjects;
-    if (data.exams) state.exams = data.exams;
-
-    if (typeof data.xp === "number") {
-      state.xp = data.xp;
+    if (button) {
+      button.textContent = "🙈";
     }
+  } else {
+    input.type = "password";
 
-    if (typeof data.coins === "number") {
-      state.coins = data.coins;
+    if (button) {
+      button.textContent = "👁️";
     }
-
-    if (typeof data.streak === "number") {
-      state.streak = data.streak;
-    }
-
-    calculateLevel();
-
-  } catch (error) {
-    console.log("API verileri alınamadı, yerel veriler kullanılıyor.");
   }
 }
 
-function loadLocalState() {
-  try {
-    const saved = localStorage.getItem("dersTakipState");
+function setAuthMessage(message, type = "") {
+  const element =
+    document.getElementById("authMessage");
 
-    if (saved) {
-      const parsed = JSON.parse(saved);
+  if (!element) return;
 
-      state = {
-        ...state,
-        ...parsed
-      };
-    }
-  } catch (error) {
-    console.log("Yerel veri okunamadı.");
-  }
+  element.textContent = message;
+
+  element.style.color =
+    type === "error"
+      ? "#d63c4e"
+      : type === "success"
+        ? "#15966e"
+        : "#555";
 }
 
-function saveLocalState() {
-  localStorage.setItem(
-    "dersTakipState",
-    JSON.stringify(state)
-  );
-}
+function clearAuthMessage() {
+  const element =
+    document.getElementById("authMessage");
 
-/* =========================================================
-   USER UI
-========================================================= */
-
-function updateUserUI() {
-  const name =
-    currentUser?.name ||
-    currentUser?.fullName ||
-    currentUser?.username ||
-    "Eren";
-
-  const firstName = name.split(" ")[0];
-
-  if ($("welcomeText")) {
-    $("welcomeText").textContent =
-      `Merhaba, ${firstName}! 👋`;
-  }
-
-  if ($("levelText")) {
-    $("levelText").textContent =
-      `Seviye ${state.level}`;
-  }
-
-  if ($("topAvatar")) {
-    $("topAvatar").textContent =
-      state.pet?.emoji || "🎓";
-  }
-
-  if ($("petDisplay")) {
-    $("petDisplay").textContent =
-      state.pet?.emoji || "🐼";
-  }
-
-  if ($("petName")) {
-    $("petName").textContent =
-      state.pet?.name || "Panda";
-  }
-
-  if ($("petLevel")) {
-    $("petLevel").textContent =
-      `Seviye ${state.pet?.level || 1}`;
+  if (element) {
+    element.textContent = "";
   }
 }
 
@@ -408,486 +453,356 @@ function updateUserUI() {
    NAVIGATION
 ========================================================= */
 
+const pageTitles = {
+  home: [
+    "Merhaba! 👋",
+    "Bugün küçük bir adım, yarın büyük bir başarı."
+  ],
+
+  tasks: [
+    "Görevlerin ✅",
+    "Bugün yapacaklarını burada yönet."
+  ],
+
+  subjects: [
+    "Derslerin 📚",
+    "Derslerini düzenle ve ilerlemeni takip et."
+  ],
+
+  exams: [
+    "Sınav Takvimi 📅",
+    "Yaklaşan sınavlarını takip et."
+  ],
+
+  focus: [
+    "Odaklan ⏱️",
+    "Telefonu bırak, derse odaklan."
+  ],
+
+  coach: [
+    "Ders Koçu 🤖",
+    "Bugünkü çalışma planını birlikte oluşturalım."
+  ],
+
+  pet: [
+    "Evcil Hayvan 🐼",
+    "Evcil hayvanını geliştir ve mutlu et."
+  ],
+
+  market: [
+    "Ödül Marketi 🛒",
+    "Kazandığın coinlerle ödüller al."
+  ],
+
+  achievements: [
+    "Rozetlerin 🏆",
+    "Başarılarını ve kazandığın rozetleri gör."
+  ],
+
+  stats: [
+    "İstatistikler 📊",
+    "Çalışma performansını incele."
+  ],
+
+  profile: [
+    "Profilim 👤",
+    "Hesabını ve tercihlerini yönet."
+  ]
+};
+
 function navigate(page, button = null) {
   currentPage = page;
 
-  /*
-    TÜM SAYFA İÇERİĞİNİ TEK BİR ALANDA DEĞİŞTİRİYORUZ.
-
-    Böylece:
-    Ana sayfada görev + koç + pet + market vb.
-    otomatik olarak görünmeyecek.
-  */
-
-  const mainContent = $("mainContent");
-  const dynamicSection = $("dynamicSection");
-
-  if (!mainContent || !dynamicSection) return;
-
-  /*
-    Önce tüm eski içeriği temizle.
-  */
-  mainContent.innerHTML = "";
-
-  dynamicSection.style.display = "none";
-  dynamicSection.innerHTML = "";
-
-  /*
-    Menü aktifliği
-  */
-  document.querySelectorAll(".menu button").forEach(btn => {
-    btn.classList.remove("active");
-  });
+  document
+    .querySelectorAll(".menu button")
+    .forEach(btn => btn.classList.remove("active"));
 
   if (button) {
     button.classList.add("active");
   } else {
-    document.querySelectorAll(".menu button").forEach(btn => {
+    document
+      .querySelectorAll(".menu button")
+      .forEach(btn => {
+        if (
+          btn.getAttribute("onclick")?.includes(
+            `'${page}'`
+          )
+        ) {
+          btn.classList.add("active");
+        }
+      });
+  }
+
+  document
+    .querySelectorAll(".mobile-menu-item")
+    .forEach(btn => {
+      btn.classList.remove("active");
+
       if (
-        btn.getAttribute("onclick")?.includes(`'${page}'`)
+        btn.getAttribute("onclick")?.includes(
+          `'${page}'`
+        )
       ) {
         btn.classList.add("active");
       }
     });
-  }
+
+  updateHeader(page);
 
   /*
-    Mobil menü
+    ANA SAYFA:
+    Çok sade.
+    Coach / pet / streak / reward burada gösterilmez.
   */
-  document.querySelectorAll(".mobile-menu-item").forEach(btn => {
-    btn.classList.remove("active");
-  });
 
-  document.querySelectorAll(".mobile-menu-item").forEach(btn => {
-    if (
-      btn.getAttribute("onclick")?.includes(`'${page}'`)
-    ) {
-      btn.classList.add("active");
-    }
-  });
-
-  updatePageHeader(page);
-
-  switch (page) {
-
-    case "home":
-      renderHome();
-      break;
-
-    case "tasks":
-      renderTasksPage();
-      break;
-
-    case "subjects":
-      renderSubjectsPage();
-      break;
-
-    case "exams":
-      renderExamsPage();
-      break;
-
-    case "focus":
-      renderFocusPage();
-      break;
-
-    case "coach":
-      renderCoachPage();
-      break;
-
-    case "pet":
-      renderPetPage();
-      break;
-
-    case "market":
-      renderMarketPage();
-      break;
-
-    case "achievements":
-      renderAchievementsPage();
-      break;
-
-    case "stats":
-      renderStatsPage();
-      break;
-
-    case "profile":
-      renderProfilePage();
-      break;
-
-    default:
-      renderHome();
+  if (page === "home") {
+    renderHome();
+    return;
   }
 
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
+  renderPage(page);
+
+  closeMobileMenu();
 }
 
 function navigateMobile(page) {
   navigate(page);
-
-  const drawer = $("mobileDrawer");
-
-  if (drawer) {
-    drawer.classList.remove("open");
-  }
 }
 
-function updatePageHeader(page) {
-  const titles = {
-    home: [
-      "Merhaba! 👋",
-      "Bugün küçük bir adım, yarın büyük bir başarı."
-    ],
-    tasks: [
-      "Görevlerin ✅",
-      "Bugün tamamlaman gereken çalışmaları yönet."
-    ],
-    subjects: [
-      "Dersler 📚",
-      "Derslerini düzenle ve ilerlemeni takip et."
-    ],
-    exams: [
-      "Sınavlar 📅",
-      "Yaklaşan sınavlarını takip et."
-    ],
-    focus: [
-      "Odaklan ⏱️",
-      "Telefonu bırak, çalışmaya başla."
-    ],
-    coach: [
-      "Ders Koçu 🤖",
-      "Bugünkü çalışma önerilerini keşfet."
-    ],
-    pet: [
-      "Evcil Hayvan 🐣",
-      "Çalıştıkça evcil hayvanını geliştir."
-    ],
-    market: [
-      "Ödül Marketi 🛒",
-      "Coinlerini kullanarak ödüller satın al."
-    ],
-    achievements: [
-      "Rozetler 🏆",
-      "Kazandığın başarıları keşfet."
-    ],
-    stats: [
-      "İstatistikler 📊",
-      "Çalışma performansını incele."
-    ],
-    profile: [
-      "Profil 👤",
-      "Hesabını ve tercihlerini yönet."
-    ]
-  };
+function updateHeader(page) {
+  const title = pageTitles[page] || pageTitles.home;
 
-  const info = titles[page] || titles.home;
+  const welcome =
+    document.getElementById("welcomeText");
 
-  if ($("welcomeText")) {
-    $("welcomeText").textContent = info[0];
+  const subtitle =
+    document.getElementById("sectionSubtitle");
+
+  if (welcome) {
+    if (page === "home" && state.user) {
+      welcome.textContent =
+        `Merhaba, ${state.user.name}! 👋`;
+    } else {
+      welcome.textContent = title[0];
+    }
   }
 
-  if ($("sectionSubtitle")) {
-    $("sectionSubtitle").textContent = info[1];
-  }
-
-  /*
-    Hero sadece ana sayfada görünür.
-  */
-  if ($("homeHero")) {
-    $("homeHero").style.display =
-      page === "home"
-        ? "block"
-        : "none";
+  if (subtitle) {
+    subtitle.textContent = title[1];
   }
 }
 
 /* =========================================================
-   ANA SAYFA
-   ÇOK SADE
+   HOME
 ========================================================= */
 
 function renderHome() {
-  const mainContent = $("mainContent");
+  const homeHero =
+    document.getElementById("homeHero");
+
+  const mainContent =
+    document.getElementById("mainContent");
+
+  if (!homeHero || !mainContent) return;
+
+  homeHero.style.display = "block";
 
   /*
-    SADE ANA SAYFA
-
-    Sadece:
-    - Hoş geldin
-    - Bugünün küçük hedefi
-    - Hızlı başla
-    - Bugünkü görev sayısı
+    Ana sayfada sadece:
+    - hedef
+    - görevler
+    - basit istatistik
   */
 
   mainContent.innerHTML = `
-    <div class="card" style="
-      background:
-        linear-gradient(135deg,#f8f7ff,#ffffff);
-      margin-bottom:20px;
-      padding:30px;
-    ">
-      <div style="
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        gap:20px;
-        flex-wrap:wrap;
-      ">
-        <div>
-          <div style="
-            font-size:13px;
-            color:var(--primary);
-            font-weight:900;
-            margin-bottom:8px;
-          ">
-            BUGÜN
-          </div>
-
-          <h2 style="
-            font-size:28px;
-            margin-bottom:8px;
-          ">
-            Çalışmaya hazır mısın? 🚀
-          </h2>
-
-          <p style="
-            color:var(--muted);
-            line-height:1.6;
-          ">
-            Küçük bir görev tamamla ve güne iyi bir başlangıç yap.
-          </p>
-        </div>
-
-        <div style="
-          width:100px;
-          height:100px;
-          border-radius:28px;
-          display:grid;
-          place-items:center;
-          background:#eeebff;
-          font-size:50px;
-        ">
-          📚
-        </div>
-      </div>
-    </div>
-
-    <div style="
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:16px;
-    ">
-
-      <button
-        class="card"
-        onclick="navigate('tasks')"
-        style="
-          border:none;
-          text-align:left;
-          cursor:pointer;
-          transition:.2s;
-        "
-        onmouseover="this.style.transform='translateY(-3px)'"
-        onmouseout="this.style.transform='translateY(0)'"
-      >
-        <div style="font-size:30px;margin-bottom:10px;">
-          ✅
-        </div>
-
-        <strong style="font-size:18px;">
-          Görevlerime Git
-        </strong>
-
-        <p style="
-          color:var(--muted);
-          margin-top:6px;
-        ">
-          ${getIncompleteTasks().length} görev bekliyor
-        </p>
-      </button>
-
-      <button
-        class="card"
-        onclick="navigate('focus')"
-        style="
-          border:none;
-          text-align:left;
-          cursor:pointer;
-          transition:.2s;
-        "
-        onmouseover="this.style.transform='translateY(-3px)'"
-        onmouseout="this.style.transform='translateY(0)'"
-      >
-        <div style="font-size:30px;margin-bottom:10px;">
-          ⏱️
-        </div>
-
-        <strong style="font-size:18px;">
-          Odaklanmaya Başla
-        </strong>
-
-        <p style="
-          color:var(--muted);
-          margin-top:6px;
-        ">
-          25 dakikalık çalışma başlat
-        </p>
-      </button>
-
-    </div>
-
-    <div style="
-      margin-top:20px;
-      padding:20px;
-      border-radius:18px;
-      background:var(--white);
-      border:1px solid var(--border);
-    ">
-      <div style="
-        display:flex;
-        justify-content:space-between;
-        gap:15px;
-        flex-wrap:wrap;
-      ">
-        <div>
-          <strong>Bugünkü ilerleme</strong>
-          <p style="
-            color:var(--muted);
-            margin-top:5px;
-          ">
-            ${getCompletedTasks().length} görev tamamlandı
-          </p>
-        </div>
-
-        <strong style="
-          color:var(--primary);
-          font-size:20px;
-        ">
-          ${calculateProgress()}%
-        </strong>
-      </div>
-
-      <div class="progress" style="
-        margin-top:15px;
-        background:#ecebfa;
-      ">
-        <span
-          style="
-            width:${calculateProgress()}%;
-            background:linear-gradient(
-              90deg,
-              var(--primary),
-              var(--primary2)
-            );
-          "
-        ></span>
-      </div>
-    </div>
-  `;
-
-  /*
-    SAĞ KOLONDAKİ ESKİ PET/SERİ/ÖDÜL KARTLARINI
-    GÖSTERME.
-
-    Bunun için grid yapısını da tek kolon yapıyoruz.
-  */
-  const grid = document.querySelector(".grid");
-
-  if (grid) {
-    grid.style.gridTemplateColumns = "1fr";
-  }
-
-  /*
-    Ana sayfada eski hero kartını da gizliyoruz.
-  */
-  if ($("homeHero")) {
-    $("homeHero").style.display = "none";
-  }
-}
-
-/* =========================================================
-   GÖREVLER
-========================================================= */
-
-function renderTasksPage() {
-  const mainContent = $("mainContent");
-
-  const completed = getCompletedTasks().length;
-  const total = state.tasks.length;
-
-  mainContent.innerHTML = `
-    <div class="card">
+    <div class="card" id="tasksSection">
       <div class="card-title">
-        <div>
-          <h2>Bugünkü Görevler</h2>
-          <p style="color:var(--muted);margin-top:5px;">
-            ${completed} / ${total} görev tamamlandı
-          </p>
-        </div>
-
-        <span style="
-          background:#f0efff;
-          color:#6257df;
-          padding:8px 12px;
-          border-radius:20px;
-          font-weight:900;
-        ">
-          ${calculateProgress()}%
-        </span>
+        <h2>Bugünkü Görevler</h2>
+        <span id="taskCounter">0 / 0</span>
       </div>
 
-      <div id="taskPageList">
-        ${renderTaskListHTML()}
-      </div>
+      <div id="taskList"></div>
 
       <div class="add-task">
         <input
-          id="pageNewTask"
+          id="newTask"
           placeholder="Yeni görev ekle..."
           maxlength="150"
-          onkeydown="if(event.key==='Enter') addTaskFromPage()"
+          onkeydown="if(event.key==='Enter') addTask()"
         >
 
-        <button onclick="addTaskFromPage()">
+        <button onclick="addTask()">
           + Ekle
         </button>
       </div>
     </div>
+
+    <div class="stats">
+      <div class="stat">
+        <span>⭐</span>
+        <strong id="statXP">${state.xp}</strong>
+        <small>Toplam XP</small>
+      </div>
+
+      <div class="stat">
+        <span>🪙</span>
+        <strong id="statCoins">${state.coins}</strong>
+        <small>Coin</small>
+      </div>
+
+      <div class="stat">
+        <span>📚</span>
+        <strong>${state.stats.totalFocusMinutes}</strong>
+        <small>Çalışma dakikası</small>
+      </div>
+    </div>
   `;
+
+  renderTasks();
+  updateHomeHero();
 }
 
-function renderTaskListHTML() {
-  if (!state.tasks.length) {
-    return `
+/* =========================================================
+   PAGE RENDER
+========================================================= */
+
+function renderPage(page) {
+  const homeHero =
+    document.getElementById("homeHero");
+
+  const mainContent =
+    document.getElementById("mainContent");
+
+  if (!mainContent) return;
+
+  if (homeHero) {
+    homeHero.style.display = "none";
+  }
+
+  if (page === "tasks") {
+    renderTasksPage(mainContent);
+  }
+
+  else if (page === "subjects") {
+    renderSubjectsPage(mainContent);
+  }
+
+  else if (page === "exams") {
+    renderExamsPage(mainContent);
+  }
+
+  else if (page === "focus") {
+    renderFocusPage(mainContent);
+  }
+
+  else if (page === "coach") {
+    renderCoachPage(mainContent);
+  }
+
+  else if (page === "pet") {
+    renderPetPage(mainContent);
+  }
+
+  else if (page === "market") {
+    renderMarketPage(mainContent);
+  }
+
+  else if (page === "achievements") {
+    renderAchievementsPage(mainContent);
+  }
+
+  else if (page === "stats") {
+    renderStatsPage(mainContent);
+  }
+
+  else if (page === "profile") {
+    renderProfilePage(mainContent);
+  }
+}
+
+/* =========================================================
+   TASKS
+========================================================= */
+
+function renderTasksPage(container) {
+  container.innerHTML = `
+    <div class="card">
+      <div class="card-title">
+        <h2>✅ Görev Yönetimi</h2>
+        <span>${state.tasks.length} görev</span>
+      </div>
+
+      <div id="taskList"></div>
+
+      <div class="add-task">
+        <input
+          id="newTask"
+          placeholder="Yeni görev ekle..."
+          maxlength="150"
+          onkeydown="if(event.key==='Enter') addTask()"
+        >
+
+        <button onclick="addTask()">
+          + Görev Ekle
+        </button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px">
+      <h2>💡 Görev önerisi</h2>
+
+      <p style="color:var(--muted);margin-top:10px">
+        Büyük bir görevi küçük parçalara ayır.
+        Böylece tamamlamak daha kolay olur.
+      </p>
+    </div>
+  `;
+
+  renderTasks();
+}
+
+function renderTasks() {
+  const list =
+    document.getElementById("taskList");
+
+  if (!list) return;
+
+  const counter =
+    document.getElementById("taskCounter");
+
+  const completed =
+    state.tasks.filter(task => task.completed).length;
+
+  if (counter) {
+    counter.textContent =
+      `${completed} / ${state.tasks.length}`;
+  }
+
+  if (state.tasks.length === 0) {
+    list.innerHTML = `
       <div style="
+        padding:30px 10px;
         text-align:center;
-        padding:40px 15px;
         color:var(--muted);
       ">
-        <div style="font-size:50px;margin-bottom:10px;">
-          📝
-        </div>
-
+        <div style="font-size:45px">📝</div>
         <strong>Henüz görev yok</strong>
-
-        <p style="margin-top:6px;">
-          İlk görevini aşağıdan ekleyebilirsin.
+        <p style="margin-top:5px">
+          İlk görevini ekle!
         </p>
       </div>
     `;
+
+    return;
   }
 
-  return state.tasks.map((task, index) => `
+  list.innerHTML = state.tasks.map(task => `
     <div class="task ${task.completed ? "completed" : ""}">
 
       <button
         class="checkbox"
-        onclick="toggleTask(${index})"
-        style="background:${
-          task.completed ? "#20c997" : "transparent"
-        };"
+        onclick="toggleTask('${task.id}')"
+        aria-label="Görevi tamamla"
       >
         ${task.completed ? "✓" : ""}
       </button>
@@ -897,232 +812,212 @@ function renderTaskListHTML() {
           ${escapeHTML(task.name)}
         </div>
 
-        ${
-          task.subject
-            ? `<small style="color:var(--muted)">
-                ${escapeHTML(task.subject)}
-              </small>`
-            : ""
-        }
+        <small style="color:var(--muted)">
+          ${task.subject || "Genel"}
+        </small>
       </div>
 
       <span class="task-xp">
-        +${task.xp || 25} XP
+        +${task.xp} XP
       </span>
 
       <button
         class="delete-task"
-        onclick="deleteTask(${index})"
+        onclick="deleteTask('${task.id}')"
         title="Sil"
       >
         🗑️
       </button>
+
     </div>
   `).join("");
 }
 
-function addTaskFromPage() {
-  const input = $("pageNewTask");
+function addTask() {
+  const input =
+    document.getElementById("newTask");
 
   if (!input) return;
 
   const name = input.value.trim();
 
   if (!name) {
-    showToast("Bir görev yazmalısın.", "error");
+    showToast("Görev adını yaz.");
     return;
   }
 
-  state.tasks.push({
-    id: Date.now(),
+  const task = {
+    id:
+      Date.now().toString(36) +
+      Math.random().toString(36).slice(2),
+
     name,
-    completed: false,
+
     xp: 25,
-    createdAt: new Date().toISOString()
-  });
 
-  saveLocalState();
-
-  showToast("Görev eklendi! ✅", "success");
-
-  renderTasksPage();
-  updateGlobalStats();
-}
-
-function addTask() {
-  const input = $("newTask");
-
-  if (!input) {
-    navigate("tasks");
-    return;
-  }
-
-  const name = input.value.trim();
-
-  if (!name) {
-    showToast("Bir görev yazmalısın.", "error");
-    return;
-  }
-
-  state.tasks.push({
-    id: Date.now(),
-    name,
     completed: false,
-    xp: 25,
-    createdAt: new Date().toISOString()
-  });
+
+    subject: "Genel",
+
+    createdAt:
+      new Date().toISOString()
+  };
+
+  state.tasks.unshift(task);
+
+  saveState();
 
   input.value = "";
 
-  saveLocalState();
+  renderTasks();
 
-  showToast("Görev eklendi! ✅", "success");
+  updateHomeHero();
 
-  if (currentPage === "tasks") {
-    renderTasksPage();
-  }
+  showToast("Görev eklendi ✅");
 }
 
-function toggleTask(index) {
-  const task = state.tasks[index];
+function toggleTask(id) {
+  const task =
+    state.tasks.find(t => t.id === id);
 
   if (!task) return;
 
-  const wasCompleted = task.completed;
+  if (!task.completed) {
+    task.completed = true;
 
-  task.completed = !task.completed;
+    state.xp += task.xp;
+    state.coins += 5;
 
-  if (!wasCompleted && task.completed) {
-    const xp = task.xp || 25;
+    state.stats.completedTasks++;
 
-    state.xp += xp;
-    state.coins += Math.ceil(xp / 5);
+    addStudyDay();
 
-    calculateLevel();
+    updateLevel();
 
-    showCelebration(`⭐ +${xp} XP kazandın!`);
+    state.pet.happiness =
+      Math.min(100, state.pet.happiness + 4);
 
-    updateStreak();
+    state.pet.energy =
+      Math.min(100, state.pet.energy + 2);
 
-  } else if (wasCompleted && !task.completed) {
-    const xp = task.xp || 25;
+    saveState();
 
-    state.xp = Math.max(0, state.xp - xp);
-    state.coins = Math.max(
-      0,
-      state.coins - Math.ceil(xp / 5)
+    renderTasks();
+
+    updateUI();
+
+    celebrate(
+      `⭐ +${task.xp} XP<br>🪙 +5 Coin`
     );
-
-    calculateLevel();
-  }
-
-  saveLocalState();
-
-  if (currentPage === "tasks") {
-    renderTasksPage();
   } else {
-    renderHome();
-  }
+    task.completed = false;
 
-  updateGlobalStats();
+    state.xp =
+      Math.max(0, state.xp - task.xp);
+
+    state.coins =
+      Math.max(0, state.coins - 5);
+
+    state.stats.completedTasks =
+      Math.max(
+        0,
+        state.stats.completedTasks - 1
+      );
+
+    saveState();
+
+    renderTasks();
+    updateUI();
+  }
 }
 
-function deleteTask(index) {
-  if (!state.tasks[index]) return;
+function deleteTask(id) {
+  const task =
+    state.tasks.find(t => t.id === id);
 
-  const task = state.tasks[index];
+  if (!task) return;
+
+  state.tasks =
+    state.tasks.filter(t => t.id !== id);
+
+  saveState();
+
+  renderTasks();
+  updateHomeHero();
+
+  showToast("Görev silindi 🗑️");
+}
+
+function addStudyDay() {
+  const today =
+    new Date().toISOString().slice(0, 10);
 
   if (
-    !confirm(
-      `"${task.name}" görevini silmek istediğine emin misin?`
-    )
+    !state.completedDates.includes(today)
   ) {
-    return;
+    state.completedDates.push(today);
+
+    state.stats.studyDays =
+      state.completedDates.length;
+
+    state.streak = calculateStreak();
+  }
+}
+
+function calculateStreak() {
+  const dates =
+    [...state.completedDates]
+      .sort()
+      .reverse();
+
+  if (!dates.length) return 0;
+
+  let streak = 0;
+
+  let current = new Date();
+
+  for (const date of dates) {
+    const expected =
+      current.toISOString().slice(0, 10);
+
+    if (date === expected) {
+      streak++;
+
+      current.setDate(
+        current.getDate() - 1
+      );
+    } else {
+      break;
+    }
   }
 
-  state.tasks.splice(index, 1);
-
-  saveLocalState();
-
-  showToast("Görev silindi.");
-
-  renderTasksPage();
+  return streak;
 }
-
-function getCompletedTasks() {
-  return state.tasks.filter(t => t.completed);
-}
-
-function getIncompleteTasks() {
-  return state.tasks.filter(t => !t.completed);
-}
-
-function calculateProgress() {
-  if (!state.tasks.length) return 0;
-
-  return Math.round(
-    getCompletedTasks().length /
-    state.tasks.length *
-    100
-  );
-}
-
-window.addTask = addTask;
-window.addTaskFromPage = addTaskFromPage;
-window.toggleTask = toggleTask;
-window.deleteTask = deleteTask;
 
 /* =========================================================
-   DERSLER
+   SUBJECTS
 ========================================================= */
 
-function renderSubjectsPage() {
-  const mainContent = $("mainContent");
-
-  if (!state.subjects.length) {
-    state.subjects = [
-      {
-        id: 1,
-        name: "Matematik",
-        icon: "📐",
-        color: "#6857f5"
-      },
-      {
-        id: 2,
-        name: "Türkçe",
-        icon: "📖",
-        color: "#20c997"
-      },
-      {
-        id: 3,
-        name: "Fen Bilimleri",
-        icon: "🔬",
-        color: "#3b82f6"
-      }
-    ];
-
-    saveLocalState();
-  }
-
-  mainContent.innerHTML = `
+function renderSubjectsPage(container) {
+  container.innerHTML = `
     <div class="card">
       <div class="card-title">
-        <h2>Derslerim</h2>
+        <h2>📚 Derslerim</h2>
 
         <button
           class="primary-btn"
-          onclick="openAddSubjectModal()"
+          onclick="addSubject()"
         >
           + Ders Ekle
         </button>
       </div>
 
       <div class="market-grid">
-        ${state.subjects.map((subject, index) => `
+        ${state.subjects.map(subject => `
           <div class="shop-item">
 
             <div class="shop-icon">
-              ${subject.icon || "📚"}
+              ${subject.icon}
             </div>
 
             <h3>
@@ -1130,14 +1025,14 @@ function renderSubjectsPage() {
             </h3>
 
             <p>
-              Dersini takip et
+              Ders takibini burada yapabilirsin.
             </p>
 
             <button
               class="secondary-btn"
-              onclick="deleteSubject(${index})"
+              onclick="subjectTasks('${subject.id}')"
             >
-              Sil
+              Görevler
             </button>
 
           </div>
@@ -1147,152 +1042,140 @@ function renderSubjectsPage() {
   `;
 }
 
-function openAddSubjectModal() {
-  openModal(
-    "Yeni Ders Ekle",
-    `
-      <div class="form-group">
-        <label>Ders adı</label>
-        <input
-          id="subjectNameInput"
-          placeholder="Örn. Matematik"
-          style="
-            width:100%;
-            padding:13px;
-            border:1px solid var(--border);
-            border-radius:11px;
-          "
-        >
-      </div>
+function addSubject() {
+  const name =
+    prompt("Ders adı:");
 
-      <button
-        class="primary-btn"
-        onclick="addSubject()"
-      >
-        Dersi Ekle
-      </button>
+  if (!name?.trim()) return;
+
+  state.subjects.push({
+    id: Date.now().toString(36),
+    name: name.trim(),
+    icon: "📘",
+    color: "#6857f5"
+  });
+
+  saveState();
+
+  renderPage("subjects");
+
+  showToast("Ders eklendi 📚");
+}
+
+function subjectTasks(id) {
+  const subject =
+    state.subjects.find(s => s.id === id);
+
+  if (!subject) return;
+
+  const tasks =
+    state.tasks.filter(
+      task => task.subject === subject.name
+    );
+
+  openModal(
+    subject.name,
+    `
+      <h3>${subject.icon} ${escapeHTML(subject.name)}</h3>
+
+      <p style="color:var(--muted);margin:10px 0 20px">
+        ${tasks.length} görev bulunuyor.
+      </p>
+
+      ${
+        tasks.length
+          ? tasks.map(task => `
+              <div style="
+                padding:12px;
+                border-bottom:1px solid var(--border)
+              ">
+                ${task.completed ? "✅" : "⬜"}
+                ${escapeHTML(task.name)}
+              </div>
+            `).join("")
+          : `
+            <p style="color:var(--muted)">
+              Bu derse ait görev yok.
+            </p>
+          `
+      }
     `
   );
 }
 
-function addSubject() {
-  const input = $("subjectNameInput");
-
-  if (!input) return;
-
-  const name = input.value.trim();
-
-  if (!name) {
-    showToast("Ders adı yaz.", "error");
-    return;
-  }
-
-  state.subjects.push({
-    id: Date.now(),
-    name,
-    icon: "📚"
-  });
-
-  saveLocalState();
-
-  closeModal();
-
-  renderSubjectsPage();
-
-  showToast("Ders eklendi! 📚", "success");
-}
-
-function deleteSubject(index) {
-  if (!confirm("Bu dersi silmek istiyor musun?")) return;
-
-  state.subjects.splice(index, 1);
-
-  saveLocalState();
-
-  renderSubjectsPage();
-
-  showToast("Ders silindi.");
-}
-
-window.addSubject = addSubject;
-window.deleteSubject = deleteSubject;
-window.openAddSubjectModal = openAddSubjectModal;
-
 /* =========================================================
-   SINAVLAR
+   EXAMS
 ========================================================= */
 
-function renderExamsPage() {
-  const mainContent = $("mainContent");
+function renderExamsPage(container) {
+  const exams =
+    [...state.exams].sort(
+      (a,b) =>
+        new Date(a.date) -
+        new Date(b.date)
+    );
 
-  mainContent.innerHTML = `
+  container.innerHTML = `
     <div class="card">
 
       <div class="card-title">
-        <div>
-          <h2>Sınavlarım 📅</h2>
-          <p style="color:var(--muted);margin-top:5px;">
-            Yaklaşan sınavlarını burada takip et.
-          </p>
-        </div>
+        <h2>📅 Sınavlarım</h2>
 
         <button
           class="primary-btn"
-          onclick="openAddExamModal()"
+          onclick="addExam()"
         >
           + Sınav Ekle
         </button>
       </div>
 
       ${
-        state.exams.length
-          ? state.exams.map((exam, index) => `
-              <div class="task">
+        exams.length
+          ? exams.map(exam => `
+            <div class="task">
 
-                <div style="
-                  width:45px;
-                  height:45px;
-                  border-radius:13px;
-                  background:#eef0ff;
-                  display:grid;
-                  place-items:center;
-                  font-size:22px;
-                ">
-                  📅
-                </div>
-
-                <div class="task-content">
-                  <div class="task-name">
-                    ${escapeHTML(exam.name)}
-                  </div>
-
-                  <small style="color:var(--muted)">
-                    ${escapeHTML(exam.date)}
-                  </small>
-                </div>
-
-                <button
-                  class="delete-task"
-                  onclick="deleteExam(${index})"
-                >
-                  🗑️
-                </button>
-
+              <div style="font-size:28px">
+                📝
               </div>
-            `).join("")
+
+              <div class="task-content">
+                <div class="task-name">
+                  ${escapeHTML(exam.name)}
+                </div>
+
+                <small style="color:var(--muted)">
+                  ${escapeHTML(exam.subject)}
+                  ·
+                  ${formatDate(exam.date)}
+                </small>
+              </div>
+
+              <button
+                class="delete-task"
+                onclick="deleteExam('${exam.id}')"
+              >
+                🗑️
+              </button>
+
+            </div>
+          `).join("")
           : `
             <div style="
               text-align:center;
               padding:45px;
-              color:var(--muted);
+              color:var(--muted)
             ">
-              <div style="font-size:55px;">
+              <div style="font-size:50px">
                 📅
               </div>
 
               <strong>
                 Henüz sınav eklemedin.
               </strong>
+
+              <p style="margin-top:6px">
+                İlk sınavını ekleyerek başlayabilirsin.
+              </p>
             </div>
           `
       }
@@ -1301,265 +1184,307 @@ function renderExamsPage() {
   `;
 }
 
-function openAddExamModal() {
-  openModal(
-    "Yeni Sınav Ekle",
-    `
-      <div class="form-group">
-        <label>Sınav adı</label>
-        <input
-          id="examName"
-          placeholder="Örn. Matematik Yazılısı"
-          style="
-            width:100%;
-            padding:13px;
-            border:1px solid var(--border);
-            border-radius:11px;
-          "
-        >
-      </div>
-
-      <div class="form-group">
-        <label>Tarih</label>
-        <input
-          id="examDate"
-          type="date"
-          style="
-            width:100%;
-            padding:13px;
-            border:1px solid var(--border);
-            border-radius:11px;
-          "
-        >
-      </div>
-
-      <button
-        class="primary-btn"
-        onclick="addExam()"
-      >
-        Sınavı Ekle
-      </button>
-    `
-  );
-}
-
 function addExam() {
-  const name = $("examName")?.value.trim();
-  const date = $("examDate")?.value;
+  const name =
+    prompt("Sınav adı:");
 
-  if (!name || !date) {
-    showToast("Sınav adı ve tarih gerekli.", "error");
-    return;
-  }
+  if (!name?.trim()) return;
+
+  const subject =
+    prompt("Ders:");
+
+  if (!subject?.trim()) return;
+
+  const date =
+    prompt(
+      "Tarih gir (YYYY-AA-GG):",
+      new Date().toISOString().slice(0,10)
+    );
+
+  if (!date) return;
 
   state.exams.push({
-    id: Date.now(),
-    name,
+    id: Date.now().toString(36),
+    name: name.trim(),
+    subject: subject.trim(),
     date
   });
 
-  state.exams.sort(
-    (a, b) =>
-      new Date(a.date) -
-      new Date(b.date)
-  );
+  saveState();
 
-  saveLocalState();
+  renderPage("exams");
 
-  closeModal();
-
-  renderExamsPage();
-
-  showToast("Sınav eklendi! 📅", "success");
+  showToast("Sınav eklendi 📅");
 }
 
-function deleteExam(index) {
-  if (!confirm("Bu sınavı silmek istiyor musun?")) return;
+function deleteExam(id) {
+  state.exams =
+    state.exams.filter(
+      exam => exam.id !== id
+    );
 
-  state.exams.splice(index, 1);
+  saveState();
 
-  saveLocalState();
-
-  renderExamsPage();
+  renderPage("exams");
 
   showToast("Sınav silindi.");
 }
 
-window.openAddExamModal = openAddExamModal;
-window.addExam = addExam;
-window.deleteExam = deleteExam;
-
 /* =========================================================
-   ODAKLAN
+   FOCUS
 ========================================================= */
 
-function renderFocusPage() {
-  const mainContent = $("mainContent");
-
-  mainContent.innerHTML = `
+function renderFocusPage(container) {
+  container.innerHTML = `
     <div class="card focus">
 
+      <h2>⏱️ Odaklanma Zamanı</h2>
+
+      <p style="
+        color:var(--muted);
+        margin-top:7px
+      ">
+        ${state.focus.mode}
+      </p>
+
+      <div
+        class="timer"
+        id="focusTimer"
+      >
+        ${formatTimer()}
+      </div>
+
+      <div class="focus-buttons">
+
+        <button
+          class="primary-btn"
+          id="focusStartButton"
+          onclick="toggleFocusTimer()"
+        >
+          ▶ Başlat
+        </button>
+
+        <button
+          class="secondary-btn"
+          onclick="resetFocusTimer()"
+        >
+          ↺ Sıfırla
+        </button>
+
+      </div>
+
       <div style="
-        max-width:600px;
-        margin:auto;
+        margin-top:30px;
+        display:flex;
+        justify-content:center;
+        gap:10px;
+        flex-wrap:wrap
       ">
 
-        <div style="
-          width:80px;
-          height:80px;
-          border-radius:25px;
-          background:#eeebff;
-          display:grid;
-          place-items:center;
-          margin:auto;
-          font-size:40px;
-        ">
-          ⏱️
-        </div>
-
-        <h2 style="margin-top:20px;">
-          Odaklanma Zamanı
-        </h2>
-
-        <p style="
-          color:var(--muted);
-          margin-top:7px;
-        ">
-          25 dakika boyunca sadece dersine odaklan.
-        </p>
-
-        <div
-          class="timer"
-          id="focusTimer"
+        <button
+          class="secondary-btn"
+          onclick="setFocusTime(25)"
         >
-          ${formatTime(state.focusSeconds)}
-        </div>
+          25 dk
+        </button>
 
-        <div class="focus-buttons">
+        <button
+          class="secondary-btn"
+          onclick="setFocusTime(45)"
+        >
+          45 dk
+        </button>
 
-          <button
-            class="primary-btn"
-            onclick="toggleFocusTimer()"
-          >
-            ▶ Başlat
-          </button>
-
-          <button
-            class="secondary-btn"
-            onclick="resetFocusTimer()"
-          >
-            ↻ Sıfırla
-          </button>
-
-        </div>
+        <button
+          class="secondary-btn"
+          onclick="setFocusTime(60)"
+        >
+          60 dk
+        </button>
 
       </div>
 
     </div>
+
+    <div class="card" style="margin-top:20px">
+
+      <h2>💡 Odaklanma İpucu</h2>
+
+      <p style="
+        color:var(--muted);
+        line-height:1.7;
+        margin-top:10px
+      ">
+        Çalışırken bildirimlerini kapat.
+        Tek bir derse odaklan ve süre sonunda
+        kısa bir mola ver.
+      </p>
+
+    </div>
   `;
 
-  updateFocusTimerDisplay();
+  updateFocusDisplay();
 }
 
-function formatTime(seconds) {
-  const min = Math.floor(seconds / 60);
-  const sec = seconds % 60;
+function formatTimer() {
+  const minutes =
+    String(state.focus.minutes).padStart(2, "0");
 
-  return (
-    String(min).padStart(2, "0") +
-    ":" +
-    String(sec).padStart(2, "0")
-  );
+  const seconds =
+    String(state.focus.seconds).padStart(2, "0");
+
+  return `${minutes}:${seconds}`;
+}
+
+function updateFocusDisplay() {
+  const timer =
+    document.getElementById("focusTimer");
+
+  const button =
+    document.getElementById(
+      "focusStartButton"
+    );
+
+  if (timer) {
+    timer.textContent = formatTimer();
+  }
+
+  if (button) {
+    button.textContent =
+      state.focus.running
+        ? "⏸ Duraklat"
+        : "▶ Başlat";
+  }
 }
 
 function toggleFocusTimer() {
-  if (state.focusRunning) {
+  if (state.focus.running) {
     stopFocusTimer();
-    return;
+  } else {
+    startFocusTimer();
   }
+}
 
-  state.focusRunning = true;
+function startFocusTimer() {
+  if (focusInterval) return;
 
-  state.focusInterval = setInterval(() => {
+  state.focus.running = true;
 
-    if (state.focusSeconds <= 0) {
+  focusInterval =
+    setInterval(() => {
+      if (
+        state.focus.minutes === 0 &&
+        state.focus.seconds === 0
+      ) {
+        finishFocusSession();
+        return;
+      }
 
-      stopFocusTimer();
+      if (state.focus.seconds > 0) {
+        state.focus.seconds--;
+      } else {
+        state.focus.minutes--;
+        state.focus.seconds = 59;
+      }
 
-      state.xp += 30;
-      state.coins += 5;
+      updateFocusDisplay();
+    }, 1000);
 
-      calculateLevel();
-
-      saveLocalState();
-
-      showCelebration("⏱️ Odaklanma tamamlandı! +30 XP");
-
-      return;
-    }
-
-    state.focusSeconds--;
-
-    updateFocusTimerDisplay();
-
-  }, 1000);
+  updateFocusDisplay();
 }
 
 function stopFocusTimer() {
-  state.focusRunning = false;
-
-  if (state.focusInterval) {
-    clearInterval(state.focusInterval);
-    state.focusInterval = null;
+  if (focusInterval) {
+    clearInterval(focusInterval);
+    focusInterval = null;
   }
+
+  state.focus.running = false;
+
+  updateFocusDisplay();
 }
 
 function resetFocusTimer() {
   stopFocusTimer();
 
-  state.focusSeconds = 25 * 60;
+  state.focus.minutes = 25;
+  state.focus.seconds = 0;
 
-  updateFocusTimerDisplay();
+  saveState();
+
+  updateFocusDisplay();
 }
 
-function updateFocusTimerDisplay() {
-  const timer = $("focusTimer");
+function setFocusTime(minutes) {
+  stopFocusTimer();
 
-  if (timer) {
-    timer.textContent =
-      formatTime(state.focusSeconds);
-  }
+  state.focus.minutes = minutes;
+  state.focus.seconds = 0;
+
+  saveState();
+
+  updateFocusDisplay();
 }
 
-window.toggleFocusTimer = toggleFocusTimer;
-window.resetFocusTimer = resetFocusTimer;
+function finishFocusSession() {
+  stopFocusTimer();
+
+  state.stats.totalFocusMinutes +=
+    state.focus.mode === "Pomodoro"
+      ? 25
+      : 45;
+
+  state.xp += 30;
+  state.coins += 10;
+
+  updateLevel();
+
+  saveState();
+
+  celebrate(
+    "⏱️ Odaklanma tamamlandı!<br>⭐ +30 XP<br>🪙 +10 Coin"
+  );
+
+  showToast(
+    "Harika çalışma! 🎉"
+  );
+
+  resetFocusTimer();
+}
 
 /* =========================================================
-   DERS KOÇU
+   COACH
 ========================================================= */
 
-function renderCoachPage() {
-  const mainContent = $("mainContent");
+function renderCoachPage(container) {
+  const completed =
+    state.tasks.filter(t => t.completed).length;
 
-  const suggestions = [
-    "Bugün önce en zor dersinden başlamayı dene. 🧠",
-    "25 dakika çalış, ardından 5 dakika mola ver. ⏱️",
-    "Telefonunu sessize al ve dikkat dağıtıcıları kapat. 📵",
-    "Küçük hedefler belirlemek motivasyonunu artırabilir. 🎯",
-    "Bugün en az bir görevi tamamen bitirmeye çalış. ⭐",
-    "Çalışırken kısa notlar almak konuyu hatırlamana yardımcı olur. 📝"
-  ];
+  const total =
+    state.tasks.length;
 
-  const suggestion =
-    suggestions[
-      new Date().getDate() %
-      suggestions.length
-    ];
+  let message =
+    "Bugün güzel bir çalışma günü! 🌟";
 
-  mainContent.innerHTML = `
+  if (total === 0) {
+    message =
+      "Önce kendine küçük bir çalışma hedefi belirle. 🎯";
+  } else if (completed === total) {
+    message =
+      "Bugünkü görevlerinin hepsi tamamlandı! Muhteşem! 🏆";
+  } else if (completed > 0) {
+    message =
+      "Başladın bile! Birkaç görev daha tamamlayabilirsin. 💪";
+  } else {
+    message =
+      "İlk görevini tamamla ve çalışma serini başlat! 🔥";
+  }
+
+  container.innerHTML = `
     <div class="card coach">
 
       <div class="coach-head">
+
         <div class="coach-icon">
           🤖
         </div>
@@ -1568,44 +1493,47 @@ function renderCoachPage() {
           <h2>Ders Koçu</h2>
 
           <small style="color:var(--muted)">
-            Sana özel çalışma önerisi
+            Sana özel öneri
           </small>
         </div>
+
       </div>
 
-      <div style="
-        background:var(--white);
-        border:1px solid var(--border);
-        border-radius:18px;
-        padding:22px;
-        line-height:1.7;
-      ">
-        ${suggestion}
+      <p class="coach-message">
+        ${message}
+      </p>
+
+    </div>
+
+    <div class="card" style="margin-top:20px">
+
+      <h2>🎯 Bugünün Mini Planı</h2>
+
+      <div class="task">
+        <div>1️⃣</div>
+        <div class="task-content">
+          <div class="task-name">
+            25 dakika odaklan
+          </div>
+        </div>
       </div>
 
-      <div style="
-        display:grid;
-        grid-template-columns:
-        repeat(3,minmax(0,1fr));
-        gap:12px;
-        margin-top:15px;
-      ">
-
-        <div class="stat">
-          <strong>${getIncompleteTasks().length}</strong>
-          <small>Bekleyen görev</small>
+      <div class="task">
+        <div>2️⃣</div>
+        <div class="task-content">
+          <div class="task-name">
+            Bir görevi tamamla
+          </div>
         </div>
+      </div>
 
-        <div class="stat">
-          <strong>${state.streak}</strong>
-          <small>Günlük seri</small>
+      <div class="task">
+        <div>3️⃣</div>
+        <div class="task-content">
+          <div class="task-name">
+            5 dakika mola ver
+          </div>
         </div>
-
-        <div class="stat">
-          <strong>${state.level}</strong>
-          <small>Seviye</small>
-        </div>
-
       </div>
 
     </div>
@@ -1616,22 +1544,15 @@ function renderCoachPage() {
    PET
 ========================================================= */
 
-function renderPetPage() {
-  const mainContent = $("mainContent");
-
-  mainContent.innerHTML = `
+function renderPetPage(container) {
+  container.innerHTML = `
     <div class="card pet-card">
 
       <h2>🐣 Evcil Hayvanım</h2>
 
       <div
         class="pet-display"
-        style="
-          max-width:500px;
-          margin:25px auto;
-          height:260px;
-          font-size:130px;
-        "
+        style="height:250px;font-size:130px"
       >
         ${state.pet.emoji}
       </div>
@@ -1644,18 +1565,60 @@ function renderPetPage() {
         Seviye ${state.pet.level}
       </div>
 
-      <p style="
-        color:var(--muted);
-        margin:15px auto;
-        max-width:500px;
-        line-height:1.6;
+      <div style="
+        margin-top:25px;
+        text-align:left
       ">
-        Ders çalıştıkça XP kazanırsın.
-        Seviyen yükseldikçe evcil hayvanın da gelişir.
-      </p>
+
+        <p>
+          ❤️ Mutluluk
+        </p>
+
+        <div class="progress"
+          style="
+            background:#eee;
+            margin-top:7px
+          "
+        >
+          <span
+            style="
+              width:${state.pet.happiness}%;
+              background:#ff5b6e
+            "
+          ></span>
+        </div>
+
+        <p style="margin-top:18px">
+          ⚡ Enerji
+        </p>
+
+        <div class="progress"
+          style="
+            background:#eee;
+            margin-top:7px
+          "
+        >
+          <span
+            style="
+              width:${state.pet.energy}%;
+              background:#3b82f6
+            "
+          ></span>
+        </div>
+
+      </div>
 
       <button
         class="primary-btn"
+        style="margin-top:25px"
+        onclick="feedPet()"
+      >
+        🍎 Evcil Hayvanımı Besle
+      </button>
+
+      <button
+        class="secondary-btn"
+        style="margin-top:10px"
         onclick="renamePet()"
       >
         ✏️ İsmini Değiştir
@@ -1665,59 +1628,50 @@ function renderPetPage() {
   `;
 }
 
-function renamePet() {
-  openModal(
-    "Evcil Hayvanının İsmi",
-    `
-      <div class="form-group">
-        <label>Yeni isim</label>
-
-        <input
-          id="newPetName"
-          value="${escapeHTML(state.pet.name)}"
-          maxlength="20"
-          style="
-            width:100%;
-            padding:13px;
-            border:1px solid var(--border);
-            border-radius:11px;
-          "
-        >
-      </div>
-
-      <button
-        class="primary-btn"
-        onclick="savePetName()"
-      >
-        Kaydet
-      </button>
-    `
-  );
-}
-
-function savePetName() {
-  const name = $("newPetName")?.value.trim();
-
-  if (!name) {
-    showToast("Bir isim yaz.", "error");
+function feedPet() {
+  if (state.coins < 10) {
+    showToast("Beslemek için 10 coin gerekiyor. 🪙");
     return;
   }
 
-  state.pet.name = name;
+  state.coins -= 10;
 
-  saveLocalState();
+  state.pet.happiness =
+    Math.min(
+      100,
+      state.pet.happiness + 15
+    );
 
-  closeModal();
+  state.pet.energy =
+    Math.min(
+      100,
+      state.pet.energy + 10
+    );
 
-  renderPetPage();
+  saveState();
 
-  updateUserUI();
+  renderPage("pet");
+  updateUI();
 
-  showToast("Evcil hayvanının adı değiştirildi! 🐼");
+  showToast("Panda çok mutlu! 🐼❤️");
 }
 
-window.renamePet = renamePet;
-window.savePetName = savePetName;
+function renamePet() {
+  const name =
+    prompt(
+      "Evcil hayvanının yeni adı:",
+      state.pet.name
+    );
+
+  if (!name?.trim()) return;
+
+  state.pet.name = name.trim();
+
+  saveState();
+
+  renderPage("pet");
+  updateUI();
+}
 
 /* =========================================================
    MARKET
@@ -1728,52 +1682,56 @@ const marketItems = [
     id: "food",
     icon: "🍎",
     name: "Elma",
-    description: "Pandanı mutlu et.",
-    price: 20
+    description: "Evcil hayvanını mutlu eder.",
+    price: 10
   },
   {
-    id: "hat",
-    icon: "🎩",
-    name: "Şapka",
-    description: "Şık bir aksesuar.",
-    price: 50
+    id: "toy",
+    icon: "🎾",
+    name: "Top",
+    description: "Eğlenceli bir oyuncak.",
+    price: 25
+  },
+  {
+    id: "book",
+    icon: "📚",
+    name: "Kitap",
+    description: "Çalışma motivasyonu verir.",
+    price: 40
   },
   {
     id: "star",
     icon: "⭐",
     name: "Yıldız",
-    description: "Özel ödül.",
-    price: 100
+    description: "Özel koleksiyon ödülü.",
+    price: 75
   },
   {
-    id: "rocket",
-    icon: "🚀",
-    name: "Roket",
-    description: "Hızlı seviye bonusu.",
-    price: 150
+    id: "crown",
+    icon: "👑",
+    name: "Taç",
+    description: "Başarılarını göster.",
+    price: 120
   }
 ];
 
-function renderMarketPage() {
-  const mainContent = $("mainContent");
-
-  mainContent.innerHTML = `
+function renderMarketPage(container) {
+  container.innerHTML = `
     <div class="card">
 
       <div class="card-title">
-        <div>
-          <h2>Ödül Marketi 🛒</h2>
 
-          <p style="
-            color:var(--muted);
-            margin-top:5px;
-          ">
-            Bakiyen:
-            <strong style="color:#d79a00;">
-              🪙 ${state.coins}
+        <div>
+          <h2>🛒 Ödül Marketi</h2>
+
+          <small style="color:var(--muted)">
+            Coinlerin:
+            <strong>
+              ${state.coins} 🪙
             </strong>
-          </p>
+          </small>
         </div>
+
       </div>
 
       <div class="market-grid">
@@ -1794,12 +1752,12 @@ function renderMarketPage() {
             </p>
 
             <div class="price">
-              🪙 ${item.price}
+              ${item.price} 🪙
             </div>
 
             <button
               class="primary-btn"
-              onclick="buyMarketItem('${item.id}')"
+              onclick="buyItem('${item.id}')"
             >
               Satın Al
             </button>
@@ -1813,136 +1771,149 @@ function renderMarketPage() {
   `;
 }
 
-function buyMarketItem(id) {
-  const item = marketItems.find(
-    x => x.id === id
-  );
+function buyItem(id) {
+  const item =
+    marketItems.find(
+      item => item.id === id
+    );
 
   if (!item) return;
 
   if (state.coins < item.price) {
-    showToast(
-      "Bu ödülü almak için yeterli coin'in yok.",
-      "error"
-    );
+    showToast("Yeterli coin yok. 🪙");
     return;
   }
 
   state.coins -= item.price;
 
-  saveLocalState();
+  if (id === "food") {
+    state.pet.happiness =
+      Math.min(
+        100,
+        state.pet.happiness + 20
+      );
+  }
+
+  if (id === "toy") {
+    state.pet.happiness =
+      Math.min(
+        100,
+        state.pet.happiness + 30
+      );
+  }
+
+  if (id === "book") {
+    state.xp += 15;
+    updateLevel();
+  }
+
+  saveState();
+
+  renderPage("market");
+  updateUI();
 
   showToast(
-    `${item.name} satın alındı! 🎁`,
-    "success"
+    `${item.name} satın alındı! 🎉`
   );
-
-  renderMarketPage();
-
-  updateGlobalStats();
 }
 
-window.buyMarketItem = buyMarketItem;
-
 /* =========================================================
-   ROZETLER
+   ACHIEVEMENTS
 ========================================================= */
 
-function renderAchievementsPage() {
-  const mainContent = $("mainContent");
-
-  const badges = [
+function getAchievements() {
+  return [
     {
       icon: "🌱",
-      name: "İlk Adım",
+      title: "İlk Adım",
       description: "İlk görevini tamamla.",
-      unlocked: getCompletedTasks().length >= 1
+      unlocked:
+        state.stats.completedTasks >= 1
     },
+
     {
       icon: "🔥",
-      name: "Ateş Başladı",
+      title: "Seri Başladı",
       description: "3 günlük seri yap.",
-      unlocked: state.streak >= 3
+      unlocked:
+        state.streak >= 3
     },
+
     {
       icon: "⭐",
-      name: "XP Avcısı",
-      description: "100 XP kazan.",
-      unlocked: state.xp >= 100
+      title: "XP Avcısı",
+      description: "500 XP kazan.",
+      unlocked:
+        state.xp >= 500
     },
+
     {
       icon: "🏆",
-      name: "Çalışkan",
+      title: "Çalışkan",
       description: "10 görev tamamla.",
-      unlocked: getCompletedTasks().length >= 10
+      unlocked:
+        state.stats.completedTasks >= 10
     },
+
     {
-      icon: "🚀",
-      name: "Seviye Atladım",
-      description: "Seviye 2'ye ulaş.",
-      unlocked: state.level >= 2
+      icon: "⏱️",
+      title: "Odak Ustası",
+      description: "100 dakika çalış.",
+      unlocked:
+        state.stats.totalFocusMinutes >= 100
     },
+
     {
-      icon: "🧠",
-      name: "Odak Ustası",
-      description: "Odaklanma oturumunu tamamla.",
-      unlocked: state.xp >= 30
+      icon: "💎",
+      title: "Coin Koleksiyoncusu",
+      description: "500 coin kazan.",
+      unlocked:
+        state.coins >= 500
     }
   ];
+}
 
-  mainContent.innerHTML = `
+function renderAchievementsPage(container) {
+  const achievements =
+    getAchievements();
+
+  container.innerHTML = `
     <div class="card">
 
       <div class="card-title">
-        <div>
-          <h2>Başarı Rozetleri 🏆</h2>
+        <h2>🏆 Başarı Rozetleri</h2>
 
-          <p style="
-            color:var(--muted);
-            margin-top:5px;
-          ">
-            ${
-              badges.filter(b => b.unlocked).length
-            } / ${badges.length} rozet kazanıldı
-          </p>
-        </div>
+        <span>
+          ${
+            achievements.filter(
+              a => a.unlocked
+            ).length
+          }
+          /
+          ${achievements.length}
+        }
       </div>
 
       <div class="badges">
 
-        ${badges.map(badge => `
+        ${achievements.map(item => `
           <div class="badge ${
-            badge.unlocked ? "" : "locked"
+            item.unlocked
+              ? ""
+              : "locked"
           }">
 
             <div class="badge-icon">
-              ${badge.icon}
+              ${item.icon}
             </div>
 
             <strong>
-              ${badge.name}
+              ${item.title}
             </strong>
 
             <small>
-              ${badge.description}
+              ${item.description}
             </small>
-
-            <div style="
-              margin-top:8px;
-              font-size:11px;
-              font-weight:900;
-              color:${
-                badge.unlocked
-                  ? "#20c997"
-                  : "var(--muted)"
-              };
-            ">
-              ${
-                badge.unlocked
-                  ? "✓ KAZANILDI"
-                  : "🔒 KİLİTLİ"
-              }
-            </div>
 
           </div>
         `).join("")}
@@ -1954,174 +1925,131 @@ function renderAchievementsPage() {
 }
 
 /* =========================================================
-   İSTATİSTİKLER
+   STATS
 ========================================================= */
 
-function renderStatsPage() {
-  const mainContent = $("mainContent");
+function renderStatsPage(container) {
+  const total =
+    state.tasks.length;
 
-  const totalTasks = state.tasks.length;
-  const completedTasks =
-    getCompletedTasks().length;
+  const completed =
+    state.tasks.filter(
+      task => task.completed
+    ).length;
 
-  const completion =
-    totalTasks
+  const percentage =
+    total
       ? Math.round(
-          completedTasks /
-          totalTasks *
-          100
+          completed / total * 100
         )
       : 0;
 
-  mainContent.innerHTML = `
-    <div class="card">
+  container.innerHTML = `
+    <div class="stats"
+      style="
+        margin-top:0;
+        grid-template-columns:
+          repeat(auto-fit,minmax(180px,1fr))
+      "
+    >
 
-      <div class="card-title">
-        <div>
-          <h2>Çalışma İstatistiklerin 📊</h2>
-
-          <p style="color:var(--muted);margin-top:5px;">
-            Ders çalışma performansın
-          </p>
-        </div>
+      <div class="stat">
+        <span>⭐</span>
+        <strong>
+          ${state.xp}
+        </strong>
+        <small>
+          Toplam XP
+        </small>
       </div>
 
-      <div class="stats">
-
-        <div class="stat">
-          <span>⭐</span>
-
-          <strong>
-            ${state.xp}
-          </strong>
-
-          <small>
-            Toplam XP
-          </small>
-        </div>
-
-        <div class="stat">
-          <span>🪙</span>
-
-          <strong>
-            ${state.coins}
-          </strong>
-
-          <small>
-            Coin
-          </small>
-        </div>
-
-        <div class="stat">
-          <span>🔥</span>
-
-          <strong>
-            ${state.streak}
-          </strong>
-
-          <small>
-            Günlük seri
-          </small>
-        </div>
-
-        <div class="stat">
-          <span>📝</span>
-
-          <strong>
-            ${totalTasks}
-          </strong>
-
-          <small>
-            Toplam görev
-          </small>
-        </div>
-
-        <div class="stat">
-          <span>✅</span>
-
-          <strong>
-            ${completedTasks}
-          </strong>
-
-          <small>
-            Tamamlanan görev
-          </small>
-        </div>
-
-        <div class="stat">
-          <span>📈</span>
-
-          <strong>
-            ${completion}%
-          </strong>
-
-          <small>
-            Görev başarısı
-          </small>
-        </div>
-
+      <div class="stat">
+        <span>🪙</span>
+        <strong>
+          ${state.coins}
+        </strong>
+        <small>
+          Coin
+        </small>
       </div>
+
+      <div class="stat">
+        <span>🔥</span>
+        <strong>
+          ${state.streak}
+        </strong>
+        <small>
+          Günlük seri
+        </small>
+      </div>
+
+      <div class="stat">
+        <span>⏱️</span>
+        <strong>
+          ${state.stats.totalFocusMinutes}
+        </strong>
+        <small>
+          Çalışma dakikası
+        </small>
+      </div>
+
+    </div>
+
+    <div class="card" style="margin-top:20px">
+
+      <h2>📈 Görev İlerlemesi</h2>
 
       <div style="
-        margin-top:25px;
-        padding:20px;
-        border-radius:18px;
-        background:#f5f4ff;
+        font-size:38px;
+        font-weight:950;
+        margin:20px 0
       ">
-
-        <strong>
-          Görev Tamamlama
-        </strong>
-
-        <div class="progress" style="
-          margin-top:12px;
-          background:#dddaf8;
-        ">
-          <span
-            style="
-              width:${completion}%;
-              background:var(--primary);
-            "
-          ></span>
-        </div>
-
-        <p style="
-          color:var(--muted);
-          margin-top:8px;
-        ">
-          ${completedTasks} / ${totalTasks}
-          görev tamamlandı.
-        </p>
-
+        ${percentage}%
       </div>
+
+      <div
+        class="progress"
+        style="
+          background:#eee
+        "
+      >
+        <span
+          style="
+            width:${percentage}%;
+            background:var(--primary)
+          "
+        ></span>
+      </div>
+
+      <p style="
+        color:var(--muted);
+        margin-top:12px
+      ">
+        ${completed} / ${total}
+        görev tamamlandı.
+      </p>
 
     </div>
   `;
 }
 
 /* =========================================================
-   PROFİL
+   PROFILE
 ========================================================= */
 
-function renderProfilePage() {
-  const mainContent = $("mainContent");
+function renderProfilePage(container) {
+  const user =
+    state.user || {
+      name: "Öğrenci",
+      email: ""
+    };
 
-  const name =
-    currentUser?.name ||
-    currentUser?.fullName ||
-    "Eren";
-
-  const email =
-    currentUser?.email ||
-    "E-posta bilgisi yok";
-
-  mainContent.innerHTML = `
+  container.innerHTML = `
     <div class="card">
 
       <div style="
         text-align:center;
-        max-width:600px;
-        margin:auto;
+        padding:20px
       ">
 
         <div style="
@@ -2131,77 +2059,76 @@ function renderProfilePage() {
           background:#e7e4ff;
           display:grid;
           place-items:center;
-          font-size:50px;
-          margin:0 auto 15px;
+          font-size:55px;
+          margin:0 auto 15px
         ">
-          ${state.pet.emoji || "🎓"}
+          🎓
         </div>
 
         <h2>
-          ${escapeHTML(name)}
+          ${escapeHTML(user.name)}
         </h2>
 
         <p style="
           color:var(--muted);
-          margin-top:5px;
+          margin-top:5px
         ">
-          ${escapeHTML(email)}
+          ${escapeHTML(user.email)}
         </p>
 
-        <div class="stats">
+      </div>
 
-          <div class="stat">
-            <strong>
-              ${state.level}
-            </strong>
-            <small>
-              Seviye
-            </small>
+    </div>
+
+    <div class="card" style="margin-top:20px">
+
+      <h2>⚙️ Ayarlar</h2>
+
+      <div class="task">
+
+        <div>🌙</div>
+
+        <div class="task-content">
+          <div class="task-name">
+            Karanlık Tema
           </div>
 
-          <div class="stat">
-            <strong>
-              ${state.xp}
-            </strong>
-            <small>
-              XP
-            </small>
-          </div>
-
-          <div class="stat">
-            <strong>
-              ${state.coins}
-            </strong>
-            <small>
-              Coin
-            </small>
-          </div>
-
+          <small style="color:var(--muted)">
+            Görünümü değiştir
+          </small>
         </div>
 
-        <div style="
-          display:flex;
-          gap:10px;
-          justify-content:center;
-          flex-wrap:wrap;
-          margin-top:25px;
-        ">
+        <button
+          class="secondary-btn"
+          onclick="toggleTheme()"
+        >
+          ${state.settings.dark
+            ? "Açık Tema"
+            : "Karanlık Tema"}
+        </button>
 
-          <button
-            class="secondary-btn"
-            onclick="toggleDarkMode()"
-          >
-            🌙 Tema Değiştir
-          </button>
+      </div>
 
-          <button
-            class="danger-btn"
-            onclick="logout()"
-          >
-            🚪 Çıkış Yap
-          </button>
+      <div class="task">
 
+        <div>🗑️</div>
+
+        <div class="task-content">
+          <div class="task-name">
+            Verileri Sıfırla
+          </div>
+
+          <small style="color:var(--muted)">
+            Tüm çalışma verilerini sil
+          </small>
         </div>
+
+        <button
+          class="danger-btn"
+          onclick="resetData()"
+        >
+          Sıfırla
+        </button>
 
       </div>
 
@@ -2210,272 +2137,510 @@ function renderProfilePage() {
 }
 
 /* =========================================================
-   GÜNLÜK ÖDÜL
+   UI
+========================================================= */
+
+function updateUI() {
+  updateHeader(currentPage);
+
+  updateLevel();
+
+  updateHomeHero();
+
+  const topAvatar =
+    document.getElementById("topAvatar");
+
+  if (topAvatar) {
+    topAvatar.textContent =
+      state.pet.emoji;
+  }
+
+  const levelText =
+    document.getElementById("levelText");
+
+  if (levelText) {
+    levelText.textContent =
+      `Seviye ${state.level}`;
+  }
+
+  const petDisplay =
+    document.getElementById("petDisplay");
+
+  if (petDisplay) {
+    petDisplay.textContent =
+      state.pet.emoji;
+  }
+
+  const petName =
+    document.getElementById("petName");
+
+  if (petName) {
+    petName.textContent =
+      state.pet.name;
+  }
+
+  const petLevel =
+    document.getElementById("petLevel");
+
+  if (petLevel) {
+    petLevel.textContent =
+      `Seviye ${state.pet.level}`;
+  }
+
+  const streakNumber =
+    document.getElementById(
+      "streakNumber"
+    );
+
+  if (streakNumber) {
+    streakNumber.textContent =
+      state.streak;
+  }
+
+  const statXP =
+    document.getElementById("statXP");
+
+  if (statXP) {
+    statXP.textContent =
+      state.xp;
+  }
+
+  const statCoins =
+    document.getElementById("statCoins");
+
+  if (statCoins) {
+    statCoins.textContent =
+      state.coins;
+  }
+
+  const statStreak =
+    document.getElementById("statStreak");
+
+  if (statStreak) {
+    statStreak.textContent =
+      state.streak;
+  }
+}
+
+function updateHomeHero() {
+  const completed =
+    state.tasks.filter(
+      task => task.completed
+    ).length;
+
+  const total =
+    state.tasks.length;
+
+  const percentage =
+    total
+      ? Math.round(
+          completed / total * 100
+        )
+      : 0;
+
+  const bar =
+    document.getElementById(
+      "progressBar"
+    );
+
+  const summary =
+    document.getElementById(
+      "taskSummary"
+    );
+
+  const xp =
+    document.getElementById(
+      "xpText"
+    );
+
+  if (bar) {
+    bar.style.width =
+      `${percentage}%`;
+  }
+
+  if (summary) {
+    summary.textContent =
+      total
+        ? `${completed}/${total} görev tamamlandı.`
+        : "Bugün için ilk görevini ekle.";
+  }
+
+  if (xp) {
+    xp.textContent =
+      `${state.xp} XP · Seviye ${state.level}`;
+  }
+}
+
+function updateLevel() {
+  const newLevel =
+    Math.floor(state.xp / 250) + 1;
+
+  if (newLevel > state.level) {
+    state.level = newLevel;
+
+    state.pet.level =
+      Math.max(
+        state.pet.level,
+        newLevel
+      );
+
+    saveState();
+
+    showToast(
+      `🎉 Seviye ${newLevel} oldun!`
+    );
+  } else {
+    state.level = newLevel;
+  }
+}
+
+/* =========================================================
+   DAILY REWARD
 ========================================================= */
 
 function claimDailyReward() {
   const today =
-    new Date().toISOString().slice(0, 10);
+    new Date().toISOString().slice(0,10);
 
-  const lastClaim =
-    localStorage.getItem(
-      "dersTakipDailyReward"
-    );
-
-  if (lastClaim === today) {
+  if (state.lastReward === today) {
     showToast(
       "Bugünkü ödülünü zaten aldın. 🎁"
     );
     return;
   }
 
-  const rewardXP = 50;
-  const rewardCoins = 20;
+  state.lastReward = today;
 
-  state.xp += rewardXP;
-  state.coins += rewardCoins;
+  state.coins += 20;
+  state.xp += 10;
 
-  calculateLevel();
+  updateLevel();
 
-  localStorage.setItem(
-    "dersTakipDailyReward",
-    today
-  );
+  saveState();
 
-  state.dailyRewardClaimed = true;
-
-  saveLocalState();
-
-  showCelebration(
-    `🎁 +${rewardXP} XP   🪙 +${rewardCoins} Coin`
-  );
-
-  updateGlobalStats();
-}
-
-window.claimDailyReward = claimDailyReward;
-
-/* =========================================================
-   SERİ
-========================================================= */
-
-function updateStreak() {
-  const today =
-    new Date().toISOString().slice(0, 10);
-
-  const lastStudy =
-    localStorage.getItem(
-      "dersTakipLastStudy"
-    );
-
-  if (lastStudy === today) {
-    return;
-  }
-
-  if (lastStudy) {
-    const previous =
-      new Date(lastStudy);
-
-    const current =
-      new Date(today);
-
-    const difference =
-      Math.floor(
-        (current - previous) /
-        86400000
-      );
-
-    if (difference === 1) {
-      state.streak++;
-    } else if (difference > 1) {
-      state.streak = 1;
-    }
-  } else {
-    state.streak = 1;
-  }
-
-  localStorage.setItem(
-    "dersTakipLastStudy",
-    today
-  );
-
-  saveLocalState();
-}
-
-/* =========================================================
-   LEVEL
-========================================================= */
-
-function calculateLevel() {
-  state.level =
-    Math.max(
-      1,
-      Math.floor(state.xp / 100) + 1
-    );
-
-  /*
-    Evcil hayvan seviyesi de gelişsin.
-  */
-  state.pet.level =
-    Math.max(
-      1,
-      Math.floor(state.xp / 200) + 1
-    );
-}
-
-/* =========================================================
-   GLOBAL STATS
-========================================================= */
-
-function updateGlobalStats() {
-  if ($("statXP")) {
-    $("statXP").textContent =
-      state.xp;
-  }
-
-  if ($("statStreak")) {
-    $("statStreak").textContent =
-      state.streak;
-  }
-
-  if ($("statCoins")) {
-    $("statCoins").textContent =
-      state.coins;
-  }
-
-  if ($("streakNumber")) {
-    $("streakNumber").textContent =
-      state.streak;
-  }
-
-  if ($("levelText")) {
-    $("levelText").textContent =
-      `Seviye ${state.level}`;
-  }
-
-  if ($("xpText")) {
-    $("xpText").textContent =
-      `${state.xp} XP`;
-  }
-
-  if ($("progressBar")) {
-    $("progressBar").style.width =
-      calculateProgress() + "%";
-  }
-
-  if ($("taskSummary")) {
-    const remaining =
-      getIncompleteTasks().length;
-
-    $("taskSummary").textContent =
-      remaining
-        ? `${remaining} görevin seni bekliyor.`
-        : "Bugünkü tüm görevlerini tamamladın! 🎉";
-  }
-}
-
-/* =========================================================
-   DARK MODE
-========================================================= */
-
-function toggleDarkMode() {
-  state.darkMode =
-    !state.darkMode;
-
-  document.body.classList.toggle(
-    "dark",
-    state.darkMode
-  );
-
-  saveLocalState();
+  updateUI();
 
   showToast(
-    state.darkMode
-      ? "Karanlık tema açıldı 🌙"
-      : "Aydınlık tema açıldı ☀️"
+    "🎁 +20 Coin ve +10 XP kazandın!"
+  );
+
+  const button =
+    document.getElementById(
+      "dailyRewardButton"
+    );
+
+  if (button) {
+    button.disabled = true;
+    button.textContent =
+      "Bugünkü Ödül Alındı ✓";
+  }
+}
+
+/* =========================================================
+   THEME
+========================================================= */
+
+function applyTheme() {
+  document.body.classList.toggle(
+    "dark",
+    !!state.settings.dark
   );
 }
 
-window.toggleDarkMode = toggleDarkMode;
+function toggleTheme() {
+  state.settings.dark =
+    !state.settings.dark;
+
+  applyTheme();
+
+  saveState();
+
+  if (currentPage === "profile") {
+    renderPage("profile");
+  }
+
+  showToast(
+    state.settings.dark
+      ? "🌙 Karanlık tema açıldı."
+      : "☀️ Açık tema açıldı."
+  );
+}
 
 /* =========================================================
-   MOBILE MENU
+   MOBILE
 ========================================================= */
 
 function toggleMobileMenu() {
   const drawer =
-    $("mobileDrawer");
+    document.getElementById(
+      "mobileDrawer"
+    );
 
   if (!drawer) return;
 
   drawer.classList.toggle("open");
 }
 
-window.toggleMobileMenu = toggleMobileMenu;
+function closeMobileMenu() {
+  const drawer =
+    document.getElementById(
+      "mobileDrawer"
+    );
 
-/* =========================================================
-   BAŞLANGIÇ
-========================================================= */
-
-async function boot() {
-  loadLocalState();
-
-  /*
-    Tema
-  */
-  document.body.classList.toggle(
-    "dark",
-    state.darkMode
-  );
-
-  /*
-    Daha önce giriş yapan kullanıcı
-  */
-  try {
-    const savedUser =
-      localStorage.getItem(
-        "dersTakipUser"
-      );
-
-    if (savedUser) {
-      currentUser =
-        JSON.parse(savedUser);
-
-      await initializeApp();
-
-      return;
-    }
-  } catch (error) {
-    console.log("Kullanıcı verisi okunamadı.");
-  }
-
-  /*
-    Giriş ekranı
-  */
-  $("authScreen").style.display = "flex";
-  $("app").style.display = "none";
+  drawer?.classList.remove("open");
 }
 
 /* =========================================================
-   ESC → MODAL KAPAT
+   MODAL
 ========================================================= */
 
-document.addEventListener(
-  "keydown",
+function openModal(title, content) {
+  const modal =
+    document.getElementById("modal");
+
+  const modalTitle =
+    document.getElementById(
+      "modalTitle"
+    );
+
+  const modalContent =
+    document.getElementById(
+      "modalContent"
+    );
+
+  if (!modal) return;
+
+  if (modalTitle) {
+    modalTitle.textContent =
+      title;
+  }
+
+  if (modalContent) {
+    modalContent.innerHTML =
+      content;
+  }
+
+  modal.classList.add("show");
+}
+
+function closeModal() {
+  document
+    .getElementById("modal")
+    ?.classList.remove("show");
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message) {
+  const container =
+    document.getElementById(
+      "toastContainer"
+    );
+
+  if (!container) return;
+
+  const toast =
+    document.createElement("div");
+
+  toast.className = "toast";
+
+  toast.innerHTML =
+    message;
+
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    toast.style.transform =
+      "translateY(20px)";
+
+    setTimeout(
+      () => toast.remove(),
+      300
+    );
+  }, 3000);
+}
+
+/* =========================================================
+   CELEBRATION
+========================================================= */
+
+function celebrate(message) {
+  const element =
+    document.getElementById(
+      "celebration"
+    );
+
+  const text =
+    document.getElementById(
+      "celebrationText"
+    );
+
+  if (!element) return;
+
+  if (text) {
+    text.innerHTML =
+      message;
+  }
+
+  element.style.display =
+    "flex";
+
+  setTimeout(() => {
+    element.style.display =
+      "none";
+  }, 2200);
+}
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetData() {
+  const confirmed =
+    confirm(
+      "Tüm çalışma verilerin silinecek. Emin misin?"
+    );
+
+  if (!confirmed) return;
+
+  const user =
+    state.user;
+
+  state =
+    structuredClone(DEFAULT_STATE);
+
+  state.user =
+    user;
+
+  saveState();
+
+  applyTheme();
+
+  navigate("home");
+
+  updateUI();
+
+  showToast(
+    "Verilerin sıfırlandı."
+  );
+}
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function formatDate(date) {
+  try {
+    return new Intl.DateTimeFormat(
+      "tr-TR",
+      {
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+      }
+    ).format(new Date(date));
+  } catch {
+    return date;
+  }
+}
+
+function escapeHTML(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+/* =========================================================
+   GLOBAL ERROR HANDLING
+========================================================= */
+
+window.addEventListener(
+  "error",
   event => {
-    if (event.key === "Escape") {
-      closeModal();
-    }
+    console.error(
+      "DersTakip JavaScript hatası:",
+      event.error || event.message
+    );
+  }
+);
+
+window.addEventListener(
+  "unhandledrejection",
+  event => {
+    console.error(
+      "DersTakip Promise hatası:",
+      event.reason
+    );
   }
 );
 
 /* =========================================================
-   SAYFA YÜKLENİNCE
+   GLOBAL
 ========================================================= */
 
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
-    boot();
-  }
+window.showLogin = showLogin;
+window.showRegister = showRegister;
+
+window.login = login;
+window.register = register;
+window.logout = logout;
+
+window.togglePassword = togglePassword;
+
+window.navigate = navigate;
+window.navigateMobile = navigateMobile;
+
+window.toggleMobileMenu = toggleMobileMenu;
+
+window.addTask = addTask;
+window.toggleTask = toggleTask;
+window.deleteTask = deleteTask;
+
+window.addSubject = addSubject;
+window.subjectTasks = subjectTasks;
+
+window.addExam = addExam;
+window.deleteExam = deleteExam;
+
+window.toggleFocusTimer =
+  toggleFocusTimer;
+
+window.resetFocusTimer =
+  resetFocusTimer;
+
+window.setFocusTime =
+  setFocusTime;
+
+window.toggleTheme =
+  toggleTheme;
+
+window.feedPet =
+  feedPet;
+
+window.renamePet =
+  renamePet;
+
+window.buyItem =
+  buyItem;
+
+window.claimDailyReward =
+  claimDailyReward;
+
+window.closeModal =
+  closeModal;
+
+window.openModal =
+  openModal;
+
+window.resetData =
+  resetData;
+
+console.log(
+  "DersTakip 2.0 app.js başarıyla yüklendi 🚀"
 );
