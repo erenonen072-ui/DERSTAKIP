@@ -1,4 +1,5 @@
 export default async function handler(req, res) {
+  // Sadece POST kabul et
   if (req.method !== "POST") {
     return res.status(405).json({
       success: false,
@@ -13,8 +14,7 @@ export default async function handler(req, res) {
     if (!apiKey) {
       return res.status(500).json({
         success: false,
-        error:
-          "GEMINI_API_KEY bulunamadı. Vercel > Settings > Environment Variables bölümünü kontrol et."
+        error: "GEMINI_API_KEY bulunamadı. Vercel Environment Variables bölümünü kontrol et."
       });
     }
 
@@ -24,14 +24,14 @@ export default async function handler(req, res) {
       student
     } = req.body || {};
 
-    if (!message || typeof message !== "string") {
+    if (!message || !message.trim()) {
       return res.status(400).json({
         success: false,
         error: "Mesaj boş olamaz."
       });
     }
 
-    // Son 12 mesajı al
+    // Son 12 mesajı kullan
     const previousMessages = Array.isArray(history)
       ? history.slice(-12)
       : [];
@@ -39,11 +39,11 @@ export default async function handler(req, res) {
     const conversation = previousMessages
       .map((item) => {
         const role =
-          item?.role === "user"
+          item.role === "user"
             ? "Öğrenci"
             : "Ders Koçu";
 
-        return `${role}: ${item?.content || ""}`;
+        return `${role}: ${item.content || ""}`;
       })
       .join("\n");
 
@@ -81,7 +81,7 @@ ${
 }
 `;
 
-    // Gemini prompt
+    // Yapay zekaya gönderilecek prompt
     const prompt = `
 Sen "DersTakip" adlı öğrenci takip uygulamasının yapay zeka Ders Koçusun.
 
@@ -89,23 +89,23 @@ Sen "DersTakip" adlı öğrenci takip uygulamasının yapay zeka Ders Koçusun.
 
 KURALLAR:
 
-1. Öğrencinin yazdığı mesaja doğrudan cevap ver.
-2. Aynı tavsiyeleri sürekli tekrar etme.
-3. Matematik sorusunda matematik hakkında konuş.
-4. Motivasyon istiyorsa kısa ve gerçekçi motivasyon ver.
-5. Sınav hakkında sorarsa uygun bir çalışma planı oluştur.
+1. Öğrencinin yazdığı mesaja göre cevap ver.
+2. Her mesajda aynı tavsiyeleri tekrar etme.
+3. Öğrenci matematik soruyorsa matematik hakkında konuş.
+4. Öğrenci motivasyon istiyorsa motivasyon ver.
+5. Öğrenci sınav soruyorsa uygun bir çalışma planı oluştur.
 6. Öğrenci "merhaba" diyorsa normal şekilde karşılık ver.
-7. Önceki konuşmaları mümkün olduğunda dikkate al.
+7. Öğrenci önceki mesajlarından bahsediyorsa konuşma geçmişini kullan.
 8. Öğrenci bir konuyu anlamadığını söylüyorsa basit şekilde anlat.
 9. Gereksiz uzun cevap verme.
 10. Yaşa uygun ve anlaşılır Türkçe kullan.
-11. Sürekli "25 dakika çalış" tavsiyesi verme.
-12. Aynı cümleleri tekrar tekrar kullanma.
-13. Cevabı mümkün olduğunca öğrencinin mesajına özel oluştur.
-14. Ders konularında gerekirse örnekler kullan.
-15. Öğrenciden gereksiz kişisel bilgi isteme.
-16. Bilmediğin bir konuda kesin bilgi veriyormuş gibi davranma.
-17. Ders çalışmayı destekleyen, güvenli ve faydalı öneriler ver.
+11. Sürekli "25 dakika çalış" tavsiyesini kullanma.
+12. Aynı cümleyi tekrar tekrar kullanma.
+13. Cevapları mümkün olduğunca öğrencinin mesajına özel oluştur.
+14. Matematik, fen, Türkçe ve İngilizce gibi derslerde gerektiğinde örnek ver.
+15. Öğrencinin özel veya hassas kişisel bilgilerini isteme.
+16. Bilmediğin bir şeyi kesin bilgiymiş gibi söyleme.
+17. Öğrenci soru sorarsa mümkün olduğunca doğrudan cevap ver.
 
 ${studentInfo}
 
@@ -118,12 +118,10 @@ ${message}
 Şimdi doğrudan öğrencinin mesajına cevap ver.
 `;
 
-    // Gemini API URL
+    // Gemini API
     const url =
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" +
-      encodeURIComponent(apiKey);
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
 
-    // Gemini isteği
     const response = await fetch(url, {
       method: "POST",
 
@@ -135,7 +133,6 @@ ${message}
         contents: [
           {
             role: "user",
-
             parts: [
               {
                 text: prompt
@@ -151,62 +148,46 @@ ${message}
       })
     });
 
-    // Gelen cevabı oku
     const raw = await response.text();
 
-    let result;
+    let data;
 
     try {
-      result = raw ? JSON.parse(raw) : null;
-    } catch (parseError) {
-      console.error(
-        "GEMINI RAW RESPONSE:",
-        raw
-      );
+      data = JSON.parse(raw);
+    } catch {
+      console.error("GEMINI RAW RESPONSE:", raw);
 
       return res.status(502).json({
         success: false,
-        error:
-          "Gemini API geçerli JSON döndürmedi.",
-        details: raw
+        error: "Gemini API geçerli JSON döndürmedi."
       });
     }
 
     // Gemini hata döndürdüyse
     if (!response.ok) {
-      console.error(
-        "GEMINI ERROR:",
-        JSON.stringify(result, null, 2)
-      );
-
-      const geminiError =
-        result?.error?.message ||
-        result?.error?.status ||
-        JSON.stringify(result?.error || result);
+      console.error("GEMINI ERROR:", data);
 
       return res.status(response.status).json({
         success: false,
-        error: geminiError
+        error:
+          data?.error?.message ||
+          "Gemini API isteği başarısız oldu."
       });
     }
 
-    // Cevabı çıkar
+    // Cevabı al
     const answer =
-      result?.candidates?.[0]?.content?.parts
-        ?.map((part) => part?.text || "")
+      data?.candidates?.[0]?.content?.parts
+        ?.map((part) => part.text || "")
         .join("")
         .trim();
 
     if (!answer) {
-      console.error(
-        "GEMINI EMPTY RESPONSE:",
-        JSON.stringify(result, null, 2)
-      );
+      console.error("GEMINI EMPTY RESPONSE:", data);
 
       return res.status(502).json({
         success: false,
-        error:
-          "Gemini cevap döndürdü ancak cevap metni bulunamadı."
+        error: "Yapay zekadan cevap alınamadı."
       });
     }
 
@@ -217,10 +198,7 @@ ${message}
     });
 
   } catch (error) {
-    console.error(
-      "COACH SERVER ERROR:",
-      error
-    );
+    console.error("COACH SERVER ERROR:", error);
 
     return res.status(500).json({
       success: false,
