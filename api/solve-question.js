@@ -1,122 +1,104 @@
-const OpenAI = require("openai");
+async function solveAIQuestion() {
+  const question =
+    document.getElementById("aiQuestion").value.trim();
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-});
+  const subject =
+    document.getElementById("aiSubject").value;
 
-module.exports = async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({
-      success: false,
-      error: "Sadece POST isteği kabul edilir."
-    });
+  const mode =
+    document.getElementById("aiMode").value;
+
+  const result =
+    document.getElementById("aiResult");
+
+  const loading =
+    document.getElementById("aiLoading");
+
+  const button =
+    document.getElementById("aiSolveButton");
+
+  if (!question && !aiImageData) {
+    toast("Lütfen soru yaz veya fotoğraf yükle.");
+    return;
   }
+
+  result.style.display = "none";
+  result.textContent = "";
+
+  loading.style.display = "block";
+
+  button.disabled = true;
+  button.style.opacity = "0.6";
+  button.textContent = "🤖 Çözülüyor...";
 
   try {
-    if (!process.env.OPENAI_API_KEY) {
-      return res.status(500).json({
-        success: false,
-        error: "OPENAI_API_KEY Vercel'de ayarlanmamış."
-      });
-    }
-
-    const {
-      image,
-      question,
-      subject,
-      mode
-    } = req.body || {};
-
-    if (!image && !question) {
-      return res.status(400).json({
-        success: false,
-        error: "Soru fotoğrafı veya soru metni gerekli."
-      });
-    }
-
-    const content = [
-      {
-        type: "input_text",
-        text: `
-Sen DersTakip uygulamasının yapay zeka ders koçusun.
-
-Öğrencinin sorusunu çöz.
-
-Ders: ${subject || "Belirtilmemiş"}
-Anlatım şekli: ${mode || "Adım adım"}
-
-Kurallar:
-- Soruyu dikkatlice oku.
-- İşlemleri kontrol et.
-- Cevabı tahmin etme.
-- Öğrencinin anlayacağı Türkçe kullan.
-- Çözümü adım adım göster.
-- En sonunda doğru cevabı açıkça yaz.
-- Fotoğraf okunmuyorsa bunu söyle.
-- Birden fazla soru varsa ayrı ayrı çöz.
-
-Yanıt formatı:
-
-SORU
-Sorunun kısa özeti.
-
-ÇÖZÜM
-Adım adım çözüm.
-
-CEVAP
-Doğru cevap.
-
-İPUCU
-Benzer sorular için kısa ipucu.
-`
-      }
-    ];
-
-    if (question && question.trim()) {
-      content.push({
-        type: "input_text",
-        text: `Öğrencinin yazdığı soru:\n${question}`
-      });
-    }
-
-    if (image) {
-      if (!image.startsWith("data:image/")) {
-        return res.status(400).json({
-          success: false,
-          error: "Geçersiz görsel."
-        });
-      }
-
-      content.push({
-        type: "input_image",
-        image_url: image,
-        detail: "high"
-      });
-    }
-
-    const response = await client.responses.create({
-      model: "gpt-5.6",
-      input: [
-        {
-          role: "user",
-          content
-        }
-      ]
+    const response = await fetch("/api/solve", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({
+        image: aiImageData || null,
+        question: question || null,
+        subject: subject,
+        mode: mode
+      })
     });
 
-    const answer = response.output_text || "";
+    /*
+     * ÖNEMLİ:
+     * Direkt response.json() kullanmıyoruz.
+     * Çünkü Vercel bazen JSON yerine HTML hata sayfası döndürebilir.
+     */
+    const rawText = await response.text();
 
-    return res.status(200).json({
-      success: true,
-      answer
-    });
+    let data;
+
+    try {
+      data = JSON.parse(rawText);
+    } catch (jsonError) {
+      console.error("API JSON DEĞİL:", rawText);
+
+      throw new Error(
+        "API JSON yerine başka bir yanıt döndürdü. " +
+        "Vercel üzerinde /api/solve dosyası bulunamıyor veya API hata veriyor."
+      );
+    }
+
+    if (!response.ok || !data.success) {
+      throw new Error(
+        data.error ||
+        data.message ||
+        "Yapay zeka soruyu çözemedi."
+      );
+    }
+
+    result.textContent =
+      data.answer || "Yanıt alınamadı.";
+
+    result.style.display = "block";
+
+    toast("Soru başarıyla çözüldü 🧠✅");
 
   } catch (error) {
-    console.error("AI ERROR:", error);
 
-    return res.status(500).json({
-      success: false,
-      error: "Yapay zeka soruyu çözerken hata oluştu."
-    });
+    console.error("AI SOLVE ERROR:", error);
+
+    result.textContent =
+      "❌ Soru çözme servisine bağlanılamadı.\n\n" +
+      error.message;
+
+    result.style.display = "block";
+
+    toast("Soru çözülürken hata oluştu.");
+
+  } finally {
+
+    loading.style.display = "none";
+
+    button.disabled = false;
+    button.style.opacity = "1";
+    button.textContent = "🧠 Soruyu Çöz";
   }
-};
+}
