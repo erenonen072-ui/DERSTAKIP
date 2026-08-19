@@ -4,9 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#6857f5">
-  <meta name="description" content="DersTakip - Derslerini, hedeflerini ve çalışma süreni takip et.">
-
-  <title>DersTakip 2.0</title>
+  <meta name="description" content="DersTakip - Derslerini, görevlerini ve sınavlarını takip et.">
+  <title>DersTakip</title>
 
   <style>
     * {
@@ -17,7 +16,7 @@
 
     :root {
       --primary: #6857f5;
-      --primary2: #917dff;
+      --primary2: #927cff;
       --dark: #15182b;
       --dark2: #202540;
       --text: #171a2b;
@@ -29,7 +28,7 @@
       --red: #ff5b6e;
       --yellow: #ffbd3c;
       --blue: #3b82f6;
-      --shadow: 0 15px 45px rgba(25, 30, 60, .08);
+      --shadow: 0 15px 45px rgba(25,30,60,.08);
     }
 
     body.dark {
@@ -41,21 +40,17 @@
       --shadow: 0 15px 45px rgba(0,0,0,.25);
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
-
     body {
-      font-family: Inter, Arial, Helvetica, sans-serif;
+      font-family: Inter, Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      transition: background .25s, color .25s;
     }
 
     button,
     input,
-    select {
+    select,
+    textarea {
       font: inherit;
     }
 
@@ -63,9 +58,7 @@
       cursor: pointer;
     }
 
-    /* =========================
-       AUTH
-    ========================= */
+    /* AUTH */
 
     #authScreen {
       min-height: 100vh;
@@ -74,9 +67,9 @@
       justify-content: center;
       padding: 25px;
       background:
-        radial-gradient(circle at 10% 10%, #b7aaff 0, transparent 28%),
-        radial-gradient(circle at 90% 90%, #ffc4e2 0, transparent 28%),
-        linear-gradient(135deg, #5e51ed, #9a7dff);
+        radial-gradient(circle at 10% 10%, #b7aaff, transparent 28%),
+        radial-gradient(circle at 90% 90%, #ffc4e2, transparent 28%),
+        linear-gradient(135deg,#5e51ed,#9a7dff);
     }
 
     .auth-wrapper {
@@ -85,7 +78,7 @@
       min-height: 650px;
       display: grid;
       grid-template-columns: 1.1fr .9fr;
-      background: rgba(255,255,255,.95);
+      background: rgba(255,255,255,.96);
       border-radius: 35px;
       overflow: hidden;
       box-shadow: 0 35px 100px rgba(0,0,0,.25);
@@ -94,11 +87,9 @@
     .auth-showcase {
       padding: 50px;
       color: white;
-      position: relative;
-      overflow: hidden;
       background:
         radial-gradient(circle at 80% 15%, #ffffff35, transparent 25%),
-        linear-gradient(145deg, #6153ef, #9378ff);
+        linear-gradient(145deg,#6153ef,#9378ff);
     }
 
     .auth-showcase h1 {
@@ -115,25 +106,17 @@
       font-size: 17px;
       line-height: 1.7;
       opacity: .9;
-      max-width: 480px;
     }
 
     .auth-illustration {
-      width: 300px;
-      height: 300px;
+      width: 270px;
+      height: 270px;
       margin: 35px auto 20px;
       border-radius: 50%;
       background: rgba(255,255,255,.14);
       display: grid;
       place-items: center;
-      font-size: 150px;
-      box-shadow: inset 0 0 50px #ffffff18;
-      animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
+      font-size: 140px;
     }
 
     .auth-features {
@@ -193,13 +176,11 @@
       background: transparent;
       border-radius: 9px;
       font-weight: 800;
-      color: #555;
     }
 
     .auth-tabs button.active {
       background: white;
       box-shadow: 0 4px 12px #0001;
-      color: #171a2b;
     }
 
     .form-group {
@@ -211,7 +192,6 @@
       font-size: 13px;
       font-weight: 800;
       margin-bottom: 7px;
-      color: #292d40;
     }
 
     .form-group input {
@@ -220,14 +200,8 @@
       border: 1px solid #dfe3ec;
       border-radius: 13px;
       outline: none;
-      transition: .2s;
       background: white;
       color: #171a2b;
-    }
-
-    .form-group input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 4px #6658f515;
     }
 
     .password-wrap {
@@ -256,12 +230,6 @@
       padding: 14px;
       border-radius: 13px;
       font-weight: 900;
-      box-shadow: 0 10px 25px #6658f530;
-      transition: .2s;
-    }
-
-    .auth-button:hover {
-      transform: translateY(-2px);
     }
 
     #authMessage {
@@ -271,9 +239,7 @@
       min-height: 18px;
     }
 
-    /* =========================
-       APP
-    ========================= */
+    /* APP */
 
     #app {
       display: none;
@@ -313,14 +279,12 @@
       margin-bottom: 6px;
       text-align: left;
       font-weight: 800;
-      transition: .2s;
     }
 
     .menu button:hover,
     .menu button.active {
       background: #292d49;
       color: white;
-      transform: translateX(2px);
     }
 
     .logout {
@@ -346,7 +310,6 @@
       max-width: 1700px;
     }
 
-    /* Üst menü yok */
     .topbar {
       display: flex;
       justify-content: space-between;
@@ -371,6 +334,7 @@
       align-items: center;
       gap: 10px;
       box-shadow: var(--shadow);
+      cursor: pointer;
     }
 
     .avatar {
@@ -382,11 +346,37 @@
       place-items: center;
     }
 
-    /* =========================
-       HERO
-    ========================= */
+    /* PAGE */
 
-    .hero {
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .page-header {
+      background: var(--white);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border-radius: 24px;
+      padding: 25px;
+      margin-bottom: 20px;
+    }
+
+    .page-header h2 {
+      font-size: 28px;
+      margin-bottom: 7px;
+    }
+
+    .page-header p {
+      color: var(--muted);
+    }
+
+    /* HOME */
+
+    .home-hero {
       background:
         radial-gradient(circle at 90% 20%,#ffffff25,transparent 30%),
         linear-gradient(135deg,#6357ef,#9275ff);
@@ -394,14 +384,13 @@
       border-radius: 25px;
       padding: 30px;
       margin-bottom: 20px;
-      box-shadow: 0 15px 40px #6658f525;
     }
 
-    .hero h2 {
+    .home-hero h2 {
       margin-bottom: 8px;
     }
 
-    .hero p {
+    .home-hero p {
       opacity: .9;
       margin-bottom: 20px;
     }
@@ -418,23 +407,38 @@
       height: 100%;
       background: white;
       width: 0%;
-      transition: width .4s ease;
+      transition: .4s;
     }
 
-    .xp {
-      font-size: 13px;
-      margin-top: 8px;
-    }
-
-    /* =========================
-       GRID
-    ========================= */
-
-    .grid {
+    .home-grid {
       display: grid;
-      grid-template-columns:minmax(0,2fr) minmax(280px,1fr);
-      gap: 20px;
+      grid-template-columns: repeat(3,1fr);
+      gap: 18px;
     }
+
+    .home-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border-radius: 20px;
+      padding: 22px;
+    }
+
+    .home-card .icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .home-card h3 {
+      margin-bottom: 7px;
+    }
+
+    .home-card p {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* COMMON */
 
     .card {
       background: var(--white);
@@ -442,7 +446,7 @@
       padding: 22px;
       box-shadow: var(--shadow);
       border: 1px solid var(--border);
-      color: var(--text);
+      margin-bottom: 20px;
     }
 
     .card-title {
@@ -452,195 +456,6 @@
       gap: 10px;
       margin-bottom: 15px;
     }
-
-    .card-title h2 {
-      font-size: 20px;
-    }
-
-    /* =========================
-       COACH
-    ========================= */
-
-    .coach {
-      background: linear-gradient(135deg,#eef0ff,#f8f6ff);
-      border: 1px solid #dfdcff;
-      margin-bottom: 20px;
-    }
-
-    body.dark .coach {
-      background: #202540;
-      border-color: #353b5c;
-    }
-
-    .coach-head {
-      display: flex;
-      gap: 14px;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .coach-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 16px;
-      display: grid;
-      place-items: center;
-      font-size: 28px;
-      background: #dedaff;
-    }
-
-    .coach-message {
-      line-height: 1.6;
-      color: var(--muted);
-    }
-
-    /* =========================
-       TASK
-    ========================= */
-
-    .task {
-      display: flex;
-      align-items: center;
-      gap: 13px;
-      padding: 15px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .checkbox {
-      width: 28px;
-      height: 28px;
-      border: 2px solid #d8dce8;
-      border-radius: 8px;
-      display: grid;
-      place-items: center;
-      flex-shrink: 0;
-      transition: .2s;
-    }
-
-    .task.completed .checkbox {
-      background: var(--green);
-      border-color: var(--green);
-      color: white;
-    }
-
-    .task.completed .task-name {
-      text-decoration: line-through;
-      color: #9aa1b2;
-    }
-
-    .task-content {
-      min-width: 0;
-    }
-
-    .task-name {
-      font-weight: 800;
-      overflow-wrap: anywhere;
-    }
-
-    .task-xp {
-      margin-left: auto;
-      background: #f0efff;
-      color: #6257df;
-      padding: 6px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 800;
-      white-space: nowrap;
-    }
-
-    .delete-task {
-      border: none;
-      background: transparent;
-      font-size: 16px;
-      padding: 5px;
-    }
-
-    .add-task {
-      display: flex;
-      gap: 8px;
-      margin-top: 15px;
-    }
-
-    .add-task input {
-      flex: 1;
-      border: 1px solid var(--border);
-      padding: 13px;
-      border-radius: 11px;
-      outline: none;
-      background: var(--white);
-      color: var(--text);
-    }
-
-    .add-task button {
-      border: none;
-      background: var(--primary);
-      color: white;
-      padding: 12px 18px;
-      border-radius: 11px;
-      font-weight: 900;
-    }
-
-    /* =========================
-       STATS
-    ========================= */
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3,1fr);
-      gap: 15px;
-      margin-top: 20px;
-    }
-
-    .stat {
-      background: var(--white);
-      padding: 20px;
-      border-radius: 18px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-    }
-
-    .stat strong {
-      display: block;
-      font-size: 25px;
-      margin: 8px 0;
-    }
-
-    .stat small {
-      color: var(--muted);
-    }
-
-    /* =========================
-       PET
-    ========================= */
-
-    .pet-card {
-      text-align: center;
-      overflow: hidden;
-    }
-
-    .pet-display {
-      height: 180px;
-      border-radius: 20px;
-      background: linear-gradient(135deg,#fff1b9,#ffd8ec);
-      display: grid;
-      place-items: center;
-      font-size: 95px;
-      margin: 15px 0;
-    }
-
-    .pet-name {
-      font-size: 20px;
-      font-weight: 950;
-    }
-
-    .pet-level {
-      color: var(--muted);
-      margin-top: 5px;
-    }
-
-    /* =========================
-       BUTTONS
-    ========================= */
 
     .primary-btn {
       border: none;
@@ -669,238 +484,235 @@
       font-weight: 800;
     }
 
-    /* =========================
-       MARKET
-    ========================= */
-
-    .market-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill,minmax(180px,1fr));
-      gap: 15px;
-    }
-
-    .shop-item {
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 18px;
+    .empty {
       text-align: center;
-      background: var(--white);
-      transition: .2s;
-    }
-
-    .shop-item:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow);
-    }
-
-    .shop-icon {
-      font-size: 50px;
-      margin-bottom: 8px;
-    }
-
-    .shop-item h3 {
-      font-size: 15px;
-      margin-bottom: 5px;
-    }
-
-    .shop-item p {
+      padding: 35px 15px;
       color: var(--muted);
-      font-size: 12px;
-      margin-bottom: 12px;
     }
 
-    .price {
-      font-weight: 900;
-      color: #d79a00;
+    .empty-icon {
+      font-size: 45px;
       margin-bottom: 10px;
     }
 
-    /* =========================
-       COUNTDOWN
-    ========================= */
+    /* TASKS */
 
-    .countdown {
-      text-align: center;
+    .task {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--border);
     }
 
-    .countdown-number {
+    .checkbox {
+      width: 28px;
+      height: 28px;
+      border: 2px solid #d8dce8;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .task.completed .checkbox {
+      background: var(--green);
+      border-color: var(--green);
+      color: white;
+    }
+
+    .task.completed .task-name {
+      text-decoration: line-through;
+      color: #9aa1b2;
+    }
+
+    .task-content {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .task-name {
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .task-xp {
+      background: #f0efff;
+      color: #6257df;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .delete-task {
+      border: none;
+      background: transparent;
+      font-size: 16px;
+    }
+
+    .add-task {
+      display: flex;
+      gap: 8px;
+      margin-top: 15px;
+    }
+
+    .add-task input,
+    .input {
+      flex: 1;
+      border: 1px solid var(--border);
+      padding: 13px;
+      border-radius: 11px;
+      outline: none;
+      background: var(--white);
+      color: var(--text);
+    }
+
+    /* SUBJECTS */
+
+    .subject-grid,
+    .exam-grid,
+    .market-grid,
+    .badge-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill,minmax(210px,1fr));
+      gap: 15px;
+    }
+
+    .subject,
+    .exam,
+    .shop-item,
+    .badge-item {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+    }
+
+    .subject-icon,
+    .exam-icon,
+    .shop-icon,
+    .badge-icon {
       font-size: 42px;
-      font-weight: 950;
-      color: var(--primary);
-      margin: 10px 0;
+      margin-bottom: 10px;
     }
 
-    /* =========================
-       FOCUS
-    ========================= */
+    .subject h3,
+    .exam h3,
+    .shop-item h3,
+    .badge-item h3 {
+      margin-bottom: 7px;
+    }
 
-    .focus {
+    .muted {
+      color: var(--muted);
+    }
+
+    /* FOCUS */
+
+    .focus-card {
       text-align: center;
+      max-width: 700px;
+      margin: auto;
     }
 
     .timer {
-      font-size: 75px;
+      font-size: 85px;
       font-weight: 950;
-      margin: 25px 0;
-      letter-spacing: 2px;
+      margin: 30px 0;
+      color: var(--primary);
     }
 
     .focus-buttons {
       display: flex;
       justify-content: center;
       gap: 10px;
+      flex-wrap: wrap;
     }
 
-    /* =========================
-       ACHIEVEMENTS
-    ========================= */
+    /* PET */
 
-    .badges {
-      display: grid;
-      grid-template-columns: repeat(auto-fill,minmax(140px,1fr));
-      gap: 12px;
-    }
-
-    .badge {
+    .pet-big {
+      max-width: 600px;
+      margin: auto;
       text-align: center;
-      padding: 17px 10px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      background: var(--white);
     }
 
-    .badge.locked {
-      opacity: .4;
-      filter: grayscale(1);
-    }
-
-    .badge-icon {
-      font-size: 38px;
-      margin-bottom: 7px;
-    }
-
-    .badge small {
-      color: var(--muted);
-    }
-
-    /* =========================
-       MODAL
-    ========================= */
-
-    .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.55);
-      backdrop-filter: blur(8px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 10000;
-      padding: 20px;
-    }
-
-    .modal.show {
-      display: flex;
-    }
-
-    .modal-box {
-      width: 100%;
-      max-width: 500px;
-      background: var(--white);
+    .pet-display {
+      height: 300px;
       border-radius: 25px;
-      padding: 25px;
-      color: var(--text);
-      max-height: 90vh;
-      overflow: auto;
+      background: linear-gradient(135deg,#fff1b9,#ffd8ec);
+      display: grid;
+      place-items: center;
+      font-size: 150px;
+      margin: 20px 0;
     }
 
-    .modal-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .close-modal {
-      border: none;
-      background: transparent;
+    .pet-name {
       font-size: 25px;
+      font-weight: 950;
     }
 
-    /* =========================
-       TOAST
-    ========================= */
+    /* COACH */
 
-    #toastContainer {
-      position: fixed;
-      right: 20px;
-      bottom: 20px;
-      z-index: 20000;
+    .coach-box {
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .coach-message {
+      background: #f0efff;
+      padding: 25px;
+      border-radius: 18px;
+      line-height: 1.7;
+      margin: 20px 0;
+    }
+
+    body.dark .coach-message {
+      background: #202540;
+    }
+
+    /* STATS */
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 18px;
+    }
+
+    .stat {
+      background: var(--white);
+      padding: 25px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 35px;
+      margin: 10px 0;
+    }
+
+    /* PROFILE */
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .setting {
       display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .toast {
-      min-width: 260px;
-      background: var(--dark);
-      color: white;
-      padding: 15px 18px;
-      border-radius: 15px;
-      box-shadow: 0 15px 35px #0003;
-      animation: toastIn .3s ease;
-    }
-
-    @keyframes toastIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* =========================
-       CELEBRATION
-    ========================= */
-
-    #celebration {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      display: none;
       align-items: center;
-      justify-content: center;
-      z-index: 30000;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
     }
 
-    .celebration-box {
-      background: white;
-      color: #171a2b;
-      padding: 35px;
-      border-radius: 28px;
-      text-align: center;
-      box-shadow: 0 30px 100px #0004;
-      animation: celebrate .7s ease;
-    }
-
-    .celebration-box h2 {
-      font-size: 30px;
-      color: #6658f5;
-      margin-bottom: 12px;
-    }
-
-    @keyframes celebrate {
-      0% { transform: scale(.5) rotate(-5deg); opacity: 0; }
-      70% { transform: scale(1.08) rotate(2deg); }
-      100% { transform: scale(1) rotate(0); opacity: 1; }
-    }
-
-    /* =========================
-       MOBILE MENU
-    ========================= */
+    /* MOBILE */
 
     .mobile-menu-button {
       display: none;
@@ -910,7 +722,7 @@
       display: none;
     }
 
-    @media (max-width: 1100px) {
+    @media(max-width:1100px) {
       .sidebar {
         width: 82px;
       }
@@ -939,29 +751,17 @@
         font-size: 20px;
       }
 
-      .logout button {
-        font-size: 0;
-      }
-
-      .logout button::before {
-        content: "🚪";
-        font-size: 20px;
-      }
-
       .main {
         margin-left: 82px;
       }
 
-      .grid {
+      .home-grid,
+      .profile-grid {
         grid-template-columns: 1fr;
       }
     }
 
-    @media (max-width: 700px) {
-      body {
-        padding-bottom: 15px;
-      }
-
+    @media(max-width:700px) {
       .sidebar {
         display: none;
       }
@@ -997,7 +797,6 @@
         color: white;
         font-size: 23px;
         z-index: 9998;
-        box-shadow: 0 10px 25px #0003;
       }
 
       .mobile-drawer {
@@ -1011,8 +810,8 @@
         color: white;
         z-index: 9999;
         padding: 25px 18px;
-        transition: right .25s ease;
-        box-shadow: -15px 0 40px #0003;
+        transition: right .25s;
+        overflow-y: auto;
       }
 
       .mobile-drawer.open {
@@ -1022,7 +821,6 @@
       .mobile-drawer-head {
         display: flex;
         justify-content: space-between;
-        align-items: center;
         margin-bottom: 25px;
       }
 
@@ -1051,18 +849,14 @@
       }
 
       .topbar {
-        padding-right: 58px;
+        padding-right: 60px;
       }
 
       .profile {
         display: none;
       }
 
-      .hero {
-        padding: 22px;
-      }
-
-      .stats {
+      .stats-grid {
         grid-template-columns: 1fr;
       }
 
@@ -1074,22 +868,8 @@
         width: 100%;
       }
 
-      .market-grid {
-        grid-template-columns: repeat(2,1fr);
-      }
-
       .timer {
         font-size: 55px;
-      }
-    }
-
-    @media (max-width: 400px) {
-      .market-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .auth-box {
-        padding: 25px 16px;
       }
     }
   </style>
@@ -1097,9 +877,7 @@
 
 <body>
 
-<!-- =========================
-     LOGIN
-========================= -->
+<!-- ================= AUTH ================= -->
 
 <section id="authScreen">
 
@@ -1113,9 +891,8 @@
       </h1>
 
       <p>
-        DersTakip ile görevlerini tamamla,
-        XP kazan, seviyeni yükselt, evcil hayvanını
-        geliştir ve sınavlarına hazırlan.
+        Derslerini takip et, görevlerini tamamla,
+        XP kazan ve hedeflerine ulaş.
       </p>
 
       <div class="auth-illustration">
@@ -1123,12 +900,12 @@
       </div>
 
       <div class="auth-features">
-        <div class="auth-feature">🤖 Ders Koçu</div>
-        <div class="auth-feature">🔥 Seri Sistemi</div>
-        <div class="auth-feature">⭐ XP & Seviye</div>
-        <div class="auth-feature">🐣 Evcil Hayvan</div>
-        <div class="auth-feature">🛒 Ödül Marketi</div>
-        <div class="auth-feature">🎯 Sınav Takibi</div>
+        <div class="auth-feature">✅ Görev Takibi</div>
+        <div class="auth-feature">📚 Dersler</div>
+        <div class="auth-feature">🎯 Sınavlar</div>
+        <div class="auth-feature">⏱️ Odaklan</div>
+        <div class="auth-feature">🏆 Rozetler</div>
+        <div class="auth-feature">📊 İstatistikler</div>
       </div>
 
     </div>
@@ -1162,24 +939,16 @@
 
       </div>
 
-      <!-- LOGIN -->
-
-      <form
-        id="loginForm"
-        onsubmit="login(event)"
-      >
+      <form id="loginForm" onsubmit="login(event)">
 
         <div class="form-group">
-
           <label>E-posta</label>
-
           <input
             id="loginEmail"
             type="email"
             required
             placeholder="ornek@mail.com"
           >
-
         </div>
 
         <div class="form-group">
@@ -1207,16 +976,11 @@
 
         </div>
 
-        <button
-          class="auth-button"
-          type="submit"
-        >
+        <button class="auth-button">
           Giriş Yap 🚀
         </button>
 
       </form>
-
-      <!-- REGISTER -->
 
       <form
         id="registerForm"
@@ -1276,10 +1040,7 @@
 
         </div>
 
-        <button
-          class="auth-button"
-          type="submit"
-        >
+        <button class="auth-button">
           Hesap Oluştur ✨
         </button>
 
@@ -1294,13 +1055,11 @@
 </section>
 
 
-<!-- =========================
-     APP
-========================= -->
+<!-- ================= APP ================= -->
 
 <div id="app">
 
-  <!-- DESKTOP SIDEBAR -->
+  <!-- SIDEBAR -->
 
   <aside class="sidebar">
 
@@ -1367,7 +1126,7 @@
   </aside>
 
 
-  <!-- MOBILE MENU BUTTON -->
+  <!-- MOBILE -->
 
   <button
     class="mobile-menu-button"
@@ -1375,9 +1134,6 @@
   >
     ☰
   </button>
-
-
-  <!-- MOBILE DRAWER -->
 
   <aside
     id="mobileDrawer"
@@ -1470,7 +1226,6 @@
       <div
         class="profile"
         onclick="navigate('profile')"
-        style="cursor:pointer"
       >
 
         <div
@@ -1489,303 +1244,656 @@
     </div>
 
 
-    <!-- HERO -->
+    <!-- ================= HOME ================= -->
 
-    <div
-      class="hero"
-      id="homeHero"
+    <section
+      id="page-home"
+      class="page active"
     >
 
-      <h2>
-        Bugünkü hedefin 🎯
-      </h2>
+      <div class="home-hero">
 
-      <p id="taskSummary">
-        Görevlerini tamamlamaya başla.
-      </p>
+        <h2>
+          Bugünkü hedefin 🎯
+        </h2>
 
-      <div class="progress">
-        <span id="progressBar"></span>
+        <p id="homeSummary">
+          Bugün için henüz görev eklemedin.
+        </p>
+
+        <div class="progress">
+          <span id="homeProgress"></span>
+        </div>
+
       </div>
 
-      <div
-        class="xp"
-        id="xpText"
-      >
-        0 XP
-      </div>
 
-    </div>
+      <div class="home-grid">
 
+        <div
+          class="home-card"
+          onclick="navigate('tasks')"
+          style="cursor:pointer"
+        >
 
-    <!-- CONTENT -->
+          <div class="icon">✅</div>
 
-    <div class="grid">
+          <h3>Görevlerin</h3>
 
-      <div id="mainContent">
-
-        <!-- COACH -->
-
-        <div class="card coach">
-
-          <div class="coach-head">
-
-            <div class="coach-icon">
-              🤖
-            </div>
-
-            <div>
-              <h2>Ders Koçu</h2>
-              <small style="color:var(--muted)">
-                Bugünün önerisi
-              </small>
-            </div>
-
-          </div>
-
-          <p
-            id="coachMessage"
-            class="coach-message"
-          >
-            Bugün güzel bir çalışma günü!
+          <p id="homeTaskInfo">
+            Görevlerini görüntüle.
           </p>
 
         </div>
 
 
-        <!-- TASKS -->
-
         <div
-          class="card"
-          id="tasksSection"
+          class="home-card"
+          onclick="navigate('subjects')"
+          style="cursor:pointer"
         >
 
-          <div class="card-title">
+          <div class="icon">📚</div>
 
-            <h2>
-              Bugünkü Görevler
-            </h2>
+          <h3>Derslerin</h3>
 
-            <span id="taskCounter">
-              0 / 0
+          <p>
+            Derslerini düzenle ve takip et.
+          </p>
+
+        </div>
+
+
+        <div
+          class="home-card"
+          onclick="navigate('focus')"
+          style="cursor:pointer"
+        >
+
+          <div class="icon">⏱️</div>
+
+          <h3>Odaklan</h3>
+
+          <p>
+            Çalışma süreni başlat.
+          </p>
+
+        </div>
+
+
+        <div
+          class="home-card"
+          onclick="navigate('exams')"
+          style="cursor:pointer"
+        >
+
+          <div class="icon">📅</div>
+
+          <h3>Sınavlar</h3>
+
+          <p>
+            Yaklaşan sınavlarını kontrol et.
+          </p>
+
+        </div>
+
+
+        <div
+          class="home-card"
+          onclick="navigate('stats')"
+          style="cursor:pointer"
+        >
+
+          <div class="icon">📊</div>
+
+          <h3>İstatistikler</h3>
+
+          <p>
+            Çalışma performansını incele.
+          </p>
+
+        </div>
+
+
+        <div
+          class="home-card"
+          onclick="navigate('coach')"
+          style="cursor:pointer"
+        >
+
+          <div class="icon">🤖</div>
+
+          <h3>Ders Koçu</h3>
+
+          <p>
+            Bugünkü çalışma önerini al.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= TASKS ================= -->
+
+    <section
+      id="page-tasks"
+      class="page"
+    >
+
+      <div class="page-header">
+
+        <h2>✅ Görevler</h2>
+
+        <p>
+          Bugün tamamlaman gereken görevleri yönet.
+        </p>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="card-title">
+
+          <h2>Görev Listesi</h2>
+
+          <span id="taskCounter">
+            0 / 0
+          </span>
+
+        </div>
+
+        <div id="taskList"></div>
+
+        <div class="add-task">
+
+          <input
+            id="newTask"
+            maxlength="150"
+            placeholder="Yeni görev ekle..."
+            onkeydown="if(event.key==='Enter') addTask()"
+          >
+
+          <button
+            class="primary-btn"
+            onclick="addTask()"
+          >
+            + Ekle
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= SUBJECTS ================= -->
+
+    <section
+      id="page-subjects"
+      class="page"
+    >
+
+      <div class="page-header">
+
+        <h2>📚 Dersler</h2>
+
+        <p>
+          Derslerini ekle ve çalışma planını düzenle.
+        </p>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="add-task">
+
+          <input
+            id="subjectInput"
+            class="input"
+            placeholder="Örn. Matematik"
+          >
+
+          <button
+            class="primary-btn"
+            onclick="addSubject()"
+          >
+            + Ders Ekle
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="subjectList"
+        class="subject-grid"
+      ></div>
+
+    </section>
+
+
+    <!-- ================= EXAMS ================= -->
+
+    <section
+      id="page-exams"
+      class="page"
+    >
+
+      <div class="page-header">
+
+        <h2>📅 Sınavlar</h2>
+
+        <p>
+          Sınavlarını ekle ve yaklaşan sınavlarını takip et.
+        </p>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="form-group">
+
+          <label>Sınav adı</label>
+
+          <input
+            id="examName"
+            class="input"
+            placeholder="Örn. Matematik Yazılısı"
+          >
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Tarih</label>
+
+          <input
+            id="examDate"
+            class="input"
+            type="date"
+          >
+
+        </div>
+
+        <button
+          class="primary-btn"
+          onclick="addExam()"
+        >
+          + Sınav Ekle
+        </button>
+
+      </div>
+
+
+      <div
+        id="examList"
+        class="exam-grid"
+      ></div>
+
+    </section>
+
+
+    <!-- ================= FOCUS ================= -->
+
+    <section
+      id="page-focus"
+      class="page"
+    >
+
+      <div class="page-header">
+
+        <h2>⏱️ Odaklan</h2>
+
+        <p>
+          Telefonunu bırak, hedefin için çalış.
+        </p>
+
+      </div>
+
+
+      <div class="card focus-card">
+
+        <div>
+          🎯
+        </div>
+
+        <div
+          id="timer"
+          class="timer"
+        >
+          25:00
+        </div>
+
+        <div class="focus-buttons">
+
+          <button
+            class="primary-btn"
+            onclick="startTimer()"
+          >
+            ▶ Başlat
+          </button>
+
+          <button
+            class="secondary-btn"
+            onclick="pauseTimer()"
+          >
+            ⏸ Duraklat
+          </button>
+
+          <button
+            class="secondary-btn"
+            onclick="resetTimer()"
+          >
+            ↻ Sıfırla
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= COACH ================= -->
+
+    <section
+      id="page-coach"
+      class="page"
+    >
+
+      <div class="page-header">
+
+        <h2>🤖 Ders Koçu</h2>
+
+        <p>
+          Sana özel çalışma önerileri.
+        </p>
+
+      </div>
+
+
+      <div class="card coach-box">
+
+        <div style="font-size:60px;text-align:center">
+          🤖
+        </div>
+
+        <div
+          id="coachMessage"
+          class="coach-message"
+        >
+          Bugün küçük bir hedef belirle ve 25 dakika boyunca
+          sadece o hedefe odaklan.
+        </div>
+
+        <button
+          class="primary-btn"
+          onclick="newCoachAdvice()"
+        >
+          🔄 Yeni Öneri
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= PET ================= -->
+
+    <section
+      id="page-pet"
+      class="page"
+    >
+
+      <div class="page-header">
+
+        <h2>🐣 Evcil Hayvan</h2>
+
+        <p>
+          Çalıştıkça evcil hayvanını geliştir.
+        </p>
+
+      </div>
+
+
+      <div class="card pet-big">
+
+        <div class="pet-display">
+          🐼
+        </div>
+
+        <div
+          id="petName"
+          class="pet-name"
+        >
+          Panda
+        </div>
+
+        <p
+          id="petLevel"
+          class="muted"
+          style="margin-top:7px"
+        >
+          Seviye 1
+        </p>
+
+        <button
+          class="primary-btn"
+          style="margin-top:20px"
+          onclick="feedPet()"
+        >
+          🍎 Panda'yı Besle
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= MARKET ================= -->
+
+    <section
+      id="page-market"
+      class="page"
+    >
+
+      <div class="page-header">
+
+        <h2>🛒 Ödül Marketi</h2>
+
+        <p>
+          Coinlerini kullanarak ödüller satın al.
+        </p>
+
+      </div>
+
+
+      <div
+        id="marketList"
+        class="market-grid"
+      ></div>
+
+    </section>
+
+
+    <!-- ================= ACHIEVEMENTS ================= -->
+
+    <section
+      id="page-achievements"
+      class="page"
+    >
+
+      <div class="page-header">
+
+        <h2>🏆 Rozetler</h2>
+
+        <p>
+          Başarılarını topla ve yeni rozetlerin kilidini aç.
+        </p>
+
+      </div>
+
+
+      <div
+        id="badgeList"
+        class="badge-grid"
+      ></div>
+
+    </section>
+
+
+    <!-- ================= STATS ================= -->
+
+    <section
+      id="page-stats"
+      class="page"
+    >
+
+      <div class="page-header">
+
+        <h2>📊 İstatistikler</h2>
+
+        <p>
+          Çalışma performansını buradan takip et.
+        </p>
+
+      </div>
+
+
+      <div class="stats-grid">
+
+        <div class="stat">
+          ⭐
+          <strong id="statXP">0</strong>
+          <span class="muted">Toplam XP</span>
+        </div>
+
+        <div class="stat">
+          🔥
+          <strong id="statStreak">0</strong>
+          <span class="muted">Günlük Seri</span>
+        </div>
+
+        <div class="stat">
+          🪙
+          <strong id="statCoins">0</strong>
+          <span class="muted">Coin</span>
+        </div>
+
+        <div class="stat">
+          ✅
+          <strong id="statCompleted">0</strong>
+          <span class="muted">Tamamlanan Görev</span>
+        </div>
+
+        <div class="stat">
+          📚
+          <strong id="statSubjects">0</strong>
+          <span class="muted">Ders</span>
+        </div>
+
+        <div class="stat">
+          ⏱️
+          <strong id="statFocus">0</strong>
+          <span class="muted">Odak Dakikası</span>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= PROFILE ================= -->
+
+    <section
+      id="page-profile"
+      class="page"
+    >
+
+      <div class="page-header">
+
+        <h2>👤 Profil</h2>
+
+        <p>
+          Hesabını ve uygulama tercihlerini yönet.
+        </p>
+
+      </div>
+
+
+      <div class="profile-grid">
+
+        <div class="card">
+
+          <h3>👤 Hesap Bilgileri</h3>
+
+          <div class="setting">
+            <span>Ad</span>
+            <strong id="profileName">-</strong>
+          </div>
+
+          <div class="setting">
+            <span>E-posta</span>
+            <strong id="profileEmail">-</strong>
+          </div>
+
+          <div class="setting">
+            <span>Seviye</span>
+            <strong id="profileLevel">1</strong>
+          </div>
+
+        </div>
+
+
+        <div class="card">
+
+          <h3>⚙️ Ayarlar</h3>
+
+          <div class="setting">
+
+            <span>
+              🌙 Karanlık Mod
             </span>
+
+            <button
+              class="secondary-btn"
+              onclick="toggleDarkMode()"
+            >
+              Değiştir
+            </button>
 
           </div>
 
-          <div id="taskList"></div>
+          <div class="setting">
 
-          <div class="add-task">
+            <span>
+              🔄 Verileri Sıfırla
+            </span>
 
-            <input
-              id="newTask"
-              placeholder="Yeni görev ekle..."
-              maxlength="150"
-              onkeydown="if(event.key==='Enter') addTask()"
+            <button
+              class="danger-btn"
+              onclick="resetData()"
             >
-
-            <button onclick="addTask()">
-              + Ekle
+              Sıfırla
             </button>
 
           </div>
 
         </div>
 
-
-        <!-- DYNAMIC -->
-
-        <div
-          class="card"
-          id="dynamicSection"
-          style="display:none;margin-top:20px"
-        ></div>
-
-
-        <!-- STATS -->
-
-        <div class="stats">
-
-          <div class="stat">
-
-            <span>⭐</span>
-
-            <strong id="statXP">
-              0
-            </strong>
-
-            <small>
-              Toplam XP
-            </small>
-
-          </div>
-
-          <div class="stat">
-
-            <span>🔥</span>
-
-            <strong id="statStreak">
-              0
-            </strong>
-
-            <small>
-              Günlük seri
-            </small>
-
-          </div>
-
-          <div class="stat">
-
-            <span>🪙</span>
-
-            <strong id="statCoins">
-              0
-            </strong>
-
-            <small>
-              Coin
-            </small>
-
-          </div>
-
-        </div>
-
       </div>
 
-
-      <!-- RIGHT COLUMN -->
-
-      <div>
-
-        <!-- PET -->
-
-        <div class="card pet-card">
-
-          <h2>
-            🐣 Evcil Hayvanın
-          </h2>
-
-          <div
-            class="pet-display"
-            id="petDisplay"
-          >
-            🐼
-          </div>
-
-          <div
-            class="pet-name"
-            id="petName"
-          >
-            Panda
-          </div>
-
-          <div
-            class="pet-level"
-            id="petLevel"
-          >
-            Seviye 1
-          </div>
-
-          <button
-            class="primary-btn"
-            style="margin-top:15px"
-            onclick="navigate('pet')"
-          >
-            Evcil Hayvanım
-          </button>
-
-        </div>
-
-
-        <!-- STREAK -->
-
-        <div
-          class="card"
-          style="margin-top:20px"
-        >
-
-          <h2>
-            🔥 Çalışma Serisi
-          </h2>
-
-          <div
-            class="info-number"
-            id="streakNumber"
-          >
-            0
-          </div>
-
-          <p style="color:var(--muted)">
-            Günlük serin
-          </p>
-
-        </div>
-
-
-        <!-- DAILY REWARD -->
-
-        <div
-          class="card"
-          style="margin-top:20px"
-        >
-
-          <h2>
-            🎁 Günlük Ödül
-          </h2>
-
-          <p
-            id="dailyRewardText"
-            style="color:var(--muted);margin:10px 0"
-          >
-            Günlük ödülünü kontrol et.
-          </p>
-
-          <button
-            id="dailyRewardButton"
-            class="primary-btn"
-            onclick="claimDailyReward()"
-          >
-            Ödülü Al 🎁
-          </button>
-
-        </div>
-
-      </div>
-
-    </div>
+    </section>
 
   </main>
-
-</div>
-
-
-<!-- MODAL -->
-
-<div
-  class="modal"
-  id="modal"
-  onclick="if(event.target===this)closeModal()"
->
-
-  <div class="modal-box">
-
-    <div class="modal-head">
-
-      <h2 id="modalTitle">
-        DersTakip
-      </h2>
-
-      <button
-        class="close-modal"
-        onclick="closeModal()"
-      >
-        ✕
-      </button>
-
-    </div>
-
-    <div id="modalContent"></div>
-
-  </div>
 
 </div>
 
@@ -1793,25 +1901,6 @@
 <!-- TOAST -->
 
 <div id="toastContainer"></div>
-
-
-<!-- CELEBRATION -->
-
-<div id="celebration">
-
-  <div class="celebration-box">
-
-    <h2>
-      ✨ GÖREV TAMAMLANDI! ✨
-    </h2>
-
-    <p id="celebrationText">
-      ⭐ +50 XP
-    </p>
-
-  </div>
-
-</div>
 
 
 <script src="/app.js"></script>
