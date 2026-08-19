@@ -30,30 +30,79 @@ export default async function handler(req, res) {
       });
     }
 
-    const parts = [];
+    const prompt = `
+Sen DersTakip'in öğrenci dostu yapay zeka ders asistanısın.
 
-    parts.push({
-      text: `
-Sen DersTakip uygulamasının yapay zeka ders asistanısın.
-
-Ders: ${subject}
-Anlatım şekli: ${mode}
-
-Öğrencinin sorusunu Türkçe çöz.
+Öğrenciye verilen soruyu çok anlaşılır, sade ve doğal bir Türkçeyle çöz.
 
 Kurallar:
-- Soruyu dikkatlice analiz et.
-- Matematik sorularında işlemleri göster.
-- Cevabı anlaşılır şekilde açıkla.
-- Öğrenci seviyesine uygun konuş.
-- En sonunda "Cevap:" şeklinde sonucu belirt.
+
+- Türkçe cevap ver.
+- Öğrencinin seviyesine uygun anlat.
+- Gereksiz uzun konuşma yapma.
+- Gereksiz giriş cümleleri kullanma.
+- "Merhaba", "Birlikte çözelim", "Şimdi kontrol edelim" gibi gereksiz ifadeleri azalt.
+- Doğrudan sorunun çözümüne geç.
+- Matematik sorularında işlemleri sırayla göster.
+- Her adımın neden yapıldığını kısa ve anlaşılır şekilde açıkla.
+- Karmaşık LaTeX kullanma.
+- Mümkün olduğunca normal matematik gösterimi kullan.
+- İşlemleri kod bloğu içinde gösterme.
+- Basit soruları gereksiz yere çok fazla adıma bölme.
+- Zor sorularda gerekli olduğu kadar detaylı anlat.
+- Sonucu en sonunda net şekilde belirt.
+- Cevabı öğrencinin anlayabileceği şekilde yaz.
+- Öğrenciyi küçümseyen veya aşırı resmi bir dil kullanma.
+- Eğer fotoğraf gönderildiyse fotoğraftaki soruyu dikkatlice oku.
+- Fotoğraftaki yazı okunmuyorsa tahmin etme; okunamadığını belirt.
 - Bilmediğin bilgiyi uydurma.
+- Birden fazla soru varsa soruları ayrı ayrı çöz.
+- Sorunun cevabını sadece söyleme; nasıl bulunduğunu da göster.
+
+Örnek anlatım:
+
+Soru:
+2x + 5 = 17
+
+Çözüm:
+
+Önce x'in yanındaki +5'i kaldırıyoruz.
+Bunun için iki taraftan da 5 çıkaralım:
+
+2x = 17 - 5
+
+2x = 12
+
+Şimdi x'in önündeki 2'yi kaldırmak için iki tarafı 2'ye bölelim:
+
+x = 12 ÷ 2
+
+x = 6
+
+Cevap: x = 6
+
+Bu örnekteki gibi sade, kısa ve anlaşılır anlat.
+
+Ders:
+${subject}
+
+Anlatım şekli:
+${mode}
 
 Öğrencinin sorusu:
-${question || "Fotoğraftaki soruyu çöz."}
-`
-    });
+${question || "Soru fotoğrafta bulunmaktadır. Fotoğraftaki soruyu çöz."}
+`;
 
+    const parts = [
+      {
+        text: prompt
+      }
+    ];
+
+    /*
+     * FOTOĞRAF VARSA
+     * Gemini'ye resmi gönder
+     */
     if (image) {
       const match = image.match(
         /^data:(image\/[^;]+);base64,(.+)$/
@@ -74,14 +123,19 @@ ${question || "Fotoğraftaki soruyu çöz."}
       });
     }
 
+    /*
+     * GEMINI API
+     */
     const response = await fetch(
-     "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent",
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent",
       {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
           "x-goog-api-key": apiKey
         },
+
         body: JSON.stringify({
           contents: [
             {
@@ -92,23 +146,43 @@ ${question || "Fotoğraftaki soruyu çöz."}
       }
     );
 
+    /*
+     * Gemini'nin cevabını önce text olarak alıyoruz.
+     * Böylece API hata verirse JSON hatasını düzgün yakalayabiliriz.
+     */
     const text = await response.text();
 
-    console.log("Gemini status:", response.status);
-    console.log("Gemini response:", text);
+    console.log(
+      "Gemini status:",
+      response.status
+    );
+
+    console.log(
+      "Gemini response:",
+      text
+    );
 
     let result;
 
     try {
       result = JSON.parse(text);
-    } catch {
+    } catch (error) {
       return res.status(502).json({
         success: false,
-        error: "Gemini geçerli JSON yanıtı vermedi."
+        error:
+          "Gemini geçerli bir JSON yanıtı vermedi."
       });
     }
 
+    /*
+     * GEMINI HATA KONTROLÜ
+     */
     if (!response.ok) {
+      console.error(
+        "Gemini API Error:",
+        result
+      );
+
       return res.status(response.status).json({
         success: false,
         error:
@@ -117,6 +191,9 @@ ${question || "Fotoğraftaki soruyu çöz."}
       });
     }
 
+    /*
+     * CEVABI AL
+     */
     const answer =
       result?.candidates?.[0]?.content?.parts
         ?.map(part => part.text || "")
@@ -126,21 +203,30 @@ ${question || "Fotoğraftaki soruyu çöz."}
     if (!answer) {
       return res.status(500).json({
         success: false,
-        error: "Gemini cevap oluşturamadı."
+        error:
+          "Yapay zekadan cevap alınamadı."
       });
     }
 
+    /*
+     * BAŞARILI CEVAP
+     */
     return res.status(200).json({
       success: true,
       answer: answer
     });
 
   } catch (error) {
-    console.error("SOLVE ERROR:", error);
+    console.error(
+      "SOLVE ERROR:",
+      error
+    );
 
     return res.status(500).json({
       success: false,
-      error: error.message || "Sunucu hatası oluştu."
+      error:
+        error?.message ||
+        "Soru çözülürken sunucu hatası oluştu."
     });
   }
 }
