@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZC2X3K9CHX"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-ZC2X3K9CHX');
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-ZC2X3K9CHX');
 </script>
 
 <meta charset="UTF-8">
@@ -16,7 +17,12 @@
 <title>DersTakip Pro</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+
+*{
+ box-sizing:border-box;
+ margin:0;
+ padding:0
+}
 
 :root{
  --primary:#635bff;
@@ -51,11 +57,23 @@ body{
  min-height:100vh;
 }
 
-button,input,textarea,select{font:inherit}
-button{cursor:pointer}
-.hidden{display:none!important}
+button,
+input,
+textarea,
+select{
+ font:inherit
+}
+
+button{
+ cursor:pointer
+}
+
+.hidden{
+ display:none!important
+}
 
 /* AUTH */
+
 #auth{
  min-height:100vh;
  display:flex;
@@ -94,7 +112,9 @@ button{cursor:pointer}
  margin-bottom:15px;
 }
 
-.auth-left h1 span{color:#ffe66d}
+.auth-left h1 span{
+ color:#ffe66d
+}
 
 .auth-left p{
  line-height:1.7;
@@ -121,7 +141,9 @@ button{cursor:pointer}
  margin-bottom:5px;
 }
 
-.auth-logo span{color:var(--primary)}
+.auth-logo span{
+ color:var(--primary)
+}
 
 .auth-subtitle{
  text-align:center;
@@ -151,7 +173,9 @@ button{cursor:pointer}
  box-shadow:0 4px 15px #0001;
 }
 
-.field{margin-bottom:15px}
+.field{
+ margin-bottom:15px
+}
 
 .field label{
  display:block;
@@ -190,7 +214,10 @@ button{cursor:pointer}
 }
 
 /* APP */
-#app{display:none}
+
+#app{
+ display:none
+}
 
 .sidebar{
  position:fixed;
@@ -211,7 +238,9 @@ button{cursor:pointer}
  margin-bottom:35px;
 }
 
-.logo span{color:#8b7cff}
+.logo span{
+ color:#8b7cff
+}
 
 .menu button{
  width:100%;
@@ -267,7 +296,9 @@ button{cursor:pointer}
  margin-bottom:5px;
 }
 
-.welcome p{color:var(--muted)}
+.welcome p{
+ color:var(--muted)
+}
 
 .profile{
  display:flex;
@@ -289,6 +320,7 @@ button{cursor:pointer}
 }
 
 /* HERO */
+
 .hero{
  background:
  radial-gradient(circle at 90% 15%,#ffffff30,transparent 30%),
@@ -300,7 +332,9 @@ button{cursor:pointer}
  box-shadow:0 15px 40px #635bff30;
 }
 
-.hero h2{margin-bottom:8px}
+.hero h2{
+ margin-bottom:8px
+}
 
 .hero p{
  opacity:.9;
@@ -328,6 +362,7 @@ button{cursor:pointer}
 }
 
 /* CONTENT */
+
 .grid{
  display:grid;
  grid-template-columns:2fr 1fr;
@@ -350,7 +385,9 @@ button{cursor:pointer}
  margin-bottom:16px;
 }
 
-.card-title h2{font-size:19px}
+.card-title h2{
+ font-size:19px
+}
 
 .primary{
  border:0;
@@ -371,6 +408,7 @@ button{cursor:pointer}
 }
 
 /* AI SOLVE */
+
 #page-ai-solve .card{
  max-width:900px;
 }
@@ -386,6 +424,7 @@ button{cursor:pointer}
 }
 
 /* TASKS */
+
 .task{
  display:flex;
  align-items:center;
@@ -415,7 +454,9 @@ button{cursor:pointer}
  color:var(--muted);
 }
 
-.task-name{font-weight:800}
+.task-name{
+ font-weight:800
+}
 
 .task-xp{
  margin-left:auto;
@@ -449,6 +490,7 @@ button{cursor:pointer}
 }
 
 /* STATS */
+
 .stats{
  display:grid;
  grid-template-columns:repeat(3,1fr);
@@ -468,9 +510,12 @@ button{cursor:pointer}
  margin:8px 0;
 }
 
-.stat small{color:var(--muted)}
+.stat small{
+ color:var(--muted)
+}
 
 /* COACH */
+
 .coach{
  background:linear-gradient(135deg,#f0efff,#faf9ff);
 }
@@ -490,10 +535,17 @@ body.dark .coach{
 }
 
 /* PAGE */
-.page{display:none}
-.page.active{display:block}
+
+.page{
+ display:none
+}
+
+.page.active{
+ display:block
+}
 
 /* SUBJECTS */
+
 .subject-grid{
  display:grid;
  grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
@@ -518,7 +570,9 @@ body.dark .coach{
  margin-bottom:10px;
 }
 
-.subject h3{margin-bottom:5px}
+.subject h3{
+ margin-bottom:5px
+}
 
 .subject p{
  color:var(--muted);
@@ -531,6 +585,7 @@ body.dark .coach{
 }
 
 /* EXAMS */
+
 .exam{
  border:1px solid var(--border);
  border-radius:16px;
@@ -553,6 +608,7 @@ body.dark .coach{
 }
 
 /* NOTES */
+
 .notes-grid{
  display:grid;
  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
@@ -585,7 +641,10 @@ body.dark .coach{
 }
 
 /* FOCUS */
-.focus-box{text-align:center}
+
+.focus-box{
+ text-align:center
+}
 
 .timer{
  font-size:80px;
@@ -601,6 +660,7 @@ body.dark .coach{
 }
 
 /* ACHIEVEMENTS */
+
 .badges{
  display:grid;
  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
@@ -619,7 +679,9 @@ body.dark .coach{
  margin-bottom:8px;
 }
 
-.badge small{color:var(--muted)}
+.badge small{
+ color:var(--muted)
+}
 
 .badge.locked{
  opacity:.35;
@@ -627,6 +689,7 @@ body.dark .coach{
 }
 
 /* PROFILE */
+
 .profile-card{
  max-width:700px;
 }
@@ -661,7 +724,162 @@ body.dark .coach{
  margin-bottom:5px;
 }
 
+/* =========================
+   AI COACH CHAT
+========================= */
+
+.coach-chat{
+ height:480px;
+ overflow-y:auto;
+ padding:15px;
+ background:var(--bg);
+ border:1px solid var(--border);
+ border-radius:16px;
+ margin-bottom:15px;
+ scroll-behavior:smooth;
+}
+
+.coach-empty{
+ min-height:100%;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ color:var(--muted);
+ padding:30px;
+}
+
+.coach-empty-icon{
+ font-size:55px;
+ margin-bottom:12px;
+}
+
+.coach-empty h3{
+ color:var(--text);
+ margin-bottom:8px;
+}
+
+.coach-message-row{
+ display:flex;
+ margin-bottom:13px;
+}
+
+.coach-message-row.user{
+ justify-content:flex-end;
+}
+
+.coach-message-row.assistant{
+ justify-content:flex-start;
+}
+
+.coach-bubble{
+ max-width:82%;
+ padding:12px 15px;
+ border-radius:16px;
+ line-height:1.65;
+ white-space:pre-wrap;
+ word-break:break-word;
+}
+
+.coach-message-row.user .coach-bubble{
+ background:var(--primary);
+ color:white;
+ border-bottom-right-radius:5px;
+}
+
+.coach-message-row.assistant .coach-bubble{
+ background:var(--card);
+ color:var(--text);
+ border:1px solid var(--border);
+ border-bottom-left-radius:5px;
+}
+
+.coach-label{
+ font-size:11px;
+ opacity:.65;
+ margin-bottom:5px;
+ font-weight:800;
+}
+
+.coach-typing{
+ display:flex;
+ align-items:center;
+ gap:5px;
+}
+
+.coach-typing span{
+ width:7px;
+ height:7px;
+ border-radius:50%;
+ background:var(--muted);
+ animation:coachTyping 1.2s infinite;
+}
+
+.coach-typing span:nth-child(2){
+ animation-delay:.15s;
+}
+
+.coach-typing span:nth-child(3){
+ animation-delay:.3s;
+}
+
+@keyframes coachTyping{
+ 0%,60%,100%{
+  opacity:.3;
+  transform:translateY(0);
+ }
+ 30%{
+  opacity:1;
+  transform:translateY(-4px);
+ }
+}
+
+.coach-input-row{
+ display:flex;
+ gap:10px;
+ align-items:flex-end;
+}
+
+.coach-input{
+ flex:1;
+ resize:none;
+ border:1px solid var(--border);
+ background:var(--card);
+ color:var(--text);
+ border-radius:12px;
+ padding:13px;
+ outline:none;
+ min-height:52px;
+}
+
+.coach-input:focus{
+ border-color:var(--primary);
+ box-shadow:0 0 0 3px #635bff18;
+}
+
+.coach-send{
+ min-height:52px;
+ padding:0 20px;
+}
+
+.coach-quick-buttons{
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap;
+ margin-top:12px;
+}
+
+.coach-quick-buttons button{
+ transition:.2s;
+}
+
+.coach-quick-buttons button:hover{
+ transform:translateY(-2px);
+}
+
 /* MODAL */
+
 .modal{
  position:fixed;
  inset:0;
@@ -674,7 +892,9 @@ body.dark .coach{
  padding:20px;
 }
 
-.modal.show{display:flex}
+.modal.show{
+ display:flex
+}
 
 .modal-box{
  width:100%;
@@ -702,6 +922,7 @@ body.dark .coach{
 }
 
 /* TOAST */
+
 #toast{
  position:fixed;
  right:20px;
@@ -722,11 +943,18 @@ body.dark .coach{
 }
 
 @keyframes toast{
- from{opacity:0;transform:translateY(15px)}
- to{opacity:1;transform:translateY(0)}
+ from{
+  opacity:0;
+  transform:translateY(15px)
+ }
+ to{
+  opacity:1;
+  transform:translateY(0)
+ }
 }
 
 /* MOBILE */
+
 .mobile-btn{
  display:none;
  position:fixed;
@@ -743,7 +971,10 @@ body.dark .coach{
 }
 
 @media(max-width:1000px){
- .sidebar{width:80px}
+
+ .sidebar{
+  width:80px
+ }
 
  .logo{
   font-size:0;
@@ -774,17 +1005,25 @@ body.dark .coach{
   font-size:20px;
  }
 
- .main{margin-left:80px}
+ .main{
+  margin-left:80px
+ }
 
  .grid{
   grid-template-columns:1fr;
  }
+
 }
 
 @media(max-width:700px){
- .sidebar{display:none}
 
- .mobile-btn{display:block}
+ .sidebar{
+  display:none
+ }
+
+ .mobile-btn{
+  display:block
+ }
 
  .main{
   margin-left:0;
@@ -795,9 +1034,13 @@ body.dark .coach{
   padding-right:60px;
  }
 
- .profile{display:none}
+ .profile{
+  display:none
+ }
 
- .welcome h1{font-size:25px}
+ .welcome h1{
+  font-size:25px
+ }
 
  .stats{
   grid-template-columns:1fr;
@@ -807,7 +1050,9 @@ body.dark .coach{
   grid-template-columns:1fr;
  }
 
- .auth-left{display:none}
+ .auth-left{
+  display:none
+ }
 
  .auth-right{
   padding:30px 22px;
@@ -833,6 +1078,24 @@ body.dark .coach{
  .timer{
   font-size:58px;
  }
+
+ .coach-chat{
+  height:430px;
+  padding:10px;
+ }
+
+ .coach-bubble{
+  max-width:90%;
+ }
+
+ .coach-input-row{
+  align-items:stretch;
+ }
+
+ .coach-send{
+  padding:0 14px;
+ }
+
 }
 
 .mobile-menu{
@@ -848,7 +1111,9 @@ body.dark .coach{
  transition:.25s;
 }
 
-.mobile-menu.open{right:0}
+.mobile-menu.open{
+ right:0
+}
 
 .mobile-menu button{
  width:100%;
@@ -878,6 +1143,7 @@ body.dark .coach{
  color:white;
  font-size:22px;
 }
+
 </style>
 </head>
 
@@ -918,13 +1184,15 @@ Kendi çalışma sistemini oluştur.
 
 <div class="auth-tabs">
 
-<button id="loginTab"
+<button
+id="loginTab"
 class="active"
 onclick="showLogin()">
 Giriş Yap
 </button>
 
-<button id="registerTab"
+<button
+id="registerTab"
 onclick="showRegister()">
 Kayıt Ol
 </button>
@@ -935,12 +1203,18 @@ Kayıt Ol
 
 <div class="field">
 <label>E-posta</label>
-<input id="loginEmail" type="email" required>
+<input
+id="loginEmail"
+type="email"
+required>
 </div>
 
 <div class="field">
 <label>Şifre</label>
-<input id="loginPassword" type="password" required>
+<input
+id="loginPassword"
+type="password"
+required>
 </div>
 
 <button class="auth-btn">
@@ -949,18 +1223,24 @@ Giriş Yap 🚀
 
 </form>
 
-<form id="registerForm"
+<form
+id="registerForm"
 class="hidden"
 onsubmit="register(event)">
 
 <div class="field">
 <label>Ad Soyad</label>
-<input id="registerName" required>
+<input
+id="registerName"
+required>
 </div>
 
 <div class="field">
 <label>E-posta</label>
-<input id="registerEmail" type="email" required>
+<input
+id="registerEmail"
+type="email"
+required>
 </div>
 
 <div class="field">
@@ -969,8 +1249,7 @@ onsubmit="register(event)">
 id="registerPassword"
 type="password"
 minlength="6"
-required
->
+required>
 </div>
 
 <button class="auth-btn">
@@ -983,6 +1262,7 @@ Hesap Oluştur ✨
 
 </div>
 </div>
+
 </section>
 
 
@@ -1085,7 +1365,9 @@ onclick="toggleMobile()">
 </button>
 
 
-<div class="mobile-menu" id="mobileMenu">
+<div
+class="mobile-menu"
+id="mobileMenu">
 
 <div class="mobile-head">
 
@@ -1177,7 +1459,9 @@ Seviye 1
 
 <!-- HOME -->
 
-<section id="page-home" class="page active">
+<section
+id="page-home"
+class="page active">
 
 <div class="hero">
 
@@ -1193,7 +1477,9 @@ Bugün için henüz görev eklemedin.
 <span id="progress"></span>
 </div>
 
-<div class="xp" id="homeXP">
+<div
+class="xp"
+id="homeXP">
 0 XP
 </div>
 
@@ -1323,7 +1609,9 @@ style="margin-top:15px">
 
 <!-- AI SOLVE -->
 
-<section id="page-ai-solve" class="page">
+<section
+id="page-ai-solve"
+class="page">
 
 <div class="card">
 
@@ -1408,8 +1696,8 @@ Soruyu Yaz
 <textarea
 id="aiQuestion"
 rows="6"
-placeholder="Örneğin: 2x + 5 = 17 ise x kaçtır?"
-></textarea>
+placeholder="Örneğin: 2x + 5 = 17 ise x kaçtır.">
+</textarea>
 
 </div>
 
@@ -1424,8 +1712,7 @@ Veya Soru Fotoğrafı Yükle
 id="aiImage"
 type="file"
 accept="image/*"
-onchange="previewAIImage(event)"
->
+onchange="previewAIImage(event)">
 
 </div>
 
@@ -1436,8 +1723,7 @@ style="display:none;margin-bottom:15px">
 
 <img
 id="aiPreview"
-style="max-width:100%;max-height:300px;border-radius:15px;border:1px solid var(--border)"
->
+style="max-width:100%;max-height:300px;border-radius:15px;border:1px solid var(--border)">
 
 </div>
 
@@ -1494,7 +1780,9 @@ white-space:pre-wrap;
 
 <!-- TASKS -->
 
-<section id="page-tasks" class="page">
+<section
+id="page-tasks"
+class="page">
 
 <div class="card">
 
@@ -1506,8 +1794,11 @@ white-space:pre-wrap;
 Görevler
 </h2>
 
-<p style="color:var(--muted);margin-top:5px">
+<p
+style="color:var(--muted);margin-top:5px">
+
 Çalışma hedeflerini buradan yönet.
+
 </p>
 
 </div>
@@ -1529,7 +1820,9 @@ onclick="openTaskModal()">
 
 <!-- SUBJECTS -->
 
-<section id="page-subjects" class="page">
+<section
+id="page-subjects"
+class="page">
 
 <div class="card">
 
@@ -1541,8 +1834,11 @@ onclick="openTaskModal()">
 Derslerim 📚
 </h2>
 
-<p style="color:var(--muted);margin-top:5px">
+<p
+style="color:var(--muted);margin-top:5px">
+
 Çalıştığın dersleri seç veya kendin ekle.
+
 </p>
 
 </div>
@@ -1567,7 +1863,9 @@ id="subjectsGrid">
 
 <!-- EXAMS -->
 
-<section id="page-exams" class="page">
+<section
+id="page-exams"
+class="page">
 
 <div class="card">
 
@@ -1579,8 +1877,11 @@ id="subjectsGrid">
 Sınav Takvimi 📅
 </h2>
 
-<p style="color:var(--muted);margin-top:5px">
+<p
+style="color:var(--muted);margin-top:5px">
+
 Sınavlarını ve tarihlerini takip et.
+
 </p>
 
 </div>
@@ -1602,7 +1903,9 @@ onclick="openExamModal()">
 
 <!-- NOTES -->
 
-<section id="page-notes" class="page">
+<section
+id="page-notes"
+class="page">
 
 <div class="card">
 
@@ -1614,8 +1917,11 @@ onclick="openExamModal()">
 Notlarım 📝
 </h2>
 
-<p style="color:var(--muted);margin-top:5px">
+<p
+style="color:var(--muted);margin-top:5px">
+
 Ders çalışırken önemli bilgilerini kaydet.
+
 </p>
 
 </div>
@@ -1640,7 +1946,9 @@ id="notesGrid">
 
 <!-- FOCUS -->
 
-<section id="page-focus" class="page">
+<section
+id="page-focus"
+class="page">
 
 <div class="card focus-box">
 
@@ -1648,8 +1956,11 @@ id="notesGrid">
 Odaklanma Modu ⏱️
 </h2>
 
-<p style="color:var(--muted);margin-top:7px">
+<p
+style="color:var(--muted);margin-top:7px">
+
 Telefonunu bırak ve sadece çalışmaya odaklan.
+
 </p>
 
 <div
@@ -1685,27 +1996,97 @@ Sıfırla
 </section>
 
 
-<!-- COACH -->
+<!-- =========================
+     AI COACH CHAT
+========================= -->
 
-<section id="page-coach" class="page">
+<section
+id="page-coach"
+class="page">
 
 <div class="card">
 
+<div class="card-title">
+
+<div>
+
 <h2>
-🤖 Ders Koçu
+🤖 Akıllı Ders Koçu
 </h2>
 
 <p
-id="coachFull"
-style="margin-top:15px;line-height:1.8;color:var(--muted)">
+style="color:var(--muted);margin-top:5px">
+
+Sorunu sor, konu anlatımı iste veya benimle sohbet et.
+
 </p>
 
-<div style="margin-top:20px">
+</div>
+
+</div>
+
+
+<div
+id="coachChat"
+class="coach-chat">
+
+</div>
+
+
+<div class="coach-input-row">
+
+<textarea
+id="coachInput"
+class="coach-input"
+rows="2"
+placeholder="Mesajını yaz... Örn: Kesirleri bana anlat."
+onkeydown="handleCoachKey(event)">
+</textarea>
 
 <button
-class="primary"
-onclick="newAdvice()">
-Yeni Öneri
+class="primary coach-send"
+id="coachSendButton"
+onclick="sendCoachMessage()">
+
+Gönder 🚀
+
+</button>
+
+</div>
+
+
+<div class="coach-quick-buttons">
+
+<button
+class="secondary"
+onclick="coachQuickMessage('Bugün ne çalışmalıyım?')">
+
+🎯 Bugün ne çalışmalıyım?
+
+</button>
+
+<button
+class="secondary"
+onclick="coachQuickMessage('Bana bir matematik sorusu sor.')">
+
+🧮 Bana soru sor
+
+</button>
+
+<button
+class="secondary"
+onclick="coachQuickMessage('Bir konuyu bana çok basit şekilde anlat.')">
+
+📚 Konu anlat
+
+</button>
+
+<button
+class="secondary"
+onclick="clearCoachChat()">
+
+🗑️ Sohbeti Temizle
+
 </button>
 
 </div>
@@ -1717,7 +2098,9 @@ Yeni Öneri
 
 <!-- ACHIEVEMENTS -->
 
-<section id="page-achievements" class="page">
+<section
+id="page-achievements"
+class="page">
 
 <div class="card">
 
@@ -1737,7 +2120,9 @@ id="badges">
 
 <!-- STATS -->
 
-<section id="page-stats" class="page">
+<section
+id="page-stats"
+class="page">
 
 <div class="card">
 
@@ -1763,7 +2148,6 @@ Toplam XP
 
 </div>
 
-
 <div class="stat">
 
 <span>🔥</span>
@@ -1777,7 +2161,6 @@ Toplam XP
 </small>
 
 </div>
-
 
 <div class="stat">
 
@@ -1839,7 +2222,9 @@ style="background:var(--primary)">
 
 <!-- PROFILE -->
 
-<section id="page-profile" class="page">
+<section
+id="page-profile"
+class="page">
 
 <div class="card profile-card">
 
@@ -1873,7 +2258,6 @@ Seviye
 
 </div>
 
-
 <div class="profile-item">
 
 <span>
@@ -1886,7 +2270,6 @@ Toplam XP
 
 </div>
 
-
 <div class="profile-item">
 
 <span>
@@ -1898,7 +2281,6 @@ Görev
 </strong>
 
 </div>
-
 
 <div class="profile-item">
 
@@ -1996,7 +2378,6 @@ let data=JSON.parse(
  lastDay:""
 };
 
-
 const subjectsDefault=[
  ["Matematik","📐"],
  ["Türkçe","📖"],
@@ -2010,23 +2391,14 @@ const subjectsDefault=[
  ["Bilişim Teknolojileri","💻"]
 ];
 
-
 const advices=[
-
-"Bugün önce en zor dersinden başla. Zor işi bitirmek motivasyonunu artırır.",
-
-"25 dakika boyunca sadece tek bir derse odaklanmayı dene.",
-
-"Sınavın varsa bugün kısa tekrar yapmak son gün çalışmaktan daha etkilidir.",
-
-"Bir konuyu öğrendikten sonra kendi cümlelerinle anlatmayı dene.",
-
-"Ders çalışırken telefonunu başka bir odaya koymayı deneyebilirsin.",
-
-"Küçük hedefler belirle. Bir anda her şeyi bitirmeye çalışma.",
-
-"Bugün sadece 20 dakika çalışmak bile hiç çalışmamaktan daha iyidir."
-
+ "Bugün önce en zor dersinden başla. Zor işi bitirmek motivasyonunu artırır.",
+ "25 dakika boyunca sadece tek bir derse odaklanmayı dene.",
+ "Sınavın varsa bugün kısa tekrar yapmak son gün çalışmaktan daha etkilidir.",
+ "Bir konuyu öğrendikten sonra kendi cümlelerinle anlatmayı dene.",
+ "Ders çalışırken telefonunu başka bir odaya koymayı deneyebilirsin.",
+ "Küçük hedefler belirle. Bir anda her şeyi bitirmeye çalışma.",
+ "Bugün sadece 20 dakika çalışmak bile hiç çalışmamaktan daha iyidir."
 ];
 
 
@@ -2037,41 +2409,31 @@ AUTH
 function showLogin(){
 
  loginForm.classList.remove("hidden");
-
  registerForm.classList.add("hidden");
 
  loginTab.classList.add("active");
-
  registerTab.classList.remove("active");
 
  authMsg.textContent="";
-
 }
-
 
 function showRegister(){
 
  loginForm.classList.add("hidden");
-
  registerForm.classList.remove("hidden");
 
  loginTab.classList.remove("active");
-
  registerTab.classList.add("active");
 
  authMsg.textContent="";
-
 }
-
 
 function register(e){
 
  e.preventDefault();
 
  const name=registerName.value.trim();
-
  const email=registerEmail.value.trim();
-
  const password=registerPassword.value;
 
  if(password.length<6){
@@ -2082,7 +2444,6 @@ function register(e){
    "Şifre en az 6 karakter olmalı.";
 
   return;
-
  }
 
  user={
@@ -2104,9 +2465,7 @@ function register(e){
  showLogin();
 
  loginEmail.value=email;
-
 }
-
 
 function login(e){
 
@@ -2124,7 +2483,6 @@ function login(e){
    "Önce kayıt olmalısın.";
 
   return;
-
  }
 
  if(
@@ -2138,7 +2496,6 @@ function login(e){
    "E-posta veya şifre yanlış.";
 
   return;
-
  }
 
  user=saved;
@@ -2149,27 +2506,21 @@ function login(e){
  );
 
  openApp();
-
 }
-
 
 function logout(){
 
  localStorage.removeItem("dt_logged");
 
  location.reload();
-
 }
-
 
 function openApp(){
 
  auth.style.display="none";
-
  app.style.display="block";
 
  renderAll();
-
 }
 
 
@@ -2179,7 +2530,8 @@ NAVIGATION
 
 function navigate(page){
 
- document.querySelectorAll(".page").forEach(x=>{
+ document.querySelectorAll(".page")
+ .forEach(x=>{
   x.classList.remove("active");
  });
 
@@ -2189,81 +2541,56 @@ function navigate(page){
  if(target)
   target.classList.add("active");
 
-
  document.querySelectorAll(".menu button")
  .forEach(btn=>{
-
   btn.classList.toggle(
    "active",
    btn.dataset.page===page
   );
-
  });
 
-
  const titles={
-
   home:"Ana Sayfa",
-
   "ai-solve":"Soru Çöz",
-
   tasks:"Görevler",
-
   subjects:"Dersler",
-
   exams:"Sınavlar",
-
   notes:"Notlar",
-
   focus:"Odaklan",
-
-  coach:"Ders Koçu",
-
+  coach:"Akıllı Ders Koçu",
   achievements:"Rozetler",
-
   stats:"İstatistikler",
-
   profile:"Profil"
-
  };
-
 
  document.getElementById("subtitle")
  .textContent=
   titles[page]||"DersTakip";
 
+ if(page==="coach"){
+  renderCoachChat();
 
- if(page==="coach")
-  newAdvice();
-
+  setTimeout(()=>{
+   document.getElementById("coachInput")?.focus();
+  },100);
+ }
 
  if(page==="achievements")
   renderBadges();
 
-
  closeMobile();
-
 }
-
 
 function navigateMobile(page){
-
  navigate(page);
-
 }
-
 
 function toggleMobile(){
-
  mobileMenu.classList.toggle("open");
-
 }
 
-
 function closeMobile(){
-
  mobileMenu.classList.remove("open");
-
 }
 
 
@@ -2283,15 +2610,10 @@ function addTask(){
  if(!name)return;
 
  data.tasks.push({
-
   id:Date.now(),
-
   name,
-
   done:false,
-
   xp:20
-
  });
 
  save();
@@ -2301,9 +2623,7 @@ function addTask(){
  renderAll();
 
  toast("Görev eklendi ✅");
-
 }
-
 
 function toggleTask(id){
 
@@ -2317,7 +2637,6 @@ function toggleTask(id){
  if(task.done){
 
   data.xp+=task.xp;
-
   data.completed++;
 
   updateStreak();
@@ -2341,15 +2660,12 @@ function toggleTask(id){
     0,
     data.completed-1
    );
-
  }
 
  save();
 
  renderAll();
-
 }
-
 
 function deleteTask(id){
 
@@ -2361,9 +2677,7 @@ function deleteTask(id){
  renderAll();
 
  toast("Görev silindi.");
-
 }
-
 
 function renderTasks(){
 
@@ -2382,23 +2696,17 @@ function renderTasks(){
  </button>
 
  <span class="task-name">
-
  ${escapeHTML(task.name)}
-
  </span>
 
  <span class="task-xp">
-
  +${task.xp} XP
-
  </span>
 
  <button
  class="delete"
  onclick="deleteTask(${task.id})">
-
  🗑️
-
  </button>
 
  </div>
@@ -2408,18 +2716,13 @@ function renderTasks(){
  :
 
  `<p style="color:var(--muted);padding:20px 0">
-
  Henüz görev yok. İlk görevini ekle!
-
  </p>`;
-
 
  document.getElementById("allTasks")
  .innerHTML=html;
 
-
  const home=data.tasks.slice(0,5);
-
 
  document.getElementById("homeTasks")
  .innerHTML=
@@ -2439,9 +2742,7 @@ function renderTasks(){
  </button>
 
  <span class="task-name">
-
  ${escapeHTML(task.name)}
-
  </span>
 
  </div>
@@ -2451,33 +2752,26 @@ function renderTasks(){
  :
 
  `<p style="color:var(--muted)">
-
  Henüz görev eklemedin.
-
  </p>`;
-
 
  const total=data.tasks.length;
 
  const done=
   data.tasks.filter(x=>x.done).length;
 
-
  document.getElementById("taskCounter")
  .textContent=
   `${done} / ${total}`;
-
 
  const percent=
   total?
   Math.round(done/total*100):
   0;
 
-
  document.getElementById("progress")
  .style.width=
   percent+"%";
-
 
  document.getElementById("homeSummary")
  .textContent=
@@ -2490,11 +2784,9 @@ function renderTasks(){
 
  "Bugün için henüz görev eklemedin.";
 
-
  document.getElementById("homeXP")
  .textContent=
   `${data.xp} XP`;
-
 }
 
 
@@ -2505,11 +2797,9 @@ TASK MODAL
 function openTaskModal(){
 
  openModal(
-
   "Yeni Görev",
 
   `
-
   <div class="field">
 
   <label>
@@ -2530,19 +2820,14 @@ function openTaskModal(){
   Görevi Ekle
 
   </button>
-
   `
-
  );
 
  setTimeout(()=>{
-
   document
   .getElementById("taskInput")
   ?.focus();
-
  },100);
-
 }
 
 
@@ -2556,19 +2841,13 @@ function renderSubjects(){
 
   data.subjects=
    subjectsDefault.map((x,i)=>({
-
     id:"default-"+i,
-
     name:x[0],
-
     icon:x[1]
-
    }));
 
   save();
-
  }
-
 
  document.getElementById("subjectsGrid")
  .innerHTML=
@@ -2600,31 +2879,23 @@ function renderSubjects(){
  </div>
 
  `).join("");
-
 }
-
 
 function subjectTask(name){
 
  navigate("tasks");
 
  setTimeout(()=>{
-
   openTaskModalWithSubject(name);
-
  },150);
-
 }
-
 
 function openTaskModalWithSubject(name){
 
  openModal(
-
   "Yeni "+name+" Görevi",
 
   `
-
   <div class="field">
 
   <label>
@@ -2645,22 +2916,16 @@ function openTaskModalWithSubject(name){
   Görevi Ekle
 
   </button>
-
   `
-
  );
-
 }
-
 
 function openSubjectModal(){
 
  openModal(
-
   "Ders Ekle",
 
   `
-
   <div class="field">
 
   <label>
@@ -2693,13 +2958,9 @@ function openSubjectModal(){
   Dersi Ekle
 
   </button>
-
   `
-
  );
-
 }
-
 
 function addSubject(){
 
@@ -2717,13 +2978,9 @@ function addSubject(){
  if(!name)return;
 
  data.subjects.push({
-
   id:Date.now(),
-
   name,
-
   icon
-
  });
 
  save();
@@ -2733,7 +2990,6 @@ function addSubject(){
  renderSubjects();
 
  toast("Ders eklendi 📚");
-
 }
 
 
@@ -2744,11 +3000,9 @@ EXAMS
 function openExamModal(){
 
  openModal(
-
   "Sınav Ekle",
 
   `
-
   <div class="field">
 
   <label>
@@ -2758,17 +3012,14 @@ function openExamModal(){
   <select id="examSubject">
 
   ${data.subjects.map(s=>
-
    `<option>
    ${escapeHTML(s.name)}
    </option>`
-
   ).join("")}
 
   </select>
 
   </div>
-
 
   <div class="field">
 
@@ -2782,7 +3033,6 @@ function openExamModal(){
 
   </div>
 
-
   <div class="field">
 
   <label>
@@ -2794,7 +3044,6 @@ function openExamModal(){
   type="date">
 
   </div>
-
 
   <div class="field">
 
@@ -2808,7 +3057,6 @@ function openExamModal(){
 
   </div>
 
-
   <button
   class="primary"
   onclick="addExam()">
@@ -2816,13 +3064,9 @@ function openExamModal(){
   Sınavı Kaydet
 
   </button>
-
   `
-
  );
-
 }
-
 
 function addExam(){
 
@@ -2849,17 +3093,11 @@ function addExam(){
  if(!name||!date)return;
 
  data.exams.push({
-
   id:Date.now(),
-
   subject,
-
   name,
-
   date,
-
   target
-
  });
 
  save();
@@ -2869,9 +3107,7 @@ function addExam(){
  renderExams();
 
  toast("Sınav takvime eklendi 📅");
-
 }
-
 
 function deleteExam(id){
 
@@ -2883,37 +3119,28 @@ function deleteExam(id){
  renderExams();
 
  toast("Sınav silindi.");
-
 }
-
 
 function renderExams(){
 
  const list=
   document.getElementById("examList");
 
-
  if(!data.exams.length){
 
   list.innerHTML=
-
   `<p style="color:var(--muted);padding:20px 0">
-
   Henüz sınav eklemedin.
-
   </p>`;
 
   return;
-
  }
-
 
  const sorted=
   [...data.exams].sort(
    (a,b)=>
     new Date(a.date)-new Date(b.date)
   );
-
 
  list.innerHTML=
 
@@ -2923,7 +3150,6 @@ function renderExams(){
    (new Date(e.date)-new Date())/
    86400000
   );
-
 
   let remaining;
 
@@ -2935,7 +3161,6 @@ function renderExams(){
 
   else
    remaining=days+" gün kaldı";
-
 
   return `
 
@@ -2961,19 +3186,14 @@ function renderExams(){
 
   </div>
 
-
   <div style="text-align:right">
 
   <div class="exam-date">
-
   ${formatDate(e.date)}
-
   </div>
 
   <small style="color:var(--muted)">
-
   ${remaining}
-
   </small>
 
   <div class="exam-actions">
@@ -2981,9 +3201,7 @@ function renderExams(){
   <button
   class="delete"
   onclick="deleteExam(${e.id})">
-
   🗑️
-
   </button>
 
   </div>
@@ -2995,7 +3213,6 @@ function renderExams(){
   `;
 
  }).join("");
-
 }
 
 
@@ -3006,11 +3223,9 @@ NOTES
 function openNoteModal(){
 
  openModal(
-
   "Yeni Not",
 
   `
-
   <div class="field">
 
   <label>
@@ -3022,7 +3237,6 @@ function openNoteModal(){
   placeholder="Örn. Matematik - Kesirler">
 
   </div>
-
 
   <div class="field">
 
@@ -3037,17 +3251,14 @@ function openNoteModal(){
   </option>
 
   ${data.subjects.map(s=>
-
    `<option>
    ${escapeHTML(s.name)}
    </option>`
-
   ).join("")}
 
   </select>
 
   </div>
-
 
   <div class="field">
 
@@ -3058,11 +3269,10 @@ function openNoteModal(){
   <textarea
   id="noteText"
   rows="8"
-  placeholder="Notlarını buraya yaz..."
-  ></textarea>
+  placeholder="Notlarını buraya yaz...">
+  </textarea>
 
   </div>
-
 
   <button
   class="primary"
@@ -3071,13 +3281,9 @@ function openNoteModal(){
   Notu Kaydet
 
   </button>
-
   `
-
  );
-
 }
-
 
 function addNote(){
 
@@ -3096,24 +3302,15 @@ function addNote(){
   .getElementById("noteText")
   .value.trim();
 
-
  if(!title||!text)return;
 
-
  data.notes.unshift({
-
   id:Date.now(),
-
   title,
-
   subject,
-
   text,
-
   date:new Date().toISOString()
-
  });
-
 
  save();
 
@@ -3122,9 +3319,7 @@ function addNote(){
  renderNotes();
 
  toast("Not kaydedildi 📝");
-
 }
-
 
 function deleteNote(id){
 
@@ -3136,30 +3331,22 @@ function deleteNote(id){
  renderNotes();
 
  toast("Not silindi.");
-
 }
-
 
 function renderNotes(){
 
  const grid=
   document.getElementById("notesGrid");
 
-
  if(!data.notes.length){
 
   grid.innerHTML=
-
   `<p style="color:var(--muted)">
-
   Henüz notun yok.
-
   </p>`;
 
   return;
-
  }
-
 
  grid.innerHTML=
 
@@ -3172,15 +3359,11 @@ function renderNotes(){
  </h3>
 
  <small style="color:var(--primary)">
-
  ${escapeHTML(n.subject)}
-
  </small>
 
  <p style="margin-top:10px">
-
  ${escapeHTML(n.text)}
-
  </p>
 
  <div class="note-footer">
@@ -3192,9 +3375,7 @@ function renderNotes(){
  <button
  class="delete"
  onclick="deleteNote(${n.id})">
-
  🗑️
-
  </button>
 
  </div>
@@ -3202,7 +3383,6 @@ function renderNotes(){
  </div>
 
  `).join("");
-
 }
 
 
@@ -3211,9 +3391,7 @@ FOCUS
 ========================= */
 
 let timerSeconds=25*60;
-
 let timerInterval=null;
-
 
 function updateTimer(){
 
@@ -3227,18 +3405,14 @@ function updateTimer(){
   .toString()
   .padStart(2,"0");
 
-
  document.getElementById("timer")
  .textContent=
   `${min}:${sec}`;
-
 }
-
 
 function startTimer(){
 
  if(timerInterval)return;
-
 
  timerInterval=setInterval(()=>{
 
@@ -3263,7 +3437,6 @@ function startTimer(){
    updateTimer();
 
    return;
-
   }
 
   timerSeconds--;
@@ -3271,18 +3444,14 @@ function startTimer(){
   updateTimer();
 
  },1000);
-
 }
-
 
 function pauseTimer(){
 
  clearInterval(timerInterval);
 
  timerInterval=null;
-
 }
-
 
 function resetTimer(){
 
@@ -3291,12 +3460,11 @@ function resetTimer(){
  timerSeconds=25*60;
 
  updateTimer();
-
 }
 
 
 /* =========================
-COACH
+OLD COACH ADVICE
 ========================= */
 
 function newAdvice(){
@@ -3308,12 +3476,453 @@ function newAdvice(){
    )
   ];
 
- document.getElementById("coachFull")
- .textContent=text;
+ const coachFull=
+  document.getElementById("coachFull");
 
- document.getElementById("homeCoach")
- .textContent=text;
+ if(coachFull)
+  coachFull.textContent=text;
 
+ const homeCoach=
+  document.getElementById("homeCoach");
+
+ if(homeCoach)
+  homeCoach.textContent=text;
+}
+
+
+/* ==================================================
+   AKILLI DERS KOÇU
+================================================== */
+
+let coachHistory=JSON.parse(
+ localStorage.getItem("dt_coach_history")||"[]"
+);
+
+
+/* =========================
+COACH STORAGE
+========================= */
+
+function saveCoachHistory(){
+
+ localStorage.setItem(
+  "dt_coach_history",
+  JSON.stringify(coachHistory)
+ );
+}
+
+
+/* =========================
+COACH HTML ESCAPE
+========================= */
+
+function escapeCoachText(text){
+
+ return escapeHTML(
+  text==null ? "" : String(text)
+ );
+
+}
+
+
+/* =========================
+RENDER COACH CHAT
+========================= */
+
+function renderCoachChat(){
+
+ const chat=
+  document.getElementById("coachChat");
+
+ if(!chat)return;
+
+ if(!coachHistory.length){
+
+  chat.innerHTML=`
+
+  <div class="coach-empty">
+
+   <div class="coach-empty-icon">
+    🤖
+   </div>
+
+   <h3>
+    Merhaba! Ben Akıllı Ders Koçu 👋
+   </h3>
+
+   <p>
+    Bana derslerinle ilgili istediğin şeyi sorabilirsin.
+   </p>
+
+   <p style="margin-top:8px">
+    Örneğin:
+    <br>
+    "Kesirleri bana çok basit anlat."
+    <br>
+    "Yarın matematik sınavım var, ne çalışmalıyım?"
+   </p>
+
+  </div>
+
+  `;
+
+  return;
+ }
+
+ chat.innerHTML=
+  coachHistory.map(message=>{
+
+   const isUser=
+    message.role==="user";
+
+   return `
+
+   <div class="coach-message-row ${isUser?"user":"assistant"}">
+
+    <div class="coach-bubble">
+
+     <div class="coach-label">
+      ${isUser?"Sen":"🤖 Akıllı Ders Koçu"}
+     </div>
+
+     ${escapeCoachText(message.content)}
+
+    </div>
+
+   </div>
+
+   `;
+
+  }).join("");
+
+ chat.scrollTop=chat.scrollHeight;
+}
+
+
+/* =========================
+COACH MESSAGE
+========================= */
+
+function addCoachMessage(role,content){
+
+ coachHistory.push({
+  role,
+  content
+ });
+
+ saveCoachHistory();
+
+ renderCoachChat();
+}
+
+
+/* =========================
+COACH ENTER
+========================= */
+
+function handleCoachKey(event){
+
+ if(
+  event.key==="Enter" &&
+  !event.shiftKey
+ ){
+
+  event.preventDefault();
+
+  sendCoachMessage();
+ }
+}
+
+
+/* =========================
+QUICK MESSAGE
+========================= */
+
+function coachQuickMessage(message){
+
+ const input=
+  document.getElementById("coachInput");
+
+ if(!input)return;
+
+ input.value=message;
+
+ sendCoachMessage();
+}
+
+
+/* =========================
+SEND COACH MESSAGE
+========================= */
+
+async function sendCoachMessage(){
+
+ const input=
+  document.getElementById("coachInput");
+
+ const button=
+  document.getElementById("coachSendButton");
+
+ const chat=
+  document.getElementById("coachChat");
+
+ if(!input||!button||!chat)return;
+
+ const message=
+  input.value.trim();
+
+ if(!message){
+
+  toast("Önce bir mesaj yaz.");
+
+  input.focus();
+
+  return;
+ }
+
+ input.value="";
+
+ addCoachMessage(
+  "user",
+  message
+ );
+
+ button.disabled=true;
+
+ button.style.opacity="0.6";
+
+ button.textContent=
+  "🤖 Düşünüyor...";
+
+
+ const typing=
+  document.createElement("div");
+
+ typing.className=
+  "coach-message-row assistant";
+
+ typing.id=
+  "coachTypingMessage";
+
+ typing.innerHTML=`
+
+  <div class="coach-bubble">
+
+   <div class="coach-label">
+    🤖 Akıllı Ders Koçu
+   </div>
+
+   <div class="coach-typing">
+
+    <span></span>
+    <span></span>
+    <span></span>
+
+   </div>
+
+  </div>
+
+ `;
+
+ chat.appendChild(typing);
+
+ chat.scrollTop=chat.scrollHeight;
+
+
+ /*
+  API'ye gönderilecek geçmiş.
+  Son mesaj kullanıcı mesajıdır.
+ */
+
+ try{
+
+  const response=
+   await fetch(
+    "/api/coach",
+    {
+     method:"POST",
+
+     headers:{
+      "Content-Type":
+       "application/json",
+
+      "Accept":
+       "application/json"
+     },
+
+     body:JSON.stringify({
+
+      message,
+
+      history:coachHistory,
+
+      user:{
+       name:user?.name||"Öğrenci"
+      },
+
+      studyData:{
+       tasks:data.tasks,
+       subjects:data.subjects,
+       exams:data.exams,
+       notes:data.notes,
+       xp:data.xp,
+       streak:data.streak,
+       completed:data.completed
+      }
+
+     })
+    }
+   );
+
+
+  /*
+   JSON yerine Vercel HTML hata sayfası
+   döndürürse burada yakalıyoruz.
+  */
+
+  const rawText=
+   await response.text();
+
+  let responseData=null;
+
+  try{
+
+   responseData=
+    rawText?
+    JSON.parse(rawText):
+    null;
+
+  }catch(parseError){
+
+   console.error(
+    "COACH JSON PARSE ERROR:",
+    parseError
+   );
+
+   console.error(
+    "COACH SUNUCU YANITI:",
+    rawText
+   );
+
+   throw new Error(
+    "Sunucu JSON yerine farklı bir yanıt döndürdü. /api/coach dosyasını kontrol et."
+   );
+  }
+
+
+  if(!response.ok){
+
+   throw new Error(
+    responseData?.error||
+    responseData?.message||
+    `Sunucu hatası (${response.status})`
+   );
+  }
+
+
+  if(
+   !responseData||
+   !responseData.success
+  ){
+
+   throw new Error(
+    responseData?.error||
+    responseData?.message||
+    "Akıllı Ders Koçu cevap veremedi."
+   );
+  }
+
+
+  /*
+   Önce typing mesajını kaldır.
+  */
+
+  document
+   .getElementById("coachTypingMessage")
+   ?.remove();
+
+
+  addCoachMessage(
+   "assistant",
+   responseData.answer||
+   "Cevap alınamadı."
+  );
+
+
+ }catch(error){
+
+  console.error(
+   "COACH ERROR:",
+   error
+  );
+
+
+  document
+   .getElementById("coachTypingMessage")
+   ?.remove();
+
+
+  /*
+   Kullanıcının mesajı history'de zaten var.
+   Hata olduğunda onu kaldırıyoruz.
+  */
+
+  coachHistory.pop();
+
+  saveCoachHistory();
+
+  addCoachMessage(
+   "assistant",
+   "❌ Şu anda cevap veremiyorum.\n\n"+
+   (
+    error.message||
+    "Akıllı Ders Koçu'na bağlanılamadı."
+   )
+  );
+
+
+  toast(
+   "Akıllı Ders Koçu'na bağlanılamadı."
+  );
+
+ }finally{
+
+  button.disabled=false;
+
+  button.style.opacity="1";
+
+  button.textContent=
+   "Gönder 🚀";
+
+  input.focus();
+ }
+}
+
+
+/* =========================
+CLEAR COACH CHAT
+========================= */
+
+function clearCoachChat(){
+
+ if(
+  !confirm(
+   "Akıllı Ders Koçu sohbeti silinsin mi?"
+  )
+ ){
+
+  return;
+ }
+
+ coachHistory=[];
+
+ localStorage.removeItem(
+  "dt_coach_history"
+ );
+
+ renderCoachChat();
+
+ toast("Sohbet temizlendi.");
 }
 
 
@@ -3383,7 +3992,6 @@ function renderBadges(){
 
  ];
 
-
  document.getElementById("badges")
  .innerHTML=
 
@@ -3409,7 +4017,6 @@ function renderBadges(){
  </div>
 
  `).join("");
-
 }
 
 
@@ -3428,28 +4035,23 @@ function renderStats(){
  document.getElementById("statsCompleted")
  .textContent=data.completed;
 
-
  const total=data.tasks.length;
 
  const done=
   data.tasks.filter(x=>x.done).length;
-
 
  const percent=
   total?
   Math.round(done/total*100):
   0;
 
-
  document.getElementById("statsPercent")
  .textContent=
   percent+"%";
 
-
  document.getElementById("statsProgress")
  .style.width=
   percent+"%";
-
 }
 
 
@@ -3463,49 +4065,39 @@ function getLevel(){
   1,
   Math.floor(data.xp/100)+1
  );
-
 }
-
 
 function renderProfile(){
 
  const level=getLevel();
 
-
  document.getElementById("profileName")
  .textContent=
   user?.name||"Öğrenci";
-
 
  document.getElementById("profileEmail")
  .textContent=
   user?.email||"-";
 
-
  document.getElementById("profileLevel")
  .textContent=
   level;
-
 
  document.getElementById("profileXP")
  .textContent=
   data.xp;
 
-
  document.getElementById("profileTasks")
  .textContent=
   data.tasks.length;
-
 
  document.getElementById("profileSubjects")
  .textContent=
   data.subjects.length;
 
-
  document.getElementById("topLevel")
  .textContent=
   "Seviye "+level;
-
 
  document.getElementById("welcome")
  .textContent=
@@ -3513,7 +4105,6 @@ function renderProfile(){
    user?.name?.split(" ")[0]||
    "Öğrenci"
   }! 👋`;
-
 }
 
 
@@ -3537,7 +4128,6 @@ function renderHomeStats(){
  document.getElementById("homeStatExams")
  .textContent=
   data.exams.length;
-
 }
 
 
@@ -3552,9 +4142,7 @@ function updateStreak(){
   .toISOString()
   .slice(0,10);
 
-
  if(data.lastDay===today)return;
-
 
  const yesterday=new Date();
 
@@ -3562,12 +4150,10 @@ function updateStreak(){
   yesterday.getDate()-1
  );
 
-
  const yesterdayString=
   yesterday
   .toISOString()
   .slice(0,10);
-
 
  if(
   data.lastDay===yesterdayString
@@ -3578,12 +4164,9 @@ function updateStreak(){
  }else{
 
   data.streak=1;
-
  }
 
-
  data.lastDay=today;
-
 }
 
 
@@ -3601,15 +4184,12 @@ function openModal(title,body){
 
  document.getElementById("modal")
  .classList.add("show");
-
 }
-
 
 function closeModal(){
 
  document.getElementById("modal")
  .classList.remove("show");
-
 }
 
 
@@ -3630,11 +4210,8 @@ function toast(message){
  .appendChild(box);
 
  setTimeout(()=>{
-
   box.remove();
-
  },3000);
-
 }
 
 
@@ -3652,7 +4229,6 @@ function toggleDark(){
    ?"1"
    :"0"
  );
-
 }
 
 
@@ -3666,34 +4242,22 @@ function clearData(){
   "Tüm görev, ders, sınav ve not verilerin silinecek. Emin misin?"
  ))return;
 
-
  data={
-
   tasks:[],
-
   subjects:[],
-
   exams:[],
-
   notes:[],
-
   xp:0,
-
   streak:0,
-
   completed:0,
-
   lastDay:""
-
  };
-
 
  save();
 
  renderAll();
 
  toast("Veriler temizlendi.");
-
 }
 
 
@@ -3707,7 +4271,6 @@ function save(){
   "dt_data",
   JSON.stringify(data)
  );
-
 }
 
 
@@ -3717,12 +4280,10 @@ AI SORU ÇÖZ
 
 let aiImageData="";
 
-
 function previewAIImage(event){
 
  const file=
   event.target.files[0];
-
 
  if(!file){
 
@@ -3733,9 +4294,7 @@ function previewAIImage(event){
   ).style.display="none";
 
   return;
-
  }
-
 
  if(!file.type.startsWith("image/")){
 
@@ -3744,12 +4303,9 @@ function previewAIImage(event){
   event.target.value="";
 
   return;
-
  }
 
-
  const reader=new FileReader();
-
 
  reader.onload=function(e){
 
@@ -3762,20 +4318,15 @@ function previewAIImage(event){
   document.getElementById(
    "aiImagePreview"
   ).style.display="block";
-
  };
 
-
  reader.readAsDataURL(file);
-
 }
 
 
-/*
-====================================================
-DÜZELTİLEN AI FONKSİYONU
-====================================================
-*/
+/* =========================
+AI SOLVE
+========================= */
 
 async function solveAIQuestion(){
 
@@ -3784,33 +4335,27 @@ async function solveAIQuestion(){
   .getElementById("aiQuestion")
   .value.trim();
 
-
  const subject=
   document
   .getElementById("aiSubject")
   .value;
-
 
  const mode=
   document
   .getElementById("aiMode")
   .value;
 
-
  const result=
   document
   .getElementById("aiResult");
-
 
  const loading=
   document
   .getElementById("aiLoading");
 
-
  const button=
   document
   .getElementById("aiSolveButton");
-
 
  if(!question&&!aiImageData){
 
@@ -3819,9 +4364,7 @@ async function solveAIQuestion(){
   );
 
   return;
-
  }
-
 
  result.style.display="none";
 
@@ -3836,7 +4379,6 @@ async function solveAIQuestion(){
  button.textContent=
   "🤖 Çözülüyor...";
 
-
  try{
 
   const response=await fetch(
@@ -3847,6 +4389,7 @@ async function solveAIQuestion(){
     headers:{
      "Content-Type":
       "application/json",
+
      "Accept":
       "application/json"
     },
@@ -3864,24 +4407,14 @@ async function solveAIQuestion(){
      mode
 
     })
-
    }
   );
 
 
-  /*
-  ÖNEMLİ:
-  response.json() doğrudan kullanılmıyor.
-  Çünkü Vercel bazen JSON yerine HTML
-  hata sayfası döndürebiliyor.
-  */
-
   const rawText=
    await response.text();
 
-
   let responseData=null;
-
 
   try{
 
@@ -3902,13 +4435,10 @@ async function solveAIQuestion(){
     rawText
    );
 
-
    throw new Error(
     "Sunucu JSON yerine farklı bir yanıt döndürdü. API adresini kontrol et."
    );
-
   }
-
 
   if(!response.ok){
 
@@ -3916,18 +4446,14 @@ async function solveAIQuestion(){
     responseData?.error||
     `Sunucu hatası (${response.status})`
    );
-
   }
-
 
   if(!responseData){
 
    throw new Error(
     "Sunucudan boş yanıt geldi."
    );
-
   }
-
 
   if(!responseData.success){
 
@@ -3935,22 +4461,17 @@ async function solveAIQuestion(){
     responseData.error||
     "Yapay zeka soruyu çözemedi."
    );
-
   }
-
 
   result.textContent=
    responseData.answer||
    "Yanıt alınamadı.";
 
-
   result.style.display="block";
-
 
   toast(
    "Soru başarıyla çözüldü 🧠✅"
   );
-
 
  }catch(error){
 
@@ -3959,7 +4480,6 @@ async function solveAIQuestion(){
    error
   );
 
-
   result.textContent=
    "❌ Hata oluştu.\n\n"+
    (
@@ -3967,14 +4487,11 @@ async function solveAIQuestion(){
     "Yapay zeka servisine bağlanılamadı."
    );
 
-
   result.style.display="block";
-
 
   toast(
    "Soru çözülürken hata oluştu."
   );
-
 
  }finally{
 
@@ -3986,9 +4503,7 @@ async function solveAIQuestion(){
 
   button.textContent=
    "🧠 Soruyu Çöz";
-
  }
-
 }
 
 
@@ -4000,7 +4515,6 @@ function formatDate(date){
 
  if(!date)return "-";
 
-
  return new Date(date)
  .toLocaleDateString(
   "tr-TR",
@@ -4010,9 +4524,7 @@ function formatDate(date){
    year:"numeric"
   }
  );
-
 }
-
 
 function formatDateTime(date){
 
@@ -4025,46 +4537,35 @@ function formatDateTime(date){
    year:"numeric"
   }
  );
-
 }
-
 
 function escapeHTML(str){
 
  return String(str)
-
  .replaceAll(
   "&",
   "&amp;"
  )
-
  .replaceAll(
   "<",
   "&lt;"
  )
-
  .replaceAll(
   ">",
   "&gt;"
  )
-
  .replaceAll(
   '"',
   "&quot;"
  )
-
  .replaceAll(
   "'",
   "&#039;"
  );
-
 }
 
-
 function escapeAttr(str){
-
  return escapeHTML(str);
-
 }
 
 
@@ -4092,12 +4593,9 @@ function renderAll(){
 
  updateTimer();
 
+ newAdvice();
 
- document.getElementById(
-  "coachFull"
- ).textContent=
-  advices[0];
-
+ renderCoachChat();
 }
 
 
@@ -4110,7 +4608,6 @@ if(
 ){
 
  document.body.classList.add("dark");
-
 }
 
 
@@ -4143,7 +4640,6 @@ if(
  auth.style.display="flex";
 
  app.style.display="none";
-
 }
 
 </script>
