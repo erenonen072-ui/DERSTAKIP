@@ -7041,5 +7041,380 @@ if(
 </script>
 <script src="notes.js"></script>
 <script src="app.js"></script>
+<!-- DERSCEP NOTLAR -->
+<section id="notlar" class="notlar-section">
+
+    <div class="notlar-header">
+        <span class="notlar-badge">📚 DERS NOTLARI</span>
+        <h2>Notlar</h2>
+        <p>Sınıfını, dersini ve konunu seçerek ders notlarına ulaş.</p>
+    </div>
+
+    <div class="notlar-filters">
+
+        <select id="sinifSec">
+            <option value="">Sınıf Seç</option>
+            <option value="5">5. Sınıf</option>
+            <option value="6">6. Sınıf</option>
+            <option value="7">7. Sınıf</option>
+            <option value="8">8. Sınıf</option>
+            <option value="9">9. Sınıf</option>
+            <option value="10">10. Sınıf</option>
+            <option value="11">11. Sınıf</option>
+            <option value="12">12. Sınıf</option>
+        </select>
+
+        <select id="dersSec" disabled>
+            <option value="">Önce sınıf seç</option>
+        </select>
+
+        <select id="uniteSec" disabled>
+            <option value="">Önce ders seç</option>
+        </select>
+
+        <select id="konuSec" disabled>
+            <option value="">Önce ünite seç</option>
+        </select>
+
+        <button id="notGoster" disabled>
+            📖 Notu Göster
+        </button>
+
+    </div>
+
+    <div id="notSonucu" class="not-sonucu">
+        <div class="not-bos">
+            <div>📚</div>
+            <h3>Ders notunu seç</h3>
+            <p>Sınıf → Ders → Ünite → Konu seçerek başlayabilirsin.</p>
+        </div>
+    </div>
+
+</section>
+
+
+<style>
+.notlar-section {
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 30px;
+}
+
+.notlar-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.notlar-badge {
+    display: inline-block;
+    padding: 7px 14px;
+    border-radius: 20px;
+    background: #fff3b0;
+    color: #856404;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.notlar-header h2 {
+    font-size: 36px;
+    margin: 12px 0 5px;
+}
+
+.notlar-header p {
+    opacity: .7;
+}
+
+.notlar-filters {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.notlar-filters select,
+.notlar-filters button {
+    min-height: 48px;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background: white;
+    font-size: 14px;
+}
+
+.notlar-filters button {
+    background: #ffd21c;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.notlar-filters button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.not-sonucu {
+    border-radius: 18px;
+    padding: 30px;
+    background: #fff;
+    box-shadow: 0 8px 30px rgba(0,0,0,.08);
+}
+
+.not-bos {
+    text-align: center;
+    padding: 35px;
+}
+
+.not-bos div {
+    font-size: 45px;
+}
+
+.not-icerik h2 {
+    margin-top: 0;
+}
+
+.not-icerik h3 {
+    margin-top: 25px;
+}
+
+.not-icerik li {
+    margin: 8px 0;
+}
+
+.not-ozet,
+.not-onemli,
+.not-formuller,
+.not-sinav {
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 14px;
+    background: #f7f7f7;
+}
+
+@media (max-width: 800px) {
+    .notlar-filters {
+        grid-template-columns: 1fr;
+    }
+
+    .notlar-section {
+        padding: 15px;
+    }
+}
+</style>
+
+
+<script>
+
+const sinifSec = document.getElementById("sinifSec");
+const dersSec = document.getElementById("dersSec");
+const uniteSec = document.getElementById("uniteSec");
+const konuSec = document.getElementById("konuSec");
+const notGoster = document.getElementById("notGoster");
+const notSonucu = document.getElementById("notSonucu");
+
+
+function temizleSelect(select, text) {
+    select.innerHTML = "";
+    select.innerHTML = `<option value="">${text}</option>`;
+}
+
+
+function secenekEkle(select, value, text) {
+    const option = document.createElement("option");
+
+    option.value = value;
+    option.textContent = text;
+
+    select.appendChild(option);
+}
+
+
+/* SINIF */
+
+sinifSec.addEventListener("change", function() {
+
+    temizleSelect(dersSec, "Ders Seç");
+    temizleSelect(uniteSec, "Önce ders seç");
+    temizleSelect(konuSec, "Önce ünite seç");
+
+    dersSec.disabled = true;
+    uniteSec.disabled = true;
+    konuSec.disabled = true;
+    notGoster.disabled = true;
+
+    const sinif = this.value;
+
+    if (!sinif || !window.DersCepNotes?.[sinif]) return;
+
+    Object.keys(window.DersCepNotes[sinif])
+        .forEach(ders => {
+            secenekEkle(dersSec, ders, ders);
+        });
+
+    dersSec.disabled = false;
+});
+
+
+/* DERS */
+
+dersSec.addEventListener("change", function() {
+
+    temizleSelect(uniteSec, "Ünite / Tema Seç");
+    temizleSelect(konuSec, "Önce ünite seç");
+
+    uniteSec.disabled = true;
+    konuSec.disabled = true;
+    notGoster.disabled = true;
+
+    const sinif = sinifSec.value;
+    const ders = this.value;
+
+    if (!sinif || !ders) return;
+
+    Object.keys(window.DersCepNotes[sinif][ders])
+        .forEach(unit => {
+            secenekEkle(uniteSec, unit, unit);
+        });
+
+    uniteSec.disabled = false;
+});
+
+
+/* ÜNİTE */
+
+uniteSec.addEventListener("change", function() {
+
+    temizleSelect(konuSec, "Konu Seç");
+
+    konuSec.disabled = true;
+    notGoster.disabled = true;
+
+    const sinif = sinifSec.value;
+    const ders = dersSec.value;
+    const unite = this.value;
+
+    if (!sinif || !ders || !unite) return;
+
+    Object.keys(window.DersCepNotes[sinif][ders][unite])
+        .forEach(konu => {
+            secenekEkle(konuSec, konu, konu);
+        });
+
+    konuSec.disabled = false;
+});
+
+
+/* KONU */
+
+konuSec.addEventListener("change", function() {
+
+    notGoster.disabled = !this.value;
+
+});
+
+
+/* NOTU GÖSTER */
+
+notGoster.addEventListener("click", function() {
+
+    const sinif = sinifSec.value;
+    const ders = dersSec.value;
+    const unite = uniteSec.value;
+    const konu = konuSec.value;
+
+    const not = window.DersCepNotes?.[sinif]?.[ders]?.[unite]?.[konu];
+
+    if (!not) return;
+
+    notSonucu.innerHTML = `
+
+        <article class="not-icerik">
+
+            <h2>${not.baslik || konu}</h2>
+
+            <div>
+                ${not.konu || ""}
+            </div>
+
+            ${
+                not.ozet
+                ? `
+                <div class="not-ozet">
+                    <h3>🧠 Kısa Özet</h3>
+                    <p>${not.ozet}</p>
+                </div>
+                `
+                : ""
+            }
+
+            ${
+                not.onemli?.length
+                ? `
+                <div class="not-onemli">
+                    <h3>📌 Önemli Bilgiler</h3>
+                    <ul>
+                        ${not.onemli.map(x => `<li>${x}</li>`).join("")}
+                    </ul>
+                </div>
+                `
+                : ""
+            }
+
+            ${
+                not.formuller?.length
+                ? `
+                <div class="not-formuller">
+                    <h3>📐 Formüller</h3>
+                    <ul>
+                        ${not.formuller.map(x => `<li>${x}</li>`).join("")}
+                    </ul>
+                </div>
+                `
+                : ""
+            }
+
+            ${
+                not.ornekler?.length
+                ? `
+                <div>
+                    <h3>✏️ Örnekler</h3>
+
+                    ${not.ornekler.map(x => `
+                        <div class="not-ozet">
+                            <strong>❓ ${x.soru}</strong>
+                            <p>✅ ${x.cevap}</p>
+                        </div>
+                    `).join("")}
+
+                </div>
+                `
+                : ""
+            }
+
+            ${
+                not.sinav?.length
+                ? `
+                <div class="not-sinav">
+                    <h3>🎯 Sınav İpuçları</h3>
+                    <ul>
+                        ${not.sinav.map(x => `<li>${x}</li>`).join("")}
+                    </ul>
+                </div>
+                `
+                : ""
+            }
+
+        </article>
+
+    `;
+
+    notSonucu.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+});
+
+</script>
 </body>
 </html>
