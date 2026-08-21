@@ -7416,5 +7416,386 @@ notGoster.addEventListener("click", function() {
 });
 
 </script>
+<script src="./notes.js"></script>
+
+<section id="derscep-notlar" style="max-width:1100px;margin:40px auto;padding:20px;">
+    <h2>📚 Ders Notları</h2>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+
+        <select id="dcSinif">
+            <option value="">Sınıf seç</option>
+        </select>
+
+        <select id="dcDers" disabled>
+            <option value="">Ders seç</option>
+        </select>
+
+        <select id="dcUnite" disabled>
+            <option value="">Ünite / Tema seç</option>
+        </select>
+
+        <select id="dcKonu" disabled>
+            <option value="">Konu seç</option>
+        </select>
+
+    </div>
+
+    <div id="dcNot" style="margin-top:25px;">
+        <p>📚 Bir sınıf seçerek başla.</p>
+    </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const sinif = document.getElementById("dcSinif");
+    const ders = document.getElementById("dcDers");
+    const unite = document.getElementById("dcUnite");
+    const konu = document.getElementById("dcKonu");
+    const not = document.getElementById("dcNot");
+
+    /* SINIFLARI DOLDUR */
+
+    Object.keys(window.DersCepNotes).forEach(function (sinifNo) {
+
+        const option = document.createElement("option");
+
+        option.value = sinifNo;
+        option.textContent = sinifNo + ". Sınıf";
+
+        sinif.appendChild(option);
+
+    });
+
+
+    /* SINIF SEÇİLDİ */
+
+    sinif.addEventListener("change", function () {
+
+        ders.innerHTML = '<option value="">Ders seç</option>';
+        unite.innerHTML = '<option value="">Ünite / Tema seç</option>';
+        konu.innerHTML = '<option value="">Konu seç</option>';
+
+        ders.disabled = true;
+        unite.disabled = true;
+        konu.disabled = true;
+
+        not.innerHTML = "<p>📚 Ders seç.</p>";
+
+        const secilenSinif = this.value;
+
+        if (!secilenSinif) return;
+
+        const dersler =
+            Object.keys(window.DersCepNotes[secilenSinif]);
+
+        dersler.forEach(function (dersAdi) {
+
+            const option = document.createElement("option");
+
+            option.value = dersAdi;
+            option.textContent = dersAdi;
+
+            ders.appendChild(option);
+
+        });
+
+        ders.disabled = false;
+
+    });
+
+
+    /* DERS SEÇİLDİ */
+
+    ders.addEventListener("change", function () {
+
+        unite.innerHTML = '<option value="">Ünite / Tema seç</option>';
+        konu.innerHTML = '<option value="">Konu seç</option>';
+
+        unite.disabled = true;
+        konu.disabled = true;
+
+        const secilenSinif = sinif.value;
+        const secilenDers = this.value;
+
+        if (!secilenDers) return;
+
+        const uniteler =
+            Object.keys(
+                window.DersCepNotes[secilenSinif][secilenDers]
+            );
+
+        uniteler.forEach(function (uniteAdi) {
+
+            const option = document.createElement("option");
+
+            option.value = uniteAdi;
+            option.textContent = uniteAdi;
+
+            unite.appendChild(option);
+
+        });
+
+        unite.disabled = false;
+
+    });
+
+
+    /* ÜNİTE SEÇİLDİ */
+
+    unite.addEventListener("change", function () {
+
+        konu.innerHTML = '<option value="">Konu seç</option>';
+
+        konu.disabled = true;
+
+        const secilenSinif = sinif.value;
+        const secilenDers = ders.value;
+        const secilenUnite = this.value;
+
+        if (!secilenUnite) return;
+
+        const konular =
+            Object.keys(
+                window.DersCepNotes
+                    [secilenSinif]
+                    [secilenDers]
+                    [secilenUnite]
+            );
+
+        konular.forEach(function (konuAdi) {
+
+            const option = document.createElement("option");
+
+            option.value = konuAdi;
+            option.textContent = konuAdi;
+
+            konu.appendChild(option);
+
+        });
+
+        konu.disabled = false;
+
+    });
+
+
+    /* KONU SEÇİLDİ */
+
+    konu.addEventListener("change", function () {
+
+        const secilenSinif = sinif.value;
+        const secilenDers = ders.value;
+        const secilenUnite = unite.value;
+        const secilenKonu = this.value;
+
+        if (!secilenKonu) {
+
+            not.innerHTML = "<p>📚 Konu seç.</p>";
+
+            return;
+
+        }
+
+        const veri =
+            window.DersCepNotes
+                [secilenSinif]
+                [secilenDers]
+                [secilenUnite]
+                [secilenKonu];
+
+
+        if (!veri) {
+
+            not.innerHTML =
+                "<p>❌ Bu konu bulunamadı.</p>";
+
+            return;
+
+        }
+
+
+        let html = `
+
+            <article style="
+                padding:25px;
+                border-radius:18px;
+                background:#fff;
+                box-shadow:0 5px 25px rgba(0,0,0,.08);
+            ">
+
+                <small>
+                    ${secilenSinif}. Sınıf
+                    › ${secilenDers}
+                    › ${secilenUnite}
+                </small>
+
+                <h2>${secilenKonu}</h2>
+
+                <div>
+                    ${veri.konu || ""}
+                </div>
+
+        `;
+
+
+        /* ÖZET */
+
+        if (veri.ozet) {
+
+            html += `
+
+                <div style="
+                    margin-top:20px;
+                    padding:18px;
+                    border-radius:12px;
+                    background:#fff8d6;
+                ">
+
+                    <h3>🧠 Kısa Özet</h3>
+
+                    <p>${veri.ozet}</p>
+
+                </div>
+
+            `;
+
+        }
+
+
+        /* ÖNEMLİ BİLGİLER */
+
+        if (veri.onemli && veri.onemli.length) {
+
+            html += `
+
+                <div style="margin-top:20px;">
+
+                    <h3>📌 Önemli Bilgiler</h3>
+
+                    <ul>
+
+                        ${veri.onemli.map(function (bilgi) {
+
+                            return `<li>${bilgi}</li>`;
+
+                        }).join("")}
+
+                    </ul>
+
+                </div>
+
+            `;
+
+        }
+
+
+        /* FORMÜLLER */
+
+        if (veri.formuller && veri.formuller.length) {
+
+            html += `
+
+                <div style="margin-top:20px;">
+
+                    <h3>📐 Formüller</h3>
+
+                    <ul>
+
+                        ${veri.formuller.map(function (formul) {
+
+                            return `<li>${formul}</li>`;
+
+                        }).join("")}
+
+                    </ul>
+
+                </div>
+
+            `;
+
+        }
+
+
+        /* ÖRNEKLER */
+
+        if (veri.ornekler && veri.ornekler.length) {
+
+            html += `
+
+                <div style="margin-top:20px;">
+
+                    <h3>✏️ Örnekler</h3>
+
+            `;
+
+
+            veri.ornekler.forEach(function (ornek) {
+
+                html += `
+
+                    <div style="
+                        padding:15px;
+                        margin-top:10px;
+                        border-radius:12px;
+                        background:#f5f5f5;
+                    ">
+
+                        <strong>❓ ${ornek.soru}</strong>
+
+                        <p>✅ ${ornek.cevap}</p>
+
+                    </div>
+
+                `;
+
+            });
+
+
+            html += `</div>`;
+
+        }
+
+
+        /* SINAV */
+
+        if (veri.sinav && veri.sinav.length) {
+
+            html += `
+
+                <div style="
+                    margin-top:20px;
+                    padding:18px;
+                    border-radius:12px;
+                    background:#eef7ff;
+                ">
+
+                    <h3>🎯 Sınav İpuçları</h3>
+
+                    <ul>
+
+                        ${veri.sinav.map(function (ipucu) {
+
+                            return `<li>${ipucu}</li>`;
+
+                        }).join("")}
+
+                    </ul>
+
+                </div>
+
+            `;
+
+        }
+
+
+        html += `</article>`;
+
+        not.innerHTML = html;
+
+    });
+
+});
+</script>
 </body>
 </html>
