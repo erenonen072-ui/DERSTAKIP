@@ -7050,5 +7050,19 @@ if(
 
 </script>
 </script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/sw.js")
+      .then(registration => {
+        console.log("DersTakip PWA aktif 🚀");
+      })
+      .catch(error => {
+        console.error("PWA başlatılamadı:", error);
+      });
+  });
+}
+</script>
 </body>
 </html>
