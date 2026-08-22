@@ -3035,6 +3035,66 @@ APP
         onclick="navigate('tasks')">
         ✅ Görevler
       </button>
+     <button id="installAppBtn" style="
+  display:none;
+  width:100%;
+  border:0;
+  padding:14px 18px;
+  border-radius:14px;
+  background:#635bff;
+  color:white;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  margin-top:12px;
+">
+  📱 DersTakip'i Uygulama Olarak Yükle
+</button>
+     <script>
+let deferredPrompt = null;
+
+const installBtn = document.getElementById("installAppBtn");
+
+window.addEventListener("beforeinstallprompt", event => {
+  event.preventDefault();
+
+  deferredPrompt = event;
+
+  if (installBtn) {
+    installBtn.style.display = "block";
+  }
+});
+
+if (installBtn) {
+  installBtn.addEventListener("click", async () => {
+
+    if (!deferredPrompt) {
+      alert(
+        "Tarayıcının menüsünden 'Uygulamayı yükle' veya 'Ana ekrana ekle' seçeneğini kullanabilirsin."
+      );
+      return;
+    }
+
+    deferredPrompt.prompt();
+
+    const result = await deferredPrompt.userChoice;
+
+    console.log("Yükleme sonucu:", result.outcome);
+
+    deferredPrompt = null;
+
+    installBtn.style.display = "none";
+  });
+}
+
+window.addEventListener("appinstalled", () => {
+  console.log("DersTakip uygulama olarak yüklendi 🎉");
+
+  if (installBtn) {
+    installBtn.style.display = "none";
+  }
+});
+</script>
 
       <button
         data-page="subjects"
