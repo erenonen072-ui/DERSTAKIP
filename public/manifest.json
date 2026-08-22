@@ -1,14 +1,13 @@
 {
   "name": "DersTakip Pro",
   "short_name": "DersTakip",
-  "description": "Derslerini, görevlerini ve sınavlarını kolayca takip et.",
+  "description": "Derslerini, görevlerini, sınavlarını ve hedeflerini takip et.",
   "start_url": "/",
-  "scope": "/",
   "display": "standalone",
-  "orientation": "portrait-primary",
   "background_color": "#f7f8fc",
   "theme_color": "#635bff",
-  "lang": "tr",
+  "orientation": "portrait",
+  "lang": "tr-TR",
   "icons": [
     {
       "src": "/icon-192.png",
