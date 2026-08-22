@@ -4134,6 +4134,25 @@ APP
             onclick="clearData()">
             Verileri Sıfırla
           </button>
+             <button
+    id="profileInstallBtn"
+    type="button"
+    onclick="installDersTakipApp()"
+    style="
+        width:100%;
+        margin-top:12px;
+        padding:14px 18px;
+        border:none;
+        border-radius:14px;
+        background:linear-gradient(135deg,#635bff,#8b5cf6);
+        color:white;
+        font-size:15px;
+        font-weight:700;
+        cursor:pointer;
+        box-shadow:0 8px 20px rgba(99,91,255,.25);
+    ">
+    📱 Uygulamayı Yükle
+</button>
 
         </div>
 
@@ -7075,6 +7094,92 @@ if ("serviceWorker" in navigator) {
       });
   });
 }
+</script>
+<script>
+let dersTakipInstallPrompt = null;
+
+window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+
+    dersTakipInstallPrompt = event;
+
+    const btn = document.getElementById("profileInstallBtn");
+
+    if (btn) {
+        btn.style.display = "block";
+    }
+
+    console.log("📱 DersTakip yüklemeye hazır");
+});
+
+async function installDersTakipApp() {
+
+    // Android / Chrome / Edge
+    if (dersTakipInstallPrompt) {
+
+        dersTakipInstallPrompt.prompt();
+
+        const result =
+            await dersTakipInstallPrompt.userChoice;
+
+        console.log(
+            "DersTakip yükleme sonucu:",
+            result.outcome
+        );
+
+        dersTakipInstallPrompt = null;
+
+        const btn =
+            document.getElementById("profileInstallBtn");
+
+        if (btn) {
+            btn.style.display = "none";
+        }
+
+        return;
+    }
+
+    // iPhone / iPad
+    const isIOS =
+        /iphone|ipad|ipod/i.test(
+            navigator.userAgent
+        );
+
+    if (isIOS) {
+
+        alert(
+            "📱 DersTakip'i yüklemek için:\n\n" +
+            "1. Safari'de Paylaş butonuna dokun.\n\n" +
+            "2. 'Ana Ekrana Ekle' seçeneğine dokun.\n\n" +
+            "3. 'Ekle' butonuna dokun.\n\n" +
+            "🎓 DersTakip artık uygulama gibi açılabilir."
+        );
+
+        return;
+    }
+
+    // Tarayıcı PWA yükleme menüsünü sunmuyorsa
+    alert(
+        "📱 DersTakip henüz doğrudan yükleme penceresini açamadı.\n\n" +
+        "Tarayıcının ⋮ menüsünü açıp " +
+        "'Uygulamayı yükle' veya " +
+        "'Ana ekrana ekle' seçeneğini kullan."
+    );
+}
+
+window.addEventListener("appinstalled", () => {
+
+    console.log(
+        "🎉 DersTakip uygulama olarak yüklendi!"
+    );
+
+    const btn =
+        document.getElementById("profileInstallBtn");
+
+    if (btn) {
+        btn.style.display = "none";
+    }
+});
 </script>
 </body>
 </html>
