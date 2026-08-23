@@ -1,1458 +1,2114 @@
-/*
- * ============================================================
- * DERS TAKİP — DERS KİTAPLIĞI DATA
- * 5 - 12. SINIF
- * ============================================================
- *
- * Kullanım:
- *
- * <script src="kitaplik-data.js"></script>
- * <script src="kitaplik.js"></script>
- *
- * kitaplik.js içerisinden:
- *
- * const data = window.kitaplikData;
- *
- * ============================================================
- */
+/* =========================================================
+   DERS TAKİP — KİTAPLIK
+   Sınıf → Ders → Konu → Konu Anlatımı → Mini Test
+   ========================================================= */
 
 (function () {
     "use strict";
 
-    /* ========================================================
-       KONU OLUŞTURUCU
-    ======================================================== */
-
-    function konuOlustur(
-        id,
-        ad,
-        giris,
-        anlatim,
-        temelBilgi,
-        ornekler,
-        dikkat,
-        ozet,
-        test
-    ) {
-
-        return {
-            id: id,
-            ad: ad,
-
-            giris: giris,
-
-            anlatim: anlatim,
-
-            temelBilgi: temelBilgi,
-
-            ornekler: ornekler || [],
-
-            dikkat: dikkat,
-
-            ozet: ozet,
-
-            test: test || [],
-
-            tamamlandi: false
-        };
-    }
-
-
-    /* ========================================================
-       ÖRNEK KONU
-       Ayrıntılı konu anlatımı yapısı
-    ======================================================== */
-
-    const dogalSayilar = konuOlustur(
-
-        "5-matematik-dogal-sayilar",
-
-        "Doğal Sayılar",
-
-        `
-        Doğal sayılar matematiğin temel yapı taşlarından biridir.
-        Günlük hayatta sayma, sıralama ve miktar belirtme gibi
-        işlemlerde doğal sayılardan yararlanırız.
-
-        Bu konuda doğal sayıların nasıl yazıldığını, okunduğunu,
-        basamak ve basamak değerlerini ve doğal sayılarla yapılan
-        temel işlemleri öğreneceğiz.
-        `,
-
-        `
-        <h3>📖 Doğal Sayı Nedir?</h3>
-
-        <p>
-        Sayma işlemlerinde kullandığımız sayılar doğal sayılar olarak
-        adlandırılır. 0, 1, 2, 3, 4, 5, ... şeklinde devam eder.
-        </p>
-
-        <p>
-        Doğal sayılar sonsuzdur. En büyük doğal sayı yoktur.
-        Çünkü herhangi bir doğal sayıya 1 eklediğimizde daha büyük
-        başka bir doğal sayı elde ederiz.
-        </p>
-
-        <h3>🔢 Basamaklar</h3>
-
-        <p>
-        Büyük doğal sayıları daha kolay okuyup yazabilmek için
-        sayıları basamaklarına ayırırız.
-        </p>
-
-        <p>
-        Örneğin:
-        </p>
-
-        <div class="kitap-ornek">
-            4 582
-        </div>
-
-        <p>
-        Bu sayıda:
-        </p>
-
-        <ul>
-            <li>2 → birler basamağı</li>
-            <li>8 → onlar basamağı</li>
-            <li>5 → yüzler basamağı</li>
-            <li>4 → binler basamağı</li>
-        </ul>
-
-        <h3>💡 Basamak Değeri</h3>
-
-        <p>
-        Bir rakamın bulunduğu basamağa göre aldığı değere
-        basamak değeri denir.
-        </p>
-
-        <p>
-        4 582 sayısında 5 rakamı yüzler basamağındadır.
-        Bu nedenle basamak değeri:
-        </p>
-
-        <div class="kitap-formul">
-            5 × 100 = 500
-        </div>
-
-        <h3>🧠 Sayı Değeri</h3>
-
-        <p>
-        Bir rakamın sayı değeri, bulunduğu basamaktan bağımsız
-        olarak rakamın kendisidir.
-        </p>
-
-        <p>
-        Örneğin 4 582 sayısındaki 5'in sayı değeri 5,
-        basamak değeri ise 500'dür.
-        </p>
-
-        <h3>➕ Doğal Sayılarla İşlemler</h3>
-
-        <p>
-        Doğal sayılarla toplama, çıkarma, çarpma ve bölme işlemleri
-        yapılabilir.
-        </p>
-
-        <p>
-        İşlem yaparken basamakların doğru hizalanması özellikle
-        toplama ve çıkarma işlemlerinde önemlidir.
-        </p>
-        `,
-
-        [
-            "Doğal sayılar 0'dan başlar.",
-            "En büyük doğal sayı yoktur.",
-            "Basamak değeri rakamın bulunduğu basamağa göre değişir.",
-            "Sayı değeri rakamın kendisidir."
-        ],
-
-        [
-            {
-                soru: "4 582 sayısında 5 rakamının basamak değeri kaçtır?",
-                cozum: `
-                5 yüzler basamağındadır.
-
-                5 × 100 = 500
-
-                Cevap: 500
-                `
-            },
-
-            {
-                soru: "3 406 sayısında 4 rakamının basamak değeri nedir?",
-                cozum: `
-                4 yüzler basamağındadır.
-
-                4 × 100 = 400
-
-                Cevap: 400
-                `
-            }
-        ],
-
-        `
-        ⚠️ Basamak değeri ile sayı değerini karıştırma.
-
-        Örneğin 7 325 sayısındaki 3'ün:
-
-        Sayı değeri = 3
-
-        Basamak değeri = 300
-        `,
-
-        `
-        ⭐ Doğal sayılar 0, 1, 2, 3, ... şeklinde sonsuza kadar
-        devam eder.
-
-        ⭐ Rakamın bulunduğu basamak onun basamak değerini belirler.
-
-        ⭐ Sayı değeri ise rakamın kendisidir.
-
-        ⭐ İşlemlerde basamakların doğru hizalanmasına dikkat edilmelidir.
-        `,
-
-        [
-            {
-                soru: "2 735 sayısında 7'nin basamak değeri kaçtır?",
-                secenekler: [
-                    "7",
-                    "70",
-                    "700",
-                    "7000"
-                ],
-                cevap: 2
-            },
-
-            {
-                soru: "Aşağıdakilerden hangisi doğal sayıdır?",
-                secenekler: [
-                    "-3",
-                    "1/2",
-                    "8",
-                    "2,5"
-                ],
-                cevap: 2
-            }
-        ]
-    );
-
-
-    /* ========================================================
-       5. SINIF MATEMATİK
-    ======================================================== */
-
-    const besMatematik = {
-
-        ad: "Matematik",
-
-        icon: "📐",
-
-        konular: [
-
-            dogalSayilar,
-
-            konuOlustur(
-                "5-matematik-islemler",
-                "Doğal Sayılarla İşlemler",
-
-                `
-                Bu bölümde doğal sayılarla toplama, çıkarma,
-                çarpma ve bölme işlemlerini inceleyeceğiz.
-                `,
-
-                `
-                <h3>➕ Toplama</h3>
-
-                <p>
-                Toplama, iki veya daha fazla miktarın bir araya
-                getirilmesi anlamına gelir.
-                </p>
-
-                <div class="kitap-ornek">
-                    245 + 132 = 377
-                </div>
-
-                <h3>➖ Çıkarma</h3>
-
-                <p>
-                Çıkarma işlemi bir miktardan başka bir miktarı
-                ayırmak veya iki miktar arasındaki farkı bulmak
-                için kullanılır.
-                </p>
-
-                <div class="kitap-ornek">
-                    500 - 275 = 225
-                </div>
-
-                <h3>✖️ Çarpma</h3>
-
-                <p>
-                Çarpma işlemi aynı sayının tekrarlı toplanmasını
-                kısa biçimde ifade eder.
-                </p>
-
-                <div class="kitap-ornek">
-                    4 × 6 = 24
-                </div>
-
-                <h3>➗ Bölme</h3>
-
-                <p>
-                Bölme, bir miktarı eşit gruplara ayırmak için kullanılır.
-                </p>
-
-                <div class="kitap-ornek">
-                    24 ÷ 6 = 4
-                </div>
-                `,
-
-                [
-                    "İşlem önceliğine dikkat edilmelidir.",
-                    "Çıkarma işleminde büyük sayıdan küçük sayı çıkarılır.",
-                    "Bölme işleminde bölünen, bölen ve bölüm kavramları bilinmelidir."
-                ],
-
-                [
-                    {
-                        soru: "245 + 132 işleminin sonucu kaçtır?",
-                        cozum: "245 + 132 = 377"
-                    },
-                    {
-                        soru: "500 - 275 işleminin sonucu kaçtır?",
-                        cozum: "500 - 275 = 225"
-                    }
-                ],
-
-                `
-                ⚠️ İşlem yaparken basamakları yanlış hizalamamaya dikkat et.
-                `,
-
-                `
-                ⭐ Toplama birleştirme,
-                çıkarma ayırma/fark bulma,
-                çarpma tekrarlı toplama,
-                bölme ise eşit gruplara ayırma mantığı taşır.
-                `,
-
-                [
-                    {
-                        soru: "25 × 4 kaçtır?",
-                        secenekler: ["50", "75", "100", "125"],
-                        cevap: 2
-                    }
-                ]
-            ),
-
-            konuOlustur(
-                "5-matematik-kesirler",
-                "Kesirler",
-
-                `
-                Bir bütünün eş parçalarından kaç tanesinin
-                alındığını göstermek için kesirlerden yararlanırız.
-                `,
-
-                `
-                <h3>📖 Kesrin Bölümleri</h3>
-
-                <p>
-                Bir kesir iki bölümden oluşur:
-                pay ve payda.
-                </p>
-
-                <div class="kitap-formul">
-                    Pay / Payda
-                </div>
-
-                <p>
-                Örneğin 3/5 kesrinde 3 pay, 5 ise paydadır.
-                </p>
-
-                <h3>💡 Payda Ne Anlatır?</h3>
-
-                <p>
-                Payda bütünün kaç eş parçaya ayrıldığını gösterir.
-                </p>
-
-                <h3>💡 Pay Ne Anlatır?</h3>
-
-                <p>
-                Pay, bu eş parçalardan kaç tanesinin ele alındığını
-                gösterir.
-                </p>
-
-                <h3>🧩 Örnek</h3>
-
-                <p>
-                Bir pasta 8 eş parçaya ayrılmış ve 3 parçası yenmişse
-                yenilen kısmı 3/8 ile gösterebiliriz.
-                </p>
-                `,
-
-                [
-                    "Payda 0 olamaz.",
-                    "Pay, alınan parça sayısını gösterir.",
-                    "Payda, bütünün eş parça sayısını gösterir."
-                ],
-
-                [
-                    {
-                        soru: "5/9 kesrinde pay hangisidir?",
-                        cozum: "Pay 5'tir."
-                    }
-                ],
-
-                `
-                ⚠️ Pay ve paydayı yer değiştirmemeye dikkat et.
-                `,
-
-                `
-                ⭐ Kesirlerde üstteki sayı pay,
-                alttaki sayı paydadır.
-                `,
-
-                [
-                    {
-                        soru: "7/10 kesrinde payda kaçtır?",
-                        secenekler: ["7", "10", "17", "3"],
-                        cevap: 1
-                    }
-                ]
-            ),
-
-            konuOlustur(
-                "5-matematik-ondalik",
-                "Ondalık Gösterim",
-
-                "Kesirlerin ve bazı ölçümlerin ondalık biçimde ifade edilmesini öğreniriz.",
-
-                `
-                <h3>📖 Ondalık Sayılar</h3>
-
-                <p>
-                Bir bütünün onda, yüzde veya binde birlik parçalarını
-                göstermek için ondalık gösterim kullanılabilir.
-                </p>
-
-                <div class="kitap-ornek">
-                    0,5
-                </div>
-
-                <p>
-                Türkçede ondalık gösterimde virgül kullanılır.
-                </p>
-
-                <h3>🧩 Örnek</h3>
-
-                <p>
-                0,5 sayısı yarımı ifade eder.
-                </p>
-
-                <div class="kitap-formul">
-                    0,5 = 5/10 = 1/2
-                </div>
-                `,
-
-                [
-                    "Ondalık ayırıcı olarak virgül kullanılır.",
-                    "Virgülün sol tarafı tam kısmı gösterir.",
-                    "Virgülün sağ tarafı ondalık kısmı gösterir."
-                ],
-
-                [
-                    {
-                        soru: "0,5 hangi kesre eşittir?",
-                        cozum: "0,5 = 5/10 = 1/2"
-                    }
-                ],
-
-                "⚠️ Virgülün yerini değiştirmek sayının değerini değiştirir.",
-
-                "⭐ Ondalık gösterim özellikle ölçme ve günlük hayat problemlerinde sık kullanılır.",
-
-                [
-                    {
-                        soru: "0,25 aşağıdakilerden hangisine eşittir?",
-                        secenekler: ["1/2", "1/3", "1/4", "3/4"],
-                        cevap: 2
-                    }
-                ]
-            )
-        ]
+    const DATA = window.kitaplikData || {};
+
+    const state = {
+        sinif: null,
+        ders: null,
+        konu: null,
+        arama: "",
+        testCevaplari: {},
+        tamamlananlar: JSON.parse(
+            localStorage.getItem("dersTakip_kitaplik_tamamlanan") || "{}"
+        )
     };
 
+    const root = document.getElementById("kitaplikApp");
 
-    /* ========================================================
-       DİĞER ORTAOKUL DERSLERİ
-       ======================================================== */
-
-    function standartKonular(sinif, ders, ikon, isimler, odak) {
-
-        return {
-            ad: ders,
-            icon: ikon,
-
-            konular: isimler.map(function (isim, index) {
-
-                return konuOlustur(
-
-                    `${sinif}-${ders}-${index + 1}`,
-
-                    isim,
-
-                    `
-                    ${isim} konusuna hoş geldin.
-
-                    Bu bölümde ${odak} ile ilgili temel kavramları,
-                    aralarındaki ilişkileri ve günlük hayattaki
-                    uygulamalarını inceleyeceğiz.
-                    `,
-
-                    `
-                    <h3>📖 Konuya Giriş</h3>
-
-                    <p>
-                    ${isim}, ${odak} öğrenme alanının önemli
-                    başlıklarından biridir.
-                    </p>
-
-                    <p>
-                    Konuyu öğrenirken önce temel kavramları anlamak,
-                    ardından örnekleri incelemek ve son olarak
-                    öğrendiklerini uygulamak gerekir.
-                    </p>
-
-                    <h3>💡 Temel Bilgi</h3>
-
-                    <p>
-                    Bu bölümün temel amacı kavramları ezberlemek yerine
-                    aralarındaki ilişkiyi kurabilmektir.
-                    </p>
-
-                    <h3>🧠 Nasıl Düşünmelisin?</h3>
-
-                    <p>
-                    Bir soru ile karşılaştığında önce verilen bilgileri
-                    belirle. Daha sonra sorunun senden ne istediğini
-                    açıkça ifade et. Son olarak uygun yöntemle sonuca ulaş.
-                    </p>
-
-                    <h3>🧩 Uygulama</h3>
-
-                    <p>
-                    Öğrendiğin bilgiyi günlük hayatla ilişkilendirmeye
-                    çalış. Bir konuyu kendi cümlelerinle anlatabiliyorsan
-                    konunun temel mantığını kavramışsın demektir.
-                    </p>
-                    `,
-
-                    [
-                        `${isim} konusunun temel kavramlarını bil.`,
-                        "Kavramların hangi durumda kullanıldığını öğren.",
-                        "Örnekleri incele ve benzer soruları kendin çöz."
-                    ],
-
-                    [
-                        {
-                            soru: `${isim} konusunda temel yaklaşım nedir?`,
-                            cozum: `
-                            Önce verilenler ve istenen belirlenir.
-                            Ardından konuyla ilgili uygun kavram veya
-                            yöntem seçilir ve sonuç kontrol edilir.
-                            `
-                        }
-                    ],
-
-                    `
-                    ⚠️ Sadece ezber yapma.
-
-                    Konunun nedenini ve hangi durumda kullanıldığını
-                    anlamaya çalış.
-                    `,
-
-                    `
-                    ⭐ ${isim} konusunun temel kavramlarını öğren.
-
-                    ⭐ Örnekleri incele.
-
-                    ⭐ Kendi cümlelerinle tekrar et.
-
-                    ⭐ Mini test ile kendini kontrol et.
-                    `,
-
-                    [
-                        {
-                            soru: `${isim} çalışırken en doğru yaklaşım hangisidir?`,
-                            secenekler: [
-                                "Sadece cevabı ezberlemek",
-                                "Konuyu anlamak ve uygulamak",
-                                "Soruyu okumadan işlem yapmak",
-                                "Yanlışları kontrol etmemek"
-                            ],
-                            cevap: 1
-                        }
-                    ]
-                );
-            })
-        };
+    if (!root) {
+        console.error(
+            "DersTakip Kitaplık: #kitaplikApp bulunamadı."
+        );
+        return;
     }
 
+    /* =====================================================
+       YARDIMCI FONKSİYONLAR
+    ===================================================== */
 
-    /* ========================================================
-       SINIFLAR
-    ======================================================== */
+    function escapeHTML(value) {
+        if (value === null || value === undefined) return "";
 
-    const kitaplikData = {
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
 
-        "5": {
-            ad: "5. Sınıf",
+    function getSiniflar() {
+        return Object.keys(DATA).sort(function (a, b) {
+            return Number(a) - Number(b);
+        });
+    }
 
-            dersler: {
+    function getSinif() {
+        return state.sinif ? DATA[state.sinif] : null;
+    }
 
-                turkce: standartKonular(
-                    5,
-                    "Türkçe",
-                    "📖",
-                    [
-                        "Sözcükte Anlam",
-                        "Cümlede Anlam",
-                        "Paragraf",
-                        "Metin Türleri",
-                        "Yazım Kuralları",
-                        "Noktalama İşaretleri",
-                        "İsimler",
-                        "Sıfatlar",
-                        "Fiiller",
-                        "Söz Varlığı"
-                    ],
-                    "okuma, anlama, söz varlığı ve dil bilgisi"
-                ),
+    function getDersler() {
+        const sinif = getSinif();
 
-                matematik: besMatematik,
+        if (!sinif || !sinif.dersler) {
+            return {};
+        }
 
-                fen: standartKonular(
-                    5,
-                    "Fen Bilimleri",
-                    "🔬",
-                    [
-                        "Dünya ve Evren",
-                        "Kuvvet ve Hareket",
-                        "Madde ve Isı",
-                        "Canlılar ve Yaşam",
-                        "Elektrik",
-                        "Işık ve Ses",
-                        "Enerji",
-                        "Çevre"
-                    ],
-                    "bilimsel gözlem, canlılar, madde, enerji ve çevre"
-                ),
+        return sinif.dersler;
+    }
 
-                sosyal: standartKonular(
-                    5,
-                    "Sosyal Bilgiler",
-                    "🌍",
-                    [
-                        "Birey ve Toplum",
-                        "Kültür ve Miras",
-                        "İnsanlar, Yerler ve Çevreler",
-                        "Bilim, Teknoloji ve Toplum",
-                        "Üretim, Dağıtım ve Tüketim",
-                        "Etkin Vatandaşlık",
-                        "Küresel Bağlantılar"
-                    ],
-                    "birey, toplum, kültür, çevre ve vatandaşlık"
-                ),
+    function getDers() {
+        const dersler = getDersler();
 
-                ingilizce: standartKonular(
-                    5,
-                    "İngilizce",
-                    "🇬🇧",
-                    [
-                        "Daily Routines",
-                        "Family and Friends",
-                        "Hobbies",
-                        "Health",
-                        "Weather",
-                        "Environment",
-                        "Travel",
-                        "Technology"
-                    ],
-                    "temel iletişim ve günlük yaşam"
-                ),
+        return state.ders ? dersler[state.ders] : null;
+    }
 
-                din: standartKonular(
-                    5,
-                    "Din Kültürü ve Ahlak Bilgisi",
-                    "🕌",
-                    [
-                        "İnanç",
-                        "İbadet",
-                        "Ahlak ve Değerler",
-                        "Hz. Muhammed",
-                        "Kur'an-ı Kerim ve Anlamı",
-                        "Din ve Hayat"
-                    ],
-                    "inanç, ibadet, ahlak ve değerler"
-                )
+    function getKonular() {
+        const ders = getDers();
+
+        return ders && Array.isArray(ders.konular)
+            ? ders.konular
+            : [];
+    }
+
+    function getKonu() {
+        const konular = getKonular();
+
+        return konular.find(function (konu) {
+            return String(konu.id) === String(state.konu);
+        }) || null;
+    }
+
+    function saveCompleted() {
+        localStorage.setItem(
+            "dersTakip_kitaplik_tamamlanan",
+            JSON.stringify(state.tamamlananlar)
+        );
+    }
+
+    function konuTamamlandiMi(konu) {
+        return !!state.tamamlananlar[konu.id];
+    }
+
+    function konuTamamla(konu) {
+        if (!konu) return;
+
+        state.tamamlananlar[konu.id] =
+            !state.tamamlananlar[konu.id];
+
+        saveCompleted();
+
+        render();
+    }
+
+    function toplamKonu() {
+        let toplam = 0;
+
+        Object.keys(DATA).forEach(function (sinifKey) {
+            const sinif = DATA[sinifKey];
+
+            if (!sinif || !sinif.dersler) return;
+
+            Object.keys(sinif.dersler).forEach(function (dersKey) {
+                const ders = sinif.dersler[dersKey];
+
+                if (ders && Array.isArray(ders.konular)) {
+                    toplam += ders.konular.length;
+                }
+            });
+        });
+
+        return toplam;
+    }
+
+    function tamamlananKonu() {
+        return Object.keys(state.tamamlananlar).filter(function (id) {
+            return state.tamamlananlar[id];
+        }).length;
+    }
+
+    function yuzde() {
+        const toplam = toplamKonu();
+
+        if (!toplam) return 0;
+
+        return Math.min(
+            100,
+            Math.round((tamamlananKonu() / toplam) * 100)
+        );
+    }
+
+    function htmlToText(html) {
+        const div = document.createElement("div");
+        div.innerHTML = html || "";
+
+        return div.textContent
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
+    /* =====================================================
+       CSS
+    ===================================================== */
+
+    function injectStyles() {
+
+        if (document.getElementById("kitaplikStyles")) {
+            return;
+        }
+
+        const style = document.createElement("style");
+
+        style.id = "kitaplikStyles";
+
+        style.textContent = `
+
+        #kitaplikApp {
+            --kt-primary: #635bff;
+            --kt-primary-dark: #5148e8;
+            --kt-bg: #f6f7fb;
+            --kt-card: #ffffff;
+            --kt-text: #182033;
+            --kt-muted: #6b7280;
+            --kt-border: #e8eaf0;
+            --kt-success: #16a34a;
+            --kt-warning: #f59e0b;
+
+            font-family:
+                Inter,
+                ui-sans-serif,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            color: var(--kt-text);
+            background: var(--kt-bg);
+            min-height: 100vh;
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        #kitaplikApp * {
+            box-sizing: border-box;
+        }
+
+        .kt-wrapper {
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .kt-header {
+            padding: 28px;
+            background:
+                linear-gradient(
+                    135deg,
+                    #635bff 0%,
+                    #7c3aed 55%,
+                    #2563eb 100%
+                );
+            color: white;
+        }
+
+        .kt-header-inner {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .kt-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .kt-brand-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 16px;
+            background: rgba(255,255,255,.16);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            backdrop-filter: blur(10px);
+        }
+
+        .kt-title {
+            margin: 0;
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: -.5px;
+        }
+
+        .kt-subtitle {
+            margin: 5px 0 0;
+            opacity: .85;
+            font-size: 14px;
+        }
+
+        .kt-progress-wrap {
+            max-width: 1200px;
+            margin: 22px auto 0;
+        }
+
+        .kt-progress-top {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .kt-progress {
+            width: 100%;
+            height: 9px;
+            background: rgba(255,255,255,.2);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .kt-progress-bar {
+            height: 100%;
+            width: var(--progress);
+            background: white;
+            border-radius: 999px;
+            transition: width .3s ease;
+        }
+
+        .kt-body {
+            max-width: 1200px;
+            margin: auto;
+            padding: 28px;
+        }
+
+        .kt-toolbar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .kt-search {
+            flex: 1;
+            min-width: 220px;
+            position: relative;
+        }
+
+        .kt-search input {
+            width: 100%;
+            height: 48px;
+            border: 1px solid var(--kt-border);
+            background: white;
+            border-radius: 14px;
+            padding: 0 16px 0 45px;
+            outline: none;
+            font-size: 14px;
+            color: var(--kt-text);
+        }
+
+        .kt-search input:focus {
+            border-color: var(--kt-primary);
+            box-shadow: 0 0 0 3px rgba(99,91,255,.1);
+        }
+
+        .kt-search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+        }
+
+        .kt-btn {
+            border: 0;
+            border-radius: 13px;
+            padding: 0 18px;
+            min-height: 46px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .kt-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .kt-btn-primary {
+            background: var(--kt-primary);
+            color: white;
+        }
+
+        .kt-btn-light {
+            background: white;
+            color: var(--kt-text);
+            border: 1px solid var(--kt-border);
+        }
+
+        .kt-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-size: 13px;
+            color: var(--kt-muted);
+            margin-bottom: 22px;
+        }
+
+        .kt-breadcrumb button {
+            border: 0;
+            background: transparent;
+            padding: 0;
+            color: var(--kt-primary);
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .kt-section-title {
+            margin: 0 0 7px;
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+        .kt-section-desc {
+            color: var(--kt-muted);
+            margin: 0 0 24px;
+        }
+
+        .kt-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fill, minmax(230px, 1fr));
+            gap: 16px;
+        }
+
+        .kt-card {
+            background: var(--kt-card);
+            border: 1px solid var(--kt-border);
+            border-radius: 20px;
+            padding: 20px;
+            cursor: pointer;
+            transition:
+                transform .2s ease,
+                box-shadow .2s ease,
+                border-color .2s ease;
+        }
+
+        .kt-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(99,91,255,.3);
+            box-shadow: 0 12px 30px rgba(31,35,55,.08);
+        }
+
+        .kt-card-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 15px;
+            background: #f0efff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+            margin-bottom: 15px;
+        }
+
+        .kt-card-title {
+            margin: 0;
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .kt-card-info {
+            margin-top: 7px;
+            color: var(--kt-muted);
+            font-size: 13px;
+        }
+
+        .kt-card-progress {
+            margin-top: 15px;
+            height: 6px;
+            background: #eef0f5;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .kt-card-progress span {
+            display: block;
+            height: 100%;
+            background: var(--kt-primary);
+            width: var(--progress);
+            border-radius: inherit;
+        }
+
+        .kt-topic-card {
+            position: relative;
+            padding-right: 52px;
+        }
+
+        .kt-topic-number {
+            position: absolute;
+            right: 17px;
+            top: 17px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #f0efff;
+            color: var(--kt-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 12px;
+        }
+
+        .kt-topic-done {
+            color: var(--kt-success);
+            font-weight: 800;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .kt-reader {
+            background: white;
+            border: 1px solid var(--kt-border);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .kt-reader-head {
+            padding: 30px;
+            background:
+                linear-gradient(
+                    135deg,
+                    #f4f3ff,
+                    #f8faff
+                );
+            border-bottom: 1px solid var(--kt-border);
+        }
+
+        .kt-reader-icon {
+            width: 62px;
+            height: 62px;
+            border-radius: 18px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            box-shadow: 0 8px 25px rgba(31,35,55,.08);
+            margin-bottom: 18px;
+        }
+
+        .kt-reader-title {
+            margin: 0;
+            font-size: 32px;
+            line-height: 1.15;
+        }
+
+        .kt-reader-meta {
+            color: var(--kt-muted);
+            margin-top: 9px;
+        }
+
+        .kt-reader-body {
+            padding: 32px;
+            max-width: 900px;
+        }
+
+        .kt-reader-body h3 {
+            margin: 30px 0 12px;
+            font-size: 21px;
+        }
+
+        .kt-reader-body h3:first-child {
+            margin-top: 0;
+        }
+
+        .kt-reader-body p {
+            line-height: 1.8;
+            color: #374151;
+            font-size: 16px;
+        }
+
+        .kt-reader-body li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .kitap-ornek {
+            margin: 18px 0;
+            padding: 20px;
+            background: #f7f7ff;
+            border-left: 4px solid var(--kt-primary);
+            border-radius: 12px;
+            white-space: pre-line;
+            line-height: 1.7;
+        }
+
+        .kitap-formul {
+            margin: 18px 0;
+            padding: 20px;
+            text-align: center;
+            font-size: 21px;
+            font-weight: 800;
+            background: #f8fafc;
+            border-radius: 14px;
+        }
+
+        .kt-info-box {
+            margin: 24px 0;
+            padding: 20px;
+            border-radius: 16px;
+            background: #f8fafc;
+            border: 1px solid var(--kt-border);
+        }
+
+        .kt-info-box.warning {
+            background: #fffaf0;
+            border-color: #fde68a;
+        }
+
+        .kt-info-box.success {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+        }
+
+        .kt-box-title {
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .kt-example-list {
+            display: grid;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .kt-example {
+            padding: 18px;
+            border: 1px solid var(--kt-border);
+            border-radius: 14px;
+            background: #fff;
+        }
+
+        .kt-example-question {
+            font-weight: 800;
+        }
+
+        .kt-example-answer {
+            margin-top: 10px;
+            color: var(--kt-muted);
+            white-space: pre-line;
+            line-height: 1.7;
+        }
+
+        .kt-test {
+            margin-top: 32px;
+            padding: 28px;
+            background: #fafaff;
+            border: 1px solid var(--kt-border);
+            border-radius: 20px;
+        }
+
+        .kt-test-title {
+            margin: 0 0 20px;
+            font-size: 23px;
+        }
+
+        .kt-question {
+            padding: 20px;
+            background: white;
+            border: 1px solid var(--kt-border);
+            border-radius: 16px;
+            margin-bottom: 14px;
+        }
+
+        .kt-question-text {
+            font-weight: 800;
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }
+
+        .kt-option {
+            display: block;
+            padding: 11px 14px;
+            border: 1px solid var(--kt-border);
+            border-radius: 10px;
+            margin-top: 8px;
+            cursor: pointer;
+            transition: .15s;
+        }
+
+        .kt-option:hover {
+            background: #f7f7ff;
+            border-color: #c7c3ff;
+        }
+
+        .kt-option input {
+            margin-right: 8px;
+        }
+
+        .kt-test-result {
+            margin-top: 18px;
+            padding: 15px;
+            border-radius: 12px;
+            background: #f0fdf4;
+            color: #166534;
+            font-weight: 800;
+        }
+
+        .kt-reader-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 28px;
+        }
+
+        .kt-empty {
+            text-align: center;
+            padding: 50px 20px;
+            background: white;
+            border: 1px dashed var(--kt-border);
+            border-radius: 20px;
+            color: var(--kt-muted);
+        }
+
+        .kt-empty-icon {
+            font-size: 42px;
+            margin-bottom: 12px;
+        }
+
+        .kt-mobile-back {
+            display: none;
+        }
+
+        @media (max-width: 700px) {
+
+            .kt-header {
+                padding: 22px 17px;
             }
-        },
 
-
-        "6": {
-            ad: "6. Sınıf",
-
-            dersler: {
-
-                turkce: standartKonular(
-                    6,
-                    "Türkçe",
-                    "📖",
-                    [
-                        "Sözcükte Anlam",
-                        "Cümlede Anlam",
-                        "Paragraf",
-                        "Fiiller",
-                        "İsimler",
-                        "Sıfatlar",
-                        "Zamirler",
-                        "Yazım Kuralları",
-                        "Noktalama",
-                        "Metin Türleri"
-                    ],
-                    "metin anlama ve dil bilgisi"
-                ),
-
-                matematik: standartKonular(
-                    6,
-                    "Matematik",
-                    "📐",
-                    [
-                        "Doğal Sayılar",
-                        "Çarpanlar ve Katlar",
-                        "Kümeler ve Sayılar",
-                        "Kesirler",
-                        "Ondalık Gösterim",
-                        "Oran",
-                        "Cebirsel İfadeler",
-                        "Açılar",
-                        "Alan ve Çevre",
-                        "Veri ve Grafikler"
-                    ],
-                    "sayılar, cebir, oran, veri ve geometri"
-                ),
-
-                fen: standartKonular(
-                    6,
-                    "Fen Bilimleri",
-                    "🔬",
-                    [
-                        "Güneş Sistemi",
-                        "Vücudumuzdaki Sistemler",
-                        "Kuvvet ve Hareket",
-                        "Madde ve Isı",
-                        "Ses",
-                        "Elektriğin İletimi",
-                        "Dünya ve Evren"
-                    ],
-                    "canlılar, madde, kuvvet, enerji ve sistemler"
-                ),
-
-                sosyal: standartKonular(
-                    6,
-                    "Sosyal Bilgiler",
-                    "🌍",
-                    [
-                        "Birey ve Toplum",
-                        "Kültür ve Miras",
-                        "İnsanlar ve Çevreler",
-                        "Bilim ve Teknoloji",
-                        "Ekonomi",
-                        "Etkin Vatandaşlık",
-                        "Küresel Bağlantılar"
-                    ],
-                    "tarih, kültür, coğrafya, ekonomi ve vatandaşlık"
-                ),
-
-                ingilizce: standartKonular(
-                    6,
-                    "İngilizce",
-                    "🇬🇧",
-                    [
-                        "Life",
-                        "Yummy Breakfast",
-                        "Downtown",
-                        "Weather and Emotions",
-                        "At the Fair",
-                        "Occupations",
-                        "Holidays",
-                        "Bookworms"
-                    ],
-                    "iletişim ve günlük yaşam"
-                ),
-
-                din: standartKonular(
-                    6,
-                    "Din Kültürü ve Ahlak Bilgisi",
-                    "🕌",
-                    [
-                        "Peygamber ve Vahiy",
-                        "Namaz",
-                        "Zekât ve Sadaka",
-                        "Hz. Muhammed",
-                        "Temel Değerler",
-                        "Kur'an"
-                    ],
-                    "inanç, ibadet ve ahlak"
-                )
+            .kt-body {
+                padding: 18px;
             }
-        },
 
-
-        "7": {
-            ad: "7. Sınıf",
-
-            dersler: {
-
-                turkce: standartKonular(
-                    7,
-                    "Türkçe",
-                    "📖",
-                    [
-                        "Sözcükte Anlam",
-                        "Cümlede Anlam",
-                        "Paragraf",
-                        "Fiiller",
-                        "Fiilde Yapı",
-                        "Ek Fiil",
-                        "Zarflar",
-                        "Yazım",
-                        "Noktalama",
-                        "Metin Türleri"
-                    ],
-                    "anlama, yorumlama, yazma ve dil bilgisi"
-                ),
-
-                matematik: standartKonular(
-                    7,
-                    "Matematik",
-                    "📐",
-                    [
-                        "Tam Sayılar",
-                        "Rasyonel Sayılar",
-                        "Oran ve Orantı",
-                        "Yüzdeler",
-                        "Cebirsel İfadeler",
-                        "Denklemler",
-                        "Doğrular ve Açılar",
-                        "Çokgenler",
-                        "Çember ve Daire",
-                        "Veri Analizi"
-                    ],
-                    "sayılar, cebir, geometri ve veri"
-                ),
-
-                fen: standartKonular(
-                    7,
-                    "Fen Bilimleri",
-                    "🔬",
-                    [
-                        "Uzay Araştırmaları",
-                        "Hücre ve Bölünmeler",
-                        "Kuvvet ve Enerji",
-                        "Saf Madde ve Karışımlar",
-                        "Işığın Madde ile Etkileşimi",
-                        "Elektrik Devreleri",
-                        "Ekosistem"
-                    ],
-                    "kuvvet, enerji, madde, canlılar ve elektrik"
-                ),
-
-                sosyal: standartKonular(
-                    7,
-                    "Sosyal Bilgiler",
-                    "🌍",
-                    [
-                        "Birey ve Toplum",
-                        "Kültür ve Miras",
-                        "İnsanlar ve Yerler",
-                        "Bilim ve Teknoloji",
-                        "Ekonomi",
-                        "Vatandaşlık",
-                        "Küresel Bağlantılar"
-                    ],
-                    "tarih, kültür, ekonomi ve vatandaşlık"
-                ),
-
-                ingilizce: standartKonular(
-                    7,
-                    "İngilizce",
-                    "🇬🇧",
-                    [
-                        "Appearance and Personality",
-                        "Sports",
-                        "Biographies",
-                        "Wild Animals",
-                        "Television",
-                        "Celebrations",
-                        "Dreams",
-                        "Public Buildings"
-                    ],
-                    "iletişim ve günlük yaşam"
-                ),
-
-                din: standartKonular(
-                    7,
-                    "Din Kültürü ve Ahlak Bilgisi",
-                    "🕌",
-                    [
-                        "Melek ve Ahiret İnancı",
-                        "Hac ve Kurban",
-                        "Ahlaki Davranışlar",
-                        "Hz. Muhammed",
-                        "İslam Düşüncesi",
-                        "Kur'an"
-                    ],
-                    "inanç, ibadet, ahlak ve İslam kültürü"
-                )
+            .kt-title {
+                font-size: 24px;
             }
-        },
 
+            .kt-reader-head {
+                padding: 22px;
+            }
 
-        "8": {
-            ad: "8. Sınıf",
+            .kt-reader-title {
+                font-size: 26px;
+            }
 
-            dersler: {
+            .kt-reader-body {
+                padding: 22px;
+            }
 
-                turkce: standartKonular(
-                    8,
-                    "Türkçe",
-                    "📖",
-                    [
-                        "Sözcükte Anlam",
-                        "Cümlede Anlam",
-                        "Paragraf",
-                        "Fiilimsi",
-                        "Cümlenin Ögeleri",
-                        "Cümle Türleri",
-                        "Yazım Kuralları",
-                        "Noktalama",
-                        "Metin Türleri",
-                        "Anlatım Bozuklukları"
-                    ],
-                    "LGS düzeyinde okuma, yorumlama ve dil bilgisi"
-                ),
+            .kt-grid {
+                grid-template-columns: 1fr;
+            }
 
-                matematik: standartKonular(
-                    8,
-                    "Matematik",
-                    "📐",
-                    [
-                        "Çarpanlar ve Katlar",
-                        "Üslü İfadeler",
-                        "Kareköklü İfadeler",
-                        "Veri Analizi",
-                        "Basit Olayların Olma Olasılığı",
-                        "Cebirsel İfadeler",
-                        "Doğrusal Denklemler",
-                        "Eşitsizlikler",
-                        "Üçgenler",
-                        "Eşlik ve Benzerlik",
-                        "Dönüşüm Geometrisi",
-                        "Geometrik Cisimler"
-                    ],
-                    "cebir, sayılar, geometri, veri ve olasılık"
-                ),
-
-                fen: standartKonular(
-                    8,
-                    "Fen Bilimleri",
-                    "🔬",
-                    [
-                        "Mevsimler ve İklim",
-                        "DNA ve Genetik Kod",
-                        "Basınç",
-                        "Madde ve Endüstri",
-                        "Basit Makineler",
-                        "Enerji Dönüşümleri",
-                        "Elektrik Yükleri ve Elektrik Enerjisi",
-                        "Sürdürülebilir Kalkınma"
-                    ],
-                    "mevsimler, genetik, basınç, enerji ve elektrik"
-                ),
-
-                inkilap: standartKonular(
-                    8,
-                    "T.C. İnkılap Tarihi ve Atatürkçülük",
-                    "🇹🇷",
-                    [
-                        "Bir Kahraman Doğuyor",
-                        "Millî Uyanış",
-                        "Millî Bir Destan",
-                        "Atatürkçülük ve Çağdaşlaşan Türkiye",
-                        "Demokratikleşme Çabaları",
-                        "Atatürk Dönemi Dış Politika",
-                        "Atatürk'ün Ölümü ve Sonrası",
-                        "Çağdaş Türkiye ve Dünya"
-                    ],
-                    "Millî Mücadele, Atatürk ilkeleri ve Cumhuriyet tarihi"
-                ),
-
-                ingilizce: standartKonular(
-                    8,
-                    "İngilizce",
-                    "🇬🇧",
-                    [
-                        "Friendship",
-                        "Teen Life",
-                        "In the Kitchen",
-                        "On the Phone",
-                        "The Internet",
-                        "Adventures",
-                        "Tourism",
-                        "Chores",
-                        "Science",
-                        "Natural Forces"
-                    ],
-                    "LGS düzeyinde iletişim ve okuma"
-                ),
-
-                din: standartKonular(
-                    8,
-                    "Din Kültürü ve Ahlak Bilgisi",
-                    "🕌",
-                    [
-                        "Kader İnancı",
-                        "Zekât ve Sadaka",
-                        "Din ve Hayat",
-                        "Hz. Muhammed",
-                        "Kur'an ve Ana Konular",
-                        "İslam Düşüncesinde Yorumlar"
-                    ],
-                    "inanç, ibadet, ahlak ve dinî yorumlar"
-                )
+            .kt-mobile-back {
+                display: inline-flex;
             }
         }
-    };
+
+        `;
+
+        document.head.appendChild(style);
+    }
 
 
-    /* ========================================================
-       LİSE DERSLERİ
-    ======================================================== */
+    /* =====================================================
+       HEADER
+    ===================================================== */
 
-    const liseDers = function (
-        sinif,
-        ders,
-        ikon,
-        konular,
-        odak
-    ) {
+    function renderHeader() {
 
-        return standartKonular(
-            sinif,
-            ders,
-            ikon,
-            konular,
-            odak
+        const progress = yuzde();
+
+        return `
+            <header class="kt-header">
+
+                <div class="kt-header-inner">
+
+                    <div class="kt-brand">
+
+                        <div class="kt-brand-icon">
+                            📚
+                        </div>
+
+                        <div>
+                            <h1 class="kt-title">
+                                Ders Kitaplığı
+                            </h1>
+
+                            <p class="kt-subtitle">
+                                5. sınıftan 12. sınıfa konu anlatımları
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="kt-progress-wrap">
+
+                        <div class="kt-progress-top">
+                            <span>
+                                Kitaplık ilerlemen
+                            </span>
+
+                            <strong>
+                                ${progress}%
+                            </strong>
+                        </div>
+
+                        <div
+                            class="kt-progress"
+                            aria-label="Kitaplık ilerlemesi"
+                        >
+                            <div
+                                class="kt-progress-bar"
+                                style="--progress:${progress}%"
+                            ></div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+        `;
+    }
+
+
+    /* =====================================================
+       TOOLBAR
+    ===================================================== */
+
+    function renderToolbar() {
+
+        return `
+            <div class="kt-toolbar">
+
+                <div class="kt-search">
+
+                    <span class="kt-search-icon">
+                        🔎
+                    </span>
+
+                    <input
+                        id="kitaplikSearch"
+                        type="search"
+                        placeholder="Konu veya ders ara..."
+                        value="${escapeHTML(state.arama)}"
+                        autocomplete="off"
+                    >
+
+                </div>
+
+                ${
+                    state.sinif
+                        ? `
+                            <button
+                                class="kt-btn kt-btn-light"
+                                data-action="home"
+                            >
+                                🏠 Kitaplık
+                            </button>
+                          `
+                        : ""
+                }
+
+            </div>
+        `;
+    }
+
+
+    /* =====================================================
+       BREADCRUMB
+    ===================================================== */
+
+    function renderBreadcrumb() {
+
+        const parts = [];
+
+        parts.push(`
+            <button data-action="home">
+                Kitaplık
+            </button>
+        `);
+
+        if (state.sinif) {
+
+            parts.push(`
+                <span>›</span>
+
+                <button data-action="sinif">
+                    ${escapeHTML(getSinif().ad)}
+                </button>
+            `);
+        }
+
+        if (state.ders) {
+
+            const ders = getDers();
+
+            parts.push(`
+                <span>›</span>
+
+                <button data-action="ders">
+                    ${escapeHTML(ders.ad)}
+                </button>
+            `);
+        }
+
+        if (state.konu) {
+
+            const konu = getKonu();
+
+            if (konu) {
+
+                parts.push(`
+                    <span>›</span>
+                    <span>${escapeHTML(konu.ad)}</span>
+                `);
+            }
+        }
+
+        return `
+            <div class="kt-breadcrumb">
+                ${parts.join("")}
+            </div>
+        `;
+    }
+
+
+    /* =====================================================
+       ANA SAYFA — SINIFLAR
+    ===================================================== */
+
+    function renderHome() {
+
+        const siniflar = getSiniflar();
+
+        return `
+
+            ${renderToolbar()}
+
+            <h2 class="kt-section-title">
+                📚 Ders Kitaplığı
+            </h2>
+
+            <p class="kt-section-desc">
+                Sınıfını seç, dersini aç ve istediğin konuyu
+                kitap gibi çalış.
+            </p>
+
+            <div class="kt-grid">
+
+                ${siniflar.map(function (sinifKey) {
+
+                    const sinif = DATA[sinifKey];
+
+                    let dersSayisi =
+                        sinif && sinif.dersler
+                            ? Object.keys(sinif.dersler).length
+                            : 0;
+
+                    let konuSayisi = 0;
+
+                    if (sinif && sinif.dersler) {
+
+                        Object.keys(sinif.dersler).forEach(function (key) {
+
+                            const ders = sinif.dersler[key];
+
+                            if (
+                                ders &&
+                                Array.isArray(ders.konular)
+                            ) {
+                                konuSayisi += ders.konular.length;
+                            }
+
+                        });
+                    }
+
+                    return `
+                        <article
+                            class="kt-card"
+                            data-sinif="${escapeHTML(sinifKey)}"
+                        >
+
+                            <div class="kt-card-icon">
+                                ${
+                                    Number(sinifKey) >= 9
+                                        ? "🎓"
+                                        : "📚"
+                                }
+                            </div>
+
+                            <h3 class="kt-card-title">
+                                ${escapeHTML(sinif.ad)}
+                            </h3>
+
+                            <div class="kt-card-info">
+                                ${dersSayisi} ders
+                                ·
+                                ${konuSayisi} konu
+                            </div>
+
+                            <div class="kt-card-progress">
+                                <span style="--progress:${sinifProgress(sinif)}%"></span>
+                            </div>
+
+                        </article>
+                    `;
+
+                }).join("")}
+
+            </div>
+        `;
+    }
+
+
+    function sinifProgress(sinif) {
+
+        let toplam = 0;
+        let tamam = 0;
+
+        if (!sinif || !sinif.dersler) {
+            return 0;
+        }
+
+        Object.keys(sinif.dersler).forEach(function (key) {
+
+            const ders = sinif.dersler[key];
+
+            if (!ders || !Array.isArray(ders.konular)) {
+                return;
+            }
+
+            ders.konular.forEach(function (konu) {
+
+                toplam++;
+
+                if (konuTamamlandiMi(konu)) {
+                    tamam++;
+                }
+
+            });
+
+        });
+
+        if (!toplam) return 0;
+
+        return Math.round((tamam / toplam) * 100);
+    }
+
+
+    /* =====================================================
+       DERSLER
+    ===================================================== */
+
+    function renderDersler() {
+
+        const sinif = getSinif();
+
+        if (!sinif) {
+            state.sinif = null;
+            return renderHome();
+        }
+
+        let dersler = Object.keys(
+            sinif.dersler || {}
         );
 
-    };
+        return `
 
+            ${renderToolbar()}
+            ${renderBreadcrumb()}
 
-    /* ========================================================
-       9. SINIF
-    ======================================================== */
+            <h2 class="kt-section-title">
+                ${escapeHTML(sinif.ad)}
+            </h2>
 
-    kitaplikData["9"] = {
+            <p class="kt-section-desc">
+                Ders kitaplarından birini seç.
+            </p>
 
-        ad: "9. Sınıf",
+            <div class="kt-grid">
 
-        dersler: {
+                ${dersler.map(function (dersKey) {
 
-            matematik: liseDers(
-                9,
-                "Matematik",
-                "📐",
-                [
-                    "Sayılar",
-                    "Nicelikler ve Değişimler",
-                    "Geometrik Şekiller",
-                    "Algoritma ve Bilişim",
-                    "İstatistiksel Araştırma Süreci",
-                    "Veriden Olasılığa",
-                    "Fonksiyonlara Giriş"
-                ],
-                "sayılar, nicelikler, geometri, algoritmik düşünme ve veri"
-            ),
+                    const ders = sinif.dersler[dersKey];
 
-            tde: liseDers(
-                9,
-                "Türk Dili ve Edebiyatı",
-                "📖",
-                [
-                    "Sözün İnceliği",
-                    "Anlam Arayışı",
-                    "Anlamın Yapı Taşları",
-                    "Dilin Zenginliği",
-                    "Edebî Metin",
-                    "Hikâye",
-                    "Şiir",
-                    "Tiyatro"
-                ],
-                "edebî metin, anlam, dil ve anlatım"
-            ),
+                    const konular =
+                        ders && Array.isArray(ders.konular)
+                            ? ders.konular
+                            : [];
 
-            fizik: liseDers(
-                9,
-                "Fizik",
-                "⚛️",
-                [
-                    "Fizik Bilimine Giriş",
-                    "Kuvvet ve Hareket",
-                    "Akışkanlar",
-                    "Enerji",
-                    "Elektrik",
-                    "Dalgalar"
-                ],
-                "fiziksel nicelikler, hareket, kuvvet ve enerji"
-            ),
+                    const toplam = konular.length;
 
-            kimya: liseDers(
-                9,
-                "Kimya",
-                "🧪",
-                [
-                    "Etkileşim",
-                    "Atom ve Periyodik Sistem",
-                    "Kimyasal Türler",
-                    "Kimyasal Tepkimeler",
-                    "Karışımlar",
-                    "Kimya ve Çevre"
-                ],
-                "madde, atom, etkileşim ve kimyasal değişimler"
-            ),
+                    const tamam =
+                        konular.filter(konu =>
+                            konuTamamlandiMi(konu)
+                        ).length;
 
-            biyoloji: liseDers(
-                9,
-                "Biyoloji",
-                "🧬",
-                [
-                    "Yaşam Bilimi",
-                    "Hücre",
-                    "Canlıların Sınıflandırılması",
-                    "Ekosistem",
-                    "Biyolojik Çeşitlilik"
-                ],
-                "yaşam, hücre, canlı çeşitliliği ve ekosistem"
-            ),
+                    const progress =
+                        toplam
+                            ? Math.round((tamam / toplam) * 100)
+                            : 0;
 
-            tarih: liseDers(
-                9,
-                "Tarih",
-                "🏛️",
-                [
-                    "Tarih ve Zaman",
-                    "İlk Çağlarda Dünya",
-                    "Orta Çağlarda Dünya",
-                    "İlk Türk Devletleri",
-                    "İslam Medeniyeti",
-                    "Türklerin İslamiyet'i Kabulü"
-                ],
-                "tarih bilimi, ilk çağlar, Türkler ve medeniyet"
-            ),
+                    return `
 
-            cografya: liseDers(
-                9,
-                "Coğrafya",
-                "🌍",
-                [
-                    "Doğa ve İnsan",
-                    "Harita Bilgisi",
-                    "Dünya'nın Şekli ve Hareketleri",
-                    "Atmosfer ve İklim",
-                    "Nüfus",
-                    "Yerleşme"
-                ],
-                "doğa, insan, harita ve iklim"
-            ),
+                        <article
+                            class="kt-card"
+                            data-ders="${escapeHTML(dersKey)}"
+                        >
 
-            ingilizce: liseDers(
-                9,
-                "İngilizce",
-                "🇬🇧",
-                [
-                    "School Life",
-                    "Personal Life",
-                    "Family",
-                    "Daily Life",
-                    "Health",
-                    "Environment",
-                    "Culture",
-                    "Technology"
-                ],
-                "iletişim ve günlük yaşam"
-            ),
+                            <div class="kt-card-icon">
+                                ${ders.icon || "📘"}
+                            </div>
 
-            din: liseDers(
-                9,
-                "Din Kültürü ve Ahlak Bilgisi",
-                "🕌",
-                [
-                    "Bilgi ve İnanç",
-                    "İslam ve İbadet",
-                    "Ahlak ve Değerler",
-                    "Allah-İnsan İlişkisi",
-                    "Kur'an ve Ana Konular"
-                ],
-                "bilgi, inanç, ibadet ve ahlak"
-            )
-        }
-    };
+                            <h3 class="kt-card-title">
+                                ${escapeHTML(ders.ad)}
+                            </h3>
 
+                            <div class="kt-card-info">
+                                ${toplam} konu
+                                ${
+                                    tamam
+                                        ? ` · ${tamam} tamamlandı`
+                                        : ""
+                                }
+                            </div>
 
-    /* ========================================================
-       10 - 11 - 12. SINIF ORTAK LİSE VERİSİ
-    ======================================================== */
+                            <div class="kt-card-progress">
+                                <span style="--progress:${progress}%"></span>
+                            </div>
 
-    const liseKonular = {
+                        </article>
+                    `;
 
-        matematik: [
-            "Sayılar",
-            "Nicelikler ve Değişimler",
-            "Fonksiyonlar",
-            "Geometrik Şekiller",
-            "Trigonometri",
-            "Analitik Geometri",
-            "İstatistik",
-            "Olasılık"
-        ],
+                }).join("")}
 
-        tde: [
-            "Sözün İnceliği",
-            "Anlam Arayışı",
-            "Hikâye",
-            "Şiir",
-            "Roman",
-            "Tiyatro",
-            "Deneme",
-            "Eleştiri"
-        ],
-
-        fizik: [
-            "Kuvvet ve Hareket",
-            "Enerji",
-            "Elektrik",
-            "Manyetizma",
-            "Dalgalar",
-            "Optik",
-            "Modern Fizik"
-        ],
-
-        kimya: [
-            "Atom ve Periyodik Sistem",
-            "Kimyasal Türler",
-            "Kimyasal Tepkimeler",
-            "Karışımlar",
-            "Asitler ve Bazlar",
-            "Kimyasal Denge",
-            "Organik Kimya"
-        ],
-
-        biyoloji: [
-            "Hücre",
-            "Canlılarda Enerji",
-            "Kalıtım",
-            "İnsan Fizyolojisi",
-            "Ekosistem",
-            "Genetik",
-            "Biyoteknoloji"
-        ],
-
-        tarih: [
-            "Türk Dünyası",
-            "Osmanlı Devleti",
-            "Değişen Dünya Dengeleri",
-            "Modernleşme",
-            "Millî Mücadele",
-            "Cumhuriyet",
-            "Çağdaş Dünya"
-        ],
-
-        cografya: [
-            "Doğal Sistemler",
-            "Nüfus",
-            "Yerleşme",
-            "Ekonomik Faaliyetler",
-            "Türkiye'nin Coğrafi Özellikleri",
-            "Küresel Ortam"
-        ],
-
-        felsefe: [
-            "Felsefeyi Tanıma",
-            "Bilgi Felsefesi",
-            "Bilim Felsefesi",
-            "Ahlak Felsefesi",
-            "Siyaset Felsefesi",
-            "Sanat Felsefesi",
-            "Din Felsefesi"
-        ],
-
-        ingilizce: [
-            "School Life",
-            "Personal Life",
-            "Culture",
-            "Technology",
-            "Environment",
-            "Travel",
-            "Communication",
-            "Future"
-        ],
-
-        din: [
-            "Bilgi ve İnanç",
-            "İslam ve İbadet",
-            "Ahlak ve Değerler",
-            "Kur'an ve Ana Konular",
-            "İslam Düşüncesi",
-            "Din, Bilim ve Felsefe"
-        ]
-    };
-
-
-    function liseSinifiOlustur(sinif) {
-
-        return {
-
-            ad: `${sinif}. Sınıf`,
-
-            dersler: {
-
-                matematik: liseDers(
-                    sinif,
-                    "Matematik",
-                    "📐",
-                    liseKonular.matematik,
-                    "matematiksel düşünme, fonksiyon, geometri, veri ve olasılık"
-                ),
-
-                tde: liseDers(
-                    sinif,
-                    "Türk Dili ve Edebiyatı",
-                    "📖",
-                    liseKonular.tde,
-                    "edebiyat, dil, metin ve eleştirel okuma"
-                ),
-
-                fizik: liseDers(
-                    sinif,
-                    "Fizik",
-                    "⚛️",
-                    liseKonular.fizik,
-                    "kuvvet, enerji, elektrik, dalgalar ve modern fizik"
-                ),
-
-                kimya: liseDers(
-                    sinif,
-                    "Kimya",
-                    "🧪",
-                    liseKonular.kimya,
-                    "atom, tepkimeler, denge, asit-baz ve organik kimya"
-                ),
-
-                biyoloji: liseDers(
-                    sinif,
-                    "Biyoloji",
-                    "🧬",
-                    liseKonular.biyoloji,
-                    "hücre, enerji, kalıtım, fizyoloji ve ekoloji"
-                ),
-
-                tarih: liseDers(
-                    sinif,
-                    "Tarih",
-                    "🏛️",
-                    liseKonular.tarih,
-                    "Türk tarihi, Osmanlı, Cumhuriyet ve dünya tarihi"
-                ),
-
-                cografya: liseDers(
-                    sinif,
-                    "Coğrafya",
-                    "🌍",
-                    liseKonular.cografya,
-                    "doğal, beşerî ve ekonomik coğrafya"
-                ),
-
-                felsefe: liseDers(
-                    sinif,
-                    "Felsefe",
-                    "🧠",
-                    liseKonular.felsefe,
-                    "felsefi düşünme, bilgi, bilim, ahlak ve sanat"
-                ),
-
-                ingilizce: liseDers(
-                    sinif,
-                    "İngilizce",
-                    "🇬🇧",
-                    liseKonular.ingilizce,
-                    "ileri iletişim, okuma, yazma ve konuşma"
-                ),
-
-                din: liseDers(
-                    sinif,
-                    "Din Kültürü ve Ahlak Bilgisi",
-                    "🕌",
-                    liseKonular.din,
-                    "din, ahlak, inanç ve İslam düşüncesi"
-                )
-            }
-        };
+            </div>
+        `;
     }
 
 
-    kitaplikData["10"] = liseSinifiOlustur(10);
-    kitaplikData["11"] = liseSinifiOlustur(11);
-    kitaplikData["12"] = liseSinifiOlustur(12);
+    /* =====================================================
+       KONU LİSTESİ
+    ===================================================== */
+
+    function renderKonular() {
+
+        const ders = getDers();
+
+        if (!ders) {
+            return renderDersler();
+        }
+
+        let konular = Array.isArray(ders.konular)
+            ? ders.konular
+            : [];
+
+        const search = state.arama
+            .trim()
+            .toLocaleLowerCase("tr-TR");
+
+        if (search) {
+
+            konular = konular.filter(function (konu) {
+
+                const text = [
+                    konu.ad,
+                    konu.giris,
+                    konu.anlatim,
+                    konu.ozet
+                ]
+                    .map(htmlToText)
+                    .join(" ")
+                    .toLocaleLowerCase("tr-TR");
+
+                return text.includes(search);
+            });
+        }
+
+        return `
+
+            ${renderToolbar()}
+            ${renderBreadcrumb()}
+
+            <h2 class="kt-section-title">
+                ${ders.icon || "📚"}
+                ${escapeHTML(ders.ad)}
+            </h2>
+
+            <p class="kt-section-desc">
+                Konu anlatımlarından birini seç.
+            </p>
+
+            ${
+                konular.length
+                    ? `
+                        <div class="kt-grid">
+
+                            ${konular.map(function (konu, index) {
+
+                                const tamam =
+                                    konuTamamlandiMi(konu);
+
+                                return `
+
+                                    <article
+                                        class="
+                                            kt-card
+                                            kt-topic-card
+                                        "
+                                        data-konu="${escapeHTML(konu.id)}"
+                                    >
+
+                                        <div class="kt-topic-number">
+                                            ${index + 1}
+                                        </div>
+
+                                        <div class="kt-card-icon">
+                                            📖
+                                        </div>
+
+                                        <h3 class="kt-card-title">
+                                            ${escapeHTML(konu.ad)}
+                                        </h3>
+
+                                        <div class="kt-card-info">
+                                            ${
+                                                htmlToText(
+                                                    konu.giris
+                                                ).slice(0, 100)
+                                            }...
+                                        </div>
+
+                                        ${
+                                            tamam
+                                                ? `
+                                                    <div class="kt-topic-done">
+                                                        ✓ Tamamlandı
+                                                    </div>
+                                                  `
+                                                : ""
+                                        }
+
+                                    </article>
+                                `;
+
+                            }).join("")}
+
+                        </div>
+                      `
+                    : `
+                        <div class="kt-empty">
+
+                            <div class="kt-empty-icon">
+                                🔎
+                            </div>
+
+                            <strong>
+                                Konu bulunamadı
+                            </strong>
+
+                            <p>
+                                Arama kelimesini değiştirmeyi dene.
+                            </p>
+
+                        </div>
+                      `
+            }
+        `;
+    }
 
 
-    /* ========================================================
-       DERS TAKİP'E AKTAR
-    ======================================================== */
+    /* =====================================================
+       KONU OKUMA SAYFASI
+    ===================================================== */
 
-    window.kitaplikData = kitaplikData;
+    function renderKonu() {
+
+        const ders = getDers();
+        const konu = getKonu();
+
+        if (!ders || !konu) {
+            return renderKonular();
+        }
+
+        const tamam = konuTamamlandiMi(konu);
+
+        return `
+
+            ${renderToolbar()}
+            ${renderBreadcrumb()}
+
+            <article class="kt-reader">
+
+                <header class="kt-reader-head">
+
+                    <div class="kt-reader-icon">
+                        ${ders.icon || "📖"}
+                    </div>
+
+                    <h2 class="kt-reader-title">
+                        ${escapeHTML(konu.ad)}
+                    </h2>
+
+                    <div class="kt-reader-meta">
+                        ${escapeHTML(
+                            getSinif().ad
+                        )}
+                        ·
+                        ${escapeHTML(ders.ad)}
+                    </div>
+
+                </header>
 
 
-    window.kitaplikDataMeta = {
+                <div class="kt-reader-body">
 
-        version: "1.0.0",
+                    ${
+                        konu.giris
+                            ? `
+                                <div class="kt-info-box">
+                                    <div class="kt-box-title">
+                                        📖 Konuya Giriş
+                                    </div>
 
-        app: "DersTakip",
+                                    <div>
+                                        ${formatText(konu.giris)}
+                                    </div>
+                                </div>
+                              `
+                            : ""
+                    }
 
-        grades: [
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "10",
-            "11",
-            "12"
-        ],
 
-        description:
-            "DersTakip 5-12. sınıf ders kitaplığı veri katmanı.",
+                    ${
+                        konu.anlatim
+                            ? `
+                                <section>
+                                    ${konu.anlatim}
+                                </section>
+                              `
+                            : ""
+                    }
 
-        contentStructure: [
-            "giris",
-            "anlatim",
-            "temelBilgi",
-            "ornekler",
-            "dikkat",
-            "ozet",
-            "test"
-        ]
+
+                    ${
+                        konu.temelBilgi &&
+                        Array.isArray(konu.temelBilgi)
+                            ? `
+                                <div class="kt-info-box">
+
+                                    <div class="kt-box-title">
+                                        💡 Temel Bilgiler
+                                    </div>
+
+                                    <ul>
+                                        ${
+                                            konu.temelBilgi
+                                                .map(function (bilgi) {
+                                                    return `
+                                                        <li>
+                                                            ${escapeHTML(
+                                                                bilgi
+                                                            )}
+                                                        </li>
+                                                    `;
+                                                })
+                                                .join("")
+                                        }
+                                    </ul>
+
+                                </div>
+                              `
+                            : ""
+                    }
+
+
+                    ${
+                        konu.ornekler &&
+                        konu.ornekler.length
+                            ? `
+                                <section>
+
+                                    <h3>
+                                        🧩 Çözümlü Örnekler
+                                    </h3>
+
+                                    <div class="kt-example-list">
+
+                                        ${
+                                            konu.ornekler
+                                                .map(function (
+                                                    ornek,
+                                                    index
+                                                ) {
+
+                                                    return `
+                                                        <div class="kt-example">
+
+                                                            <div class="kt-example-question">
+                                                                Örnek ${index + 1}
+                                                            </div>
+
+                                                            <div style="margin-top:8px;">
+                                                                ${escapeHTML(
+                                                                    ornek.soru
+                                                                )}
+                                                            </div>
+
+                                                            <div class="kt-example-answer">
+                                                                <strong>
+                                                                    Çözüm:
+                                                                </strong>
+
+                                                                ${escapeHTML(
+                                                                    ornek.cozum
+                                                                )}
+                                                            </div>
+
+                                                        </div>
+                                                    `;
+
+                                                })
+                                                .join("")
+                                        }
+
+                                    </div>
+
+                                </section>
+                              `
+                            : ""
+                    }
+
+
+                    ${
+                        konu.dikkat
+                            ? `
+                                <div class="kt-info-box warning">
+
+                                    <div class="kt-box-title">
+                                        ⚠️ Dikkat!
+                                    </div>
+
+                                    <div>
+                                        ${formatText(konu.dikkat)}
+                                    </div>
+
+                                </div>
+                              `
+                            : ""
+                    }
+
+
+                    ${
+                        konu.ozet
+                            ? `
+                                <div class="kt-info-box success">
+
+                                    <div class="kt-box-title">
+                                        ⭐ Kısaca
+                                    </div>
+
+                                    <div>
+                                        ${formatText(konu.ozet)}
+                                    </div>
+
+                                </div>
+                              `
+                            : ""
+                    }
+
+
+                    ${
+                        konu.test &&
+                        konu.test.length
+                            ? renderTest(konu)
+                            : ""
+                    }
+
+
+                    <div class="kt-reader-actions">
+
+                        <button
+                            class="kt-btn kt-btn-light"
+                            data-action="ders"
+                        >
+                            ← Konu Listesine Dön
+                        </button>
+
+                        <button
+                            class="kt-btn kt-btn-primary"
+                            data-action="complete"
+                        >
+                            ${
+                                tamam
+                                    ? "✓ Tamamlandı — İşareti Kaldır"
+                                    : "✓ Konuyu Tamamla"
+                            }
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+        `;
+    }
+
+
+    function formatText(text) {
+
+        if (!text) return "";
+
+        return escapeHTML(text)
+            .replace(/\n\n+/g, "</p><p>")
+            .replace(/\n/g, "<br>");
+
+    }
+
+
+    /* =====================================================
+       TEST
+    ===================================================== */
+
+    function renderTest(konu) {
+
+        return `
+
+            <section class="kt-test">
+
+                <h3 class="kt-test-title">
+                    📝 Mini Test
+                </h3>
+
+                <form id="kitaplikTestForm">
+
+                    ${
+                        konu.test.map(function (soru, index) {
+
+                            return `
+
+                                <div class="kt-question">
+
+                                    <div class="kt-question-text">
+                                        ${index + 1}.
+                                        ${escapeHTML(
+                                            soru.soru
+                                        )}
+                                    </div>
+
+                                    ${
+                                        Array.isArray(
+                                            soru.secenekler
+                                        )
+                                            ? soru.secenekler
+                                                .map(function (
+                                                    secenek,
+                                                    optionIndex
+                                                ) {
+
+                                                    return `
+                                                        <label
+                                                            class="kt-option"
+                                                        >
+
+                                                            <input
+                                                                type="radio"
+                                                                name="soru-${index}"
+                                                                value="${optionIndex}"
+                                                                ${
+                                                                    String(
+                                                                        state.testCevaplari[
+                                                                            index
+                                                                        ]
+                                                                    ) ===
+                                                                    String(
+                                                                        optionIndex
+                                                                    )
+                                                                        ? "checked"
+                                                                        : ""
+                                                                }
+                                                            >
+
+                                                            ${escapeHTML(
+                                                                secenek
+                                                            )}
+
+                                                        </label>
+                                                    `;
+
+                                                })
+                                                .join("")
+                                            : ""
+                                    }
+
+                                </div>
+                            `;
+
+                        }).join("")
+                    }
+
+                    <button
+                        type="submit"
+                        class="kt-btn kt-btn-primary"
+                    >
+                        Testi Kontrol Et
+                    </button>
+
+                </form>
+
+                <div
+                    id="kitaplikTestResult"
+                    style="display:none;"
+                ></div>
+
+            </section>
+        `;
+    }
+
+
+    /* =====================================================
+       RENDER
+    ===================================================== */
+
+    function render() {
+
+        let content = "";
+
+        if (!state.sinif) {
+
+            content = renderHome();
+
+        } else if (!state.ders) {
+
+            content = renderDersler();
+
+        } else if (!state.konu) {
+
+            content = renderKonular();
+
+        } else {
+
+            content = renderKonu();
+        }
+
+        root.innerHTML = `
+            <div class="kt-wrapper">
+
+                ${renderHeader()}
+
+                <main class="kt-body">
+                    ${content}
+                </main>
+
+            </div>
+        `;
+
+        bindEvents();
+    }
+
+
+    /* =====================================================
+       EVENTLER
+    ===================================================== */
+
+    function bindEvents() {
+
+        /* SINIF */
+
+        root.querySelectorAll("[data-sinif]").forEach(function (el) {
+
+            el.addEventListener("click", function () {
+
+                state.sinif =
+                    el.getAttribute("data-sinif");
+
+                state.ders = null;
+                state.konu = null;
+                state.arama = "";
+
+                render();
+
+                scrollTop();
+            });
+
+        });
+
+
+        /* DERS */
+
+        root.querySelectorAll("[data-ders]").forEach(function (el) {
+
+            el.addEventListener("click", function () {
+
+                state.ders =
+                    el.getAttribute("data-ders");
+
+                state.konu = null;
+                state.arama = "";
+
+                render();
+
+                scrollTop();
+            });
+
+        });
+
+
+        /* KONU */
+
+        root.querySelectorAll("[data-konu]").forEach(function (el) {
+
+            el.addEventListener("click", function () {
+
+                state.konu =
+                    el.getAttribute("data-konu");
+
+                state.testCevaplari = {};
+
+                render();
+
+                scrollTop();
+            });
+
+        });
+
+
+        /* ACTION */
+
+        root.querySelectorAll("[data-action]").forEach(function (el) {
+
+            el.addEventListener("click", function () {
+
+                const action =
+                    el.getAttribute("data-action");
+
+                if (action === "home") {
+
+                    state.sinif = null;
+                    state.ders = null;
+                    state.konu = null;
+                    state.arama = "";
+
+                    render();
+
+                    scrollTop();
+                }
+
+                else if (action === "sinif") {
+
+                    state.ders = null;
+                    state.konu = null;
+                    state.arama = "";
+
+                    render();
+
+                    scrollTop();
+                }
+
+                else if (action === "ders") {
+
+                    state.konu = null;
+                    state.arama = "";
+
+                    render();
+
+                    scrollTop();
+                }
+
+                else if (action === "complete") {
+
+                    konuTamamla(
+                        getKonu()
+                    );
+
+                    scrollTop();
+                }
+
+            });
+
+        });
+
+
+        /* SEARCH */
+
+        const search =
+            root.querySelector("#kitaplikSearch");
+
+        if (search) {
+
+            search.addEventListener(
+                "input",
+                function () {
+
+                    state.arama =
+                        search.value;
+
+                    if (
+                        state.sinif &&
+                        state.ders &&
+                        !state.konu
+                    ) {
+                        render();
+
+                        const newSearch =
+                            root.querySelector(
+                                "#kitaplikSearch"
+                            );
+
+                        if (newSearch) {
+
+                            newSearch.focus();
+
+                            try {
+
+                                newSearch.setSelectionRange(
+                                    newSearch.value.length,
+                                    newSearch.value.length
+                                );
+
+                            } catch (e) {}
+
+                        }
+                    }
+
+                }
+            );
+
+        }
+
+
+        /* TEST */
+
+        const testForm =
+            root.querySelector(
+                "#kitaplikTestForm"
+            );
+
+        if (testForm) {
+
+            testForm.addEventListener(
+                "change",
+                function (event) {
+
+                    if (
+                        event.target &&
+                        event.target.type === "radio"
+                    ) {
+
+                        const name =
+                            event.target.name;
+
+                        const index =
+                            Number(
+                                name.replace(
+                                    "soru-",
+                                    ""
+                                )
+                            );
+
+                        state.testCevaplari[index] =
+                            Number(
+                                event.target.value
+                            );
+                    }
+
+                }
+            );
+
+
+            testForm.addEventListener(
+                "submit",
+                function (event) {
+
+                    event.preventDefault();
+
+                    kontrolEt();
+
+                }
+            );
+        }
+
+    }
+
+
+    /* =====================================================
+       TEST KONTROL
+    ===================================================== */
+
+    function kontrolEt() {
+
+        const konu = getKonu();
+
+        if (!konu || !Array.isArray(konu.test)) {
+            return;
+        }
+
+        let dogru = 0;
+        let cevaplanan = 0;
+
+        konu.test.forEach(function (soru, index) {
+
+            if (
+                state.testCevaplari[index] !== undefined
+            ) {
+
+                cevaplanan++;
+
+                if (
+                    Number(
+                        state.testCevaplari[index]
+                    ) === Number(
+                        soru.cevap
+                    )
+                ) {
+
+                    dogru++;
+                }
+            }
+
+        });
+
+        const sonuc =
+            root.querySelector(
+                "#kitaplikTestResult"
+            );
+
+        if (!sonuc) return;
+
+        sonuc.style.display = "block";
+
+        if (cevaplanan < konu.test.length) {
+
+            sonuc.className =
+                "kt-test-result";
+
+            sonuc.textContent =
+                `Test tamamlanmadı. ${cevaplanan}/${konu.test.length} soru cevaplandı.`;
+
+            return;
+        }
+
+        const yuzdeTest =
+            Math.round(
+                (dogru / konu.test.length) * 100
+            );
+
+        sonuc.className =
+            "kt-test-result";
+
+        sonuc.innerHTML = `
+            🎯 Sonuç:
+            ${dogru}/${konu.test.length} doğru
+            — %${yuzdeTest}
+
+            ${
+                yuzdeTest >= 70
+                    ? " 🎉 Harika!"
+                    : " 📚 Konuyu biraz daha tekrar et."
+            }
+        `;
+
+        if (yuzdeTest >= 70) {
+
+            const konuObj = getKonu();
+
+            if (konuObj) {
+
+                state.tamamlananlar[
+                    konuObj.id
+                ] = true;
+
+                saveCompleted();
+
+                setTimeout(function () {
+                    render();
+                }, 900);
+            }
+        }
+
+    }
+
+
+    /* =====================================================
+       SCROLL
+    ===================================================== */
+
+    function scrollTop() {
+
+        try {
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        } catch (e) {
+
+            window.scrollTo(0, 0);
+
+        }
+    }
+
+
+    /* =====================================================
+       DIŞARIDAN KULLANILABİLECEK API
+    ===================================================== */
+
+    window.DersTakipKitaplik = {
+
+        anaSayfa: function () {
+
+            state.sinif = null;
+            state.ders = null;
+            state.konu = null;
+            state.arama = "";
+
+            render();
+        },
+
+        sinifAc: function (sinif) {
+
+            if (!DATA[String(sinif)]) {
+                console.warn(
+                    "Kitaplık: Sınıf bulunamadı:",
+                    sinif
+                );
+
+                return;
+            }
+
+            state.sinif = String(sinif);
+            state.ders = null;
+            state.konu = null;
+
+            render();
+
+            scrollTop();
+        },
+
+        dersAc: function (sinif, ders) {
+
+            sinif = String(sinif);
+
+            if (
+                !DATA[sinif] ||
+                !DATA[sinif].dersler ||
+                !DATA[sinif].dersler[ders]
+            ) {
+
+                console.warn(
+                    "Kitaplık: Ders bulunamadı:",
+                    sinif,
+                    ders
+                );
+
+                return;
+            }
+
+            state.sinif = sinif;
+            state.ders = ders;
+            state.konu = null;
+
+            render();
+
+            scrollTop();
+        },
+
+        konuAc: function (
+            sinif,
+            ders,
+            konuId
+        ) {
+
+            sinif = String(sinif);
+
+            if (
+                !DATA[sinif] ||
+                !DATA[sinif].dersler ||
+                !DATA[sinif].dersler[ders]
+            ) {
+
+                return;
+            }
+
+            const konu =
+                DATA[sinif]
+                    .dersler[ders]
+                    .konular
+                    .find(function (item) {
+
+                        return String(item.id) ===
+                            String(konuId);
+
+                    });
+
+            if (!konu) {
+
+                console.warn(
+                    "Kitaplık: Konu bulunamadı:",
+                    konuId
+                );
+
+                return;
+            }
+
+            state.sinif = sinif;
+            state.ders = ders;
+            state.konu = konu.id;
+
+            render();
+
+            scrollTop();
+        },
+
+        yenile: function () {
+            render();
+        },
+
+        ilerleme: function () {
+            return {
+                toplam: toplamKonu(),
+                tamamlanan: tamamlananKonu(),
+                yuzde: yuzde()
+            };
+        },
+
+        tamamlananlariSifirla: function () {
+
+            state.tamamlananlar = {};
+
+            saveCompleted();
+
+            render();
+        }
+
     };
 
+
+    /* =====================================================
+       BAŞLAT
+    ===================================================== */
+
+    injectStyles();
+    render();
 
 })();
