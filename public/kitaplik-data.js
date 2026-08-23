@@ -1,1898 +1,714 @@
-/* =========================================================
-   DERS TAKİP — KİTAPLIK DATA
-   5–12. Sınıflar
-   Türkiye Yüzyılı Maarif Modeli uyumlu yapı
-
-   kitaplik.js ile doğrudan uyumludur.
-   ========================================================= */
-
-window.kitaplikData = {
-
-    /* =====================================================
-       5. SINIF
-    ===================================================== */
-    "5": {
-        ad: "5. Sınıf",
-
-        dersler: {
-
-            /* -------------------------------------------------
-               MATEMATİK
-            ------------------------------------------------- */
-            matematik: {
-                ad: "Matematik",
-                icon: "🔢",
-
-                konular: [
-
-                    {
-                        id: "5-matematik-sayilar-1",
-                        ad: "Sayılar ve Nicelikler (1)",
-
-                        giris: `
-                            Bu temada doğal sayılar, basamak değeri,
-                            sayıların karşılaştırılması ve çeşitli
-                            sayı gösterimleri üzerinde çalışılır.
-                        `,
-
-                        anlatim: `
-                            <h3>Doğal Sayılar</h3>
-
-                            <p>
-                                Doğal sayılar günlük hayatta sayma,
-                                sıralama ve miktar belirtme amacıyla
-                                kullanılır. 0'dan başlayarak sonsuza
-                                kadar devam ederler.
-                            </p>
-
-                            <p>
-                                Bir doğal sayının hangi basamaklardan
-                                oluştuğunu bilmek, sayının değerini
-                                anlamanın temelidir.
-                            </p>
-
-                            <h3>Basamak ve Basamak Değeri</h3>
-
-                            <p>
-                                Bir sayıda rakamların bulunduğu
-                                konumlara basamak denir. Bir rakamın
-                                bulunduğu basamağa göre aldığı değere
-                                basamak değeri denir.
-                            </p>
-
-                            <div class="kitap-formul">
-                                Basamak değeri =
-                                Rakam × Basamak değeri
-                            </div>
-                        `,
-
-                        temelBilgi: [
-                            "Doğal sayılar 0'dan başlar.",
-                            "Rakamlar 0,1,2,3,4,5,6,7,8 ve 9'dur.",
-                            "Bir rakamın değeri bulunduğu basamağa göre değişebilir.",
-                            "Sayıları karşılaştırırken önce basamak sayılarına bakılır.",
-                            "Basamak sayıları eşitse soldan sağa doğru karşılaştırma yapılır."
-                        ],
-
-                        ornekler: [
-                            {
-                                soru: "45 728 sayısında 7 rakamının basamak değeri kaçtır?",
-                                cozum: `
-                                    7 rakamı yüzler basamağındadır.
-                                    Bu nedenle basamak değeri:
-                                    7 × 100 = 700'dür.
-                                `
-                            },
-                            {
-                                soru: "34 560 ile 34 506 sayılarını karşılaştırınız.",
-                                cozum: `
-                                    On binler, binler ve yüzler basamakları
-                                    aynıdır. Onlar basamağında 6 > 0 olduğu
-                                    için 34 560 > 34 506 olur.
-                                `
-                            }
-                        ],
-
-                        dikkat: `
-                            Rakam ile basamak değerini karıştırmayın.
-                            Örneğin 5 432 sayısındaki 5'in rakam değeri 5,
-                            basamak değeri ise 5 000'dir.
-                        `,
-
-                        ozet: `
-                            Doğal sayıları okuyabilir, yazabilir,
-                            karşılaştırabilir ve basamak değerlerini
-                            belirleyebiliriz.
-                        `,
-
-                        test: [
-                            {
-                                soru: "6 425 sayısında 4 rakamının basamak değeri kaçtır?",
-                                secenekler: [
-                                    "4",
-                                    "40",
-                                    "400",
-                                    "4 000"
-                                ],
-                                cevap: 2
-                            },
-                            {
-                                soru: "Aşağıdakilerden hangisi bir rakamdır?",
-                                secenekler: [
-                                    "15",
-                                    "24",
-                                    "7",
-                                    "105"
-                                ],
-                                cevap: 2
-                            },
-                            {
-                                soru: "3 452 ile 3 425 karşılaştırıldığında hangisi doğrudur?",
-                                secenekler: [
-                                    "3 452 < 3 425",
-                                    "3 452 > 3 425",
-                                    "İkisi eşittir",
-                                    "Karşılaştırılamaz"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "Doğal sayılar hangi sayıdan başlar?",
-                                secenekler: [
-                                    "0",
-                                    "1",
-                                    "-1",
-                                    "10"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "8 231 sayısında 8'in basamak değeri kaçtır?",
-                                secenekler: [
-                                    "8",
-                                    "80",
-                                    "800",
-                                    "8 000"
-                                ],
-                                cevap: 3
-                            }
-                        ]
-                    },
-
-                    {
-                        id: "5-matematik-sayilar-2",
-                        ad: "Sayılar ve Nicelikler (2)",
-
-                        giris: `
-                            Bu bölümde sayılarla işlemler ve nicelikleri
-                            ifade etme üzerine çalışmalar yapılır.
-                        `,
-
-                        anlatim: `
-                            <h3>Sayılarla İşlemler</h3>
-
-                            <p>
-                                Doğal sayılarla toplama, çıkarma, çarpma
-                                ve bölme işlemleri günlük problemlerin
-                                çözümünde kullanılır.
-                            </p>
-
-                            <h3>İşlem Önceliği</h3>
-
-                            <p>
-                                Birden fazla işlem bulunan ifadelerde
-                                işlemler belirli bir sıraya göre yapılır.
-                            </p>
-
-                            <ol>
-                                <li>Parantez içindeki işlemler</li>
-                                <li>Çarpma ve bölme</li>
-                                <li>Toplama ve çıkarma</li>
-                            </ol>
-                        `,
-
-                        temelBilgi: [
-                            "Toplama ve çarpma işlemlerinde işlem sırası önemlidir.",
-                            "Çarpma ve bölme, toplama ve çıkarmadan önce yapılır.",
-                            "Parantez varsa önce parantez içi işlem yapılır.",
-                            "Bir sayının 1 ile çarpımı yine kendisidir.",
-                            "Bir sayının 0 ile çarpımı 0'dır."
-                        ],
-
-                        ornekler: [
-                            {
-                                soru: "8 + 3 × 4 işleminin sonucu kaçtır?",
-                                cozum: `
-                                    Önce çarpma yapılır:
-                                    3 × 4 = 12
-
-                                    Daha sonra:
-                                    8 + 12 = 20
-
-                                    Cevap: 20
-                                `
-                            }
-                        ],
-
-                        dikkat: `
-                            İşlem önceliğini göz ardı ederek işlemleri
-                            soldan sağa yapmak yanlış sonuç verebilir.
-                        `,
-
-                        ozet: `
-                            Sayılarla işlem yaparken işlem önceliğine
-                            dikkat edilir.
-                        `,
-
-                        test: [
-                            {
-                                soru: "8 + 2 × 5 işleminin sonucu kaçtır?",
-                                secenekler: [
-                                    "50",
-                                    "18",
-                                    "20",
-                                    "10"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "6 × 0 işleminin sonucu kaçtır?",
-                                secenekler: [
-                                    "6",
-                                    "1",
-                                    "0",
-                                    "10"
-                                ],
-                                cevap: 2
-                            },
-                            {
-                                soru: "12 ÷ 3 işleminin sonucu kaçtır?",
-                                secenekler: [
-                                    "3",
-                                    "4",
-                                    "5",
-                                    "6"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "7 + 5 işleminin sonucu kaçtır?",
-                                secenekler: [
-                                    "10",
-                                    "11",
-                                    "12",
-                                    "13"
-                                ],
-                                cevap: 2
-                            },
-                            {
-                                soru: "3 × 4 + 2 işleminin sonucu kaçtır?",
-                                secenekler: [
-                                    "14",
-                                    "18",
-                                    "20",
-                                    "24"
-                                ],
-                                cevap: 0
-                            }
-                        ]
-                    },
-
-                    {
-                        id: "5-matematik-cebirsel",
-                        ad: "İşlemlerle Cebirsel Düşünme",
-
-                        giris: `
-                            Sayılar arasındaki ilişkileri fark etmek,
-                            örüntüleri incelemek ve matematiksel
-                            düşünmeyi geliştirmek bu temanın temelidir.
-                        `,
-
-                        anlatim: `
-                            <h3>Örüntüler</h3>
-
-                            <p>
-                                Belirli bir kurala göre düzenli şekilde
-                                ilerleyen sayı veya şekil dizilerine
-                                örüntü denir.
-                            </p>
-
-                            <p>
-                                Örneğin 3, 6, 9, 12, 15 dizisinde her
-                                adımda 3 eklenmektedir.
-                            </p>
-                        `,
-
-                        temelBilgi: [
-                            "Örüntüler belirli bir kurala göre ilerler.",
-                            "Kuralı bulmak örüntüyü devam ettirmeyi sağlar.",
-                            "Ardışık terimler arasındaki ilişki incelenmelidir."
-                        ],
-
-                        ornekler: [
-                            {
-                                soru: "4, 8, 12, 16, ... örüntüsünün sonraki iki terimini bulunuz.",
-                                cozum: `
-                                    Her adımda 4 ekleniyor.
-                                    16 + 4 = 20
-                                    20 + 4 = 24
-                                    Cevap: 20 ve 24
-                                `
-                            }
-                        ],
-
-                        dikkat: `
-                            Örüntünün sadece iki terimine bakarak
-                            kural belirlemek yerine mümkün olduğunca
-                            birkaç ardışık terimi karşılaştırın.
-                        `,
-
-                        ozet: `
-                            Örüntülerde terimler arasındaki düzenli
-                            ilişki bulunur ve bu ilişki kullanılarak
-                            sonraki terimler belirlenir.
-                        `,
-
-                        test: [
-                            {
-                                soru: "2, 5, 8, 11, ... örüntüsünde sonraki sayı kaçtır?",
-                                secenekler: [
-                                    "12",
-                                    "13",
-                                    "14",
-                                    "15"
-                                ],
-                                cevap: 2
-                            },
-                            {
-                                soru: "10, 20, 30, 40 örüntüsünün kuralı nedir?",
-                                secenekler: [
-                                    "5 ekleme",
-                                    "10 ekleme",
-                                    "2 ile çarpma",
-                                    "10 çıkarma"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "5, 10, 15, 20 örüntüsünde 6. terim kaçtır?",
-                                secenekler: [
-                                    "25",
-                                    "30",
-                                    "35",
-                                    "40"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "Bir örüntüyü devam ettirmek için öncelikle ne bulunmalıdır?",
-                                secenekler: [
-                                    "Renk",
-                                    "Kural",
-                                    "Şekil",
-                                    "Başlık"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "20, 17, 14, 11 örüntüsünde her adımda ne yapılmaktadır?",
-                                secenekler: [
-                                    "2 ekleniyor",
-                                    "3 ekleniyor",
-                                    "2 çıkarılıyor",
-                                    "3 çıkarılıyor"
-                                ],
-                                cevap: 3
-                            }
-                        ]
-                    },
-
-                    {
-                        id: "5-matematik-geometrik-sekiller",
-                        ad: "Geometrik Şekiller",
-
-                        giris: `
-                            Üçgen, dörtgen ve çokgen gibi geometrik
-                            şekillerin özellikleri incelenir.
-                        `,
-
-                        anlatim: `
-                            <h3>Geometrik Şekiller</h3>
-
-                            <p>
-                                Geometride doğru parçalarının birleşmesiyle
-                                oluşan kapalı şekiller önemli bir yer tutar.
-                            </p>
-
-                            <p>
-                                Üçgenlerin üç kenarı ve üç köşesi,
-                                dörtgenlerin dört kenarı ve dört köşesi
-                                vardır.
-                            </p>
-                        `,
-
-                        temelBilgi: [
-                            "Üçgenin 3 kenarı vardır.",
-                            "Dörtgenin 4 kenarı vardır.",
-                            "Kare bir dörtgendir.",
-                            "Dikdörtgen bir dörtgendir.",
-                            "Çokgenler doğru parçalarından oluşan kapalı şekillerdir."
-                        ],
-
-                        ornekler: [
-                            {
-                                soru: "Bir karenin kaç kenarı vardır?",
-                                cozum: `
-                                    Kare bir dörtgendir.
-                                    Bu nedenle 4 kenarı vardır.
-                                `
-                            }
-                        ],
-
-                        dikkat: `
-                            Kare ile dikdörtgeni birbirinden ayırırken
-                            kenar özelliklerine dikkat edilmelidir.
-                        `,
-
-                        ozet: `
-                            Geometrik şekiller kenar, köşe ve açı
-                            özellikleriyle incelenir.
-                        `,
-
-                        test: [
-                            {
-                                soru: "Üçgenin kaç kenarı vardır?",
-                                secenekler: [
-                                    "2",
-                                    "3",
-                                    "4",
-                                    "5"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "Kare kaç kenarlıdır?",
-                                secenekler: [
-                                    "3",
-                                    "4",
-                                    "5",
-                                    "6"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "Aşağıdakilerden hangisi dörtgendir?",
-                                secenekler: [
-                                    "Üçgen",
-                                    "Kare",
-                                    "Daire",
-                                    "Doğru"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "Bir dörtgenin kaç köşesi vardır?",
-                                secenekler: [
-                                    "2",
-                                    "3",
-                                    "4",
-                                    "5"
-                                ],
-                                cevap: 2
-                            },
-                            {
-                                soru: "Çokgenlerin temel özelliği nedir?",
-                                secenekler: [
-                                    "Kapalı ve doğru parçalarından oluşmaları",
-                                    "Her zaman yuvarlak olmaları",
-                                    "Tek kenarlı olmaları",
-                                    "Sadece üç köşeli olmaları"
-                                ],
-                                cevap: 0
-                            }
-                        ]
-                    },
-
-                    {
-                        id: "5-matematik-geometrik-nicelikler",
-                        ad: "Geometrik Nicelikler",
-
-                        giris: `
-                            Uzunluk, alan ve çevre gibi geometrik
-                            nicelikleri anlamaya yönelik çalışmalar yapılır.
-                        `,
-
-                        anlatim: `
-                            <h3>Çevre</h3>
-
-                            <p>
-                                Bir şeklin bütün kenar uzunluklarının
-                                toplamına çevre denir.
-                            </p>
-
-                            <div class="kitap-formul">
-                                Dikdörtgen çevresi =
-                                2 × (uzun kenar + kısa kenar)
-                            </div>
-
-                            <h3>Alan</h3>
-
-                            <p>
-                                Bir yüzeyin kapladığı bölgeye alan denir.
-                            </p>
-
-                            <div class="kitap-formul">
-                                Dikdörtgen alanı =
-                                uzun kenar × kısa kenar
-                            </div>
-                        `,
-
-                        temelBilgi: [
-                            "Çevre kenar uzunluklarının toplamıdır.",
-                            "Alan yüzeyin kapladığı bölgedir.",
-                            "Alan birimleri kare birim şeklindedir.",
-                            "Uzunluk ölçülerinde birim seçimine dikkat edilmelidir."
-                        ],
-
-                        ornekler: [
-                            {
-                                soru: "Kenarları 5 cm ve 3 cm olan dikdörtgenin çevresi kaç cm'dir?",
-                                cozum: `
-                                    Çevre = 2 × (5 + 3)
-                                    Çevre = 2 × 8
-                                    Çevre = 16 cm
-                                `
-                            }
-                        ],
-
-                        dikkat: `
-                            Alan ile çevre aynı şey değildir.
-                            Çevre uzunluk birimiyle, alan ise kare
-                            birimlerle ifade edilir.
-                        `,
-
-                        ozet: `
-                            Çevre kenarların toplamı, alan ise
-                            yüzeyin kapladığı bölgedir.
-                        `,
-
-                        test: [
-                            {
-                                soru: "4 cm ve 6 cm kenarlı dikdörtgenin çevresi kaç cm'dir?",
-                                secenekler: [
-                                    "10",
-                                    "20",
-                                    "24",
-                                    "12"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "5 cm × 4 cm dikdörtgenin alanı kaç cm²'dir?",
-                                secenekler: [
-                                    "9",
-                                    "18",
-                                    "20",
-                                    "25"
-                                ],
-                                cevap: 2
-                            },
-                            {
-                                soru: "Çevre neyi ifade eder?",
-                                secenekler: [
-                                    "Yüzey miktarını",
-                                    "Kenar uzunlukları toplamını",
-                                    "Hacmi",
-                                    "Ağırlığı"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "Alan hangi birimle ifade edilebilir?",
-                                secenekler: [
-                                    "cm",
-                                    "kg",
-                                    "cm²",
-                                    "L"
-                                ],
-                                cevap: 2
-                            },
-                            {
-                                soru: "Bir karenin bir kenarı 3 cm ise çevresi kaç cm'dir?",
-                                secenekler: [
-                                    "6",
-                                    "9",
-                                    "12",
-                                    "15"
-                                ],
-                                cevap: 2
-                            }
-                        ]
-                    },
-
-                    {
-                        id: "5-matematik-istatistik",
-                        ad: "İstatistiksel Araştırma Süreci",
-
-                        giris: `
-                            Verileri toplama, düzenleme, tablo ve
-                            grafiklerle gösterme süreçleri incelenir.
-                        `,
-
-                        anlatim: `
-                            <h3>Veri</h3>
-
-                            <p>
-                                Bir araştırma sonucunda elde edilen
-                                bilgilere veri denir.
-                            </p>
-
-                            <p>
-                                Veriler tablo ve grafikler kullanılarak
-                                daha kolay anlaşılabilir hâle getirilebilir.
-                            </p>
-
-                            <h3>Sıklık</h3>
-
-                            <p>
-                                Bir verinin kaç kez tekrarlandığını
-                                gösteren değere sıklık denir.
-                            </p>
-                        `,
-
-                        temelBilgi: [
-                            "Veriler araştırma sonucunda elde edilir.",
-                            "Tablolar verileri düzenli göstermeyi sağlar.",
-                            "Grafikler verilerin görsel olarak anlaşılmasını kolaylaştırır.",
-                            "Sıklık bir değerin kaç kez tekrarlandığını gösterir."
-                        ],
-
-                        ornekler: [
-                            {
-                                soru: "2, 3, 3, 4, 3 veri grubunda 3 sayısının sıklığı kaçtır?",
-                                cozum: `
-                                    3 sayısı üç kez tekrarlandığı için
-                                    sıklığı 3'tür.
-                                `
-                            }
-                        ],
-
-                        dikkat: `
-                            Grafikte eksenleri, başlığı ve birimleri
-                            okumadan sonuca ulaşmaya çalışmayın.
-                        `,
-
-                        ozet: `
-                            İstatistiksel araştırmada veri toplanır,
-                            düzenlenir, gösterilir ve yorumlanır.
-                        `,
-
-                        test: [
-                            {
-                                soru: "2, 2, 3, 4, 2 veri grubunda 2'nin sıklığı kaçtır?",
-                                secenekler: [
-                                    "1",
-                                    "2",
-                                    "3",
-                                    "4"
-                                ],
-                                cevap: 2
-                            },
-                            {
-                                soru: "Veriler hangi araçla görsel olarak gösterilebilir?",
-                                secenekler: [
-                                    "Grafik",
-                                    "Sadece metin",
-                                    "Sadece ses",
-                                    "Hiçbiri"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "Bir verinin tekrar sayısına ne denir?",
-                                secenekler: [
-                                    "Alan",
-                                    "Sıklık",
-                                    "Çevre",
-                                    "Uzunluk"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "Araştırmada ilk yapılması gerekenlerden biri nedir?",
-                                secenekler: [
-                                    "Veri toplamak",
-                                    "Sonucu ezberlemek",
-                                    "Grafiği silmek",
-                                    "Soruyu değiştirmek"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "Grafikler neyi kolaylaştırır?",
-                                secenekler: [
-                                    "Verileri yorumlamayı",
-                                    "Verileri yok etmeyi",
-                                    "Soruları azaltmayı",
-                                    "Sayısal değeri değiştirmeyi"
-                                ],
-                                cevap: 0
-                            }
-                        ]
-                    },
-
-                    {
-                        id: "5-matematik-olasilik",
-                        ad: "Veriden Olasılığa",
-
-                        giris: `
-                            Olayların gerçekleşme durumlarını ve
-                            basit olasılık fikirlerini anlamaya yönelik
-                            çalışmalar yapılır.
-                        `,
-
-                        anlatim: `
-                            <h3>Olasılık</h3>
-
-                            <p>
-                                Bir olayın gerçekleşme ihtimalini
-                                ifade etmek için olasılık kavramından
-                                yararlanılır.
-                            </p>
-
-                            <p>
-                                Kesin gerçekleşecek olayların olasılığı
-                                1, gerçekleşmesi mümkün olmayan olayların
-                                olasılığı ise 0 olarak ifade edilir.
-                            </p>
-                        `,
-
-                        temelBilgi: [
-                            "Olasılık bir olayın gerçekleşme ihtimalidir.",
-                            "Kesin olayın olasılığı 1'dir.",
-                            "İmkânsız olayın olasılığı 0'dır.",
-                            "Olasılık 0 ile 1 arasında bir değerdir."
-                        ],
-
-                        ornekler: [
-                            {
-                                soru: "Standart bir zar atıldığında 7 gelme olasılığı nedir?",
-                                cozum: `
-                                    Standart zarın yüzleri 1,2,3,4,5,6'dır.
-                                    7 gelmesi mümkün değildir.
-                                    Bu nedenle olay imkânsızdır ve
-                                    olasılığı 0'dır.
-                                `
-                            }
-                        ],
-
-                        dikkat: `
-                            “Kesin”, “mümkün” ve “imkânsız” ifadelerini
-                            birbirinden ayırmaya dikkat edin.
-                        `,
-
-                        ozet: `
-                            Olasılık olayların gerçekleşme ihtimalini
-                            ifade eder.
-                        `,
-
-                        test: [
-                            {
-                                soru: "Kesin olayın olasılığı kaçtır?",
-                                secenekler: [
-                                    "0",
-                                    "0,5",
-                                    "1",
-                                    "2"
-                                ],
-                                cevap: 2
-                            },
-                            {
-                                soru: "İmkânsız olayın olasılığı kaçtır?",
-                                secenekler: [
-                                    "0",
-                                    "1",
-                                    "2",
-                                    "0,5"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "Zar atıldığında 7 gelmesi nasıldır?",
-                                secenekler: [
-                                    "Kesin",
-                                    "İmkânsız",
-                                    "Çok olası",
-                                    "Normal"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "Olasılık hangi aralıkta bulunur?",
-                                secenekler: [
-                                    "0 ile 1 arasında",
-                                    "1 ile 10 arasında",
-                                    "-10 ile -1 arasında",
-                                    "Sadece 2"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "Bir olayın gerçekleşme ihtimalini inceleyen kavram hangisidir?",
-                                secenekler: [
-                                    "Alan",
-                                    "Çevre",
-                                    "Olasılık",
-                                    "Uzunluk"
-                                ],
-                                cevap: 2
-                            }
-                        ]
-                    }
-
-                ]
-            },
-
-            /* -------------------------------------------------
-               FEN BİLİMLERİ
-            ------------------------------------------------- */
-            fen: {
-                ad: "Fen Bilimleri",
-                icon: "🔬",
-
-                konular: [
-                    {
-                        id: "5-fen-gokyuzundeki-komsularimiz",
-                        ad: "Gökyüzündeki Komşularımız ve Biz",
-
-                        giris: `
-                            Dünya'nın uzaydaki konumu, Güneş,
-                            Ay ve diğer gök cisimleri hakkında
-                            temel bilgiler ediniriz.
-                        `,
-
-                        anlatim: `
-                            <h3>Güneş</h3>
-                            <p>
-                                Güneş, Dünya'ya en yakın yıldızdır.
-                                Isı ve ışık kaynağımızdır.
-                            </p>
-
-                            <h3>Ay</h3>
-                            <p>
-                                Ay, Dünya'nın doğal uydusudur.
-                                Kendi ışığını üretmez; Güneş'ten
-                                aldığı ışığı yansıtır.
-                            </p>
-
-                            <h3>Dünya</h3>
-                            <p>
-                                Dünya, Güneş Sistemi'ndeki gezegenlerden
-                                biridir ve üzerinde yaşam bulunan
-                                bilinen tek gezegendir.
-                            </p>
-                        `,
-
-                        temelBilgi: [
-                            "Güneş bir yıldızdır.",
-                            "Ay Dünya'nın doğal uydusudur.",
-                            "Ay kendi ışığını üretmez.",
-                            "Dünya Güneş'in etrafında dolanır.",
-                            "Güneş Sistemi'nin merkezinde Güneş bulunur."
-                        ],
-
-                        ornekler: [
-                            {
-                                soru: "Ay neden geceleri parlak görünür?",
-                                cozum: `
-                                    Ay kendi ışığını üretmez.
-                                    Güneş'ten aldığı ışığı yansıttığı
-                                    için parlak görünür.
-                                `
-                            }
-                        ],
-
-                        dikkat: `
-                            Ay'ın bir yıldız olduğunu düşünmeyin.
-                            Ay bir doğal uydudur.
-                        `,
-
-                        ozet: `
-                            Güneş bir yıldız, Dünya bir gezegen,
-                            Ay ise Dünya'nın doğal uydusudur.
-                        `,
-
-                        test: [
-                            {
-                                soru: "Güneş nedir?",
-                                secenekler: [
-                                    "Gezegen",
-                                    "Uydu",
-                                    "Yıldız",
-                                    "Asteroit"
-                                ],
-                                cevap: 2
-                            },
-                            {
-                                soru: "Ay'ın doğal uydusu olduğu gök cismi hangisidir?",
-                                secenekler: [
-                                    "Mars",
-                                    "Dünya",
-                                    "Güneş",
-                                    "Jüpiter"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "Ay ışığını nereden alır?",
-                                secenekler: [
-                                    "Dünya'dan",
-                                    "Mars'tan",
-                                    "Güneş'ten",
-                                    "Kendi üretir"
-                                ],
-                                cevap: 2
-                            },
-                            {
-                                soru: "Dünya'nın şekli yaklaşık olarak nasıldır?",
-                                secenekler: [
-                                    "Küre",
-                                    "Küp",
-                                    "Üçgen",
-                                    "Düz çizgi"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "Dünya'nın enerji kaynağı olan gök cismi hangisidir?",
-                                secenekler: [
-                                    "Ay",
-                                    "Güneş",
-                                    "Mars",
-                                    "Venüs"
-                                ],
-                                cevap: 1
-                            }
-                        ]
-                    },
-
-                    {
-                        id: "5-fen-kuvveti-taniyalim",
-                        ad: "Kuvveti Tanıyalım",
-
-                        giris: `
-                            Kuvvetin cisimler üzerindeki etkilerini
-                            ve günlük yaşamdaki örneklerini inceleriz.
-                        `,
-
-                        anlatim: `
-                            <h3>Kuvvet</h3>
-
-                            <p>
-                                Bir cismi itme veya çekme etkisine
-                                kuvvet denir.
-                            </p>
-
-                            <p>
-                                Kuvvet bir cismin hareketini
-                                başlatabilir, durdurabilir,
-                                hızlandırabilir, yavaşlatabilir
-                                veya yönünü değiştirebilir.
-                            </p>
-                        `,
-
-                        temelBilgi: [
-                            "Kuvvet itme veya çekme etkisidir.",
-                            "Kuvvet cisimlerin hareket durumunu değiştirebilir.",
-                            "Kuvvetin yönü ve büyüklüğü vardır.",
-                            "Dinamometre kuvvet ölçmek için kullanılır."
-                        ],
-
-                        ornekler: [
-                            {
-                                soru: "Hareket hâlindeki topa ayağımızla vurduğumuzda ne olur?",
-                                cozum: `
-                                    Topa bir kuvvet uygulanır.
-                                    Bu kuvvet topun hızını veya
-                                    yönünü değiştirebilir.
-                                `
-                            }
-                        ],
-
-                        dikkat: `
-                            Kuvvet sadece hareket eden cisimlere
-                            uygulanmaz. Duran bir cisme uygulanan
-                            kuvvet de cismin durumunu değiştirebilir.
-                        `,
-
-                        ozet: `
-                            Kuvvet cisimleri itme veya çekme etkisidir
-                            ve hareket üzerinde değişiklik oluşturabilir.
-                        `,
-
-                        test: [
-                            {
-                                soru: "Kuvvet nedir?",
-                                secenekler: [
-                                    "Sadece sıcaklık",
-                                    "İtme veya çekme etkisi",
-                                    "Sadece ışık",
-                                    "Madde miktarı"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "Kuvvet hangi aracı ölçer?",
-                                secenekler: [
-                                    "Termometre",
-                                    "Dinamometre",
-                                    "Cetvel",
-                                    "Terazi"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "Kuvvet aşağıdakilerden hangisini değiştirebilir?",
-                                secenekler: [
-                                    "Hareket yönünü",
-                                    "Sadece rengini",
-                                    "Sadece şeklini",
-                                    "Hiçbir şeyi"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "Kapıyı açarken hangi kuvvet uygulanabilir?",
-                                secenekler: [
-                                    "İtme veya çekme",
-                                    "Sadece ışık",
-                                    "Sadece ses",
-                                    "Hiçbir kuvvet"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "Kuvvetin birimi hangisidir?",
-                                secenekler: [
-                                    "Metre",
-                                    "Newton",
-                                    "Litre",
-                                    "Kilogram"
-                                ],
-                                cevap: 1
-                            }
-                        ]
-                    },
-
-                    {
-                        id: "5-fen-canlilarin-yapisina-yolculuk",
-                        ad: "Canlıların Yapısına Yolculuk",
-
-                        giris: `
-                            Canlıların temel yapı birimi olan hücreyi
-                            ve hücrenin temel kısımlarını inceleriz.
-                        `,
-
-                        anlatim: `
-                            <h3>Hücre</h3>
-
-                            <p>
-                                Canlıların temel yapı ve görev birimine
-                                hücre denir.
-                            </p>
-
-                            <p>
-                                Hücrelerin farklı görevleri olabilir.
-                                Bitki ve hayvan hücrelerinde ortak
-                                yapılar bulunduğu gibi farklı yapılar
-                                da vardır.
-                            </p>
-                        `,
-
-                        temelBilgi: [
-                            "Hücre canlıların temel yapı birimidir.",
-                            "Hücre zarı hücreyi çevreler.",
-                            "Çekirdek hücrenin yönetim merkezidir.",
-                            "Bitki hücrelerinde hücre duvarı ve kloroplast bulunur."
-                        ],
-
-                        ornekler: [
-                            {
-                                soru: "Hücrenin yönetim merkezine ne ad verilir?",
-                                cozum: `
-                                    Hücrenin yönetim merkezi çekirdektir.
-                                `
-                            }
-                        ],
-
-                        dikkat: `
-                            Hücre zarı ile hücre duvarı aynı yapı değildir.
-                            Hücre duvarı özellikle bitki hücrelerinde bulunur.
-                        `,
-
-                        ozet: `
-                            Hücre canlıların temel yapı birimidir ve
-                            farklı bölümleri farklı görevler üstlenir.
-                        `,
-
-                        test: [
-                            {
-                                soru: "Canlıların temel yapı birimi nedir?",
-                                secenekler: [
-                                    "Organ",
-                                    "Hücre",
-                                    "Sistem",
-                                    "Doku"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "Hücrenin yönetim merkezi hangisidir?",
-                                secenekler: [
-                                    "Çekirdek",
-                                    "Hücre duvarı",
-                                    "Koful",
-                                    "Sitoplazma"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "Kloroplast hangi hücrede bulunur?",
-                                secenekler: [
-                                    "Bitki hücresinde",
-                                    "Sadece hayvan hücresinde",
-                                    "Hiçbir hücrede",
-                                    "Sadece bakteride"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "Hücre zarı ne işe yarar?",
-                                secenekler: [
-                                    "Hücreyi çevreler",
-                                    "Işık üretir",
-                                    "Kemik oluşturur",
-                                    "Ses üretir"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "Bitki hücresinin hayvan hücresinden farklı yapılarından biri hangisidir?",
-                                secenekler: [
-                                    "Çekirdek",
-                                    "Hücre zarı",
-                                    "Kloroplast",
-                                    "Sitoplazma"
-                                ],
-                                cevap: 2
-                            }
-                        ]
-                    },
-
-                    {
-                        id: "5-fen-isigin-dunyasi",
-                        ad: "Işığın Dünyası",
-
-                        giris: `
-                            Işığın yayılması, maddelerle etkileşimi
-                            ve gölgelerin oluşumu incelenir.
-                        `,
-
-                        anlatim: `
-                            <h3>Işık</h3>
-
-                            <p>
-                                Işık, cisimleri görmemizi sağlayan
-                                enerji türlerinden biridir.
-                            </p>
-
-                            <p>
-                                Işık doğrusal yollar boyunca yayılır.
-                                Bir ışık kaynağından çıkan ışık,
-                                karşısına çıkan maddelerle etkileşebilir.
-                            </p>
-                        `,
-
-                        temelBilgi: [
-                            "Işık doğrusal yayılır.",
-                            "Işık kaynakları doğal veya yapay olabilir.",
-                            "Saydam maddeler ışığın büyük kısmını geçirir.",
-                            "Opak maddeler ışığı geçirmez.",
-                            "Gölge ışığın engellenmesi sonucu oluşur."
-                        ],
-
-                        ornekler: [
-                            {
-                                soru: "Gölge nasıl oluşur?",
-                                cozum: `
-                                    Bir ışık kaynağından gelen ışığın
-                                    opak bir cisim tarafından engellenmesi
-                                    sonucunda cismin arkasında gölge oluşur.
-                                `
-                            }
-                        ],
-
-                        dikkat: `
-                            Gölgenin oluşması için ışık kaynağı,
-                            engelleyici cisim ve uygun bir yüzey
-                            arasındaki konum ilişkisi önemlidir.
-                        `,
-
-                        ozet: `
-                            Işık doğrusal yayılır ve maddelerle
-                            etkileşerek gölge gibi olaylara neden olur.
-                        `,
-
-                        test: [
-                            {
-                                soru: "Işık nasıl yayılır?",
-                                secenekler: [
-                                    "Dairesel",
-                                    "Doğrusal",
-                                    "Sadece aşağı",
-                                    "Yayılmaz"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "Işığı geçirmeyen maddeye ne denir?",
-                                secenekler: [
-                                    "Saydam",
-                                    "Yarı saydam",
-                                    "Opak",
-                                    "Parlak"
-                                ],
-                                cevap: 2
-                            },
-                            {
-                                soru: "Gölge hangi olay sonucu oluşur?",
-                                secenekler: [
-                                    "Işığın engellenmesi",
-                                    "Sesin artması",
-                                    "Suyun buharlaşması",
-                                    "Sıcaklığın düşmesi"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "Aşağıdakilerden hangisi doğal ışık kaynağıdır?",
-                                secenekler: [
-                                    "Ampul",
-                                    "El feneri",
-                                    "Güneş",
-                                    "Mum"
-                                ],
-                                cevap: 2
-                            },
-                            {
-                                soru: "Saydam maddelerin özelliği nedir?",
-                                secenekler: [
-                                    "Işığı büyük ölçüde geçirir",
-                                    "Işığı tamamen engeller",
-                                    "Hiçbir özelliği yoktur",
-                                    "Sadece ses geçirir"
-                                ],
-                                cevap: 0
-                            }
-                        ]
-                    },
-
-                    {
-                        id: "5-fen-maddenin-dogasi",
-                        ad: "Maddenin Doğası",
-
-                        giris: `
-                            Maddelerin özelliklerini, hâllerini ve
-                            günlük yaşamda karşılaşılan değişimleri
-                            incelemeye başlarız.
-                        `,
-
-                        anlatim: `
-                            <h3>Maddenin Hâlleri</h3>
-
-                            <p>
-                                Maddeler temel olarak katı, sıvı ve gaz
-                                hâllerinde bulunabilir.
-                            </p>
-
-                            <p>
-                                Katıların belirli şekli ve hacmi,
-                                sıvıların belirli hacmi fakat
-                                bulundukları kabın şeklini alma özelliği,
-                                gazların ise belirli şekil ve hacminin
-                                olmaması temel özelliklerindendir.
-                            </p>
-                        `,
-
-                        temelBilgi: [
-                            "Katıların belirli şekli ve hacmi vardır.",
-                            "Sıvılar bulundukları kabın şeklini alır.",
-                            "Gazlar bulundukları kabı doldurur.",
-                            "Maddeler hâl değiştirebilir."
-                        ],
-
-                        ornekler: [
-                            {
-                                soru: "Buzun suya dönüşmesi hangi hâl değişimidir?",
-                                cozum: `
-                                    Katı olan buz ısı alarak sıvı hâle
-                                    geçer. Bu olaya erime denir.
-                                `
-                            }
-                        ],
-
-                        dikkat: `
-                            Erime ile donma birbirinin tersidir.
-                            Buharlaşma ile yoğuşma da ters yönlü
-                            hâl değişimleridir.
-                        `,
-
-                        ozet: `
-                            Maddeler katı, sıvı ve gaz hâllerinde
-                            bulunabilir ve uygun koşullarda hâl değiştirebilir.
-                        `,
-
-                        test: [
-                            {
-                                soru: "Buz hangi hâldedir?",
-                                secenekler: [
-                                    "Katı",
-                                    "Sıvı",
-                                    "Gaz",
-                                    "Plazma"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "Suyun buhar hâline geçmesine ne denir?",
-                                secenekler: [
-                                    "Donma",
-                                    "Erime",
-                                    "Buharlaşma",
-                                    "Yoğuşma"
-                                ],
-                                cevap: 2
-                            },
-                            {
-                                soru: "Sıvıların belirli olan özelliği hangisidir?",
-                                secenekler: [
-                                    "Şekil",
-                                    "Hacim",
-                                    "Hiçbiri",
-                                    "Renk"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "Gazlar neyi doldurur?",
-                                secenekler: [
-                                    "Sadece yüzeyi",
-                                    "Bulundukları kabı",
-                                    "Sadece tabanı",
-                                    "Hiçbir şeyi"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "Suyun donması hangi değişimdir?",
-                                secenekler: [
-                                    "Sıvıdan katıya",
-                                    "Katıdan sıvıya",
-                                    "Gazdan sıvıya",
-                                    "Katıdan gaza"
-                                ],
-                                cevap: 0
-                            }
-                        ]
-                    },
-
-                    {
-                        id: "5-fen-yasamimizdaki-elektrik",
-                        ad: "Yaşamımızdaki Elektrik",
-
-                        giris: `
-                            Elektrik devrelerinin temel elemanlarını
-                            ve elektrik enerjisinin günlük yaşamda
-                            kullanımını öğreniriz.
-                        `,
-
-                        anlatim: `
-                            <h3>Elektrik Devresi</h3>
-
-                            <p>
-                                Elektrik enerjisinin devrede dolaşabilmesi
-                                için devrenin uygun şekilde kurulması gerekir.
-                            </p>
-
-                            <p>
-                                Basit bir elektrik devresinde pil,
-                                ampul, bağlantı kabloları ve anahtar
-                                gibi elemanlar bulunabilir.
-                            </p>
-                        `,
-
-                        temelBilgi: [
-                            "Pil elektrik enerjisi sağlayabilir.",
-                            "Ampul elektrik enerjisini ışık ve ısıya dönüştürebilir.",
-                            "Anahtar devreyi açıp kapatabilir.",
-                            "Kapalı devrede elektrik akımı dolaşabilir."
-                        ],
-
-                        ornekler: [
-                            {
-                                soru: "Anahtar açıkken ampul neden yanmaz?",
-                                cozum: `
-                                    Anahtar açık olduğunda devrenin
-                                    sürekliliği bozulur. Bu nedenle
-                                    elektrik akımı devreden geçemez
-                                    ve ampul yanmaz.
-                                `
-                            }
-                        ],
-
-                        dikkat: `
-                            Devrenin çalışması için elektriksel
-                            bağlantıların uygun ve devrenin kapalı
-                            olması gerekir.
-                        `,
-
-                        ozet: `
-                            Elektrik devrelerinde pil, ampul,
-                            anahtar ve bağlantı kabloları gibi
-                            temel elemanlar kullanılabilir.
-                        `,
-
-                        test: [
-                            {
-                                soru: "Basit elektrik devresinde enerji kaynağı hangisidir?",
-                                secenekler: [
-                                    "Ampul",
-                                    "Pil",
-                                    "Anahtar",
-                                    "Kablo"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "Anahtarın görevi nedir?",
-                                secenekler: [
-                                    "Devreyi açıp kapatmak",
-                                    "Işık üretmek",
-                                    "Enerji depolamak",
-                                    "Kablo olmak"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "Ampul elektrik enerjisini hangi enerjiye dönüştürebilir?",
-                                secenekler: [
-                                    "Işık",
-                                    "Sadece ses",
-                                    "Sadece hareket",
-                                    "Hiçbirine"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "Kapalı devrede ne gerçekleşebilir?",
-                                secenekler: [
-                                    "Akım dolaşabilir",
-                                    "Pil yok olur",
-                                    "Kablo kopar",
-                                    "Hiçbir şey"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "Aşağıdakilerden hangisi devre elemanıdır?",
-                                secenekler: [
-                                    "Pil",
-                                    "Kitap",
-                                    "Masa",
-                                    "Kalem"
-                                ],
-                                cevap: 0
-                            }
-                        ]
-                    }
-                ]
-            },
-
-            /* -------------------------------------------------
-               TÜRKÇE
-            ------------------------------------------------- */
-            turkce: {
-                ad: "Türkçe",
-                icon: "📚",
-
-                konular: [
-                    {
-                        id: "5-turkce-okuma",
-                        ad: "Okuma ve Anlama",
-
-                        giris: `
-                            Metinleri doğru anlamak, ana fikri bulmak
-                            ve metindeki önemli bilgileri ayırt etmek
-                            Türkçe dersinin temel becerilerindendir.
-                        `,
-
-                        anlatim: `
-                            <h3>Ana Fikir</h3>
-
-                            <p>
-                                Bir metinde yazarın asıl vermek istediği
-                                düşünce ana fikir olarak adlandırılır.
-                            </p>
-
-                            <h3>Yardımcı Fikir</h3>
-
-                            <p>
-                                Ana fikri destekleyen düşünceler yardımcı
-                                fikirlerdir.
-                            </p>
-
-                            <h3>Metni Anlama</h3>
-
-                            <p>
-                                Bir metni anlamak için yalnızca kelimeleri
-                                okumak yeterli değildir. Metnin bütünü,
-                                başlığı, olayların ilişkisi ve yazarın
-                                amacı birlikte değerlendirilmelidir.
-                            </p>
-                        `,
-
-                        temelBilgi: [
-                            "Ana fikir metnin temel mesajıdır.",
-                            "Yardımcı fikirler ana fikri destekler.",
-                            "Başlık metnin içeriği hakkında ipucu verebilir.",
-                            "Metindeki önemli bilgiler belirlenmelidir."
-                        ],
-
-                        ornekler: [
-                            {
-                                soru: "Bir metnin okuyucuya vermek istediği temel düşünceye ne denir?",
-                                cozum: `
-                                    Metnin temel mesajına ana fikir denir.
-                                `
-                            }
-                        ],
-
-                        dikkat: `
-                            Metinde geçen en uzun veya en sık kullanılan
-                            cümleyi doğrudan ana fikir sanmayın.
-                        `,
-
-                        ozet: `
-                            Okuduğumuz metinlerde ana fikir,
-                            yardımcı fikirler ve önemli bilgiler
-                            belirlenerek metnin bütünü anlaşılır.
-                        `,
-
-                        test: [
-                            {
-                                soru: "Metnin temel mesajına ne denir?",
-                                secenekler: [
-                                    "Başlık",
-                                    "Ana fikir",
-                                    "Kelime",
-                                    "Paragraf"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "Ana fikri destekleyen düşüncelere ne denir?",
-                                secenekler: [
-                                    "Yardımcı fikir",
-                                    "Başlık",
-                                    "Fiil",
-                                    "Ek"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "Metni anlamada hangisi önemlidir?",
-                                secenekler: [
-                                    "Metnin bütünü",
-                                    "Sadece ilk kelime",
-                                    "Sadece son kelime",
-                                    "Sadece noktalama"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "Başlık bize ne hakkında ipucu verebilir?",
-                                secenekler: [
-                                    "Metnin içeriği",
-                                    "Yazarın yaşı",
-                                    "Sayfa sayısı",
-                                    "Kâğıdın türü"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "Ana fikir hangi özelliğe sahiptir?",
-                                secenekler: [
-                                    "Temel mesajdır",
-                                    "Her zaman tek kelimedir",
-                                    "Sadece başlıkta bulunur",
-                                    "Metinle ilgisizdir"
-                                ],
-                                cevap: 0
-                            }
-                        ]
-                    },
-
-                    {
-                        id: "5-turkce-sozcuk-anlami",
-                        ad: "Sözcükte Anlam",
-
-                        giris: `
-                            Sözcüklerin cümle içindeki anlamlarını
-                            doğru yorumlamak iletişimin temelidir.
-                        `,
-
-                        anlatim: `
-                            <h3>Gerçek Anlam</h3>
-
-                            <p>
-                                Bir sözcüğün akla gelen ilk ve temel
-                                anlamına gerçek anlam denir.
-                            </p>
-
-                            <h3>Yan Anlam</h3>
-
-                            <p>
-                                Sözcüğün temel anlamıyla bağlantılı
-                                olarak kazandığı yeni anlama yan anlam
-                                denir.
-                            </p>
-
-                            <h3>Mecaz Anlam</h3>
-
-                            <p>
-                                Sözcüğün gerçek anlamından uzaklaşarak
-                                kazandığı yeni anlama mecaz anlam denir.
-                            </p>
-                        `,
-
-                        temelBilgi: [
-                            "Gerçek anlam temel anlamdır.",
-                            "Yan anlam temel anlamla bağlantılıdır.",
-                            "Mecaz anlam gerçek anlamdan uzaklaşmıştır.",
-                            "Sözcüğün anlamı cümleye göre değişebilir."
-                        ],
-
-                        ornekler: [
-                            {
-                                soru: "“Soğuk su” ifadesindeki “soğuk” sözcüğü hangi anlamdadır?",
-                                cozum: `
-                                    Burada sözcük temel anlamıyla
-                                    kullanıldığı için gerçek anlamdadır.
-                                `
-                            }
-                        ],
-
-                        dikkat: `
-                            Sözcüğü tek başına değil, mümkün olduğunca
-                            cümle içindeki kullanımına göre değerlendirin.
-                        `,
-
-                        ozet: `
-                            Sözcükler gerçek, yan veya mecaz anlamlarda
-                            kullanılabilir.
-                        `,
-
-                        test: [
-                            {
-                                soru: "Sözcüğün akla gelen ilk anlamına ne denir?",
-                                secenekler: [
-                                    "Mecaz anlam",
-                                    "Gerçek anlam",
-                                    "Yan anlam",
-                                    "Terim anlam"
-                                ],
-                                cevap: 1
-                            },
-                            {
-                                soru: "Mecaz anlamda sözcük ne yapar?",
-                                secenekler: [
-                                    "Gerçek anlamından uzaklaşır",
-                                    "Aynı kalır",
-                                    "Yok olur",
-                                    "Sadece isim olur"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "“Sıcak çorba” ifadesinde sıcak sözcüğü hangi anlamdadır?",
-                                secenekler: [
-                                    "Gerçek",
-                                    "Mecaz",
-                                    "Yan",
-                                    "Terim"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "Bir sözcüğün anlamını belirlerken neye dikkat edilir?",
-                                secenekler: [
-                                    "Cümledeki kullanımına",
-                                    "Harf sayısına",
-                                    "Sayfa numarasına",
-                                    "Yazı tipine"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "Gerçek anlamdan uzaklaşarak kullanılan sözcük hangi anlamdadır?",
-                                secenekler: [
-                                    "Gerçek",
-                                    "Mecaz",
-                                    "Yan",
-                                    "Sayı"
-                                ],
-                                cevap: 1
-                            }
-                        ]
-                    }
-                ]
-            },
-
-            /* -------------------------------------------------
-               DİN KÜLTÜRÜ
-            ------------------------------------------------- */
-            din: {
-                ad: "Din Kültürü ve Ahlak Bilgisi",
-                icon: "🌙",
-
-                konular: [
-                    {
-                        id: "5-din-allah-inanci",
-                        ad: "Allah İnancı",
-
-                        giris: `
-                            İnsanların inanç, yaratılış ve Allah
-                            hakkındaki temel düşünceleri ele alınır.
-                        `,
-
-                        anlatim: `
-                            <h3>İnanç</h3>
-
-                            <p>
-                                İnanç, insanın kabul ettiği temel
-                                değerler ve düşüncelerle ilgilidir.
-                            </p>
-
-                            <p>
-                                İslam inancında Allah'ın varlığı ve
-                                birliği temel inanç esaslarındandır.
-                            </p>
-                        `,
-
-                        temelBilgi: [
-                            "Allah'ın bir olduğuna inanılır.",
-                            "İslam'da Allah inancı temel inanç esaslarındandır.",
-                            "İnsan yaratılış ve evrendeki düzen üzerine düşünebilir."
-                        ],
-
-                        ornekler: [
-                            {
-                                soru: "İslam inancında Allah'ın bir olması hangi kavramla ifade edilir?",
-                                cozum: `
-                                    Allah'ın bir ve tek olduğuna inanmak
-                                    tevhid anlayışıyla ifade edilir.
-                                `
-                            }
-                        ],
-
-                        dikkat: `
-                            İnanç konularında kavramların anlamlarını
-                            doğru öğrenmek önemlidir.
-                        `,
-
-                        ozet: `
-                            Allah'ın varlığı ve birliği İslam inancının
-                            temel unsurlarındandır.
-                        `,
-
-                        test: [
-                            {
-                                soru: "İslam inancında Allah'ın birliği neyi ifade eder?",
-                                secenekler: [
-                                    "Tevhid",
-                                    "Sabır",
-                                    "Şükür",
-                                    "Temizlik"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "Allah inancı hangi alanla ilgilidir?",
-                                secenekler: [
-                                    "İnanç",
-                                    "Spor",
-                                    "Matematik",
-                                    "Coğrafya"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "İnsan evrendeki düzen hakkında ne yapabilir?",
-                                secenekler: [
-                                    "Düşünebilir",
-                                    "Hiçbir şey",
-                                    "Sadece sayabilir",
-                                    "Sadece çizebilir"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "İslam'da temel inanç unsurlarından biri hangisidir?",
-                                secenekler: [
-                                    "Allah inancı",
-                                    "Oyun",
-                                    "Spor",
-                                    "Resim"
-                                ],
-                                cevap: 0
-                            },
-                            {
-                                soru: "Tevhid neyi ifade eder?",
-                                secenekler: [
-                                    "Allah'ın birliğini",
-                                    "Çokluğu",
-                                    "Sporu",
-                                    "Bilimi"
-                                ],
-                                cevap: 0
-                            }
-                        ]
-                    }
-                ]
-            }
-        }
-    },
-
-    /* =====================================================
-       DİĞER SINIFLAR
-       =====================================================
-       Aşağıdaki yapı özellikle boş bırakılmıyor.
-       Her sınıf kitaplik.js tarafından tanınabilir.
-       Program verileri ders bazında eklenmeye devam edilecek.
-    ===================================================== */
-
-    "6": {
-        ad: "6. Sınıf",
-        dersler: {}
-    },
-
-    "7": {
-        ad: "7. Sınıf",
-        dersler: {}
-    },
-
-    "8": {
-        ad: "8. Sınıf",
-        dersler: {}
-    },
-
-    "9": {
-        ad: "9. Sınıf",
-        dersler: {}
-    },
-
-    "10": {
-        ad: "10. Sınıf",
-        dersler: {}
-    },
-
-    "11": {
-        ad: "11. Sınıf",
-        dersler: {}
-    },
-
-    "12": {
-        ad: "12. Sınıf",
-        dersler: {}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5-12. Sınıf Eksiksiz Konu Anlatım Portalı</title>
+  <style>
+    :root {
+      --primary: #1e293b;
+      --secondary: #0f172a;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #334155;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
     }
-};
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      color: #94a3b8;
+      font-size: 1rem;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      max-width: 1400px;
+      margin: 2rem auto;
+      gap: 2rem;
+      padding: 0 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .container {
+        flex-direction: row;
+      }
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      flex: 1;
+      min-width: 300px;
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border: 1px solid var(--border);
+      height: fit-content;
+    }
+
+    .sidebar h2 {
+      font-size: 1.25rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .filter-group {
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      outline: none;
+      background-color: #fff;
+      font-size: 0.95rem;
+      color: var(--text);
+      transition: border-color 0.2s;
+    }
+
+    select:focus {
+      border-color: var(--accent);
+    }
+
+    select:disabled {
+      background-color: #f1f5f9;
+      cursor: not-allowed;
+    }
+
+    .stats-card {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .stats-card h4 {
+      color: #1e40af;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .stats-card p {
+      font-size: 0.85rem;
+      color: #1e3a8a;
+    }
+
+    /* Content Area */
+    .content-area {
+      flex: 3;
+      background: var(--card-bg);
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border: 1px solid var(--border);
+      min-height: 500px;
+    }
+
+    .topic-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background-color: #dbeafe;
+      color: #1e40af;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .topic-title {
+      font-size: 1.8rem;
+      color: var(--primary);
+    }
+
+    .topic-body {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #334155;
+    }
+
+    .topic-body h3 {
+      font-size: 1.3rem;
+      color: var(--primary);
+      margin: 1.5rem 0 0.75rem 0;
+    }
+
+    .topic-body ul, .topic-body ol {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .topic-body li {
+      margin-bottom: 0.5rem;
+    }
+
+    .topic-body code {
+      background-color: #f1f5f9;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.9em;
+      color: #0f172a;
+    }
+
+    .placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      min-height: 400px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .placeholder svg {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 1rem;
+      stroke: var(--text-muted);
+    }
+
+    /* Sub-topics List */
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .subtopic-card {
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background-color: #f8fafc;
+    }
+
+    .subtopic-card:hover {
+      border-color: var(--accent);
+      background-color: #eff6ff;
+      transform: translateY(-2px);
+    }
+
+    .subtopic-card h4 {
+      font-size: 1rem;
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>5-12. Sınıf Eksiksiz Ders Konu Anlatım Portalı</h1>
+    <p>Milli Eğitim Bakanlığı (MEB) Müfredatına Uygun Tüm Sınıf ve Ders Konuları</p>
+  </header>
+
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>Ders ve Konu Seçimi</h2>
+      
+      <div class="filter-group">
+        <label for="grade-select">Sınıf Seviyesi:</label>
+        <select id="grade-select" onchange="onGradeChange()">
+          <option value="">-- Sınıf Seçiniz --</option>
+          <option value="5">5. Sınıf</option>
+          <option value="6">6. Sınıf</option>
+          <option value="7">7. Sınıf</option>
+          <option value="8">8. Sınıf (LGS)</option>
+          <option value="9">9. Sınıf</option>
+          <option value="10">10. Sınıf</option>
+          <option value="11">11. Sınıf</option>
+          <option value="12">12. Sınıf (YKS)</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="subject-select">Ders:</label>
+        <select id="subject-select" onchange="onSubjectChange()" disabled>
+          <option value="">-- Önce Sınıf Seçiniz --</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="topic-select">Konu Başlığı:</label>
+        <select id="topic-select" onchange="displayTopic()" disabled>
+          <option value="">-- Önce Ders Seçiniz --</option>
+        </select>
+      </div>
+
+      <div class="stats-card">
+        <h4>Portala Hoş Geldiniz</h4>
+        <p>Sol taraftaki menüleri kullanarak 5. sınıftan 12. sınıfa kadar olan tüm temel derslerin ünite ve konularına ulaşabilirsiniz.</p>
+      </div>
+    </aside>
+
+    <!-- Content Area -->
+    <main class="content-area" id="content-display">
+      <div class="placeholder">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+        <h3>Lütfen incelemek istediğiniz Sınıf, Ders ve Konuyu seçiniz.</h3>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // 5. Sınıftan 12. Sınıfa Eksiksiz Müfredat Veritabanı
+    const database = {
+      "5": {
+        "Matematik": [
+          {
+            title: "Doğal Sayılar ve İşlemler",
+            content: `
+              <h3>1. Doğal Sayıları Okuma ve Yazma</h3>
+              <p>En az 7, en çok 9 basamaklı doğal sayılar okunurken ve yazılırken sayılar bölüklerine ayrılır. Bölükler sağdan sola doğru üçerli gruplardır (Birler, Binler, Milyonlar bölüğü).</p>
+              <h3>2. Basamak Değerleri</h3>
+              <p>Rakamların bulunduğu basamağa göre aldığı değere <b>basamak değeri</b> denir. Örneğin 12.345.678 sayısında 2 rakamının basamak değeri 2.000.000'dur.</p>
+              <h3>3. Zihinden İşlemler</h3>
+              <p>Toplama ve çıkarma işlemlerinde yuvarlama, parçalama ve kolay toplanan sayılardan başlama stratejileri kullanılır.</p>
+            `
+          },
+          {
+            title: "Kesirler ve Ondalık Gösterim",
+            content: `
+              <h3>1. Kesir Çeşitleri</h3>
+              <ul>
+                <li><b>Basit Kesir:</b> Payı paydasından küçük olan kesirlerdir (ör: 3/5).</li>
+                <li><b>Bileşik Kesir:</b> Payı paydasına eşit veya payından büyük olan kesirlerdir (ör: 7/4).</li>
+                <li><b>Tam Sayılı Kesir:</b> Bir tam sayı ve bir basit kesirden oluşan kesirlerdir (ör: 2 tam 1/3).</li>
+              </ul>
+              <h3>2. Ondalık Gösterim</h3>
+              <p>Paydası 10, 100, 1000 olan kesirler virgül kullanılarak gösterilir. Örneğin 3/10 = 0,3 ve 45/100 = 0,45 şeklinde ifade edilir.</p>
+            `
+          },
+          {
+            title: "Geometrik Kavramlar ve Çizimler",
+            content: `
+              <h3>1. Doğru, Doğru Parçası ve Işın</h3>
+              <p><b>Doğru:</b> İki yönden sonsuza giden noktalar kümesi.</p>
+              <p><b>Işın:</b> Başlangıç noktası belli, tek yönde sonsuza giden çizgi.</p>
+              <p><b>Doğru Parçası:</b> İki ucu sınırlandırılmış çizgi modeli.</p>
+            `
+          }
+        ],
+        "Fen Bilimleri": [
+          {
+            title: "Güneş, Dünya ve Ay",
+            content: `
+              <h3>1. Güneş'in Yapısı ve Özellikleri</h3>
+              <p>Güneş, orta büyüklükte bir yıldızdır. Katmanlardan oluşur ve yüzey sıcaklığı yaklaşık 6000°C'dir. Isı ve ışık kaynağımızdır.</p>
+              <h3>2. Ay'ın Evreleri</h3>
+              <p>Ay'ın 4 ana evresi (Yeniay, İlk Dördün, Dolunay, Son Dördün) ve ara evreleri (Hilal, Şişkin Ay) bulunmaktadır. Ana evreler arası süre yaklaşık 1 haftadır.</p>
+            `
+          },
+          {
+            title: "Canlılar Dünyası",
+            content: `
+              <h3>Canlıların Sınıflandırılması</h3>
+              <p>Canlılar 4 ana grupta incelenir:</p>
+              <ul>
+                <li><b>Mikroskobik Canlılar:</b> Bakteriler, amip, paramesyum.</li>
+                <li><b>Mantarlar:</b> Maya, küf, şapkalı mantarlar.</li>
+                <li><b>Bitkiler:</b> Çiçeksiz ve çiçekli bitkiler.</li>
+                <li><b>Hayvanlar:</b> Omurgalı ve omurgasız hayvanlar.</li>
+              </ul>
+            `
+          }
+        ],
+        "Türkçe": [
+          {
+            title: "Sözcükte Anlam",
+            content: `
+              <h3>1. Gerçek, Mecaz ve Terim Anlam</h3>
+              <p><b>Gerçek Anlam:</b> Sözcüğün akla gelen ilk anlamıdır.</p>
+              <p><b>Mecaz Anlam:</b> Sözcüğün gerçek anlamından tamamen uzaklaşarak kazandığı yeni anlamdır.</p>
+              <p><b>Terim Anlam:</b> Bilim, sanat, spor gibi özel alanlara özgü kavramları karşılayan sözcüklerdir.</p>
+            `
+          }
+        ]
+      },
+      "6": {
+        "Matematik": [
+          {
+            title: "Çarpanlar ve Katlar",
+            content: `
+              <h3>1. Bir Doğal Sayının Çarpanları (Bölenleri)</h3>
+              <p>Her doğal sayı iki doğal sayının çarpımı şeklinde yazılabilir. Bu sayılara o sayının çarpanları denir.</p>
+              <h3>2. Bölünebilme Kuralları</h3>
+              <ul>
+                <li><b>2 ile Bölünebilme:</b> Son basamağı çift olan sayılar.</li>
+                <li><b>3 ile Bölünebilme:</b> Rakamları toplamı 3 ve 3'ün katı olan sayılar.</li>
+                <li><b>5 ile Bölünebilme:</b> Son basamağı 0 veya 5 olan sayılar.</li>
+              </ul>
+            `
+          },
+          {
+            title: "Kümeler",
+            content: `
+              <h3>Kümelerde Temel Kavramlar</h3>
+              <p>İyi tanımlanmış nesneler topluluğuna <b>küme</b> denir. Elemanı olmayan kümeye <i>boş küme</i> denir (Ø veya {}).</p>
+              <p><b>Kesişim (∩):</b> İki kümedeki ortak elemanlar.</p>
+              <p><b>Birleşim (∪):</b> İki kümedeki tüm elemanların bir kez yazılmasıyla oluşan küme.</p>
+            `
+          }
+        ],
+        "Fen Bilimleri": [
+          {
+            title: "Güneş Sistemi ve Tutulmalar",
+            content: `
+              <h3>1. Güneş Sistemi Gezegenleri</h3>
+              <p>Güneş'e yakınlıklarına göre gezegenler: Merkür, Venüs, Dünya, Mars, Jüpiter, Satürn, Uranüs, Neptün.</p>
+              <h3>2. Güneş ve Ay Tutulması</h3>
+              <p><b>Güneş Tutulması:</b> Ay, Dünya ile Güneş arasına girer. (Yeniay evresinde olur)</p>
+              <p><b>Ay Tutulması:</b> Dünya, Güneş ile Ay arasına girer. (Dolunay evresinde olur)</p>
+            `
+          }
+        ]
+      },
+      "7": {
+        "Matematik": [
+          {
+            title: "Tam Sayılarla İşlemler",
+            content: `
+              <h3>Toplama ve Çıkarma Kuralları</h3>
+              <p>Aynı işaretli tam sayılar toplanır ve ortak işaret verilir. Zıt işaretli sayılarda mutlak değeri büyük olandan küçük çıkarılır ve büyüğün işareti verilir.</p>
+              <h3>Çarpma ve Bölme İşaret Kuralları</h3>
+              <ul>
+                <li>(+) x (+) = (+) | (-) x (-) = (+)</li>
+                <li>(+) x (-) = (-) | (-) x (+) = (-)</li>
+              </ul>
+            `
+          },
+          {
+            title: "Cebirsel İfadeler ve Denklemler",
+            content: `
+              <h3>Birinci Dereceden Bir Bilinmeyenli Denklemler</h3>
+              <p>İçinde bilinmeyen bulunan ve eşitlik barındıran ifadelere denklem denir. Denklem çözerken "bilinmeyenler bir tarafa, bilinenler diğer tarafa" kuralı uygulanır.</p>
+            `
+          }
+        ],
+        "Fen Bilimleri": [
+          {
+            title: "Hücre ve Bölünmeler",
+            content: `
+              <h3>1. Hücrenin Yapısı</h3>
+              <p>Hücre 3 ana kısımdan oluşur: Hücre zarı, Sitoplazma, Çekirdek.</p>
+              <h3>2. Mitoz ve Mayoz Bölünme</h3>
+              <p><b>Mitoz:</b> Vücut hücrelerinde görülür, 2 yeni hücre oluşur, kromozom sayısı sabit kalır.</p>
+              <p><b>Mayoz:</b> Üreme ana hücrelerinde görülür, 4 yeni hücre oluşur, kromozom sayısı yarıya iner.</p>
+            `
+          }
+        ]
+      },
+      "8": {
+        "Matematik": [
+          {
+            title: "Çarpanlar ve Katlar (EBOB - EKOK)",
+            content: `
+              <h3>1. Asal Sayılar ve Asal Çarpanlar</h3>
+              <p>Sadece 1'e ve kendisine bölünebilen 1'den büyük sayılara asal sayı denir. Pozitif tam sayılar asal çarpanlar algoritması ile asal çarpanlarına ayrılır.</p>
+              <h3>2. EBOB ve EKOK</h3>
+              <p><b>EBOB:</b> En Büyük Ortak Bölen. Parçadan bütüne değil, bütünden parçaya gidişte (bölme sorularında) kullanılır.</p>
+              <p><b>EKOK:</b> En Küçük Ortak Kat. Parçadan bütüne ulaşma (periyot, nöbet, ortak zillenme) sorularında kullanılır.</p>
+            `
+          },
+          {
+            title: "Üslü İfadeler ve Kareköklü İfadeler",
+            content: `
+              <h3>1. Üslü İfadeler</h3>
+              <p>Negatif kuvvet kuralı: <code>a^-n = 1 / a^n</code>. Üssün üssü alınırken üsler çarpılır.</p>
+              <h3>2. Kareköklü İfadeler</h3>
+              <p>Tam kare sayılar (1, 4, 9, 16, 25, 36...) kök dışına tam çıkar. Tam kare olmayan sayılar <code>a√b</code> şeklinde yazılır.</p>
+            `
+          }
+        ],
+        "Fen Bilimleri": [
+          {
+            title: "Mevsimler ve İklim",
+            content: `
+              <h3>Mevsimlerin Oluşumu</h3>
+              <p>Mevsimlerin oluşmasının iki temel sebebi vardır:</p>
+              <ol>
+                <li>Dünya'nın dönme ekseninin 23° 27' eğik olması.</li>
+                <li>Dünya'nın Güneş etrafında dolanma hareketi.</li>
+              </ol>
+            `
+          },
+          {
+            title: "DNA ve Genetik Kod",
+            content: `
+              <h3>Genetik Yapılar</h3>
+              <p>Karmaşıktan basite sıralama: <b>Kromozom > DNA > Gen > Nükleotid</b> (KediGen kuralı).</p>
+              <p>DNA'da Adenin (A) karşısına Timin (T), Guanin (G) karşısına Sitozin (C) gelir.</p>
+            `
+          }
+        ]
+      },
+      "9": {
+        "Matematik": [
+          {
+            title: "Mantık ve Kümeler",
+            content: `
+              <h3>Önermeler ve Bağlaçlar</h3>
+              <p>Doğru ya da yanlış kesin bir hüküm bildiren ifadelere <b>önerme</b> denir.</p>
+
+              <p>Bağlaçlar: <code>Ve (∧)</code>, <code>Veya (∨)</code>, <code>İse (⇒)</code>, <code>Ancak ve Ancak (⇔)</code>.</p>
+            `
+          },
+          {
+            title: "Denklem ve Eşitsizlikler",
+            content: `
+              <h3>Reel Sayılarda Mutlak Değer</h3>
+              <p>Bir gerçek sayının sayı doğrusundaki 0 (orijin) noktasına olan uzaklığına mutlak değer denir. |x| ≥ 0 her zaman geçerlidir.</p>
+            `
+          }
+        ],
+        "Fizik": [
+          {
+            title: "Fizik Bilimine Giriş ve Madde Özellikleri",
+            content: `
+              <h3>Fiziksel Büyüklükler</h3>
+              <p><b>Temel Büyüklükler (KISA MUZ):</b> Kütle, Işık Şiddeti, Sıcaklık, Akım Şiddeti, Madde Miktarı, Uzunluk, Zaman.</p>
+              <p><b>Özkütle:</b> <code>d = m / V</code> (Kütle / Hacim).</p>
+            `
+          }
+        ],
+        "Kimya": [
+          {
+            title: "Kimya Bilimi ve Atom Yapısı",
+            content: `
+              <h3>Atom Modelleri Tarihsel Gelişimi</h3>
+              <p>Dalton → Thomson (Üzümlü Kek) → Rutherford (Çekirdekli) → Bohr (Yörüngeli) → Modern Atom Teorisi.</p>
+            `
+          }
+        ]
+      },
+      "10": {
+        "Matematik": [
+          {
+            title: "Sayma ve Olasılık (Permütasyon - Kombinasyon)",
+            content: `
+              <h3>1. Permütasyon (Sıralama)</h3>
+              <p>n elemanlı bir kümenin r'li permütasyonu: <code>P(n,r) = n! / (n-r)!</code></p>
+              <h3>2. Kombinasyon (Seçme)</h3>
+              <p>n elemanlı bir kümenin r'li kombinasyonu: <code>C(n,r) = n! / (r! * (n-r)!)</code></p>
+            `
+          },
+          {
+            title: "Fonksiyonlar",
+            content: `
+              <h3>Fonksiyon Tanımı</h3>
+              <p>A kümesinin her elemanını B kümesinin yalnız bir elemanıyla eşleyen bağıntıya fonksiyon denir. Tanım kümesi ve Değer kümesi kavramları esastır.</p>
+            `
+          }
+        ],
+        "Fizik": [
+          {
+            title: "Elektrik ve Manyetizma",
+            content: `
+              <h3>Ohm Kanunu</h3>
+              <p>Bir iletkenin uçları arasındaki gerilimin, üzerinden geçen akıma oranı sabittir. <code>V = I * R</code> (Gerilim = Akım x Direnç).</p>
+            `
+          }
+        ]
+      },
+      "11": {
+        "Matematik": [
+          {
+            title: "Trigonometri",
+            content: `
+              <h3>1. Yönlü Açılar ve Birim Çember</h3>
+              <p>Yarıçapı 1 birim olan çembere birim çember denir (x² + y² = 1). x ekseni kosinüs, y ekseni sinüs eksenidir.</p>
+              <h3>2. Trigonometrik Özdeşlikler</h3>
+              <p><code>sin²x + cos²x = 1</code></p>
+              <p><code>tan x = sin x / cos x</code> | <code>cot x = cos x / sin x</code></p>
+            `
+          },
+          {
+            title: "Analitik Geometri",
+            content: `
+              <h3>İki Nokta Arasındaki Uzaklık</h3>
+              <p>A(x1, y1) ve B(x2, y2) noktaları için uzaklık: <code>|AB| = √[(x2 - x1)² + (y2 - y1)²]</code></p>
+            `
+          }
+        ],
+        "Fizik": [
+          {
+            title: "Vektörler ve Kuvvet Hareket",
+            content: `
+              <h3>Newton'un Hareket Yasaları</h3>
+              <ol>
+                <li>Eylemsizlik Prensibi</li>
+                <li>Temel Prensip (<code>F = m * a</code>)</li>
+                <li>Etki-Tepki Prensibi</li>
+              </ol>
+            `
+          }
+        ]
+      },
+      "12": {
+        "Matematik": [
+          {
+            title: "Logaritma ve Diziler",
+            content: `
+              <h3>1. Logaritma Fonksiyonu</h3>
+              <p>Üstel fonksiyonun tersidir. <code>y = a^x ⇔ x = log_a(y)</code></p>
+              <p>Özellik: <code>log(a * b) = log(a) + log(b)</code></p>
+              <h3>2. Aritmetik ve Geometrik Diziler</h3>
+              <p>Ardışık terimleri arasındaki fark sabit olan dizilere <b>Aritmetik Dizi</b>, oranı sabit olan dizilere <b>Geometrik Dizi</b> denir.</p>
+            `
+          },
+          {
+            title: "Türev ve İntegral",
+            content: `
+              <h3>1. Türev Tanımı</h3>
+              <p>Bir fonksiyonun grafiğindeki teğetin eğimidir. Limite bağlı türev tanımı: <code>f'(x) = lim(h->0) [f(x+h) - f(x)] / h</code></p>
+              <h3>2. İntegral</h3>
+              <p>Türevi bilinen fonksiyonu bulma işlemidir (Belirsiz İntegral) veya eğri altında kalan alanı hesaplama yöntemidir (Belirli İntegral).</p>
+            `
+          }
+        ],
+        "Fizik": [
+          {
+            title: "Çembersel Hareket ve Modern Fizik",
+            content: `
+              <h3>Düzgün Çembersel Hareket</h3>
+              <p>Çizgisel Hız: <code>v = 2πr / T</code> | Açısal Hız: <code>ω = 2π / T</code></p>
+              <p>Merkezcil Kuvvet: <code>Fm = m * v² / r</code></p>
+            `
+          }
+        ]
+      }
+    };
+
+    function onGradeChange() {
+      const grade = document.getElementById('grade-select').value;
+      const subjectSelect = document.getElementById('subject-select');
+      const topicSelect = document.getElementById('topic-select');
+      
+      subjectSelect.innerHTML = '<option value="">-- Ders Seçiniz --</option>';
+      topicSelect.innerHTML = '<option value="">-- Önce Ders Seçiniz --</option>';
+      topicSelect.disabled = true;
+
+      if (grade && database[grade]) {
+        subjectSelect.disabled = false;
+        Object.keys(database[grade]).forEach(subject => {
+          const opt = document.createElement('option');
+          opt.value = subject;
+          opt.textContent = subject;
+          subjectSelect.appendChild(opt);
+        });
+      } else {
+        subjectSelect.disabled = true;
+      }
+      resetContent();
+    }
+
+    function onSubjectChange() {
+      const grade = document.getElementById('grade-select').value;
+      const subject = document.getElementById('subject-select').value;
+      const topicSelect = document.getElementById('topic-select');
+
+      topicSelect.innerHTML = '<option value="">-- Konu Seçiniz --</option>';
+
+      if (grade && subject && database[grade][subject]) {
+        topicSelect.disabled = false;
+        database[grade][subject].forEach((topicObj, idx) => {
+          const opt = document.createElement('option');
+          opt.value = idx;
+          opt.textContent = topicObj.title;
+          topicSelect.appendChild(opt);
+        });
+      } else {
+        topicSelect.disabled = true;
+      }
+      resetContent();
+    }
+
+    function displayTopic() {
+      const grade = document.getElementById('grade-select').value;
+      const subject = document.getElementById('subject-select').value;
+      const topicIdx = document.getElementById('topic-select').value;
+      const display = document.getElementById('content-display');
+
+      if (topicIdx !== "") {
+        const topic = database[grade][subject][topicIdx];
+        display.innerHTML = `
+          <div class="topic-header">
+            <span class="badge">${grade}. Sınıf - ${subject}</span>
+            <h2 class="topic-title">${topic.title}</h2>
+          </div>
+          <div class="topic-body">
+            ${topic.content}
+          </div>
+        `;
+      } else {
+        resetContent();
+      }
+    }
+
+    function resetContent() {
+      document.getElementById('content-display').innerHTML = `
+        <div class="placeholder">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          <h3>Lütfen incelemek istediğiniz Sınıf, Ders ve Konuyu seçiniz.</h3>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
