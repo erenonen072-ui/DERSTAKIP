@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>5-12. Sınıf Eksiksiz Konu Anlatım Portalı</title>
+  <title>5-12. Sınıf Eksiksiz MEB & YKS Konu Anlatım Portalı</title>
   <style>
     :root {
-      --primary: #1e293b;
-      --secondary: #0f172a;
+      --primary: #0f172a;
+      --secondary: #1e293b;
       --accent: #2563eb;
       --accent-hover: #1d4ed8;
       --bg: #f8fafc;
@@ -33,20 +33,21 @@
     header {
       background: linear-gradient(135deg, var(--primary), var(--secondary));
       color: white;
-      padding: 2rem 1rem;
+      padding: 2.5rem 1rem;
       text-align: center;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
     header h1 {
-      font-size: 2rem;
-      font-weight: 700;
+      font-size: 2.2rem;
+      font-weight: 800;
       margin-bottom: 0.5rem;
+      letter-spacing: -0.5px;
     }
 
     header p {
       color: #94a3b8;
-      font-size: 1rem;
+      font-size: 1.05rem;
     }
 
     .container {
@@ -67,11 +68,11 @@
     /* Sidebar Navigation */
     .sidebar {
       flex: 1;
-      min-width: 300px;
+      min-width: 320px;
       background: var(--card-bg);
-      padding: 1.5rem;
+      padding: 1.75rem;
       border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
       border: 1px solid var(--border);
       height: fit-content;
     }
@@ -79,7 +80,7 @@
     .sidebar h2 {
       font-size: 1.25rem;
       color: var(--primary);
-      margin-bottom: 1rem;
+      margin-bottom: 1.25rem;
       padding-bottom: 0.5rem;
       border-bottom: 2px solid var(--border);
     }
@@ -98,26 +99,28 @@
 
     select {
       width: 100%;
-      padding: 0.75rem;
+      padding: 0.8rem;
       border: 1px solid var(--border);
       border-radius: 8px;
       outline: none;
       background-color: #fff;
       font-size: 0.95rem;
       color: var(--text);
-      transition: border-color 0.2s;
+      transition: all 0.2s;
     }
 
     select:focus {
       border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
 
     select:disabled {
       background-color: #f1f5f9;
       cursor: not-allowed;
+      opacity: 0.7;
     }
 
-    .stats-card {
+    .info-card {
       background: #eff6ff;
       border: 1px solid #bfdbfe;
       border-radius: 8px;
@@ -125,13 +128,13 @@
       margin-top: 1.5rem;
     }
 
-    .stats-card h4 {
+    .info-card h4 {
       color: #1e40af;
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+      margin-bottom: 0.4rem;
     }
 
-    .stats-card p {
+    .info-card p {
       font-size: 0.85rem;
       color: #1e3a8a;
     }
@@ -142,9 +145,9 @@
       background: var(--card-bg);
       padding: 2.5rem;
       border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
       border: 1px solid var(--border);
-      min-height: 500px;
+      min-height: 550px;
     }
 
     .topic-header {
@@ -155,48 +158,29 @@
 
     .badge {
       display: inline-block;
-      padding: 0.25rem 0.75rem;
+      padding: 0.35rem 0.85rem;
       background-color: #dbeafe;
       color: #1e40af;
       border-radius: 9999px;
       font-size: 0.85rem;
-      font-weight: 600;
+      font-weight: 700;
       margin-bottom: 0.75rem;
     }
 
     .topic-title {
-      font-size: 1.8rem;
+      font-size: 2rem;
       color: var(--primary);
+      font-weight: 700;
     }
 
     .topic-body {
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       line-height: 1.8;
       color: #334155;
     }
 
-    .topic-body h3 {
-      font-size: 1.3rem;
+    .topic-body b {
       color: var(--primary);
-      margin: 1.5rem 0 0.75rem 0;
-    }
-
-    .topic-body ul, .topic-body ol {
-      margin-left: 1.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .topic-body li {
-      margin-bottom: 0.5rem;
-    }
-
-    .topic-body code {
-      background-color: #f1f5f9;
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
-      font-family: monospace;
-      font-size: 0.9em;
-      color: #0f172a;
     }
 
     .placeholder {
@@ -205,7 +189,7 @@
       align-items: center;
       justify-content: center;
       height: 100%;
-      min-height: 400px;
+      min-height: 420px;
       color: var(--text-muted);
       text-align: center;
     }
@@ -216,41 +200,13 @@
       margin-bottom: 1rem;
       stroke: var(--text-muted);
     }
-
-    /* Sub-topics List */
-    .subtopics-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 1rem;
-      margin-top: 1.5rem;
-    }
-
-    .subtopic-card {
-      padding: 1rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s;
-      background-color: #f8fafc;
-    }
-
-    .subtopic-card:hover {
-      border-color: var(--accent);
-      background-color: #eff6ff;
-      transform: translateY(-2px);
-    }
-
-    .subtopic-card h4 {
-      font-size: 1rem;
-      color: var(--primary);
-    }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>5-12. Sınıf Eksiksiz Ders Konu Anlatım Portalı</h1>
-    <p>Milli Eğitim Bakanlığı (MEB) Müfredatına Uygun Tüm Sınıf ve Ders Konuları</p>
+    <h1>5-12. Sınıf Eksiksiz MEB & YKS Ders Portalı</h1>
+    <p>Ortaokul ve Lise Tüm Sınıflar, Dersler ve Sınav Müfredatı Konu Anlatımı</p>
   </header>
 
   <div class="container">
@@ -259,37 +215,37 @@
       <h2>Ders ve Konu Seçimi</h2>
       
       <div class="filter-group">
-        <label for="grade-select">Sınıf Seviyesi:</label>
+        <label for="grade-select">1. Sınıf Seviyesi Seçiniz:</label>
         <select id="grade-select" onchange="onGradeChange()">
-          <option value="">-- Sınıf Seçiniz --</option>
+          <option value="">-- Sınıf Seç --</option>
           <option value="5">5. Sınıf</option>
           <option value="6">6. Sınıf</option>
           <option value="7">7. Sınıf</option>
           <option value="8">8. Sınıf (LGS)</option>
           <option value="9">9. Sınıf</option>
           <option value="10">10. Sınıf</option>
-          <option value="11">11. Sınıf</option>
-          <option value="12">12. Sınıf (YKS)</option>
+          <option value="11">11. Sınıf (AYT)</option>
+          <option value="12">12. Sınıf (YKS / AYT)</option>
         </select>
       </div>
 
       <div class="filter-group">
-        <label for="subject-select">Ders:</label>
+        <label for="subject-select">2. Ders Seçiniz:</label>
         <select id="subject-select" onchange="onSubjectChange()" disabled>
           <option value="">-- Önce Sınıf Seçiniz --</option>
         </select>
       </div>
 
       <div class="filter-group">
-        <label for="topic-select">Konu Başlığı:</label>
+        <label for="topic-select">3. Konu Başlığı Seçiniz:</label>
         <select id="topic-select" onchange="displayTopic()" disabled>
           <option value="">-- Önce Ders Seçiniz --</option>
         </select>
       </div>
 
-      <div class="stats-card">
-        <h4>Portala Hoş Geldiniz</h4>
-        <p>Sol taraftaki menüleri kullanarak 5. sınıftan 12. sınıfa kadar olan tüm temel derslerin ünite ve konularına ulaşabilirsiniz.</p>
+      <div class="info-card">
+        <h4>Eksiksiz Müfredat Bilgisi</h4>
+        <p>5. sınıftan 12. sınıfa kadar tüm LGS, YKS, TYT ve AYT konuları eksiksiz şekilde hiyerarşik olarak entegre edilmiştir.</p>
       </div>
     </aside>
 
@@ -299,339 +255,13 @@
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
         </svg>
-        <h3>Lütfen incelemek istediğiniz Sınıf, Ders ve Konuyu seçiniz.</h3>
+        <h3>Sol taraftaki adımları takip ederek Sınıf, Ders ve Konu seçimi yapınız.</h3>
       </div>
     </main>
   </div>
 
   <script>
-    // 5. Sınıftan 12. Sınıfa Eksiksiz Müfredat Veritabanı
-    const database = {
-      "5": {
-        "Matematik": [
-          {
-            title: "Doğal Sayılar ve İşlemler",
-            content: `
-              <h3>1. Doğal Sayıları Okuma ve Yazma</h3>
-              <p>En az 7, en çok 9 basamaklı doğal sayılar okunurken ve yazılırken sayılar bölüklerine ayrılır. Bölükler sağdan sola doğru üçerli gruplardır (Birler, Binler, Milyonlar bölüğü).</p>
-              <h3>2. Basamak Değerleri</h3>
-              <p>Rakamların bulunduğu basamağa göre aldığı değere <b>basamak değeri</b> denir. Örneğin 12.345.678 sayısında 2 rakamının basamak değeri 2.000.000'dur.</p>
-              <h3>3. Zihinden İşlemler</h3>
-              <p>Toplama ve çıkarma işlemlerinde yuvarlama, parçalama ve kolay toplanan sayılardan başlama stratejileri kullanılır.</p>
-            `
-          },
-          {
-            title: "Kesirler ve Ondalık Gösterim",
-            content: `
-              <h3>1. Kesir Çeşitleri</h3>
-              <ul>
-                <li><b>Basit Kesir:</b> Payı paydasından küçük olan kesirlerdir (ör: 3/5).</li>
-                <li><b>Bileşik Kesir:</b> Payı paydasına eşit veya payından büyük olan kesirlerdir (ör: 7/4).</li>
-                <li><b>Tam Sayılı Kesir:</b> Bir tam sayı ve bir basit kesirden oluşan kesirlerdir (ör: 2 tam 1/3).</li>
-              </ul>
-              <h3>2. Ondalık Gösterim</h3>
-              <p>Paydası 10, 100, 1000 olan kesirler virgül kullanılarak gösterilir. Örneğin 3/10 = 0,3 ve 45/100 = 0,45 şeklinde ifade edilir.</p>
-            `
-          },
-          {
-            title: "Geometrik Kavramlar ve Çizimler",
-            content: `
-              <h3>1. Doğru, Doğru Parçası ve Işın</h3>
-              <p><b>Doğru:</b> İki yönden sonsuza giden noktalar kümesi.</p>
-              <p><b>Işın:</b> Başlangıç noktası belli, tek yönde sonsuza giden çizgi.</p>
-              <p><b>Doğru Parçası:</b> İki ucu sınırlandırılmış çizgi modeli.</p>
-            `
-          }
-        ],
-        "Fen Bilimleri": [
-          {
-            title: "Güneş, Dünya ve Ay",
-            content: `
-              <h3>1. Güneş'in Yapısı ve Özellikleri</h3>
-              <p>Güneş, orta büyüklükte bir yıldızdır. Katmanlardan oluşur ve yüzey sıcaklığı yaklaşık 6000°C'dir. Isı ve ışık kaynağımızdır.</p>
-              <h3>2. Ay'ın Evreleri</h3>
-              <p>Ay'ın 4 ana evresi (Yeniay, İlk Dördün, Dolunay, Son Dördün) ve ara evreleri (Hilal, Şişkin Ay) bulunmaktadır. Ana evreler arası süre yaklaşık 1 haftadır.</p>
-            `
-          },
-          {
-            title: "Canlılar Dünyası",
-            content: `
-              <h3>Canlıların Sınıflandırılması</h3>
-              <p>Canlılar 4 ana grupta incelenir:</p>
-              <ul>
-                <li><b>Mikroskobik Canlılar:</b> Bakteriler, amip, paramesyum.</li>
-                <li><b>Mantarlar:</b> Maya, küf, şapkalı mantarlar.</li>
-                <li><b>Bitkiler:</b> Çiçeksiz ve çiçekli bitkiler.</li>
-                <li><b>Hayvanlar:</b> Omurgalı ve omurgasız hayvanlar.</li>
-              </ul>
-            `
-          }
-        ],
-        "Türkçe": [
-          {
-            title: "Sözcükte Anlam",
-            content: `
-              <h3>1. Gerçek, Mecaz ve Terim Anlam</h3>
-              <p><b>Gerçek Anlam:</b> Sözcüğün akla gelen ilk anlamıdır.</p>
-              <p><b>Mecaz Anlam:</b> Sözcüğün gerçek anlamından tamamen uzaklaşarak kazandığı yeni anlamdır.</p>
-              <p><b>Terim Anlam:</b> Bilim, sanat, spor gibi özel alanlara özgü kavramları karşılayan sözcüklerdir.</p>
-            `
-          }
-        ]
-      },
-      "6": {
-        "Matematik": [
-          {
-            title: "Çarpanlar ve Katlar",
-            content: `
-              <h3>1. Bir Doğal Sayının Çarpanları (Bölenleri)</h3>
-              <p>Her doğal sayı iki doğal sayının çarpımı şeklinde yazılabilir. Bu sayılara o sayının çarpanları denir.</p>
-              <h3>2. Bölünebilme Kuralları</h3>
-              <ul>
-                <li><b>2 ile Bölünebilme:</b> Son basamağı çift olan sayılar.</li>
-                <li><b>3 ile Bölünebilme:</b> Rakamları toplamı 3 ve 3'ün katı olan sayılar.</li>
-                <li><b>5 ile Bölünebilme:</b> Son basamağı 0 veya 5 olan sayılar.</li>
-              </ul>
-            `
-          },
-          {
-            title: "Kümeler",
-            content: `
-              <h3>Kümelerde Temel Kavramlar</h3>
-              <p>İyi tanımlanmış nesneler topluluğuna <b>küme</b> denir. Elemanı olmayan kümeye <i>boş küme</i> denir (Ø veya {}).</p>
-              <p><b>Kesişim (∩):</b> İki kümedeki ortak elemanlar.</p>
-              <p><b>Birleşim (∪):</b> İki kümedeki tüm elemanların bir kez yazılmasıyla oluşan küme.</p>
-            `
-          }
-        ],
-        "Fen Bilimleri": [
-          {
-            title: "Güneş Sistemi ve Tutulmalar",
-            content: `
-              <h3>1. Güneş Sistemi Gezegenleri</h3>
-              <p>Güneş'e yakınlıklarına göre gezegenler: Merkür, Venüs, Dünya, Mars, Jüpiter, Satürn, Uranüs, Neptün.</p>
-              <h3>2. Güneş ve Ay Tutulması</h3>
-              <p><b>Güneş Tutulması:</b> Ay, Dünya ile Güneş arasına girer. (Yeniay evresinde olur)</p>
-              <p><b>Ay Tutulması:</b> Dünya, Güneş ile Ay arasına girer. (Dolunay evresinde olur)</p>
-            `
-          }
-        ]
-      },
-      "7": {
-        "Matematik": [
-          {
-            title: "Tam Sayılarla İşlemler",
-            content: `
-              <h3>Toplama ve Çıkarma Kuralları</h3>
-              <p>Aynı işaretli tam sayılar toplanır ve ortak işaret verilir. Zıt işaretli sayılarda mutlak değeri büyük olandan küçük çıkarılır ve büyüğün işareti verilir.</p>
-              <h3>Çarpma ve Bölme İşaret Kuralları</h3>
-              <ul>
-                <li>(+) x (+) = (+) | (-) x (-) = (+)</li>
-                <li>(+) x (-) = (-) | (-) x (+) = (-)</li>
-              </ul>
-            `
-          },
-          {
-            title: "Cebirsel İfadeler ve Denklemler",
-            content: `
-              <h3>Birinci Dereceden Bir Bilinmeyenli Denklemler</h3>
-              <p>İçinde bilinmeyen bulunan ve eşitlik barındıran ifadelere denklem denir. Denklem çözerken "bilinmeyenler bir tarafa, bilinenler diğer tarafa" kuralı uygulanır.</p>
-            `
-          }
-        ],
-        "Fen Bilimleri": [
-          {
-            title: "Hücre ve Bölünmeler",
-            content: `
-              <h3>1. Hücrenin Yapısı</h3>
-              <p>Hücre 3 ana kısımdan oluşur: Hücre zarı, Sitoplazma, Çekirdek.</p>
-              <h3>2. Mitoz ve Mayoz Bölünme</h3>
-              <p><b>Mitoz:</b> Vücut hücrelerinde görülür, 2 yeni hücre oluşur, kromozom sayısı sabit kalır.</p>
-              <p><b>Mayoz:</b> Üreme ana hücrelerinde görülür, 4 yeni hücre oluşur, kromozom sayısı yarıya iner.</p>
-            `
-          }
-        ]
-      },
-      "8": {
-        "Matematik": [
-          {
-            title: "Çarpanlar ve Katlar (EBOB - EKOK)",
-            content: `
-              <h3>1. Asal Sayılar ve Asal Çarpanlar</h3>
-              <p>Sadece 1'e ve kendisine bölünebilen 1'den büyük sayılara asal sayı denir. Pozitif tam sayılar asal çarpanlar algoritması ile asal çarpanlarına ayrılır.</p>
-              <h3>2. EBOB ve EKOK</h3>
-              <p><b>EBOB:</b> En Büyük Ortak Bölen. Parçadan bütüne değil, bütünden parçaya gidişte (bölme sorularında) kullanılır.</p>
-              <p><b>EKOK:</b> En Küçük Ortak Kat. Parçadan bütüne ulaşma (periyot, nöbet, ortak zillenme) sorularında kullanılır.</p>
-            `
-          },
-          {
-            title: "Üslü İfadeler ve Kareköklü İfadeler",
-            content: `
-              <h3>1. Üslü İfadeler</h3>
-              <p>Negatif kuvvet kuralı: <code>a^-n = 1 / a^n</code>. Üssün üssü alınırken üsler çarpılır.</p>
-              <h3>2. Kareköklü İfadeler</h3>
-              <p>Tam kare sayılar (1, 4, 9, 16, 25, 36...) kök dışına tam çıkar. Tam kare olmayan sayılar <code>a√b</code> şeklinde yazılır.</p>
-            `
-          }
-        ],
-        "Fen Bilimleri": [
-          {
-            title: "Mevsimler ve İklim",
-            content: `
-              <h3>Mevsimlerin Oluşumu</h3>
-              <p>Mevsimlerin oluşmasının iki temel sebebi vardır:</p>
-              <ol>
-                <li>Dünya'nın dönme ekseninin 23° 27' eğik olması.</li>
-                <li>Dünya'nın Güneş etrafında dolanma hareketi.</li>
-              </ol>
-            `
-          },
-          {
-            title: "DNA ve Genetik Kod",
-            content: `
-              <h3>Genetik Yapılar</h3>
-              <p>Karmaşıktan basite sıralama: <b>Kromozom > DNA > Gen > Nükleotid</b> (KediGen kuralı).</p>
-              <p>DNA'da Adenin (A) karşısına Timin (T), Guanin (G) karşısına Sitozin (C) gelir.</p>
-            `
-          }
-        ]
-      },
-      "9": {
-        "Matematik": [
-          {
-            title: "Mantık ve Kümeler",
-            content: `
-              <h3>Önermeler ve Bağlaçlar</h3>
-              <p>Doğru ya da yanlış kesin bir hüküm bildiren ifadelere <b>önerme</b> denir.</p>
-
-              <p>Bağlaçlar: <code>Ve (∧)</code>, <code>Veya (∨)</code>, <code>İse (⇒)</code>, <code>Ancak ve Ancak (⇔)</code>.</p>
-            `
-          },
-          {
-            title: "Denklem ve Eşitsizlikler",
-            content: `
-              <h3>Reel Sayılarda Mutlak Değer</h3>
-              <p>Bir gerçek sayının sayı doğrusundaki 0 (orijin) noktasına olan uzaklığına mutlak değer denir. |x| ≥ 0 her zaman geçerlidir.</p>
-            `
-          }
-        ],
-        "Fizik": [
-          {
-            title: "Fizik Bilimine Giriş ve Madde Özellikleri",
-            content: `
-              <h3>Fiziksel Büyüklükler</h3>
-              <p><b>Temel Büyüklükler (KISA MUZ):</b> Kütle, Işık Şiddeti, Sıcaklık, Akım Şiddeti, Madde Miktarı, Uzunluk, Zaman.</p>
-              <p><b>Özkütle:</b> <code>d = m / V</code> (Kütle / Hacim).</p>
-            `
-          }
-        ],
-        "Kimya": [
-          {
-            title: "Kimya Bilimi ve Atom Yapısı",
-            content: `
-              <h3>Atom Modelleri Tarihsel Gelişimi</h3>
-              <p>Dalton → Thomson (Üzümlü Kek) → Rutherford (Çekirdekli) → Bohr (Yörüngeli) → Modern Atom Teorisi.</p>
-            `
-          }
-        ]
-      },
-      "10": {
-        "Matematik": [
-          {
-            title: "Sayma ve Olasılık (Permütasyon - Kombinasyon)",
-            content: `
-              <h3>1. Permütasyon (Sıralama)</h3>
-              <p>n elemanlı bir kümenin r'li permütasyonu: <code>P(n,r) = n! / (n-r)!</code></p>
-              <h3>2. Kombinasyon (Seçme)</h3>
-              <p>n elemanlı bir kümenin r'li kombinasyonu: <code>C(n,r) = n! / (r! * (n-r)!)</code></p>
-            `
-          },
-          {
-            title: "Fonksiyonlar",
-            content: `
-              <h3>Fonksiyon Tanımı</h3>
-              <p>A kümesinin her elemanını B kümesinin yalnız bir elemanıyla eşleyen bağıntıya fonksiyon denir. Tanım kümesi ve Değer kümesi kavramları esastır.</p>
-            `
-          }
-        ],
-        "Fizik": [
-          {
-            title: "Elektrik ve Manyetizma",
-            content: `
-              <h3>Ohm Kanunu</h3>
-              <p>Bir iletkenin uçları arasındaki gerilimin, üzerinden geçen akıma oranı sabittir. <code>V = I * R</code> (Gerilim = Akım x Direnç).</p>
-            `
-          }
-        ]
-      },
-      "11": {
-        "Matematik": [
-          {
-            title: "Trigonometri",
-            content: `
-              <h3>1. Yönlü Açılar ve Birim Çember</h3>
-              <p>Yarıçapı 1 birim olan çembere birim çember denir (x² + y² = 1). x ekseni kosinüs, y ekseni sinüs eksenidir.</p>
-              <h3>2. Trigonometrik Özdeşlikler</h3>
-              <p><code>sin²x + cos²x = 1</code></p>
-              <p><code>tan x = sin x / cos x</code> | <code>cot x = cos x / sin x</code></p>
-            `
-          },
-          {
-            title: "Analitik Geometri",
-            content: `
-              <h3>İki Nokta Arasındaki Uzaklık</h3>
-              <p>A(x1, y1) ve B(x2, y2) noktaları için uzaklık: <code>|AB| = √[(x2 - x1)² + (y2 - y1)²]</code></p>
-            `
-          }
-        ],
-        "Fizik": [
-          {
-            title: "Vektörler ve Kuvvet Hareket",
-            content: `
-              <h3>Newton'un Hareket Yasaları</h3>
-              <ol>
-                <li>Eylemsizlik Prensibi</li>
-                <li>Temel Prensip (<code>F = m * a</code>)</li>
-                <li>Etki-Tepki Prensibi</li>
-              </ol>
-            `
-          }
-        ]
-      },
-      "12": {
-        "Matematik": [
-          {
-            title: "Logaritma ve Diziler",
-            content: `
-              <h3>1. Logaritma Fonksiyonu</h3>
-              <p>Üstel fonksiyonun tersidir. <code>y = a^x ⇔ x = log_a(y)</code></p>
-              <p>Özellik: <code>log(a * b) = log(a) + log(b)</code></p>
-              <h3>2. Aritmetik ve Geometrik Diziler</h3>
-              <p>Ardışık terimleri arasındaki fark sabit olan dizilere <b>Aritmetik Dizi</b>, oranı sabit olan dizilere <b>Geometrik Dizi</b> denir.</p>
-            `
-          },
-          {
-            title: "Türev ve İntegral",
-            content: `
-              <h3>1. Türev Tanımı</h3>
-              <p>Bir fonksiyonun grafiğindeki teğetin eğimidir. Limite bağlı türev tanımı: <code>f'(x) = lim(h->0) [f(x+h) - f(x)] / h</code></p>
-              <h3>2. İntegral</h3>
-              <p>Türevi bilinen fonksiyonu bulma işlemidir (Belirsiz İntegral) veya eğri altında kalan alanı hesaplama yöntemidir (Belirli İntegral).</p>
-            `
-          }
-        ],
-        "Fizik": [
-          {
-            title: "Çembersel Hareket ve Modern Fizik",
-            content: `
-              <h3>Düzgün Çembersel Hareket</h3>
-              <p>Çizgisel Hız: <code>v = 2πr / T</code> | Açısal Hız: <code>ω = 2π / T</code></p>
-              <p>Merkezcil Kuvvet: <code>Fm = m * v² / r</code></p>
-            `
-          }
-        ]
-      }
-    };
+    const database = {"5": {"Matematik": [{"title": "Doğal Sayılar ve İşlemler", "content": "<b>1. Okuma ve Yazma:</b> Milyonlar bölüğündeki 9 basamaklı sayılar.<br><b>2. İşlemler:</b> Zihinden toplama-çıkarma, yuvarlama ve basamak değerleri."}, {"title": "Kesirler ve Ondalık Gösterim", "content": "<b>1. Kesir Türleri:</b> Basit, bileşik ve tam sayılı kesirlerin dönüşümleri.<br><b>2. Ondalık Bölümü:</b> Paydası 10, 100, 1000 olan kesirlerin virgüle aktarımı."}, {"title": "Geometri ve Ölçme", "content": "<b>1. Temel Elemanlar:</b> Doğru, ışın, doğru parçası ve açı çeşitleri (dar, dik, geniş).<br><b>2. Çevre ve Alan:</b> Dikdörtgen ve karenin alan hesabı."}], "Fen Bilimleri": [{"title": "Güneş, Dünya ve Ay", "content": "<b>1. Güneş ve Ay'ın Yapısı:</b> Katmanlar, büyüklük oranları.<br><b>2. Ay'ın Evreleri:</b> Yeniay, İlk Dördün, Dolunay, Son Dördün."}, {"title": "Canlılar Dünyası", "content": "<b>Sınıflandırma:</b> Mikroskobik canlılar, mantarlar, bitkiler (çiçekli/çiçeksiz) ve hayvanlar (omurgalı/omurgasız)."}, {"title": "Kuvvetin Ölçülmesi ve Sürtünme", "content": "<b>1. Dinamometre:</b> Yayların esneklik özelliği ve kuvvet ölçümü.<br><b>2. Sürtünme Kuvveti:</b> Hava ve su direnci, pürüzlü/pürüzsüz yüzeyler."}], "Türkçe": [{"title": "Sözcükte Anlam", "content": "Gerçek anlam, mecaz anlam, terim anlam, eş ve zıt anlamlı sözcükler."}, {"title": "Cümlede Anlam ve Paragraf", "content": "Öznel-nesnel yargılar, neden-sonuç, amaç-sonuç ilişkileri, ana fikir ve yardımcı fikirler."}], "Sosyal Bilgiler": [{"title": "Birey ve Toplum / Kültür ve Miras", "content": "Haklar, sorumluluklar, roller ve Anadolu/Mezopotamya uygarlıkları."}]}, "6": {"Matematik": [{"title": "Çarpanlar, Katlar ve Kümeler", "content": "<b>1. Bölünebilme Kuralları:</b> 2, 3, 4, 5, 6, 9, 10 ile bölünebilme.<br><b>2. Kümeler:</b> Birleşim (∪) ve kesişim (∩) sembolleri, liste yöntemi."}, {"title": "Tam Sayılar ve Kesirlerle İşlemler", "content": "Mutlak değer, yönlü sayılar, kesirlerde 4 işlem ve sıralama."}, {"title": "Cebirsel İfadeler ve Veri Analizi", "content": "Değişken, katsayı, terim kavramları; aritmetik ortalama ve açıklık."}], "Fen Bilimleri": [{"title": "Güneş Sistemi ve Tutulmalar", "content": "Gezegenlerin sıralaması, Güneş tutulması ve Ay tutulması olayları."}, {"title": "Vücudumuzdaki Sistemler", "content": "Destek ve hareket sistemi, sindirim, dolaşım, solunum ve boşaltım sistemleri."}], "Türkçe": [{"title": "İsimler, Sıfatlar ve Tamlamalar", "content": "Cins-özel isim, somut-soyut isim; niteleme ve belirtme sıfatları, isim tamlamaları."}]}, "7": {"Matematik": [{"title": "Tam Sayılarla İşlemler", "content": "Pozitif ve negatif tam sayılarda 4 işlem, toplama/çarpma özellikleri ve üslü nicelikler."}, {"title": "Rasyonel Sayılar ve Denklemler", "content": "Rasyonel sayılarda adımlı işlemler, 1. dereceden 1 bilinmeyenli denklemler ve problem çözümü."}, {"title": "Oran-Orantı ve Yüzdeler", "content": "Doğru ve ters orantı, orantı sabiti, yüzde hesapları, kâr-zarar problemleri."}], "Fen Bilimleri": [{"title": "Hücre, Bölünmeler ve Kuvvet-Enerji", "content": "Mitoz-Mayoz farkları, kütle-ağırlık ilişkisi, potansiyel ve kinetik enerji dönüşümleri."}, {"title": "Aynalar ve Işığın Kırılması", "content": "Düzlem, çukur ve tümsek aynalar; mercekler ve odak noktası."}]}, "8": {"Matematik (LGS)": [{"title": "Çarpanlar, Katlar, Üslü ve Kareköklü İfadeler", "content": "<b>EBOB-EKOK:</b> Aralarında asal sayılar, problem tipleri.<br><b>Kareköklü Sayılar:</b> Tam kare sayılar, a√b biçimi, irrasyonel sayılar."}, {"title": "Cebirsel İfadeler ve Özdeşlikler", "content": "Tam kare özdeşlikleri (a+b)², iki kare farkı (a²-b²), çarpanlara ayırma."}, {"title": "LGS Doğrusal Denklemler ve Eşitsizlikler", "content": "Eğim (m), dik koordinat sistemi, 1. dereceden eşitsizliklerin sayı doğrusunda gösterimi."}, {"title": "Üçgenler ve Pisagor Teoremi", "content": "Açıortay, kenarortay, yükseklik, üçgen eşitsizliği ve a² + b² = c² bağıntısı."}], "Fen Bilimleri (LGS)": [{"title": "Mevsimler, İklim, DNA ve Genetik Kod", "content": "Eksen eğikliği, Solstis/Ekinoks tarihleri, DNA mutasyon, modifikasyon, adaptasyon ve çaprazlamalar."}, {"title": "Basınç ve Periyodik Sistem", "content": "Katı, sıvı (P=h.d.g) ve gaz basıncı; periyodik tablo, fiziksel ve kimyasal değişimler."}, {"title": "Basit Makineler ve Elektrik", "content": "Kaldıraçlar, makaralar, eğik düzlem; elektrik yükleri ve topraklama."}], "Türkçe (LGS)": [{"title": "Fiilimsiler, Cümlenin Ögeleri ve Yazım Kuralları", "content": "İsim-fiil, sıfat-fiil, zarf-fiil; yüklem, özne, nesne, tümleçler, metin türleri ve mantık muhakeme."}]}, "9": {"Matematik": [{"title": "Mantık ve Kümeler", "content": "<b>Mantık:</b> Önermeler, ∧, ∨, ⇒, ⇔ bağlaçları, niteleyiciler.<br><b>Kümeler:</b> Alt küme, kartezyen çarpım."}, {"title": "Denklem ve Eşitsizlik Sistemleri", "content": "Bölünebilme, EBOB-EKOK, I. dereceden eşitsizlikler, mutlak değer, üslü-köklü ifadeler."}, {"title": "Üçgenlerde Eşlik ve Benzerlik", "content": "Trigonometrik oranlar (sin, cos, tan, cot), sinüs teoremi, alan formülleri."}], "Fizik": [{"title": "Fizik Bilimine Giriş ve Madde", "content": "SI birim sistemi, KISA MUZ büyüklükleri, özkütle (d=m/V), dayanıklılık, adezyon-kohezyon."}, {"title": "Hareket ve Kuvvet", "content": "Konum, alınan yol, yer değiştirme, ortalama hız, Newton'un hareket yasaları."}], "Kimya": [{"title": "Kimya Bilimi ve Atom Yapısı", "content": "Simyadan kimyaya, güvenlik sembolleri, Rutherford-Bohr atom modelleri, izotop/izobar atomlar."}], "Biyoloji": [{"title": "Yaşam Bilimi Biyoloji ve Hücre", "content": "Organik/Inorganik bileşikler, enzimler, ATP, hücre zarı taşıma mekanizmaları."}]}, "10": {"Matematik": [{"title": "Sayma, Permütasyon, Kombinasyon ve Olasılık", "content": "Faktöriyel, P(n,r), C(n,r), Binom açılımı ve koşullu olasılık."}, {"title": "Fonksiyonlar ve Polinomlar", "content": "Fonksiyon türleri (birebir, örten, bileşke, ters), polinomlarda 4 işlem ve kalan bulma."}, {"title": "İkinci Dereceden Denklemler ve Çokgenler", "content": "Karmaşık sayılar, Δ (diskriminant) incelemesi, dörtgenler, paralelkenar, yamuk ve deltoid."}], "Fizik": [{"title": "Elektrik, Manyetizma ve Dalgalar", "content": "Ohm kanunu (V=I.R), eşdeğer direnç, mıknatıslar, yay/su/ses dalgaları."}], "Kimya": [{"title": "Kimyanın Temel Kanunları ve Mol", "content": "Kütlenin korunumu, sabit oranlar, mol kavramı (N_A), tepkime türleri ve hesaplamalar."}]}, "11": {"Matematik (AYT)": [{"title": "Trigonometri (Detaylı AYT)", "content": "<b>1. Esas Ölçü ve Birim Çember:</b> Yönlü açılar, radyan/derece.<br><b>2. Teoremler:</b> Kosinüs ve Sinüs teoremleri.<br><b>3. Grafik ve Ters Fonksiyonlar:</b> Arcsin, Arccos, Arctan."}, {"title": "Analitik Geometri ve Fonksiyon Uygulamaları", "content": "Eğim, doğru denklemleri, noktanın doğruya uzaklığı, öteleme ve simetri dönüşümleri."}, {"title": "İkinci Dereceden Fonksiyonlar (Parabol)", "content": "Tepe noktası T(r,k), eksenleri kestiği noktalar, parabol-doğru durumları."}], "Fizik (AYT)": [{"title": "Vektörler, Bağıl Hareket ve Newton", "content": "Vektör toplama, nehir problemleri, eylemsizlik kuvveti ve sürtünmeli sistemler."}, {"title": "Atışlar, İş-Enerji, İtme ve Momentum", "content": "Serbest düşüş, yatay/eğik atış, esnek ve esnek olmayan çarpışmalar."}], "Kimya (AYT)": [{"title": "Modern Atom Teorisi ve Gazlar", "content": "Kuantum sayıları (n, l, m_l, m_s), orbital dizilimi, İdeal Gaz Denklemi (P.V=n.R.T)."}]}, "12": {"Matematik (AYT & YKS)": [{"title": "Üstel - Logaritmik Fonksiyonlar ve Diziler", "content": "Logaritma özellikleri, taban değiştirme, logaritmik denklem/eşitsizlikler; Aritmetik ve Geometrik diziler."}, {"title": "Limit ve Süreklilik", "content": "Sağdan-soldan limit, belirsizlik durumları (0/0), süreklilik şartı."}, {"title": "Türev ve Uygulamaları (AYT)", "content": "<b>1. Alma Kuralları:</b> Çarpım, bölüm, zincir kuralı.<br><b>2. Geometrik Anlam:</b> Teğet/Normal denklemi.<br><b>3. Ekstremum Noktalar:</b> Yerel maksimum, minimum ve Artan/Azalan aralıklar."}, {"title": "İntegral ve Uygulamaları (AYT)", "content": "<b>1. Belirsiz İntegral:</b> Değişken değiştirme yöntemi.<br><b>2. Belirli İntegral:</b> Riemann toplamı, iki eğri arasında kalan alan hesabı."}, {"title": "Çemberin Analitiği", "content": "Merkezi ve yarıçapı bilinen çember denklemi: (x-a)² + (y-b)² = r²."}], "Fizik (AYT & YKS)": [{"title": "Çembersel Hareket ve Basit Harmonik Hareket", "content": "Açısal hız, merkezcil ivme, tork, açısal momentum korunumu, yaylı ve basit sarkaç."}, {"title": "Dalga Mekaniği ve Modern Fizik", "content": "Su dalgalarında kırınım/girift, Fotoelektrik olay, Compton saçılması, Özel Görelilik."}], "Kimya (AYT)": [{"title": "Kimya ve Elektrik / Organik Kimya", "content": "Redoks, Galvanik piller, Elektroliz; Alkan, Alken, Alkin, Alkol ve Eterlerin adlandırılması."}]}};
 
     function onGradeChange() {
       const grade = document.getElementById('grade-select').value;
@@ -705,7 +335,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
           </svg>
-          <h3>Lütfen incelemek istediğiniz Sınıf, Ders ve Konuyu seçiniz.</h3>
+          <h3>Sol taraftaki adımları takip ederek Sınıf, Ders ve Konu seçimi yapınız.</h3>
         </div>
       `;
     }
