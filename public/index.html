@@ -3572,7 +3572,1158 @@ APP
 
     </section>
 
+<!-- ================================
+     TESTLER + DERS NOTLARI
+================================ -->
 
+<section id="page-tests" class="page">
+
+<style>
+.test-container{
+    max-width:1200px;
+    margin:auto;
+}
+
+.test-header{
+    background:linear-gradient(135deg,#635bff,#8b5cf6);
+    color:white;
+    padding:30px;
+    border-radius:24px;
+    margin-bottom:25px;
+    box-shadow:0 15px 40px rgba(99,91,255,.25);
+}
+
+.test-header h1{
+    margin:0 0 8px;
+    font-size:32px;
+}
+
+.test-header p{
+    opacity:.9;
+    margin:0;
+}
+
+.test-tabs{
+    display:flex;
+    gap:10px;
+    margin-bottom:25px;
+    flex-wrap:wrap;
+}
+
+.test-tab{
+    border:0;
+    background:var(--card,#fff);
+    color:var(--text,#222);
+    padding:13px 22px;
+    border-radius:14px;
+    cursor:pointer;
+    font-weight:700;
+    transition:.2s;
+}
+
+.test-tab.active{
+    background:#635bff;
+    color:white;
+}
+
+.test-card{
+    background:var(--card,#fff);
+    border-radius:22px;
+    padding:25px;
+    margin-bottom:20px;
+    box-shadow:0 8px 30px rgba(0,0,0,.07);
+}
+
+.test-card h2{
+    margin-top:0;
+}
+
+.selection-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:15px;
+}
+
+.select-box label{
+    display:block;
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:7px;
+}
+
+.select-box select{
+    width:100%;
+    padding:14px;
+    border:1px solid #ddd;
+    border-radius:12px;
+    background:var(--bg,#fff);
+    color:var(--text,#222);
+    font-size:15px;
+}
+
+.start-test{
+    margin-top:20px;
+    width:100%;
+    padding:16px;
+    border:0;
+    border-radius:14px;
+    background:#635bff;
+    color:white;
+    font-size:16px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.start-test:hover{
+    transform:translateY(-2px);
+}
+
+.notes-search{
+    width:100%;
+    padding:15px;
+    border:1px solid #ddd;
+    border-radius:14px;
+    margin-bottom:20px;
+    font-size:15px;
+    box-sizing:border-box;
+}
+
+.subject-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:16px;
+}
+
+.subject-card{
+    border:1px solid #eee;
+    border-radius:18px;
+    padding:20px;
+    cursor:pointer;
+    transition:.2s;
+    background:var(--card,#fff);
+}
+
+.subject-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.subject-icon{
+    font-size:32px;
+    margin-bottom:10px;
+}
+
+.subject-card h3{
+    margin:0 0 7px;
+}
+
+.subject-card p{
+    color:#777;
+    margin:0;
+    font-size:14px;
+}
+
+.topic-list{
+    display:none;
+    margin-top:15px;
+}
+
+.topic-list.open{
+    display:block;
+}
+
+.topic{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px;
+    margin-top:8px;
+    border-radius:12px;
+    background:#f7f7fb;
+    cursor:pointer;
+}
+
+.topic:hover{
+    background:#ecebff;
+}
+
+.topic button{
+    border:0;
+    background:#635bff;
+    color:white;
+    padding:8px 13px;
+    border-radius:9px;
+    cursor:pointer;
+}
+
+#testScreen{
+    display:none;
+}
+
+.question-box{
+    background:var(--card,#fff);
+    border-radius:22px;
+    padding:30px;
+}
+
+.question-number{
+    color:#635bff;
+    font-weight:800;
+}
+
+.question-text{
+    font-size:21px;
+    font-weight:700;
+    margin:20px 0;
+}
+
+.answer{
+    display:block;
+    padding:15px;
+    border:1px solid #ddd;
+    border-radius:13px;
+    margin:10px 0;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.answer:hover{
+    background:#f2f1ff;
+}
+
+.answer input{
+    margin-right:10px;
+}
+
+.next-question{
+    margin-top:20px;
+    padding:14px 25px;
+    border:0;
+    border-radius:12px;
+    background:#635bff;
+    color:white;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.result-box{
+    text-align:center;
+    padding:40px 20px;
+}
+
+.result-score{
+    font-size:55px;
+    font-weight:900;
+    color:#635bff;
+}
+
+@media(max-width:600px){
+    .test-header h1{
+        font-size:25px;
+    }
+
+    .test-card{
+        padding:18px;
+    }
+}
+</style>
+
+<div class="test-container">
+
+    <div class="test-header">
+        <h1>🧠 Test Merkezi</h1>
+        <p>Konunu seç, testini çöz, XP kazan ve eksiklerini keşfet!</p>
+    </div>
+
+    <div class="test-tabs">
+
+        <button class="test-tab active"
+                onclick="showTestTab('tests',this)">
+            📝 Test Çöz
+        </button>
+
+        <button class="test-tab"
+                onclick="showTestTab('notes',this)">
+            📚 Ders Notları
+        </button>
+
+    </div>
+
+    <!-- ================= TESTLER ================= -->
+
+    <div id="testsTab">
+
+        <div class="test-card">
+
+            <h2>🎯 Test Oluştur</h2>
+            <p>İstediğin sınıf, ders ve seviyeyi seç.</p>
+
+            <div class="selection-grid">
+
+                <div class="select-box">
+                    <label>Sınıf</label>
+
+                    <select id="gradeSelect"
+                            onchange="loadSubjects()">
+
+                        <option value="">Sınıf seç</option>
+
+                        <option value="1">1. Sınıf</option>
+                        <option value="2">2. Sınıf</option>
+                        <option value="3">3. Sınıf</option>
+                        <option value="4">4. Sınıf</option>
+                        <option value="5">5. Sınıf</option>
+                        <option value="6">6. Sınıf</option>
+                        <option value="7">7. Sınıf</option>
+                        <option value="8">8. Sınıf</option>
+                        <option value="9">9. Sınıf</option>
+                        <option value="10">10. Sınıf</option>
+                        <option value="11">11. Sınıf</option>
+                        <option value="12">12. Sınıf</option>
+
+                    </select>
+                </div>
+
+
+                <div class="select-box">
+
+                    <label>Ders</label>
+
+                    <select id="subjectSelect"
+                            onchange="loadTopics()">
+
+                        <option value="">
+                            Önce sınıf seç
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="select-box">
+
+                    <label>Konu</label>
+
+                    <select id="topicSelect">
+
+                        <option value="">
+                            Önce ders seç
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="select-box">
+
+                    <label>Zorluk</label>
+
+                    <select id="difficulty">
+
+                        <option>Kolay</option>
+                        <option selected>Orta</option>
+                        <option>Zor</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="select-box">
+
+                    <label>Soru Sayısı</label>
+
+                    <select id="questionCount">
+
+                        <option value="10">10 Soru</option>
+                        <option value="20">20 Soru</option>
+                        <option value="30">30 Soru</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <button class="start-test"
+                    onclick="startTest()">
+
+                🚀 Testi Başlat
+
+            </button>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <h2>🔥 Hızlı Testler</h2>
+
+            <div class="subject-grid">
+
+                <div class="subject-card"
+                     onclick="quickTest('Türkçe')">
+
+                    <div class="subject-icon">📖</div>
+                    <h3>Türkçe</h3>
+                    <p>Hızlı Türkçe testi</p>
+
+                </div>
+
+
+                <div class="subject-card"
+                     onclick="quickTest('Matematik')">
+
+                    <div class="subject-icon">📐</div>
+                    <h3>Matematik</h3>
+                    <p>Hızlı matematik testi</p>
+
+                </div>
+
+
+                <div class="subject-card"
+                     onclick="quickTest('Fen Bilimleri')">
+
+                    <div class="subject-icon">🔬</div>
+                    <h3>Fen Bilimleri</h3>
+                    <p>Hızlı fen testi</p>
+
+                </div>
+
+
+                <div class="subject-card"
+                     onclick="quickTest('İngilizce')">
+
+                    <div class="subject-icon">🇬🇧</div>
+                    <h3>İngilizce</h3>
+                    <p>Hızlı İngilizce testi</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= DERS NOTLARI ================= -->
+
+    <div id="notesTab" style="display:none">
+
+        <div class="test-card">
+
+            <h2>📚 Ders Notları</h2>
+
+            <p>
+                Sınıfını seç, dersini aç ve konunun kısa
+                ders notuna ulaş.
+            </p>
+
+            <select id="notesGrade"
+                    onchange="loadNotes()"
+                    style="width:100%;
+                           padding:15px;
+                           border-radius:12px;
+                           border:1px solid #ddd;
+                           margin-bottom:20px;">
+
+                <option value="">Sınıf seç</option>
+
+                <option value="1">1. Sınıf</option>
+                <option value="2">2. Sınıf</option>
+                <option value="3">3. Sınıf</option>
+                <option value="4">4. Sınıf</option>
+                <option value="5">5. Sınıf</option>
+                <option value="6">6. Sınıf</option>
+                <option value="7">7. Sınıf</option>
+                <option value="8">8. Sınıf</option>
+                <option value="9">9. Sınıf</option>
+                <option value="10">10. Sınıf</option>
+                <option value="11">11. Sınıf</option>
+                <option value="12">12. Sınıf</option>
+
+            </select>
+
+            <input
+                id="noteSearch"
+                class="notes-search"
+                placeholder="🔎 Ders veya konu ara..."
+                oninput="searchNotes()"
+            >
+
+            <div id="notesContent">
+
+                <div style="
+                    text-align:center;
+                    padding:40px;
+                    color:#777;
+                ">
+                    📚 Ders notlarını görmek için
+                    sınıfını seç.
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= TEST EKRANI ================= -->
+
+    <div id="testScreen">
+
+        <div class="question-box">
+
+            <div class="question-number"
+                 id="questionNumber">
+                Soru 1
+            </div>
+
+            <div class="question-text"
+                 id="questionText">
+                Soru hazırlanıyor...
+            </div>
+
+            <div id="answers"></div>
+
+            <button class="next-question"
+                    onclick="nextQuestion()">
+                Sonraki Soru →
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+/* ==========================================
+   DERSLER
+========================================== */
+
+const subjects = {
+
+    "1":[
+        "Türkçe",
+        "Matematik",
+        "Hayat Bilgisi"
+    ],
+
+    "2":[
+        "Türkçe",
+        "Matematik",
+        "Hayat Bilgisi"
+    ],
+
+    "3":[
+        "Türkçe",
+        "Matematik",
+        "Fen Bilimleri",
+        "Hayat Bilgisi"
+    ],
+
+    "4":[
+        "Türkçe",
+        "Matematik",
+        "Fen Bilimleri",
+        "Sosyal Bilgiler",
+        "İngilizce",
+        "Din Kültürü"
+    ],
+
+    "5":[
+        "Türkçe",
+        "Matematik",
+        "Fen Bilimleri",
+        "Sosyal Bilgiler",
+        "İngilizce",
+        "Din Kültürü"
+    ],
+
+    "6":[
+        "Türkçe",
+        "Matematik",
+        "Fen Bilimleri",
+        "Sosyal Bilgiler",
+        "İngilizce",
+        "Din Kültürü"
+    ],
+
+    "7":[
+        "Türkçe",
+        "Matematik",
+        "Fen Bilimleri",
+        "Sosyal Bilgiler",
+        "İngilizce",
+        "Din Kültürü"
+    ],
+
+    "8":[
+        "Türkçe",
+        "Matematik",
+        "Fen Bilimleri",
+        "T.C. İnkılap Tarihi",
+        "İngilizce",
+        "Din Kültürü"
+    ],
+
+    "9":[
+        "Türk Dili ve Edebiyatı",
+        "Matematik",
+        "Fizik",
+        "Kimya",
+        "Biyoloji",
+        "Tarih",
+        "Coğrafya",
+        "İngilizce",
+        "Din Kültürü"
+    ],
+
+    "10":[
+        "Türk Dili ve Edebiyatı",
+        "Matematik",
+        "Fizik",
+        "Kimya",
+        "Biyoloji",
+        "Tarih",
+        "Coğrafya",
+        "İngilizce",
+        "Din Kültürü"
+    ],
+
+    "11":[
+        "Türk Dili ve Edebiyatı",
+        "Matematik",
+        "Fizik",
+        "Kimya",
+        "Biyoloji",
+        "Tarih",
+        "Coğrafya",
+        "İngilizce",
+        "Din Kültürü"
+    ],
+
+    "12":[
+        "Türk Dili ve Edebiyatı",
+        "Matematik",
+        "Fizik",
+        "Kimya",
+        "Biyoloji",
+        "Tarih",
+        "Coğrafya",
+        "İngilizce",
+        "Din Kültürü"
+    ]
+
+};
+
+
+/* ==========================================
+   ÖRNEK KONU VERİLERİ
+========================================== */
+
+const topics = {
+
+    "Matematik":[
+        "Sayılar",
+        "Doğal Sayılar",
+        "Kesirler",
+        "Ondalık Gösterim",
+        "Yüzdeler",
+        "Cebir",
+        "Denklemler",
+        "Oran ve Orantı",
+        "Geometri",
+        "Veri ve Olasılık"
+    ],
+
+    "Türkçe":[
+        "Sözcükte Anlam",
+        "Cümlede Anlam",
+        "Paragraf",
+        "Fiiller",
+        "İsimler",
+        "Sıfatlar",
+        "Zamirler",
+        "Noktalama İşaretleri",
+        "Yazım Kuralları",
+        "Metin Türleri"
+    ],
+
+    "Fen Bilimleri":[
+        "Dünya ve Evren",
+        "Kuvvet ve Hareket",
+        "Madde ve Isı",
+        "Enerji",
+        "Elektrik",
+        "Canlılar ve Yaşam",
+        "Işık ve Ses"
+    ],
+
+    "İngilizce":[
+        "Greetings",
+        "Family",
+        "Daily Routines",
+        "Hobbies",
+        "Food",
+        "Weather",
+        "Health",
+        "Travel"
+    ]
+
+};
+
+
+/* ==========================================
+   SINIF → DERS
+========================================== */
+
+function loadSubjects(){
+
+    const grade =
+        document.getElementById("gradeSelect").value;
+
+    const select =
+        document.getElementById("subjectSelect");
+
+    select.innerHTML =
+        '<option value="">Ders seç</option>';
+
+    if(!subjects[grade]) return;
+
+    subjects[grade].forEach(subject=>{
+
+        const option =
+            document.createElement("option");
+
+        option.value = subject;
+        option.textContent = subject;
+
+        select.appendChild(option);
+
+    });
+
+    document.getElementById("topicSelect").innerHTML =
+        '<option value="">Önce ders seç</option>';
+
+}
+
+
+/* ==========================================
+   DERS → KONU
+========================================== */
+
+function loadTopics(){
+
+    const subject =
+        document.getElementById("subjectSelect").value;
+
+    const select =
+        document.getElementById("topicSelect");
+
+    select.innerHTML =
+        '<option value="">Konu seç</option>';
+
+    if(!topics[subject]){
+
+        select.innerHTML +=
+            '<option value="">Tüm konular</option>';
+
+        return;
+    }
+
+    topics[subject].forEach(topic=>{
+
+        const option =
+            document.createElement("option");
+
+        option.value = topic;
+        option.textContent = topic;
+
+        select.appendChild(option);
+
+    });
+
+}
+
+
+/* ==========================================
+   SEKME DEĞİŞTİR
+========================================== */
+
+function showTestTab(tab,button){
+
+    document.querySelectorAll(".test-tab")
+        .forEach(x=>x.classList.remove("active"));
+
+    button.classList.add("active");
+
+    document.getElementById("testsTab").style.display =
+        tab==="tests" ? "block" : "none";
+
+    document.getElementById("notesTab").style.display =
+        tab==="notes" ? "block" : "none";
+
+}
+
+
+/* ==========================================
+   DERS NOTLARI
+========================================== */
+
+function loadNotes(){
+
+    const grade =
+        document.getElementById("notesGrade").value;
+
+    const container =
+        document.getElementById("notesContent");
+
+    if(!grade){
+
+        container.innerHTML =
+            `<div style="text-align:center;padding:40px;color:#777">
+                📚 Sınıfını seç.
+            </div>`;
+
+        return;
+    }
+
+    container.innerHTML = "";
+
+    subjects[grade].forEach(subject=>{
+
+        const card =
+            document.createElement("div");
+
+        card.className = "subject-card";
+
+        const icon =
+            getSubjectIcon(subject);
+
+        card.innerHTML = `
+
+            <div class="subject-icon">
+                ${icon}
+            </div>
+
+            <h3>${subject}</h3>
+
+            <p>
+                ${topics[subject]
+                    ? topics[subject].length
+                    : "Birçok"} konu
+            </p>
+
+            <div class="topic-list">
+
+                ${
+                    topics[subject]
+                    ?
+                    topics[subject].map(topic=>`
+
+                        <div class="topic">
+
+                            <span>
+                                📖 ${topic}
+                            </span>
+
+                            <button
+                              onclick="openNote('${topic}')">
+                              Aç
+                            </button>
+
+                        </div>
+
+                    `).join("")
+                    :
+                    `
+                    <div class="topic">
+                        📚 Konular hazırlanıyor...
+                    </div>
+                    `
+                }
+
+            </div>
+        `;
+
+        card.onclick = function(e){
+
+            if(e.target.tagName==="BUTTON") return;
+
+            const list =
+                card.querySelector(".topic-list");
+
+            list.classList.toggle("open");
+
+        };
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+/* ==========================================
+   DERS İKONU
+========================================== */
+
+function getSubjectIcon(subject){
+
+    if(subject.includes("Matematik"))
+        return "📐";
+
+    if(subject.includes("Türk"))
+        return "📖";
+
+    if(subject.includes("Fen"))
+        return "🔬";
+
+    if(subject.includes("Fizik"))
+        return "⚡";
+
+    if(subject.includes("Kimya"))
+        return "🧪";
+
+    if(subject.includes("Biyoloji"))
+        return "🧬";
+
+    if(subject.includes("İngiliz"))
+        return "🇬🇧";
+
+    if(subject.includes("Tarih"))
+        return "🏛️";
+
+    if(subject.includes("Coğrafya"))
+        return "🌍";
+
+    return "📚";
+
+}
+
+
+/* ==========================================
+   NOT AÇ
+========================================== */
+
+function openNote(topic){
+
+    alert(
+        "📚 "+topic+
+        "\\n\\nBu konu için ayrıntılı ders notu açılacak."
+    );
+
+}
+
+
+/* ==========================================
+   NOT ARA
+========================================== */
+
+function searchNotes(){
+
+    const search =
+        document.getElementById("noteSearch")
+        .value
+        .toLowerCase();
+
+    document.querySelectorAll(
+        "#notesContent .subject-card"
+    ).forEach(card=>{
+
+        const text =
+            card.innerText.toLowerCase();
+
+        card.style.display =
+            text.includes(search)
+            ? "block"
+            : "none";
+
+    });
+
+}
+
+
+/* ==========================================
+   TEST BAŞLAT
+========================================== */
+
+let currentQuestion = 0;
+
+let totalQuestions = 10;
+
+function startTest(){
+
+    const grade =
+        document.getElementById("gradeSelect").value;
+
+    const subject =
+        document.getElementById("subjectSelect").value;
+
+    const topic =
+        document.getElementById("topicSelect").value;
+
+    if(!grade || !subject){
+
+        alert("⚠️ Önce sınıf ve ders seçmelisin.");
+
+        return;
+    }
+
+    totalQuestions =
+        Number(
+            document.getElementById("questionCount").value
+        );
+
+    currentQuestion = 0;
+
+    document.getElementById("testsTab").style.display =
+        "none";
+
+    document.getElementById("testScreen").style.display =
+        "block";
+
+    showQuestion();
+
+}
+
+
+/* ==========================================
+   SORU GÖSTER
+========================================== */
+
+function showQuestion(){
+
+    currentQuestion++;
+
+    document.getElementById("questionNumber")
+        .textContent =
+        `Soru ${currentQuestion} / ${totalQuestions}`;
+
+    document.getElementById("questionText")
+        .textContent =
+        "Bu konuya ait soru burada gösterilecek.";
+
+    const answers =
+        document.getElementById("answers");
+
+    answers.innerHTML = "";
+
+    ["A","B","C","D"].forEach(letter=>{
+
+        answers.innerHTML += `
+
+            <label class="answer">
+
+                <input
+                    type="radio"
+                    name="answer"
+                    value="${letter}">
+
+                ${letter}) Cevap seçeneği
+
+            </label>
+
+        `;
+
+    });
+
+}
+
+
+/* ==========================================
+   SONRAKİ SORU
+========================================== */
+
+function nextQuestion(){
+
+    if(currentQuestion >= totalQuestions){
+
+        finishTest();
+
+        return;
+    }
+
+    showQuestion();
+
+}
+
+
+/* ==========================================
+   TEST BİTİR
+========================================== */
+
+function finishTest(){
+
+    document.getElementById("testScreen")
+        .innerHTML = `
+
+        <div class="question-box result-box">
+
+            <div style="font-size:60px">
+                🎉
+            </div>
+
+            <h2>Test Tamamlandı!</h2>
+
+            <div class="result-score">
+                %100
+            </div>
+
+            <p>
+                Testi tamamladın.
+            </p>
+
+            <p>
+                ⭐ +50 XP kazandın!
+            </p>
+
+            <button
+                class="start-test"
+                onclick="location.reload()">
+
+                🔄 Yeni Test Çöz
+
+            </button>
+
+        </div>
+
+    `;
+
+}
+
+
+/* ==========================================
+   HIZLI TEST
+========================================== */
+
+function quickTest(subject){
+
+    document.getElementById("gradeSelect").value="8";
+
+    loadSubjects();
+
+    document.getElementById("subjectSelect").value=subject;
+
+    loadTopics();
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+</script>
+
+</section>
     <!-- =====================================================
     TASKS
     ===================================================== -->
