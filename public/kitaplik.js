@@ -1,1363 +1,1458 @@
-/* =========================================================
-   DERS TAKİP - KİTAPLIK MODÜLÜ
-   ========================================================= */
+/*
+ * ============================================================
+ * DERS TAKİP — DERS KİTAPLIĞI DATA
+ * 5 - 12. SINIF
+ * ============================================================
+ *
+ * Kullanım:
+ *
+ * <script src="kitaplik-data.js"></script>
+ * <script src="kitaplik.js"></script>
+ *
+ * kitaplik.js içerisinden:
+ *
+ * const data = window.kitaplikData;
+ *
+ * ============================================================
+ */
 
-const kitaplikData = {
+(function () {
+    "use strict";
 
-    "5": {
-        ad: "5. Sınıf",
+    /* ========================================================
+       KONU OLUŞTURUCU
+    ======================================================== */
+
+    function konuOlustur(
+        id,
+        ad,
+        giris,
+        anlatim,
+        temelBilgi,
+        ornekler,
+        dikkat,
+        ozet,
+        test
+    ) {
+
+        return {
+            id: id,
+            ad: ad,
+
+            giris: giris,
+
+            anlatim: anlatim,
+
+            temelBilgi: temelBilgi,
+
+            ornekler: ornekler || [],
+
+            dikkat: dikkat,
+
+            ozet: ozet,
+
+            test: test || [],
+
+            tamamlandi: false
+        };
+    }
+
+
+    /* ========================================================
+       ÖRNEK KONU
+       Ayrıntılı konu anlatımı yapısı
+    ======================================================== */
+
+    const dogalSayilar = konuOlustur(
+
+        "5-matematik-dogal-sayilar",
+
+        "Doğal Sayılar",
+
+        `
+        Doğal sayılar matematiğin temel yapı taşlarından biridir.
+        Günlük hayatta sayma, sıralama ve miktar belirtme gibi
+        işlemlerde doğal sayılardan yararlanırız.
+
+        Bu konuda doğal sayıların nasıl yazıldığını, okunduğunu,
+        basamak ve basamak değerlerini ve doğal sayılarla yapılan
+        temel işlemleri öğreneceğiz.
+        `,
+
+        `
+        <h3>📖 Doğal Sayı Nedir?</h3>
+
+        <p>
+        Sayma işlemlerinde kullandığımız sayılar doğal sayılar olarak
+        adlandırılır. 0, 1, 2, 3, 4, 5, ... şeklinde devam eder.
+        </p>
+
+        <p>
+        Doğal sayılar sonsuzdur. En büyük doğal sayı yoktur.
+        Çünkü herhangi bir doğal sayıya 1 eklediğimizde daha büyük
+        başka bir doğal sayı elde ederiz.
+        </p>
+
+        <h3>🔢 Basamaklar</h3>
+
+        <p>
+        Büyük doğal sayıları daha kolay okuyup yazabilmek için
+        sayıları basamaklarına ayırırız.
+        </p>
+
+        <p>
+        Örneğin:
+        </p>
+
+        <div class="kitap-ornek">
+            4 582
+        </div>
+
+        <p>
+        Bu sayıda:
+        </p>
+
+        <ul>
+            <li>2 → birler basamağı</li>
+            <li>8 → onlar basamağı</li>
+            <li>5 → yüzler basamağı</li>
+            <li>4 → binler basamağı</li>
+        </ul>
+
+        <h3>💡 Basamak Değeri</h3>
+
+        <p>
+        Bir rakamın bulunduğu basamağa göre aldığı değere
+        basamak değeri denir.
+        </p>
+
+        <p>
+        4 582 sayısında 5 rakamı yüzler basamağındadır.
+        Bu nedenle basamak değeri:
+        </p>
+
+        <div class="kitap-formul">
+            5 × 100 = 500
+        </div>
+
+        <h3>🧠 Sayı Değeri</h3>
+
+        <p>
+        Bir rakamın sayı değeri, bulunduğu basamaktan bağımsız
+        olarak rakamın kendisidir.
+        </p>
+
+        <p>
+        Örneğin 4 582 sayısındaki 5'in sayı değeri 5,
+        basamak değeri ise 500'dür.
+        </p>
+
+        <h3>➕ Doğal Sayılarla İşlemler</h3>
+
+        <p>
+        Doğal sayılarla toplama, çıkarma, çarpma ve bölme işlemleri
+        yapılabilir.
+        </p>
+
+        <p>
+        İşlem yaparken basamakların doğru hizalanması özellikle
+        toplama ve çıkarma işlemlerinde önemlidir.
+        </p>
+        `,
+
+        [
+            "Doğal sayılar 0'dan başlar.",
+            "En büyük doğal sayı yoktur.",
+            "Basamak değeri rakamın bulunduğu basamağa göre değişir.",
+            "Sayı değeri rakamın kendisidir."
+        ],
+
+        [
+            {
+                soru: "4 582 sayısında 5 rakamının basamak değeri kaçtır?",
+                cozum: `
+                5 yüzler basamağındadır.
+
+                5 × 100 = 500
+
+                Cevap: 500
+                `
+            },
+
+            {
+                soru: "3 406 sayısında 4 rakamının basamak değeri nedir?",
+                cozum: `
+                4 yüzler basamağındadır.
+
+                4 × 100 = 400
+
+                Cevap: 400
+                `
+            }
+        ],
+
+        `
+        ⚠️ Basamak değeri ile sayı değerini karıştırma.
+
+        Örneğin 7 325 sayısındaki 3'ün:
+
+        Sayı değeri = 3
+
+        Basamak değeri = 300
+        `,
+
+        `
+        ⭐ Doğal sayılar 0, 1, 2, 3, ... şeklinde sonsuza kadar
+        devam eder.
+
+        ⭐ Rakamın bulunduğu basamak onun basamak değerini belirler.
+
+        ⭐ Sayı değeri ise rakamın kendisidir.
+
+        ⭐ İşlemlerde basamakların doğru hizalanmasına dikkat edilmelidir.
+        `,
+
+        [
+            {
+                soru: "2 735 sayısında 7'nin basamak değeri kaçtır?",
+                secenekler: [
+                    "7",
+                    "70",
+                    "700",
+                    "7000"
+                ],
+                cevap: 2
+            },
+
+            {
+                soru: "Aşağıdakilerden hangisi doğal sayıdır?",
+                secenekler: [
+                    "-3",
+                    "1/2",
+                    "8",
+                    "2,5"
+                ],
+                cevap: 2
+            }
+        ]
+    );
+
+
+    /* ========================================================
+       5. SINIF MATEMATİK
+    ======================================================== */
+
+    const besMatematik = {
+
+        ad: "Matematik",
+
+        icon: "📐",
+
+        konular: [
+
+            dogalSayilar,
+
+            konuOlustur(
+                "5-matematik-islemler",
+                "Doğal Sayılarla İşlemler",
+
+                `
+                Bu bölümde doğal sayılarla toplama, çıkarma,
+                çarpma ve bölme işlemlerini inceleyeceğiz.
+                `,
+
+                `
+                <h3>➕ Toplama</h3>
+
+                <p>
+                Toplama, iki veya daha fazla miktarın bir araya
+                getirilmesi anlamına gelir.
+                </p>
+
+                <div class="kitap-ornek">
+                    245 + 132 = 377
+                </div>
+
+                <h3>➖ Çıkarma</h3>
+
+                <p>
+                Çıkarma işlemi bir miktardan başka bir miktarı
+                ayırmak veya iki miktar arasındaki farkı bulmak
+                için kullanılır.
+                </p>
+
+                <div class="kitap-ornek">
+                    500 - 275 = 225
+                </div>
+
+                <h3>✖️ Çarpma</h3>
+
+                <p>
+                Çarpma işlemi aynı sayının tekrarlı toplanmasını
+                kısa biçimde ifade eder.
+                </p>
+
+                <div class="kitap-ornek">
+                    4 × 6 = 24
+                </div>
+
+                <h3>➗ Bölme</h3>
+
+                <p>
+                Bölme, bir miktarı eşit gruplara ayırmak için kullanılır.
+                </p>
+
+                <div class="kitap-ornek">
+                    24 ÷ 6 = 4
+                </div>
+                `,
+
+                [
+                    "İşlem önceliğine dikkat edilmelidir.",
+                    "Çıkarma işleminde büyük sayıdan küçük sayı çıkarılır.",
+                    "Bölme işleminde bölünen, bölen ve bölüm kavramları bilinmelidir."
+                ],
+
+                [
+                    {
+                        soru: "245 + 132 işleminin sonucu kaçtır?",
+                        cozum: "245 + 132 = 377"
+                    },
+                    {
+                        soru: "500 - 275 işleminin sonucu kaçtır?",
+                        cozum: "500 - 275 = 225"
+                    }
+                ],
+
+                `
+                ⚠️ İşlem yaparken basamakları yanlış hizalamamaya dikkat et.
+                `,
+
+                `
+                ⭐ Toplama birleştirme,
+                çıkarma ayırma/fark bulma,
+                çarpma tekrarlı toplama,
+                bölme ise eşit gruplara ayırma mantığı taşır.
+                `,
+
+                [
+                    {
+                        soru: "25 × 4 kaçtır?",
+                        secenekler: ["50", "75", "100", "125"],
+                        cevap: 2
+                    }
+                ]
+            ),
+
+            konuOlustur(
+                "5-matematik-kesirler",
+                "Kesirler",
+
+                `
+                Bir bütünün eş parçalarından kaç tanesinin
+                alındığını göstermek için kesirlerden yararlanırız.
+                `,
+
+                `
+                <h3>📖 Kesrin Bölümleri</h3>
+
+                <p>
+                Bir kesir iki bölümden oluşur:
+                pay ve payda.
+                </p>
+
+                <div class="kitap-formul">
+                    Pay / Payda
+                </div>
+
+                <p>
+                Örneğin 3/5 kesrinde 3 pay, 5 ise paydadır.
+                </p>
+
+                <h3>💡 Payda Ne Anlatır?</h3>
+
+                <p>
+                Payda bütünün kaç eş parçaya ayrıldığını gösterir.
+                </p>
+
+                <h3>💡 Pay Ne Anlatır?</h3>
+
+                <p>
+                Pay, bu eş parçalardan kaç tanesinin ele alındığını
+                gösterir.
+                </p>
+
+                <h3>🧩 Örnek</h3>
+
+                <p>
+                Bir pasta 8 eş parçaya ayrılmış ve 3 parçası yenmişse
+                yenilen kısmı 3/8 ile gösterebiliriz.
+                </p>
+                `,
+
+                [
+                    "Payda 0 olamaz.",
+                    "Pay, alınan parça sayısını gösterir.",
+                    "Payda, bütünün eş parça sayısını gösterir."
+                ],
+
+                [
+                    {
+                        soru: "5/9 kesrinde pay hangisidir?",
+                        cozum: "Pay 5'tir."
+                    }
+                ],
+
+                `
+                ⚠️ Pay ve paydayı yer değiştirmemeye dikkat et.
+                `,
+
+                `
+                ⭐ Kesirlerde üstteki sayı pay,
+                alttaki sayı paydadır.
+                `,
+
+                [
+                    {
+                        soru: "7/10 kesrinde payda kaçtır?",
+                        secenekler: ["7", "10", "17", "3"],
+                        cevap: 1
+                    }
+                ]
+            ),
+
+            konuOlustur(
+                "5-matematik-ondalik",
+                "Ondalık Gösterim",
+
+                "Kesirlerin ve bazı ölçümlerin ondalık biçimde ifade edilmesini öğreniriz.",
+
+                `
+                <h3>📖 Ondalık Sayılar</h3>
+
+                <p>
+                Bir bütünün onda, yüzde veya binde birlik parçalarını
+                göstermek için ondalık gösterim kullanılabilir.
+                </p>
+
+                <div class="kitap-ornek">
+                    0,5
+                </div>
+
+                <p>
+                Türkçede ondalık gösterimde virgül kullanılır.
+                </p>
+
+                <h3>🧩 Örnek</h3>
+
+                <p>
+                0,5 sayısı yarımı ifade eder.
+                </p>
+
+                <div class="kitap-formul">
+                    0,5 = 5/10 = 1/2
+                </div>
+                `,
+
+                [
+                    "Ondalık ayırıcı olarak virgül kullanılır.",
+                    "Virgülün sol tarafı tam kısmı gösterir.",
+                    "Virgülün sağ tarafı ondalık kısmı gösterir."
+                ],
+
+                [
+                    {
+                        soru: "0,5 hangi kesre eşittir?",
+                        cozum: "0,5 = 5/10 = 1/2"
+                    }
+                ],
+
+                "⚠️ Virgülün yerini değiştirmek sayının değerini değiştirir.",
+
+                "⭐ Ondalık gösterim özellikle ölçme ve günlük hayat problemlerinde sık kullanılır.",
+
+                [
+                    {
+                        soru: "0,25 aşağıdakilerden hangisine eşittir?",
+                        secenekler: ["1/2", "1/3", "1/4", "3/4"],
+                        cevap: 2
+                    }
+                ]
+            )
+        ]
+    };
+
+
+    /* ========================================================
+       DİĞER ORTAOKUL DERSLERİ
+       ======================================================== */
+
+    function standartKonular(sinif, ders, ikon, isimler, odak) {
+
+        return {
+            ad: ders,
+            icon: ikon,
+
+            konular: isimler.map(function (isim, index) {
+
+                return konuOlustur(
+
+                    `${sinif}-${ders}-${index + 1}`,
+
+                    isim,
+
+                    `
+                    ${isim} konusuna hoş geldin.
+
+                    Bu bölümde ${odak} ile ilgili temel kavramları,
+                    aralarındaki ilişkileri ve günlük hayattaki
+                    uygulamalarını inceleyeceğiz.
+                    `,
+
+                    `
+                    <h3>📖 Konuya Giriş</h3>
+
+                    <p>
+                    ${isim}, ${odak} öğrenme alanının önemli
+                    başlıklarından biridir.
+                    </p>
+
+                    <p>
+                    Konuyu öğrenirken önce temel kavramları anlamak,
+                    ardından örnekleri incelemek ve son olarak
+                    öğrendiklerini uygulamak gerekir.
+                    </p>
+
+                    <h3>💡 Temel Bilgi</h3>
+
+                    <p>
+                    Bu bölümün temel amacı kavramları ezberlemek yerine
+                    aralarındaki ilişkiyi kurabilmektir.
+                    </p>
+
+                    <h3>🧠 Nasıl Düşünmelisin?</h3>
+
+                    <p>
+                    Bir soru ile karşılaştığında önce verilen bilgileri
+                    belirle. Daha sonra sorunun senden ne istediğini
+                    açıkça ifade et. Son olarak uygun yöntemle sonuca ulaş.
+                    </p>
+
+                    <h3>🧩 Uygulama</h3>
+
+                    <p>
+                    Öğrendiğin bilgiyi günlük hayatla ilişkilendirmeye
+                    çalış. Bir konuyu kendi cümlelerinle anlatabiliyorsan
+                    konunun temel mantığını kavramışsın demektir.
+                    </p>
+                    `,
+
+                    [
+                        `${isim} konusunun temel kavramlarını bil.`,
+                        "Kavramların hangi durumda kullanıldığını öğren.",
+                        "Örnekleri incele ve benzer soruları kendin çöz."
+                    ],
+
+                    [
+                        {
+                            soru: `${isim} konusunda temel yaklaşım nedir?`,
+                            cozum: `
+                            Önce verilenler ve istenen belirlenir.
+                            Ardından konuyla ilgili uygun kavram veya
+                            yöntem seçilir ve sonuç kontrol edilir.
+                            `
+                        }
+                    ],
+
+                    `
+                    ⚠️ Sadece ezber yapma.
+
+                    Konunun nedenini ve hangi durumda kullanıldığını
+                    anlamaya çalış.
+                    `,
+
+                    `
+                    ⭐ ${isim} konusunun temel kavramlarını öğren.
+
+                    ⭐ Örnekleri incele.
+
+                    ⭐ Kendi cümlelerinle tekrar et.
+
+                    ⭐ Mini test ile kendini kontrol et.
+                    `,
+
+                    [
+                        {
+                            soru: `${isim} çalışırken en doğru yaklaşım hangisidir?`,
+                            secenekler: [
+                                "Sadece cevabı ezberlemek",
+                                "Konuyu anlamak ve uygulamak",
+                                "Soruyu okumadan işlem yapmak",
+                                "Yanlışları kontrol etmemek"
+                            ],
+                            cevap: 1
+                        }
+                    ]
+                );
+            })
+        };
+    }
+
+
+    /* ========================================================
+       SINIFLAR
+    ======================================================== */
+
+    const kitaplikData = {
+
+        "5": {
+            ad: "5. Sınıf",
+
+            dersler: {
+
+                turkce: standartKonular(
+                    5,
+                    "Türkçe",
+                    "📖",
+                    [
+                        "Sözcükte Anlam",
+                        "Cümlede Anlam",
+                        "Paragraf",
+                        "Metin Türleri",
+                        "Yazım Kuralları",
+                        "Noktalama İşaretleri",
+                        "İsimler",
+                        "Sıfatlar",
+                        "Fiiller",
+                        "Söz Varlığı"
+                    ],
+                    "okuma, anlama, söz varlığı ve dil bilgisi"
+                ),
+
+                matematik: besMatematik,
+
+                fen: standartKonular(
+                    5,
+                    "Fen Bilimleri",
+                    "🔬",
+                    [
+                        "Dünya ve Evren",
+                        "Kuvvet ve Hareket",
+                        "Madde ve Isı",
+                        "Canlılar ve Yaşam",
+                        "Elektrik",
+                        "Işık ve Ses",
+                        "Enerji",
+                        "Çevre"
+                    ],
+                    "bilimsel gözlem, canlılar, madde, enerji ve çevre"
+                ),
+
+                sosyal: standartKonular(
+                    5,
+                    "Sosyal Bilgiler",
+                    "🌍",
+                    [
+                        "Birey ve Toplum",
+                        "Kültür ve Miras",
+                        "İnsanlar, Yerler ve Çevreler",
+                        "Bilim, Teknoloji ve Toplum",
+                        "Üretim, Dağıtım ve Tüketim",
+                        "Etkin Vatandaşlık",
+                        "Küresel Bağlantılar"
+                    ],
+                    "birey, toplum, kültür, çevre ve vatandaşlık"
+                ),
+
+                ingilizce: standartKonular(
+                    5,
+                    "İngilizce",
+                    "🇬🇧",
+                    [
+                        "Daily Routines",
+                        "Family and Friends",
+                        "Hobbies",
+                        "Health",
+                        "Weather",
+                        "Environment",
+                        "Travel",
+                        "Technology"
+                    ],
+                    "temel iletişim ve günlük yaşam"
+                ),
+
+                din: standartKonular(
+                    5,
+                    "Din Kültürü ve Ahlak Bilgisi",
+                    "🕌",
+                    [
+                        "İnanç",
+                        "İbadet",
+                        "Ahlak ve Değerler",
+                        "Hz. Muhammed",
+                        "Kur'an-ı Kerim ve Anlamı",
+                        "Din ve Hayat"
+                    ],
+                    "inanç, ibadet, ahlak ve değerler"
+                )
+            }
+        },
+
+
+        "6": {
+            ad: "6. Sınıf",
+
+            dersler: {
+
+                turkce: standartKonular(
+                    6,
+                    "Türkçe",
+                    "📖",
+                    [
+                        "Sözcükte Anlam",
+                        "Cümlede Anlam",
+                        "Paragraf",
+                        "Fiiller",
+                        "İsimler",
+                        "Sıfatlar",
+                        "Zamirler",
+                        "Yazım Kuralları",
+                        "Noktalama",
+                        "Metin Türleri"
+                    ],
+                    "metin anlama ve dil bilgisi"
+                ),
+
+                matematik: standartKonular(
+                    6,
+                    "Matematik",
+                    "📐",
+                    [
+                        "Doğal Sayılar",
+                        "Çarpanlar ve Katlar",
+                        "Kümeler ve Sayılar",
+                        "Kesirler",
+                        "Ondalık Gösterim",
+                        "Oran",
+                        "Cebirsel İfadeler",
+                        "Açılar",
+                        "Alan ve Çevre",
+                        "Veri ve Grafikler"
+                    ],
+                    "sayılar, cebir, oran, veri ve geometri"
+                ),
+
+                fen: standartKonular(
+                    6,
+                    "Fen Bilimleri",
+                    "🔬",
+                    [
+                        "Güneş Sistemi",
+                        "Vücudumuzdaki Sistemler",
+                        "Kuvvet ve Hareket",
+                        "Madde ve Isı",
+                        "Ses",
+                        "Elektriğin İletimi",
+                        "Dünya ve Evren"
+                    ],
+                    "canlılar, madde, kuvvet, enerji ve sistemler"
+                ),
+
+                sosyal: standartKonular(
+                    6,
+                    "Sosyal Bilgiler",
+                    "🌍",
+                    [
+                        "Birey ve Toplum",
+                        "Kültür ve Miras",
+                        "İnsanlar ve Çevreler",
+                        "Bilim ve Teknoloji",
+                        "Ekonomi",
+                        "Etkin Vatandaşlık",
+                        "Küresel Bağlantılar"
+                    ],
+                    "tarih, kültür, coğrafya, ekonomi ve vatandaşlık"
+                ),
+
+                ingilizce: standartKonular(
+                    6,
+                    "İngilizce",
+                    "🇬🇧",
+                    [
+                        "Life",
+                        "Yummy Breakfast",
+                        "Downtown",
+                        "Weather and Emotions",
+                        "At the Fair",
+                        "Occupations",
+                        "Holidays",
+                        "Bookworms"
+                    ],
+                    "iletişim ve günlük yaşam"
+                ),
+
+                din: standartKonular(
+                    6,
+                    "Din Kültürü ve Ahlak Bilgisi",
+                    "🕌",
+                    [
+                        "Peygamber ve Vahiy",
+                        "Namaz",
+                        "Zekât ve Sadaka",
+                        "Hz. Muhammed",
+                        "Temel Değerler",
+                        "Kur'an"
+                    ],
+                    "inanç, ibadet ve ahlak"
+                )
+            }
+        },
+
+
+        "7": {
+            ad: "7. Sınıf",
+
+            dersler: {
+
+                turkce: standartKonular(
+                    7,
+                    "Türkçe",
+                    "📖",
+                    [
+                        "Sözcükte Anlam",
+                        "Cümlede Anlam",
+                        "Paragraf",
+                        "Fiiller",
+                        "Fiilde Yapı",
+                        "Ek Fiil",
+                        "Zarflar",
+                        "Yazım",
+                        "Noktalama",
+                        "Metin Türleri"
+                    ],
+                    "anlama, yorumlama, yazma ve dil bilgisi"
+                ),
+
+                matematik: standartKonular(
+                    7,
+                    "Matematik",
+                    "📐",
+                    [
+                        "Tam Sayılar",
+                        "Rasyonel Sayılar",
+                        "Oran ve Orantı",
+                        "Yüzdeler",
+                        "Cebirsel İfadeler",
+                        "Denklemler",
+                        "Doğrular ve Açılar",
+                        "Çokgenler",
+                        "Çember ve Daire",
+                        "Veri Analizi"
+                    ],
+                    "sayılar, cebir, geometri ve veri"
+                ),
+
+                fen: standartKonular(
+                    7,
+                    "Fen Bilimleri",
+                    "🔬",
+                    [
+                        "Uzay Araştırmaları",
+                        "Hücre ve Bölünmeler",
+                        "Kuvvet ve Enerji",
+                        "Saf Madde ve Karışımlar",
+                        "Işığın Madde ile Etkileşimi",
+                        "Elektrik Devreleri",
+                        "Ekosistem"
+                    ],
+                    "kuvvet, enerji, madde, canlılar ve elektrik"
+                ),
+
+                sosyal: standartKonular(
+                    7,
+                    "Sosyal Bilgiler",
+                    "🌍",
+                    [
+                        "Birey ve Toplum",
+                        "Kültür ve Miras",
+                        "İnsanlar ve Yerler",
+                        "Bilim ve Teknoloji",
+                        "Ekonomi",
+                        "Vatandaşlık",
+                        "Küresel Bağlantılar"
+                    ],
+                    "tarih, kültür, ekonomi ve vatandaşlık"
+                ),
+
+                ingilizce: standartKonular(
+                    7,
+                    "İngilizce",
+                    "🇬🇧",
+                    [
+                        "Appearance and Personality",
+                        "Sports",
+                        "Biographies",
+                        "Wild Animals",
+                        "Television",
+                        "Celebrations",
+                        "Dreams",
+                        "Public Buildings"
+                    ],
+                    "iletişim ve günlük yaşam"
+                ),
+
+                din: standartKonular(
+                    7,
+                    "Din Kültürü ve Ahlak Bilgisi",
+                    "🕌",
+                    [
+                        "Melek ve Ahiret İnancı",
+                        "Hac ve Kurban",
+                        "Ahlaki Davranışlar",
+                        "Hz. Muhammed",
+                        "İslam Düşüncesi",
+                        "Kur'an"
+                    ],
+                    "inanç, ibadet, ahlak ve İslam kültürü"
+                )
+            }
+        },
+
+
+        "8": {
+            ad: "8. Sınıf",
+
+            dersler: {
+
+                turkce: standartKonular(
+                    8,
+                    "Türkçe",
+                    "📖",
+                    [
+                        "Sözcükte Anlam",
+                        "Cümlede Anlam",
+                        "Paragraf",
+                        "Fiilimsi",
+                        "Cümlenin Ögeleri",
+                        "Cümle Türleri",
+                        "Yazım Kuralları",
+                        "Noktalama",
+                        "Metin Türleri",
+                        "Anlatım Bozuklukları"
+                    ],
+                    "LGS düzeyinde okuma, yorumlama ve dil bilgisi"
+                ),
+
+                matematik: standartKonular(
+                    8,
+                    "Matematik",
+                    "📐",
+                    [
+                        "Çarpanlar ve Katlar",
+                        "Üslü İfadeler",
+                        "Kareköklü İfadeler",
+                        "Veri Analizi",
+                        "Basit Olayların Olma Olasılığı",
+                        "Cebirsel İfadeler",
+                        "Doğrusal Denklemler",
+                        "Eşitsizlikler",
+                        "Üçgenler",
+                        "Eşlik ve Benzerlik",
+                        "Dönüşüm Geometrisi",
+                        "Geometrik Cisimler"
+                    ],
+                    "cebir, sayılar, geometri, veri ve olasılık"
+                ),
+
+                fen: standartKonular(
+                    8,
+                    "Fen Bilimleri",
+                    "🔬",
+                    [
+                        "Mevsimler ve İklim",
+                        "DNA ve Genetik Kod",
+                        "Basınç",
+                        "Madde ve Endüstri",
+                        "Basit Makineler",
+                        "Enerji Dönüşümleri",
+                        "Elektrik Yükleri ve Elektrik Enerjisi",
+                        "Sürdürülebilir Kalkınma"
+                    ],
+                    "mevsimler, genetik, basınç, enerji ve elektrik"
+                ),
+
+                inkilap: standartKonular(
+                    8,
+                    "T.C. İnkılap Tarihi ve Atatürkçülük",
+                    "🇹🇷",
+                    [
+                        "Bir Kahraman Doğuyor",
+                        "Millî Uyanış",
+                        "Millî Bir Destan",
+                        "Atatürkçülük ve Çağdaşlaşan Türkiye",
+                        "Demokratikleşme Çabaları",
+                        "Atatürk Dönemi Dış Politika",
+                        "Atatürk'ün Ölümü ve Sonrası",
+                        "Çağdaş Türkiye ve Dünya"
+                    ],
+                    "Millî Mücadele, Atatürk ilkeleri ve Cumhuriyet tarihi"
+                ),
+
+                ingilizce: standartKonular(
+                    8,
+                    "İngilizce",
+                    "🇬🇧",
+                    [
+                        "Friendship",
+                        "Teen Life",
+                        "In the Kitchen",
+                        "On the Phone",
+                        "The Internet",
+                        "Adventures",
+                        "Tourism",
+                        "Chores",
+                        "Science",
+                        "Natural Forces"
+                    ],
+                    "LGS düzeyinde iletişim ve okuma"
+                ),
+
+                din: standartKonular(
+                    8,
+                    "Din Kültürü ve Ahlak Bilgisi",
+                    "🕌",
+                    [
+                        "Kader İnancı",
+                        "Zekât ve Sadaka",
+                        "Din ve Hayat",
+                        "Hz. Muhammed",
+                        "Kur'an ve Ana Konular",
+                        "İslam Düşüncesinde Yorumlar"
+                    ],
+                    "inanç, ibadet, ahlak ve dinî yorumlar"
+                )
+            }
+        }
+    };
+
+
+    /* ========================================================
+       LİSE DERSLERİ
+    ======================================================== */
+
+    const liseDers = function (
+        sinif,
+        ders,
+        ikon,
+        konular,
+        odak
+    ) {
+
+        return standartKonular(
+            sinif,
+            ders,
+            ikon,
+            konular,
+            odak
+        );
+
+    };
+
+
+    /* ========================================================
+       9. SINIF
+    ======================================================== */
+
+    kitaplikData["9"] = {
+
+        ad: "9. Sınıf",
 
         dersler: {
 
-            matematik: {
-                ad: "Matematik",
-                icon: "📐",
+            matematik: liseDers(
+                9,
+                "Matematik",
+                "📐",
+                [
+                    "Sayılar",
+                    "Nicelikler ve Değişimler",
+                    "Geometrik Şekiller",
+                    "Algoritma ve Bilişim",
+                    "İstatistiksel Araştırma Süreci",
+                    "Veriden Olasılığa",
+                    "Fonksiyonlara Giriş"
+                ],
+                "sayılar, nicelikler, geometri, algoritmik düşünme ve veri"
+            ),
 
-                konular: [
+            tde: liseDers(
+                9,
+                "Türk Dili ve Edebiyatı",
+                "📖",
+                [
+                    "Sözün İnceliği",
+                    "Anlam Arayışı",
+                    "Anlamın Yapı Taşları",
+                    "Dilin Zenginliği",
+                    "Edebî Metin",
+                    "Hikâye",
+                    "Şiir",
+                    "Tiyatro"
+                ],
+                "edebî metin, anlam, dil ve anlatım"
+            ),
 
-                    {
-                        id: "5-mat-dogal-sayilar",
-                        ad: "Doğal Sayılar",
+            fizik: liseDers(
+                9,
+                "Fizik",
+                "⚛️",
+                [
+                    "Fizik Bilimine Giriş",
+                    "Kuvvet ve Hareket",
+                    "Akışkanlar",
+                    "Enerji",
+                    "Elektrik",
+                    "Dalgalar"
+                ],
+                "fiziksel nicelikler, hareket, kuvvet ve enerji"
+            ),
 
-                        giris:
-                            "Doğal sayılar, günlük hayatta sayma ve sıralama amacıyla kullandığımız sayılardır.",
+            kimya: liseDers(
+                9,
+                "Kimya",
+                "🧪",
+                [
+                    "Etkileşim",
+                    "Atom ve Periyodik Sistem",
+                    "Kimyasal Türler",
+                    "Kimyasal Tepkimeler",
+                    "Karışımlar",
+                    "Kimya ve Çevre"
+                ],
+                "madde, atom, etkileşim ve kimyasal değişimler"
+            ),
 
-                        anlatim:
-                            "Doğal sayılar 0'dan başlayarak sonsuza kadar devam eden sayılardır. 0, 1, 2, 3, 4, 5 şeklinde ilerler. Bir doğal sayının basamaklarının bulunduğu yere göre farklı bir değeri olabilir.",
+            biyoloji: liseDers(
+                9,
+                "Biyoloji",
+                "🧬",
+                [
+                    "Yaşam Bilimi",
+                    "Hücre",
+                    "Canlıların Sınıflandırılması",
+                    "Ekosistem",
+                    "Biyolojik Çeşitlilik"
+                ],
+                "yaşam, hücre, canlı çeşitliliği ve ekosistem"
+            ),
 
-                        temel:
-                            "Bir sayının basamak değeri, rakamın bulunduğu basamağa göre aldığı değerdir. Örneğin 4 582 sayısında 5 yüzler basamağındadır ve basamak değeri 500'dür.",
+            tarih: liseDers(
+                9,
+                "Tarih",
+                "🏛️",
+                [
+                    "Tarih ve Zaman",
+                    "İlk Çağlarda Dünya",
+                    "Orta Çağlarda Dünya",
+                    "İlk Türk Devletleri",
+                    "İslam Medeniyeti",
+                    "Türklerin İslamiyet'i Kabulü"
+                ],
+                "tarih bilimi, ilk çağlar, Türkler ve medeniyet"
+            ),
 
-                        ornekSoru:
-                            "3 724 sayısında 7 rakamının basamak değeri kaçtır?",
+            cografya: liseDers(
+                9,
+                "Coğrafya",
+                "🌍",
+                [
+                    "Doğa ve İnsan",
+                    "Harita Bilgisi",
+                    "Dünya'nın Şekli ve Hareketleri",
+                    "Atmosfer ve İklim",
+                    "Nüfus",
+                    "Yerleşme"
+                ],
+                "doğa, insan, harita ve iklim"
+            ),
 
-                        ornekCozum:
-                            "7 rakamı yüzler basamağındadır. Bu nedenle 7 × 100 = 700 olur. Cevap: 700.",
+            ingilizce: liseDers(
+                9,
+                "İngilizce",
+                "🇬🇧",
+                [
+                    "School Life",
+                    "Personal Life",
+                    "Family",
+                    "Daily Life",
+                    "Health",
+                    "Environment",
+                    "Culture",
+                    "Technology"
+                ],
+                "iletişim ve günlük yaşam"
+            ),
 
-                        dikkat:
-                            "Rakam ile sayıyı karıştırmamaya dikkat et. Rakamlar 0 ile 9 arasındaki sembollerdir.",
+            din: liseDers(
+                9,
+                "Din Kültürü ve Ahlak Bilgisi",
+                "🕌",
+                [
+                    "Bilgi ve İnanç",
+                    "İslam ve İbadet",
+                    "Ahlak ve Değerler",
+                    "Allah-İnsan İlişkisi",
+                    "Kur'an ve Ana Konular"
+                ],
+                "bilgi, inanç, ibadet ve ahlak"
+            )
+        }
+    };
 
-                        ozet:
-                            "Doğal sayılar 0'dan başlayarak sonsuza kadar devam eder. Basamak değeri, rakamın bulunduğu basamağa göre belirlenir.",
 
-                        test: [
-                            {
-                                soru: "5 236 sayısında 2'nin basamak değeri kaçtır?",
-                                secenekler: [
-                                    "2",
-                                    "20",
-                                    "200",
-                                    "2000"
-                                ],
-                                cevap: 2
-                            },
-                            {
-                                soru: "Aşağıdakilerden hangisi doğal sayıdır?",
-                                secenekler: [
-                                    "-3",
-                                    "4,5",
-                                    "12",
-                                    "-1,2"
-                                ],
-                                cevap: 2
-                            }
-                        ]
-                    },
+    /* ========================================================
+       10 - 11 - 12. SINIF ORTAK LİSE VERİSİ
+    ======================================================== */
 
-                    {
-                        id: "5-mat-kesirler",
-                        ad: "Kesirler",
+    const liseKonular = {
 
-                        giris:
-                            "Kesirler, bir bütünün eş parçalarından kaç tanesinin alındığını ifade etmek için kullanılır.",
+        matematik: [
+            "Sayılar",
+            "Nicelikler ve Değişimler",
+            "Fonksiyonlar",
+            "Geometrik Şekiller",
+            "Trigonometri",
+            "Analitik Geometri",
+            "İstatistik",
+            "Olasılık"
+        ],
 
-                        anlatim:
-                            "Bir kesir iki bölümden oluşur. Üstte bulunan sayı pay, altta bulunan sayı paydadır. Örneğin 3/5 kesrinde 3 pay, 5 ise paydadır.",
+        tde: [
+            "Sözün İnceliği",
+            "Anlam Arayışı",
+            "Hikâye",
+            "Şiir",
+            "Roman",
+            "Tiyatro",
+            "Deneme",
+            "Eleştiri"
+        ],
 
-                        temel:
-                            "Payda bütünün kaç eş parçaya ayrıldığını, pay ise bu parçalardan kaç tanesinin alındığını gösterir.",
+        fizik: [
+            "Kuvvet ve Hareket",
+            "Enerji",
+            "Elektrik",
+            "Manyetizma",
+            "Dalgalar",
+            "Optik",
+            "Modern Fizik"
+        ],
 
-                        ornekSoru:
-                            "Bir pizzanın 8 eş parçasından 3 tanesi yenirse geriye pizzanın kaçta kaçı kalır?",
+        kimya: [
+            "Atom ve Periyodik Sistem",
+            "Kimyasal Türler",
+            "Kimyasal Tepkimeler",
+            "Karışımlar",
+            "Asitler ve Bazlar",
+            "Kimyasal Denge",
+            "Organik Kimya"
+        ],
 
-                        ornekCozum:
-                            "Başlangıçta 8/8 pizza vardır. 3/8'i yenmiştir. 8/8 - 3/8 = 5/8 kalır.",
+        biyoloji: [
+            "Hücre",
+            "Canlılarda Enerji",
+            "Kalıtım",
+            "İnsan Fizyolojisi",
+            "Ekosistem",
+            "Genetik",
+            "Biyoteknoloji"
+        ],
 
-                        dikkat:
-                            "Payda 0 olamaz. Çünkü bir bütünü sıfır parçaya ayırmak matematiksel olarak mümkün değildir.",
+        tarih: [
+            "Türk Dünyası",
+            "Osmanlı Devleti",
+            "Değişen Dünya Dengeleri",
+            "Modernleşme",
+            "Millî Mücadele",
+            "Cumhuriyet",
+            "Çağdaş Dünya"
+        ],
 
-                        ozet:
-                            "Kesirlerde pay alınan parça sayısını, payda ise bütünün kaç eş parçaya ayrıldığını gösterir.",
+        cografya: [
+            "Doğal Sistemler",
+            "Nüfus",
+            "Yerleşme",
+            "Ekonomik Faaliyetler",
+            "Türkiye'nin Coğrafi Özellikleri",
+            "Küresel Ortam"
+        ],
 
-                        test: [
-                            {
-                                soru: "4/7 kesrinde pay hangisidir?",
-                                secenekler: [
-                                    "4",
-                                    "7",
-                                    "11",
-                                    "3"
-                                ],
-                                cevap: 0
-                            }
-                        ]
-                    }
+        felsefe: [
+            "Felsefeyi Tanıma",
+            "Bilgi Felsefesi",
+            "Bilim Felsefesi",
+            "Ahlak Felsefesi",
+            "Siyaset Felsefesi",
+            "Sanat Felsefesi",
+            "Din Felsefesi"
+        ],
 
-                ]
-            },
+        ingilizce: [
+            "School Life",
+            "Personal Life",
+            "Culture",
+            "Technology",
+            "Environment",
+            "Travel",
+            "Communication",
+            "Future"
+        ],
 
-            turkce: {
-                ad: "Türkçe",
-                icon: "📖",
+        din: [
+            "Bilgi ve İnanç",
+            "İslam ve İbadet",
+            "Ahlak ve Değerler",
+            "Kur'an ve Ana Konular",
+            "İslam Düşüncesi",
+            "Din, Bilim ve Felsefe"
+        ]
+    };
 
-                konular: [
 
-                    {
-                        id: "5-tur-cumle",
-                        ad: "Cümle Bilgisi",
+    function liseSinifiOlustur(sinif) {
 
-                        giris:
-                            "Cümle, bir düşünceyi, duyguyu, isteği veya yargıyı anlatan anlamlı söz grubudur.",
+        return {
 
-                        anlatim:
-                            "Cümleler anlamlarına ve yapılarına göre farklı özellikler gösterebilir. Bir cümlenin temel amacı okuyucuya veya dinleyiciye anlamlı bir mesaj iletmektir.",
+            ad: `${sinif}. Sınıf`,
 
-                        temel:
-                            "Bir cümlenin anlamlı ve kurallı olması, anlatılmak istenen düşüncenin daha kolay anlaşılmasını sağlar.",
+            dersler: {
 
-                        ornekSoru:
-                            "Aşağıdaki ifadelerden hangisi anlamlı bir cümledir?",
+                matematik: liseDers(
+                    sinif,
+                    "Matematik",
+                    "📐",
+                    liseKonular.matematik,
+                    "matematiksel düşünme, fonksiyon, geometri, veri ve olasılık"
+                ),
 
-                        ornekCozum:
-                            "Kelimelerin anlamlı bir bütün oluşturduğu ifade doğru cümledir.",
+                tde: liseDers(
+                    sinif,
+                    "Türk Dili ve Edebiyatı",
+                    "📖",
+                    liseKonular.tde,
+                    "edebiyat, dil, metin ve eleştirel okuma"
+                ),
 
-                        dikkat:
-                            "Kelimelerin tek tek anlamlı olması, her zaman cümlenin anlamlı olduğu anlamına gelmez.",
+                fizik: liseDers(
+                    sinif,
+                    "Fizik",
+                    "⚛️",
+                    liseKonular.fizik,
+                    "kuvvet, enerji, elektrik, dalgalar ve modern fizik"
+                ),
 
-                        ozet:
-                            "Cümleler bir düşünce veya yargıyı anlatır ve anlamlı bir bütün oluşturur.",
+                kimya: liseDers(
+                    sinif,
+                    "Kimya",
+                    "🧪",
+                    liseKonular.kimya,
+                    "atom, tepkimeler, denge, asit-baz ve organik kimya"
+                ),
 
-                        test: [
-                            {
-                                soru: "Aşağıdakilerden hangisi bir cümledir?",
-                                secenekler: [
-                                    "Güzel bir",
-                                    "Bugün hava çok güzel.",
-                                    "Kitabın kapağı",
-                                    "Mavi kalem"
-                                ],
-                                cevap: 1
-                            }
-                        ]
-                    }
+                biyoloji: liseDers(
+                    sinif,
+                    "Biyoloji",
+                    "🧬",
+                    liseKonular.biyoloji,
+                    "hücre, enerji, kalıtım, fizyoloji ve ekoloji"
+                ),
 
-                ]
-            },
+                tarih: liseDers(
+                    sinif,
+                    "Tarih",
+                    "🏛️",
+                    liseKonular.tarih,
+                    "Türk tarihi, Osmanlı, Cumhuriyet ve dünya tarihi"
+                ),
 
-            fen: {
-                ad: "Fen Bilimleri",
-                icon: "🔬",
+                cografya: liseDers(
+                    sinif,
+                    "Coğrafya",
+                    "🌍",
+                    liseKonular.cografya,
+                    "doğal, beşerî ve ekonomik coğrafya"
+                ),
 
-                konular: [
-                    {
-                        id: "5-fen-dunya",
-                        ad: "Dünya ve Evren",
+                felsefe: liseDers(
+                    sinif,
+                    "Felsefe",
+                    "🧠",
+                    liseKonular.felsefe,
+                    "felsefi düşünme, bilgi, bilim, ahlak ve sanat"
+                ),
 
-                        giris:
-                            "Dünya, Güneş Sistemi içerisinde yer alan ve üzerinde yaşam bulunan bir gezegendir.",
+                ingilizce: liseDers(
+                    sinif,
+                    "İngilizce",
+                    "🇬🇧",
+                    liseKonular.ingilizce,
+                    "ileri iletişim, okuma, yazma ve konuşma"
+                ),
 
-                        anlatim:
-                            "Dünya kendi ekseni etrafında dönerek gece ve gündüzün oluşmasını sağlar. Güneş etrafındaki hareketi ise bir yılın oluşmasında etkilidir.",
-
-                        temel:
-                            "Dünya'nın kendi ekseni etrafındaki hareketine dönme, Güneş etrafındaki hareketine dolanma hareketi denir.",
-
-                        ornekSoru:
-                            "Gece ve gündüzün oluşmasının temel nedeni nedir?",
-
-                        ornekCozum:
-                            "Dünya'nın kendi ekseni etrafında dönmesidir.",
-
-                        dikkat:
-                            "Mevsimlerin oluşumunu yalnızca Dünya'nın Güneş'e olan uzaklığıyla açıklamak doğru değildir.",
-
-                        ozet:
-                            "Dünya kendi ekseni etrafında döner ve Güneş etrafında dolanır.",
-
-                        test: [
-                            {
-                                soru: "Gece ve gündüz hangi hareket sonucunda oluşur?",
-                                secenekler: [
-                                    "Dolanma",
-                                    "Dönme",
-                                    "Titreşim",
-                                    "Sallanma"
-                                ],
-                                cevap: 1
-                            }
-                        ]
-                    }
-                ]
-            },
-
-            sosyal: {
-                ad: "Sosyal Bilgiler",
-                icon: "🌍",
-                konular: []
-            },
-
-            ingilizce: {
-                ad: "İngilizce",
-                icon: "🇬🇧",
-                konular: []
-            },
-
-            din: {
-                ad: "Din Kültürü",
-                icon: "🕌",
-                konular: []
+                din: liseDers(
+                    sinif,
+                    "Din Kültürü ve Ahlak Bilgisi",
+                    "🕌",
+                    liseKonular.din,
+                    "din, ahlak, inanç ve İslam düşüncesi"
+                )
             }
-
-        }
-    },
-
-    "6": {
-        ad: "6. Sınıf",
-        dersler: {}
-    },
-
-    "7": {
-        ad: "7. Sınıf",
-        dersler: {}
-    },
-
-    "8": {
-        ad: "8. Sınıf",
-        dersler: {}
-    },
-
-    "9": {
-        ad: "9. Sınıf",
-        dersler: {}
-    },
-
-    "10": {
-        ad: "10. Sınıf",
-        dersler: {}
-    },
-
-    "11": {
-        ad: "11. Sınıf",
-        dersler: {}
-    },
-
-    "12": {
-        ad: "12. Sınıf",
-        dersler: {}
-    }
-
-};
-
-
-/* =========================================================
-   STATE
-   ========================================================= */
-
-let selectedGrade = null;
-let selectedSubject = null;
-let selectedTopic = null;
-
-
-/* =========================================================
-   STORAGE
-   ========================================================= */
-
-const STORAGE_KEY = "dersTakip_kitaplik_progress";
-
-const FAVORITE_KEY = "dersTakip_kitaplik_favorites";
-
-
-function getProgress() {
-
-    try {
-        return JSON.parse(
-            localStorage.getItem(STORAGE_KEY)
-        ) || {};
-
-    } catch {
-
-        return {};
-    }
-}
-
-
-function saveProgress(data) {
-
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(data)
-    );
-}
-
-
-function getFavorites() {
-
-    try {
-        return JSON.parse(
-            localStorage.getItem(FAVORITE_KEY)
-        ) || [];
-
-    } catch {
-
-        return [];
-    }
-}
-
-
-function saveFavorites(data) {
-
-    localStorage.setItem(
-        FAVORITE_KEY,
-        JSON.stringify(data)
-    );
-}
-
-
-function isCompleted(id) {
-
-    const progress = getProgress();
-
-    return !!progress[id];
-}
-
-
-function isFavorite(id) {
-
-    return getFavorites().includes(id);
-}
-
-
-/* =========================================================
-   APP
-   ========================================================= */
-
-const app = document.getElementById("ktApp");
-
-
-function renderHome() {
-
-    selectedGrade = null;
-    selectedSubject = null;
-    selectedTopic = null;
-
-    app.innerHTML = `
-
-        <div class="kt-section-title">
-            <h2>🎓 Sınıfını seç</h2>
-
-            <span>
-                5. sınıftan 12. sınıfa
-            </span>
-        </div>
-
-        <div class="kt-grade-grid">
-
-            ${Object.entries(kitaplikData)
-                .map(([key, grade]) => `
-
-                    <button
-                        class="kt-grade"
-                        onclick="selectGrade('${key}')"
-                    >
-
-                        <div class="kt-grade-icon">
-                            ${getGradeIcon(key)}
-                        </div>
-
-                        <strong>
-                            ${grade.ad}
-                        </strong>
-
-                        <small>
-                            ${Object.keys(grade.dersler).length}
-                            ders
-                        </small>
-
-                    </button>
-
-                `)
-                .join("")}
-
-        </div>
-
-        <div id="ktHomeMessage">
-
-            <div class="kt-empty">
-
-                <div class="kt-empty-icon">
-                    📚
-                </div>
-
-                <h3>
-                    Bir sınıf seç
-                </h3>
-
-                <p style="margin-top:8px">
-                    Ders kitaplarını görmek için
-                    yukarıdan bir sınıf seçebilirsin.
-                </p>
-
-            </div>
-
-        </div>
-    `;
-}
-
-
-function getGradeIcon(grade) {
-
-    if (grade === "5") return "🌱";
-    if (grade === "6") return "📘";
-    if (grade === "7") return "📗";
-    if (grade === "8") return "🎯";
-    if (grade === "9") return "🚀";
-    if (grade === "10") return "🔥";
-    if (grade === "11") return "⭐";
-    if (grade === "12") return "🏆";
-
-    return "📚";
-}
-
-
-/* =========================================================
-   GRADE
-   ========================================================= */
-
-function selectGrade(grade) {
-
-    selectedGrade = grade;
-
-    const data = kitaplikData[grade];
-
-    const message =
-        document.getElementById("ktHomeMessage");
-
-    message.innerHTML = `
-
-        <div class="kt-section-title">
-
-            <h2>
-                ${data.ad} Dersleri
-            </h2>
-
-            <span>
-                ${Object.keys(data.dersler).length} kitap
-            </span>
-
-        </div>
-
-        ${
-            Object.keys(data.dersler).length
-            ? `
-                <div class="kt-book-grid">
-
-                    ${Object.entries(data.dersler)
-                        .map(([key, subject]) => `
-
-                            <div
-                                class="kt-book"
-                                onclick="
-                                    selectSubject('${key}')
-                                "
-                            >
-
-                                <div class="kt-book-icon">
-                                    ${subject.icon}
-                                </div>
-
-                                <h3>
-                                    ${subject.ad}
-                                </h3>
-
-                                <p>
-                                    Konu anlatımları,
-                                    örnekler ve mini testler.
-                                </p>
-
-                                <div class="kt-book-footer">
-
-                                    <span class="kt-book-count">
-                                        ${subject.konular.length}
-                                        konu
-                                    </span>
-
-                                    <span class="kt-open">
-                                        Kitabı Aç →
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-                        `)
-                        .join("")}
-
-                </div>
-            `
-            :
-            `
-                <div class="kt-empty">
-
-                    <div class="kt-empty-icon">
-                        🚧
-                    </div>
-
-                    <h3>
-                        Bu sınıf hazırlanıyor
-                    </h3>
-
-                    <p style="margin-top:8px">
-                        Bu sınıfın kitapları sonraki
-                        içerik paketlerinde eklenecek.
-                    </p>
-
-                </div>
-            `
-        }
-    `;
-}
-
-
-/* =========================================================
-   SUBJECT
-   ========================================================= */
-
-function selectSubject(subjectKey) {
-
-    selectedSubject = subjectKey;
-
-    const subject =
-        kitaplikData[selectedGrade]
-            .dersler[selectedSubject];
-
-    if (!subject) return;
-
-    if (!subject.konular.length) {
-
-        app.innerHTML = `
-
-            <div class="kt-breadcrumb">
-                <button onclick="renderHome()">
-                    Kitaplık
-                </button>
-
-                →
-                ${kitaplikData[selectedGrade].ad}
-                →
-                ${subject.ad}
-            </div>
-
-            <div class="kt-reader">
-
-                <div class="kt-empty">
-
-                    <div class="kt-empty-icon">
-                        📖
-                    </div>
-
-                    <h2>
-                        Konular hazırlanıyor
-                    </h2>
-
-                    <p style="margin-top:10px">
-                        Bu dersin konu anlatımları
-                        yakında eklenecek.
-                    </p>
-
-                </div>
-
-            </div>
-        `;
-
-        return;
-    }
-
-    selectedTopic = subject.konular[0].id;
-
-    renderTopicPage();
-}
-
-
-/* =========================================================
-   TOPIC PAGE
-   ========================================================= */
-
-function renderTopicPage() {
-
-    const subject =
-        kitaplikData[selectedGrade]
-            .dersler[selectedSubject];
-
-    const topics = subject.konular;
-
-    const topic =
-        topics.find(
-            item => item.id === selectedTopic
-        );
-
-    if (!topic) return;
-
-    const topicIndex =
-        topics.findIndex(
-            item => item.id === selectedTopic
-        );
-
-    app.innerHTML = `
-
-        <div class="kt-breadcrumb">
-
-            <button onclick="renderHome()">
-                Kitaplık
-            </button>
-
-            →
-
-            <button onclick="selectGrade('${selectedGrade}')">
-                ${kitaplikData[selectedGrade].ad}
-            </button>
-
-            →
-
-            ${subject.ad}
-
-        </div>
-
-        <div class="kt-topic-layout">
-
-            <aside class="kt-topic-sidebar">
-
-                <h3>
-                    ${subject.icon}
-                    ${subject.ad}
-                </h3>
-
-                <div class="kt-topic-list">
-
-                    ${topics.map(item => `
-
-                        <button
-                            class="
-                                kt-topic-btn
-                                ${item.id === selectedTopic
-                                    ? "active"
-                                    : ""
-                                }
-                                ${isCompleted(item.id)
-                                    ? "completed"
-                                    : ""
-                                }
-                            "
-                            onclick="
-                                openTopic('${item.id}')
-                            "
-                        >
-                            ${item.ad}
-                        </button>
-
-                    `).join("")}
-
-                </div>
-
-            </aside>
-
-
-            <article class="kt-reader">
-
-                <div class="kt-reader-header">
-
-                    <span class="kt-reader-label">
-                        ${subject.ad}
-                    </span>
-
-                    <h1>
-                        ${topic.ad}
-                    </h1>
-
-                    <p>
-                        ${topic.giris}
-                    </p>
-
-                    <div class="kt-progress">
-
-                        <div class="kt-progress-top">
-
-                            <span>
-                                Kitap ilerlemesi
-                            </span>
-
-                            <span>
-                                ${calculateSubjectProgress(subject)}%
-                            </span>
-
-                        </div>
-
-                        <div class="kt-progress-bar">
-
-                            <div
-                                class="kt-progress-fill"
-                                style="
-                                    width:
-                                    ${calculateSubjectProgress(subject)}%
-                                "
-                            ></div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="kt-reader-body">
-
-                    <section class="kt-content-section">
-
-                        <h2>
-                            📖 Konu Anlatımı
-                        </h2>
-
-                        <p>
-                            ${topic.anlatim}
-                        </p>
-
-                    </section>
-
-
-                    <section class="kt-content-section">
-
-                        <div class="kt-info-box kt-info">
-
-                            <h3>
-                                💡 Temel Bilgi
-                            </h3>
-
-                            <p>
-                                ${topic.temel}
-                            </p>
-
-                        </div>
-
-                    </section>
-
-
-                    <section class="kt-content-section">
-
-                        <div class="kt-info-box kt-example">
-
-                            <h3>
-                                🧩 Çözümlü Örnek
-                            </h3>
-
-                            <p>
-                                <strong>
-                                    Soru:
-                                </strong>
-                                ${topic.ornekSoru}
-                            </p>
-
-                            <p style="margin-top:10px">
-
-                                <strong>
-                                    Çözüm:
-                                </strong>
-
-                                ${topic.ornekCozum}
-
-                            </p>
-
-                        </div>
-
-                    </section>
-
-
-                    <section class="kt-content-section">
-
-                        <div class="kt-info-box kt-warning">
-
-                            <h3>
-                                ⚠️ Dikkat!
-                            </h3>
-
-                            <p>
-                                ${topic.dikkat}
-                            </p>
-
-                        </div>
-
-                    </section>
-
-
-                    <section class="kt-content-section">
-
-                        <div class="kt-info-box kt-summary">
-
-                            <h3>
-                                ⭐ Kısaca
-                            </h3>
-
-                            <p>
-                                ${topic.ozet}
-                            </p>
-
-                        </div>
-
-                    </section>
-
-
-                    <section class="kt-content-section">
-
-                        <h2>
-                            📝 Mini Test
-                        </h2>
-
-                        <div class="kt-test">
-
-                            ${
-                                topic.test &&
-                                topic.test.length
-                                ?
-                                topic.test.map(
-                                    (question, index) => `
-
-                                        <div
-                                            class="kt-question"
-                                            id="
-                                                question-${index}
-                                            "
-                                        >
-
-                                            <p>
-                                                ${index + 1}.
-                                                ${question.soru}
-                                            </p>
-
-                                            <div class="kt-options">
-
-                                                ${question.secenekler
-                                                    .map(
-                                                        (option, optionIndex) => `
-
-                                                            <button
-                                                                class="kt-option"
-                                                                onclick="
-                                                                    answerQuestion(
-                                                                        '${topic.id}',
-                                                                        ${index},
-                                                                        ${optionIndex},
-                                                                        ${question.cevap}
-                                                                    )
-                                                                "
-                                                            >
-                                                                ${String.fromCharCode(65 + optionIndex)}
-                                                                )
-                                                                ${option}
-                                                            </button>
-
-                                                        `
-                                                    )
-                                                    .join("")}
-
-                                            </div>
-
-                                        </div>
-
-                                    `
-                                ).join("")
-                                :
-                                `
-                                    <p>
-                                        Bu konu için henüz test
-                                        eklenmedi.
-                                    </p>
-                                `
-                            }
-
-                        </div>
-
-                    </section>
-
-                </div>
-
-
-                <div class="kt-reader-actions">
-
-                    <button
-                        class="kt-action"
-                        onclick="previousTopic()"
-                        ${topicIndex <= 0 ? "disabled" : ""}
-                    >
-                        ← Önceki
-                    </button>
-
-
-                    <button
-                        class="
-                            kt-action
-                            primary
-                            ${isCompleted(topic.id)
-                                ? "completed"
-                                : ""
-                            }
-                        "
-                        onclick="toggleCompleted('${topic.id}')"
-                    >
-
-                        ${
-                            isCompleted(topic.id)
-                            ? "✓ Konu Tamamlandı"
-                            : "✓ Konuyu Tamamla"
-                        }
-
-                    </button>
-
-
-                    <button
-                        class="kt-action"
-                        onclick="toggleFavorite('${topic.id}')"
-                    >
-
-                        ${
-                            isFavorite(topic.id)
-                            ? "⭐ Favorilerden Çıkar"
-                            : "☆ Favorilere Ekle"
-                        }
-
-                    </button>
-
-
-                    <button
-                        class="kt-action"
-                        onclick="nextTopic()"
-                        ${topicIndex >= topics.length - 1
-                            ? "disabled"
-                            : ""
-                        }
-                    >
-                        Sonraki →
-                    </button>
-
-                </div>
-
-            </article>
-
-        </div>
-    `;
-}
-
-
-/* =========================================================
-   OPEN TOPIC
-   ========================================================= */
-
-function openTopic(id) {
-
-    selectedTopic = id;
-
-    renderTopicPage();
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-}
-
-
-/* =========================================================
-   COMPLETE
-   ========================================================= */
-
-function toggleCompleted(id) {
-
-    const progress = getProgress();
-
-    if (progress[id]) {
-
-        delete progress[id];
-
-    } else {
-
-        progress[id] = {
-            completedAt: new Date().toISOString()
         };
-
     }
 
-    saveProgress(progress);
 
-    renderTopicPage();
-}
+    kitaplikData["10"] = liseSinifiOlustur(10);
+    kitaplikData["11"] = liseSinifiOlustur(11);
+    kitaplikData["12"] = liseSinifiOlustur(12);
 
 
-/* =========================================================
-   FAVORITES
-   ========================================================= */
+    /* ========================================================
+       DERS TAKİP'E AKTAR
+    ======================================================== */
 
-function toggleFavorite(id) {
+    window.kitaplikData = kitaplikData;
 
-    let favorites = getFavorites();
 
-    if (favorites.includes(id)) {
+    window.kitaplikDataMeta = {
 
-        favorites =
-            favorites.filter(
-                item => item !== id
-            );
+        version: "1.0.0",
 
-    } else {
+        app: "DersTakip",
 
-        favorites.push(id);
-    }
+        grades: [
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12"
+        ],
 
-    saveFavorites(favorites);
+        description:
+            "DersTakip 5-12. sınıf ders kitaplığı veri katmanı.",
 
-    renderTopicPage();
-}
+        contentStructure: [
+            "giris",
+            "anlatim",
+            "temelBilgi",
+            "ornekler",
+            "dikkat",
+            "ozet",
+            "test"
+        ]
+    };
 
 
-/* =========================================================
-   SUBJECT PROGRESS
-   ========================================================= */
-
-function calculateSubjectProgress(subject) {
-
-    if (!subject.konular.length) {
-        return 0;
-    }
-
-    const completed =
-        subject.konular.filter(
-            topic => isCompleted(topic.id)
-        ).length;
-
-    return Math.round(
-        completed /
-        subject.konular.length *
-        100
-    );
-}
-
-
-/* =========================================================
-   PREVIOUS / NEXT
-   ========================================================= */
-
-function previousTopic() {
-
-    const subject =
-        kitaplikData[selectedGrade]
-            .dersler[selectedSubject];
-
-    const index =
-        subject.konular.findIndex(
-            item => item.id === selectedTopic
-        );
-
-    if (index > 0) {
-
-        selectedTopic =
-            subject.konular[index - 1].id;
-
-        renderTopicPage();
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-    }
-}
-
-
-function nextTopic() {
-
-    const subject =
-        kitaplikData[selectedGrade]
-            .dersler[selectedSubject];
-
-    const index =
-        subject.konular.findIndex(
-            item => item.id === selectedTopic
-        );
-
-    if (
-        index <
-        subject.konular.length - 1
-    ) {
-
-        selectedTopic =
-            subject.konular[index + 1].id;
-
-        renderTopicPage();
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-    }
-}
-
-
-/* =========================================================
-   MINI TEST
-   ========================================================= */
-
-function answerQuestion(
-    topicId,
-    questionIndex,
-    selectedAnswer,
-    correctAnswer
-) {
-
-    const question =
-        document.querySelector(
-            `#question-${questionIndex}`
-        );
-
-    if (!question) return;
-
-    const options =
-        question.querySelectorAll(
-            ".kt-option"
-        );
-
-    options.forEach(
-        (button, index) => {
-
-            button.disabled = true;
-
-            if (index === correctAnswer) {
-
-                button.classList.add(
-                    "correct"
-                );
-            }
-
-            if (
-                index === selectedAnswer &&
-                index !== correctAnswer
-            ) {
-
-                button.classList.add(
-                    "wrong"
-                );
-            }
-        }
-    );
-}
-
-
-/* =========================================================
-   SEARCH
-   ========================================================= */
-
-function searchLibrary() {
-
-    const input =
-        document.getElementById("ktSearch");
-
-    const query =
-        input.value
-            .trim()
-            .toLocaleLowerCase("tr-TR");
-
-    if (!query) {
-
-        if (selectedTopic) {
-            renderTopicPage();
-        } else {
-            renderHome();
-        }
-
-        return;
-    }
-
-    const results = [];
-
-    Object.entries(kitaplikData)
-        .forEach(
-            ([gradeKey, grade]) => {
-
-                Object.entries(grade.dersler)
-                    .forEach(
-                        ([subjectKey, subject]) => {
-
-                            subject.konular.forEach(
-                                topic => {
-
-                                    const text = (
-
-                                        grade.ad +
-                                        " " +
-                                        subject.ad +
-                                        " " +
-                                        topic.ad
-
-                                    ).toLocaleLowerCase(
-                                        "tr-TR"
-                                    );
-
-                                    if (
-                                        text.includes(query)
-                                    ) {
-
-                                        results.push({
-                                            gradeKey,
-                                            subjectKey,
-                                            grade,
-                                            subject,
-                                            topic
-                                        });
-
-                                    }
-
-                                }
-                            );
-
-                        }
-                    );
-
-            }
-        );
-
-
-    app.innerHTML = `
-
-        <div class="kt-section-title">
-
-            <h2>
-                🔍 Arama sonuçları
-            </h2>
-
-            <span>
-                ${results.length} sonuç
-            </span>
-
-        </div>
-
-        ${
-            results.length
-            ?
-            `
-                <div class="kt-book-grid">
-
-                    ${results.map(result => `
-
-                        <div
-                            class="kt-book"
-                            onclick="
-                                openSearchResult(
-                                    '${result.gradeKey}',
-                                    '${result.subjectKey}',
-                                    '${result.topic.id}'
-                                )
-                            "
-                        >
-
-                            <div class="kt-book-icon">
-                                ${result.subject.icon}
-                            </div>
-
-                            <h3>
-                                ${result.topic.ad}
-                            </h3>
-
-                            <p>
-                                ${result.grade.ad}
-                                →
-                                ${result.subject.ad}
-                            </p>
-
-                            <div class="kt-book-footer">
-
-                                <span class="kt-book-count">
-                                    Konu anlatımı
-                                </span>
-
-                                <span class="kt-open">
-                                    Oku →
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    `).join("")}
-
-                </div>
-            `
-            :
-            `
-                <div class="kt-empty">
-
-                    <div class="kt-empty-icon">
-                        🔎
-                    </div>
-
-                    <h3>
-                        Sonuç bulunamadı
-                    </h3>
-
-                    <p style="margin-top:8px">
-                        Farklı bir ders veya konu adı
-                        deneyebilirsin.
-                    </p>
-
-                </div>
-            `
-        }
-    `;
-}
-
-
-function openSearchResult(
-    gradeKey,
-    subjectKey,
-    topicId
-) {
-
-    selectedGrade = gradeKey;
-    selectedSubject = subjectKey;
-    selectedTopic = topicId;
-
-    document.getElementById(
-        "ktSearch"
-    ).value = "";
-
-    renderTopicPage();
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-}
-
-
-/* =========================================================
-   HOME
-   ========================================================= */
-
-function goHome() {
-
-    /*
-       Eğer DersTakip ana sayfanın yolu farklıysa
-       burayı değiştirebilirsin.
-    */
-
-    window.location.href = "index.html";
-}
-
-
-/* =========================================================
-   START
-   ========================================================= */
-
-renderHome();
+})();
